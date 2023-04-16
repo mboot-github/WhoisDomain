@@ -1,6 +1,12 @@
-# whois
+# whoisdomain
+
 A Python package for retrieving WHOIS information of domains.
+
 This package will not support querying ip CIDR ranges or AS information
+
+A copy of the original DanyCork 'whois',
+I will start versioning at 1.x.x where the second item will be YYYYMMDD,
+the third will start from 1 and be only used if more than one update will have to be done in one day.
 
 ## Features
  * Python wrapper for the "whois" cli command of your operating system.
@@ -13,93 +19,44 @@ This package will not support querying ip CIDR ranges or AS information
  * Verbose output on stderr during debugging to see how the internal functions are doing their work
  * raise a exception on Quota ecceeded type responses
  * raise a exception on PrivateRegistry tld's where we know the tld and know we don't know anything
- * allow for optional cleaning the whois response before extracting information
+ * allow for optional cleaning the response before extracting information
  * optionally allow IDN's to be translated to Punycode
 
 ## Dependencies
   * please install also the command line "whois" of your distribution
   * this library parses the output of the "whois" cli command of your operating system
 
-## Help Wanted
-Your contributions are welcome, look for the Help wanted tag https://github.com/DannyCork/python-whois/labels/help%20wanted
-
 ## Usage example
 
-Install the cli `whois` of your operating system if it is not present already
-
-Install `whois` package from your distribution (e.g apt install whois)
+Install the cli `whois` of your operating system if it is not present already,
+e.g 'apt install whois' or 'yum install whois'
 
 ```
-$pip install whois
+sudo yum install whois
+$pip install whoisdomain
+python
+>>> import whoisdomain as whois
+>>> d = whois.query('google.com')
+>>> print(d.__dict__)
+{'name': 'google.com', 'tld': 'com', 'registrar': 'MarkMonitor, Inc.', 'registrant_country': 'US', 'creation_date': datetime.datetime(1997, 9, 15, 9, 0), 'expiration_date': None, 'last_updated': datetime.datetime(2019, 9, 9, 17, 39, 4), 'status': 'clientUpdateProhibited (https://www.icann.org/epp#clientUpdateProhibited)', 'statuses': ['clientDeleteProhibited (https://www.icann.org/epp#clientDeleteProhibited)', 'clientTransferProhibited (https://www.icann.org/epp#clientTransferProhibited)', 'clientUpdateProhibited (https://www.icann.org/epp#clientUpdateProhibited)', 'serverDeleteProhibited (https://www.icann.org/epp#serverDeleteProhibited)', 'serverTransferProhibited (https://www.icann.org/epp#serverTransferProhibited)', 'serverUpdateProhibited (https://www.icann.org/epp#serverUpdateProhibited)'], 'dnssec': False, 'name_servers': ['ns1.google.com', 'ns2.google.com', 'ns3.google.com', 'ns4.google.com'], 'registrant': 'Google LLC', 'emails': ['abusecomplaints@markmonitor.com', 'whoisrequest@markmonitor.com']}
 
->>> import whois
->>> domain = whois.query('google.com')
-
->>> print(domain.__dict__)
-{
-	'expiration_date': datetime.datetime(2020, 9, 14, 0, 0),
-	'last_updated': datetime.datetime(2011, 7, 20, 0, 0),
-	'registrar': 'MARKMONITOR INC.',
-	'name': 'google.com',
-	'creation_date': datetime.datetime(1997, 9, 15, 0, 0)
-}
-
->>> print(domain.name)
+>>> print(d.name)
 google.com
 
->>> print(domain.expiration_date)
-2020-09-14 00:00:00
+>>> print (d.expiration_date)
+None
+
+>>> print (d.creation_date)
+1997-09-15 09:00:00
 ```
 
 ## ccTLD & TLD support
-see the file: ./whois/tld_regexpr.py
-or call whois.validTlds()
-
-## Issues
-Raise an issue https://github.com/DannyCork/python-whois/issues/new
-
-## Changes:
-2022-06-09: maarten_boot:
- * the returned list of name_servers is now a sorted unique list and not a set
- * the help function whois.validTlds() now outputs the true tld with dots
-
-2022-09-27: maarten_boot
- * add test2.py to replace test.py
- * ./test2.py -h will show the possible usage
- * all tests from the original program are now files in the ./tests directory
- * test can be done on all supported tld's with -a or --all and limitest by regex with -r <pattern> or --reg=<pattern>
-
-2022-11-04: maarten_boot
- * add support for Iana example.com, example.net
-
-2022-11-07: maarten_boot
- * add testing against static known data in dir: ./testdata/<domain>/output
- * test.sh will test all domains in testdata without actually calling whois, the input data is instead read from testdata/<domain>/input
-
-2022-11-11: maarten_boot
- * add support for returning the raw data from the whois command: flag include_raw_whois_text
- * add support for handling unsupported domains via whois raw text only: flag return_raw_text_for_unsupported_tld
-
-2023-01-18: sorrowless
- * add an opportunity to specify maximum cache age
-
-2023-01-25: maarten_boot
- * convert the tld file to a Dict, we now no longer need a mappper for python keywords or second level domains.
- * utf8 level domains also need no mapper anymore an can be added as is with a translation to xn--<something>
- * added xn-- tlds for all known utf-8 domains we currently have
- * we can now add new domains on the fly or change them:  whois.mergeExternalDictWithRegex(aDictToOverride) see example testExtend.py
-
-2023-01-27: maarten_boot
- * add autodetect via iana tld file (this has only tld's)
- * add a central collection of all compiled regexes and reuse them: REG_COLLECTION_BY_KEY in _0_init_tld.py
- * refresh testdata now that tld has dot instead of _ if more then one level
- * add additional strings meaning domain does not exist
-
-2023-02-02: maarten_boot
- * whois.QuotaStringsAdd(str) to add additional strings for over quota detection. whois.QuotaStrings() lists the current configured strings
- * whois.NoneStringsAdd(str) to add additional string for NoSuchDomainExists detection (whois.query() retuning None). whois.NoneStrings() lsts the current configured strings
- * suppress messages to stderr if not verbose=True
+see the file: ./whoisdomain/tld_regexpr.py
+or call whoisdomain.validTlds()
 
 ## Support
  * Python 3.x is supported for x >= 6
  * Python 2.x IS NOT supported.
+
+## Author's
+  * this is a rename copy of original work done in: https://github.com/DannyCork/python-whois

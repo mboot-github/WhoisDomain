@@ -15,7 +15,7 @@ from typing import (
 # mostly with indented blocks of nameservers
 
 # import whois
-from whois.tld_regexpr import ZZ
+from whoisdomain.tld_regexpr import ZZ
 
 
 def buildRegCollection(zz: Dict):

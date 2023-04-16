@@ -6,7 +6,7 @@ import urllib.request
 
 from tmp.iana_tld_list.iana import IANA
 
-import whois
+import whoisdomain as whois
 from whois._1_query import _do_whois_query
 
 # allow verbose messages during testing (all on stderr)

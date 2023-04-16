@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import whois
+import whoisdomain as whois
 import os
 import re
 import getopt
