@@ -1,5 +1,7 @@
 #! /bin/bash
 
-rm -rf dist
-python -m build
-twine upload dist/*
+version=$( cat ./work/version )
+
+ls -l ./dist/*${version}* && {
+    twine upload dist/*
+}
