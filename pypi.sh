@@ -3,5 +3,5 @@
 version=$( cat ./work/version )
 
 ls -l ./dist/*${version}* && {
-    twine upload dist/*
+    twine upload dist/*${version}*
 }
