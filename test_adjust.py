@@ -13,7 +13,7 @@ TEST_DATETIMES = [
     "2000.01.02",
     "2005/05/30",
     "31-01-2000",
-    "01-31-2000", # is ambivalent for all days <=12 could be interpreded as dd-mm-yyyy
+    "01-31-2000",  # is ambivalent for all days <=12 could be interpreded as dd-mm-yyyy
     "20240405",
     "2000. 01. 31.",
     "aug-1996",

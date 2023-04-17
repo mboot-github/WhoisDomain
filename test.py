@@ -107,7 +107,6 @@ def query(domain, host=None):
         print(e)
 
 
-
 def parse(data):
     if "," in data:
         data = data.split(",")
