@@ -15,12 +15,12 @@ from typing import (
 import whoisdomain as whois
 
 
-Verbose = False
-PrintGetRawWhoisResult = False
-Ruleset = False
+Verbose: bool = False
+PrintGetRawWhoisResult: bool = False
+Ruleset: bool = False
 
 Failures: Dict[str, Any] = {}
-IgnoreReturncode = False
+IgnoreReturncode: bool = False
 
 
 class ResponseCleaner:
@@ -235,7 +235,7 @@ def testItem(
     print("\n", whois.get_last_raw_whois_data())
 
 
-def errorItem(d: str, e: str, what: str = "Generic") -> None:
+def errorItem(d: str, e: Any, what: str = "Generic") -> None:
     if what not in Failures:
         Failures[what] = {}
     Failures[what][d] = e

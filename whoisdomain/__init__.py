@@ -45,6 +45,19 @@ from .exceptions import (
     WhoisCommandTimeout,
 )
 
+__all__ = [
+    "UnknownTld",
+    "FailedParsingWhoisOutput",
+    "UnknownDateFormat",
+    "WhoisCommandFailed",
+    "WhoisPrivateRegistry",
+    "WhoisQuotaExceeded",
+    "WhoisCommandTimeout",
+    "cleanupWhoisResponse",
+    "validTlds",
+    "TLD_RE",
+    "get_last_raw_whois_data",
+]
 
 CACHE_FILE = None
 SLOW_DOWN = 0
@@ -54,11 +67,14 @@ LastWhois: Dict[str, Any] = {
 }
 
 
-def internationalizedDomainNameToPunyCode(d: List[str]) -> List[str]:
+# PRIVATE
+
+
+def _internationalizedDomainNameToPunyCode(d: List[str]) -> List[str]:
     return [k.encode("idna").decode() or k for k in d]
 
 
-def result2dict(func: Any) -> Any:
+def _result2dict(func: Any) -> Any:
     @wraps(func)
     def _inner(*args: str, **kw: Any) -> Dict[str, Any]:
         r = func(*args, **kw)
@@ -67,7 +83,7 @@ def result2dict(func: Any) -> Any:
     return _inner
 
 
-def fromDomainStringToTld(
+def _fromDomainStringToTld(
     domain: str,
     internationalized: bool,
     verbose: bool = False,
@@ -88,7 +104,7 @@ def fromDomainStringToTld(
         print(f"filterTldToSupportedPattern returns tld: {tld}", file=sys.stderr)
 
     if internationalized and isinstance(internationalized, bool):
-        d = internationalizedDomainNameToPunyCode(d)
+        d = _internationalizedDomainNameToPunyCode(d)
 
     if verbose:
         print(tld, d, file=sys.stderr)
@@ -96,7 +112,7 @@ def fromDomainStringToTld(
     return tld, d
 
 
-def validateWeKnowTheToplevelDomain(
+def _validateWeKnowTheToplevelDomain(
     tld: str,
     return_raw_text_for_unsupported_tld: bool = False,
 ) -> Optional[Dict[str, Any]]:
@@ -113,7 +129,7 @@ def validateWeKnowTheToplevelDomain(
     return TLD_RE.get(tld)
 
 
-def verifyPrivateREgistry(
+def _verifyPrivateREgistry(
     thisTld: Dict[str, Any],
 ) -> None:
     # may raise WhoisPrivateRegistry
@@ -123,7 +139,7 @@ def verifyPrivateREgistry(
         raise WhoisPrivateRegistry(msg)
 
 
-def doServerHintsForThisTld(
+def _doServerHintsForThisTld(
     tld: str,
     thisTld: Dict[str, Any],
     server: Optional[str],
@@ -138,7 +154,7 @@ def doServerHintsForThisTld(
     return server
 
 
-def doSlowdownHintForThisTld(
+def _doSlowdownHintForThisTld(
     tld: str,
     thisTld: Dict[str, Any],
     slow_down: int,
@@ -153,7 +169,7 @@ def doSlowdownHintForThisTld(
     return slow_down
 
 
-def doUnsupportedTldAnyway(
+def _doUnsupportedTldAnyway(
     tld: str,
     dl: List[str],
     ignore_returncode: bool = False,
@@ -192,6 +208,9 @@ def doUnsupportedTldAnyway(
         include_raw_whois_text=include_raw_whois_text,
         return_raw_text_for_unsupported_tld=True,
     )
+
+
+# PUBLIC
 
 
 def get_last_raw_whois_data() -> Dict[str, Any]:
@@ -243,14 +262,21 @@ def query(
     assert isinstance(domain, str), Exception("`domain` - must be <str>")
     return_raw_text_for_unsupported_tld = bool(return_raw_text_for_unsupported_tld)
 
-    tld, dl = fromDomainStringToTld(domain, internationalized, verbose)
+    tld, dl = _fromDomainStringToTld(
+        domain,
+        internationalized,
+        verbose,
+    )
     if tld is None:
         return None
 
     dl = cast(List[str], dl)
-    thisTld = validateWeKnowTheToplevelDomain(tld, return_raw_text_for_unsupported_tld)  # may raise UnknownTld
+    thisTld = _validateWeKnowTheToplevelDomain(
+        tld,
+        return_raw_text_for_unsupported_tld,
+    )  # may raise UnknownTld
     if thisTld is None:
-        return doUnsupportedTldAnyway(
+        return _doUnsupportedTldAnyway(
             tld,
             dl,
             ignore_returncode=ignore_returncode,
@@ -260,11 +286,11 @@ def query(
             wh=wh,
         )
 
-    verifyPrivateREgistry(thisTld)  # may raise WhoisPrivateRegistry
-    server = doServerHintsForThisTld(tld, thisTld, server, verbose)
+    _verifyPrivateREgistry(thisTld)  # may raise WhoisPrivateRegistry
+    server = _doServerHintsForThisTld(tld, thisTld, server, verbose)
 
     slow_down = slow_down or SLOW_DOWN
-    slow_down = doSlowdownHintForThisTld(tld, thisTld, slow_down, verbose)
+    slow_down = _doSlowdownHintForThisTld(tld, thisTld, slow_down, verbose)
 
     # if the tld is a multi level we should not move further down than the tld itself
     # we currently allow progressive lookups until we find something:
@@ -322,4 +348,4 @@ def query(
 
 
 # Add get function to support return result in dictionary form
-get = result2dict(query)
+get = _result2dict(query)
