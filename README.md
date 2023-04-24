@@ -24,6 +24,7 @@ the third will start from 1 and be only used if more than one update will have t
  * optionally allow IDN's to be translated to Punycode
  * optional specify the whois command on query(...,cmd="whois") as in: https://github.com/gen1us2k/python-whois/
  * the module is now 'mypy --strict' clean
+ * the module now also exports a cli command domainwhois
 
 ## Dependencies
   * please install also the command line "whois" of your distribution

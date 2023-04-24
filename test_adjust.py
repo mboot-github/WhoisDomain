@@ -5,7 +5,11 @@
 
 from whoisdomain._3_adjust import str_to_date
 
-TEST_DATETIMES = [
+from typing import (
+    List,
+)
+
+TEST_DATETIMES: List[str] = [
     "02-jan-2000",
     "02.02.2000",
     "01/06/2011",

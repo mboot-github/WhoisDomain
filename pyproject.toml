@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "whoisdomain"
-version = "1.20230424.3"
+version = "1.20230424.4"
 authors = [
   { name="DannyCork"},
 ]
@@ -46,10 +46,12 @@ keywords = [
     "cctld",
     "registrar",
 ]
+
 [project.scripts]
-whoisdomain = 'whoisdomain.whoisdomain:main'
+whoisdomain = 'whoisdomain.main:main'
 
 [project.urls]
 "Bug Tracker" = "https://github.com/mboot-github/WhoisDomain/issues"
 "Home Page" = "https://github.com/mboot-github/WhoisDomain/"
 "Repository" = "https://github.com/mboot-github/WhoisDomain/"
+

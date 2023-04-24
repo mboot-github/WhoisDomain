@@ -12,7 +12,7 @@ from typing import (
     Dict,
 )
 
-import whoisdomain as whois # to be compatible with dannycork
+import whoisdomain as whois  # to be compatible with dannycork
 
 
 Verbose: bool = False
