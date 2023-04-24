@@ -19,8 +19,8 @@ main()
 {
     ls *.py >/dev/null 2>/dev/null && doIt
 
-    mypy --implicit-optional *.py
-    mypy --implicit-optional whoisdomain
+    mypy --strict --no-incremental *.py
+    mypy --strict --no-incremental whoisdomain
 }
 
 main

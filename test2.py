@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-import whoisdomain as whois
+
 import os
 import re
 import getopt
@@ -11,6 +11,9 @@ from typing import (
     List,
     Dict,
 )
+
+import whoisdomain as whois
+
 
 Verbose = False
 PrintGetRawWhoisResult = False
@@ -88,7 +91,7 @@ class ResponseCleaner:
         verbose: bool = False,
         with_cleanup_results: bool = False,
     ) -> Tuple[str, Dict[Any, Any]]:
-        result = whois._2_parse.cleanupWhoisResponse(
+        result = whois.cleanupWhoisResponse(
             self.data,
             verbose,
             with_cleanup_results,

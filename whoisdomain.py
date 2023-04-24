@@ -91,7 +91,7 @@ class ResponseCleaner:
         verbose: bool = False,
         with_cleanup_results: bool = False,
     ) -> Tuple[str, Dict[Any, Any]]:
-        result = whoisdomain._2_parse.cleanupWhoisResponse(
+        result = whoisdomain.cleanupWhoisResponse(
             self.data,
             verbose,
             with_cleanup_results,
