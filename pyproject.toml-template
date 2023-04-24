@@ -46,14 +46,12 @@ keywords = [
     "cctld",
     "registrar",
 ]
+
 [project.scripts]
-whoisdomain = 'whoisdomain.whoisdomain:main'
+whoisdomain = 'whoisdomain.main:main'
 
 [project.urls]
 "Bug Tracker" = "https://github.com/mboot-github/WhoisDomain/issues"
 "Home Page" = "https://github.com/mboot-github/WhoisDomain/"
 "Repository" = "https://github.com/mboot-github/WhoisDomain/"
 
-[[tool.mypy.overrides]]
-module = "whoisdomain"
-implicit_reexport = true
