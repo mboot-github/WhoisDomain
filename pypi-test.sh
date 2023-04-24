@@ -23,6 +23,7 @@ setupVersionNumberToday()
         TODAY_SEQ=$(( TODAY_SEQ + 1))
     fi
 
+    mkdir -p ./work/
     # keep track of the latest version string
     echo "${VERSION}.${DATE}.${TODAY_SEQ}" >./work/version
 }
@@ -52,6 +53,7 @@ uploadTwineTest()
 main()
 {
     ./reformat-code.sh
+    mypy --implicit-optional *.py
     mypy --implicit-optional whoisdomain
 
     setupVersionNumberToday

@@ -46,6 +46,8 @@ keywords = [
     "cctld",
     "registrar",
 ]
+[project.scripts]
+whoisdomain = 'whoisdomain.whoisdomain:main'
 
 [project.urls]
 "Bug Tracker" = "https://github.com/mboot-github/WhoisDomain/issues"

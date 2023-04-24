@@ -73,7 +73,7 @@ def cleanupWhoisResponse(
     verbose: bool = False,
     with_cleanup_results: bool = False,
 ) -> str:
-    tmp2 = []
+    tmp2: List = []
 
     # note we cannot do yet rstrip() on the lines as many registrars use \r and even trailing whitespace after entries
     # as the resulting matches are all stripped of leading and trailing whitespace this currently is fixed there

@@ -18,6 +18,9 @@ doIt()
 main()
 {
     ls *.py >/dev/null 2>/dev/null && doIt
+
+    mypy --implicit-optional *.py
+    mypy --implicit-optional whoisdomain
 }
 
 main
