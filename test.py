@@ -5,9 +5,17 @@
 
 import sys
 
+from typing import (
+    Optional,
+    # Dict,
+    List,
+    # Any,
+)
+
+
 import whoisdomain as whois
 
-DOMAINS = """
+DOMAINS: str = """
 google.com
 www.fsdfsdfsdfsd.google.com
 google.org
@@ -80,7 +88,11 @@ nic.онлайн
 """
 
 
-def query(domain, host=None):
+def query(
+    domain: str,
+    host: Optional[str] = None,
+) -> None:
+
     print("")
     print("-" * 80)
     print("Domain: {0}, host: {1}".format(domain, host))
@@ -89,7 +101,7 @@ def query(domain, host=None):
     try:
         w = whois.query(
             domain,
-            host,
+            server=host,
             ignore_returncode=True,
             verbose=False,
             internationalized=True,
@@ -107,18 +119,23 @@ def query(domain, host=None):
         print(e)
 
 
-def parse(data):
-    if "," in data:
-        data = data.split(",")
-        if len(data) == 1:
-            query(data[0])
-        elif len(data) == 2:
-            query(data[0], data[1])
-    else:
+def parse(data: str) -> None:
+    if "," not in data:
         query(data)
+        return
+
+    dList: List[str] = data.split(",")
+
+    if len(dList) == 1:
+        query(dList[0])
+        return
+
+    if len(dList) == 2:
+        query(dList[0], dList[1])
+        return
 
 
-def main():
+def main() -> None:
     if len(sys.argv) > 1:
         domains = sys.argv[1:]
     else:

@@ -5,7 +5,7 @@ import re
 import getopt
 import sys
 from typing import (
-    # Optional,
+    Optional,
     Tuple,
     Any,
     List,
@@ -19,18 +19,24 @@ Verbose = False
 PrintGetRawWhoisResult = False
 Ruleset = False
 
-Failures = {}
+Failures: Dict[str, Any] = {}
 IgnoreReturncode = False
 
 
 class ResponseCleaner:
     data: str
-    rDict: Dict = {}
+    rDict: Dict[str, Any] = {}
 
-    def __init__(self, pathToTestFile: str):
+    def __init__(
+        self,
+        pathToTestFile: str,
+    ):
         self.data = self.readInputFile(pathToTestFile)
 
-    def readInputFile(self, pathToTestFile: str):
+    def readInputFile(
+        self,
+        pathToTestFile: str,
+    ) -> str:
         if not os.path.exists(pathToTestFile):
             return ""
 
@@ -38,7 +44,10 @@ class ResponseCleaner:
             # make sure the data is treated exactly the same as the output of Popen
             return f.read().decode(errors="ignore")
 
-    def cleanSection(self, section: List) -> List:
+    def cleanSection(
+        self,
+        section: List[str],
+    ) -> List[str]:
         # cleanup any beginning and ending empty lines from the section
 
         if len(section) == 0:
@@ -57,11 +66,14 @@ class ResponseCleaner:
 
         return section
 
-    def splitBodyInSections(self, body: List) -> List:
+    def splitBodyInSections(
+        self,
+        body: List[str],
+    ) -> List[str]:
         # split the body on empty line, cleanup all sections, remove empty sections
         # return list of body's
 
-        sections: List = []
+        sections: List[List[str]] = []
         n = 0
         sections.append([])
         for line in body:
@@ -76,8 +88,8 @@ class ResponseCleaner:
             sections[m] = self.cleanSection(sections[m])
             m += 1
 
-        # now remove ampty sections and return
-        sections2 = []
+        # now remove empty sections and return
+        sections2: List[str] = []
         m = 0
         while m < len(sections):
             if len(sections[m]) > 0:
@@ -97,16 +109,16 @@ class ResponseCleaner:
             with_cleanup_results,
         )
 
-        self.rDict = {
+        self.rDict: Dict[str, Any] = {
             "BodyHasSections": False,  # if this is true the body is not a list of lines but a list of sections with lines
             "Preamble": [],  # the lines telling what whois servers wwere contacted
             "Percent": [],  # lines staring with %% , often not present but may contain hints
             "Body": [],  # the body of the whois, may be in sections separated by empty lines
             "Postamble": [],  # copyright and other not relevant info for actual parsing whois
         }
-        body: List = []
+        body: List[str] = []
 
-        rr: List = []
+        rr: List[str] = []
         z = result.split("\n")
         preambleSeen = False
         postambleSeen = False
@@ -151,7 +163,7 @@ class ResponseCleaner:
         self.rDict["Body"] = self.splitBodyInSections(body)
         return "\n".join(rr), self.rDict
 
-    def printMe(self):
+    def printMe(self) -> None:
         zz = ["Preamble", "Percent", "Postamble"]
         for k in zz:
             n = 0
@@ -172,17 +184,20 @@ class ResponseCleaner:
                 print(lines)
 
 
-def prepItem(d):
+def prepItem(d: str) -> None:
     print("")
     print(f"test domain: <<<<<<<<<< {d} >>>>>>>>>>>>>>>>>>>>")
 
 
-def xType(x):
+def xType(x: Any) -> str:
     s = f"{type(x)}"
     return s.split("'")[1]
 
 
-def testItem(d: str, printgetRawWhoisResult: bool = False):
+def testItem(
+    d: str,
+    printgetRawWhoisResult: bool = False,
+) -> None:
     global PrintGetRawWhoisResult
 
     timout = 30  # seconds
@@ -220,7 +235,7 @@ def testItem(d: str, printgetRawWhoisResult: bool = False):
     print("\n", whois.get_last_raw_whois_data())
 
 
-def errorItem(d, e, what="Generic"):
+def errorItem(d: str, e: str, what: str = "Generic") -> None:
     if what not in Failures:
         Failures[what] = {}
     Failures[what][d] = e
@@ -229,7 +244,7 @@ def errorItem(d, e, what="Generic"):
     print(message)
 
 
-def testDomains(aList):
+def testDomains(aList: List[str]) -> None:
     for d in aList:
 
         # skip empty lines
@@ -268,7 +283,7 @@ def testDomains(aList):
         #    errorItem(d, e, what="Generic")
 
 
-def getTestFileOne(fPath, fileData):
+def getTestFileOne(fPath: str, fileData: Dict[str, Any]) -> None:
     if not os.path.isfile(fPath):  # only files
         return
 
@@ -292,18 +307,24 @@ def getTestFileOne(fPath, fileData):
     return
 
 
-def getTestFilesAll(tDir, fileData):
+def getTestFilesAll(
+    tDir: str,
+    fileData: Dict[str, Any],
+) -> None:
     for item in os.listdir(tDir):
         fPath = f"{tDir}/{item}"
         getTestFileOne(fPath, fileData)
 
 
-def getAllCurrentTld():
+def getAllCurrentTld() -> List[str]:
     return whois.validTlds()
 
 
-def makeMetaAllCurrentTld(allHaving=None, allRegex=None):
-    rr = []
+def makeMetaAllCurrentTld(
+    allHaving: Optional[str] = None,
+    allRegex: Optional[str] = None,
+) -> List[str]:
+    rr: List[str] = []
     for tld in getAllCurrentTld():
         if allRegex:
             if re.search(allRegex, tld):
@@ -314,13 +335,13 @@ def makeMetaAllCurrentTld(allHaving=None, allRegex=None):
     return rr
 
 
-def showAllCurrentTld():
+def showAllCurrentTld() -> None:
     print("Tld's currently supported")
     for tld in getAllCurrentTld():
         print(tld)
 
 
-def ShowRuleset(tld):
+def ShowRuleset(tld: str) -> None:
     rr = whois.TLD_RE
     if tld in rr:
         for key in sorted(rr[tld].keys()):
@@ -331,7 +352,7 @@ def ShowRuleset(tld):
             print(key, rule, "IGNORECASE")
 
 
-def usage():
+def usage() -> None:
     print(
         """
 test.py
@@ -397,9 +418,10 @@ test.py
     --all --having <name>
         from all but only the ones haveing a certain field
     """
+    sys.exit(1)
 
 
-def showFailures():
+def showFailures() -> None:
     if len(Failures):
         print("\n# ========================")
         for i in sorted(Failures.keys()):
@@ -407,14 +429,15 @@ def showFailures():
                 print(i, j, Failures[i][j])
 
 
-def main(argv):
+def main() -> None:
     global Verbose
     global IgnoreReturncode
     global PrintGetRawWhoisResult
     global Ruleset
+
     try:
         opts, args = getopt.getopt(
-            argv,
+            sys.argv[1:],
             "RSpvIhaf:d:D:r:H:C:",
             [
                 "Ruleset",
@@ -435,20 +458,21 @@ def main(argv):
         usage()
         sys.exit(2)
 
-    testAllTld = False
-    allHaving = None  # from all supported tld only process the ones having this :: TODO ::
-    allRegex = None  # from all supported tld process only the ones matching this regex
+    testAllTld: bool = False
 
-    directory = None
-    dirs = []
+    allHaving: Optional[str] = None  # from all supported tld only process the ones having this :: TODO ::
+    allRegex: Optional[str] = None  # from all supported tld process only the ones matching this regex
 
-    filename = None
-    files = []
+    directory: Optional[str] = None
+    dirs: List[str] = []
 
-    domain = None
-    domains = []
+    filename: Optional[str] = None
+    files: List[str] = []
 
-    fileData = {}
+    domain: Optional[str] = None
+    domains: List[str] = []
+
+    fileData: Dict[str, Any] = {}
 
     for opt, arg in opts:
         if opt in ("-S", "SupportedTld"):
@@ -465,11 +489,11 @@ def main(argv):
 
         if opt in ("-H", "--having"):
             testAllTld = True
-            allHaving = arg
+            allHaving = str(arg)
 
         if opt in ("-r", "--reg"):
             testAllTld = True
-            allRegex = arg
+            allRegex = str(arg)
 
         if opt in ("-v", "--verbose"):
             Verbose = True
@@ -556,4 +580,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()
