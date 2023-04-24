@@ -353,9 +353,11 @@ def ShowRuleset(tld: str) -> None:
 
 
 def usage() -> None:
+    name = os.path.basename(sys.argv[0])
+
     print(
-        """
-test.py
+        f"""
+{name}
     [ -v | --verbose ]
         # set verbose to True, this will be forwarded to whois.query
 
@@ -391,22 +393,22 @@ test.py
     [ -C <file> | --Cleanup <file> ]
     read the input file specified and run the same cleanup as in whois.query , then exit
 
-    # options are exclusive and without any options the test2 program does nothing
+    # options are exclusive and without any options the {name} program does nothing
 
     # test one specific file with verbose and IgnoreReturncode
-    example: ./test2.py -v -I -f tests/ok-domains.txt 2>2 >out
+    example: {name} -v -I -f tests/ok-domains.txt 2>2 >out
 
     # test one specific directory with verbose and IgnoreReturncode
-    example: ./test2.py -v -I -D tests 2>2 >out
+    example: {name} -v -I -D tests 2>2 >out
 
     # test two domains with verbose and IgnoreReturncode
-    example: ./test2.py -v -I -d meta.org -d meta.com 2>2 >out
+    example: {name} -v -I -d meta.org -d meta.com 2>2 >out
 
     # test all supported tld's with verbose and IgnoreReturncode
-    example: ./test2.py -v -I -a 2>2 >out
+    example: {name} -v -I -a 2>2 >out
 
     # test nothing
-    example: ./test2.py -v -I 2>2 >out
+    example: {name} -v -I 2>2 >out
 """
     )
 
@@ -577,6 +579,9 @@ def main() -> None:
         testDomains(domains)
         showFailures()
         return
+
+    usage()
+    sys.exit(0)
 
 
 if __name__ == "__main__":

@@ -72,8 +72,64 @@ name_servers       list              ['ns1.google.com', 'ns2.google.com', 'ns3.g
 registrant         str               'Google LLC'
 emails             list              ['abusecomplaints@markmonitor.com', 'whoisrequest@markmonitor.com']
 
- {'Try': [{'Domain': 'google.com', 'rawData': '[Querying whois.verisign-grs.com]\n[Redirected to whois.markmonitor.com]\n[Querying whois.markmonitor.com]\n[whois.markmonitor.com]\nDomain Name: google.com\nRegistry Domain ID: 2138514_DOMAIN_COM-VRSN\nRegistrar WHOIS Server: whois.markmonitor.com\nRegistrar URL: http://www.markmonitor.com\nUpdated Date: 2019-09-09T15:39:04+0000\nCreation Date: 1997-09-15T07:00:00+0000\nRegistrar Registration Expiration Date: 2028-09-13T07:00:00+0000\nRegistrar: MarkMonitor, Inc.\nRegistrar IANA ID: 292\nRegistrar Abuse Contact Email: abusecomplaints@markmonitor.com\nRegistrar Abuse Contact Phone: +1.2086851750\nDomain Status: clientUpdateProhibited (https://www.icann.org/epp#clientUpdateProhibited)\nDomain Status: clientTransferProhibited (https://www.icann.org/epp#clientTransferProhibited)\nDomain Status: clientDeleteProhibited (https://www.icann.org/epp#clientDeleteProhibited)\nDomain Status: serverUpdateProhibited (https://www.icann.org/epp#serverUpdateProhibited)\nDomain Status: serverTransferProhibited (https://www.icann.org/epp#serverTransferProhibited)\nDomain Status: serverDeleteProhibited (https://www.icann.org/epp#serverDeleteProhibited)\nRegistrant Organization: Google LLC\nRegistrant State/Province: CA\nRegistrant Country: US\nRegistrant Email: Select Request Email Form at https://domains.markmonitor.com/whois/google.com\nAdmin Organization: Google LLC\nAdmin State/Province: CA\nAdmin Country: US\nAdmin Email: Select Request Email Form at https://domains.markmonitor.com/whois/google.com\nTech Organization: Google LLC\nTech State/Province: CA\nTech Country: US\nTech Email: Select Request Email Form at https://domains.markmonitor.com/whois/google.com\nName Server: ns1.google.com\nName Server: ns3.google.com\nName Server: ns2.google.com\nName Server: ns4.google.com\nDNSSEC: unsigned\nURL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/\n>>> Last update of WHOIS database: 2023-04-17T08:13:22+0000 <<<\n\nFor more information on WHOIS status codes, please visit:\n  https://www.icann.org/resources/pages/epp-status-codes\n\nIf you wish to contact this domain’s Registrant, Administrative, or Technical\ncontact, and such email address is not visible above, you may do so via our web\nform, pursuant to ICANN’s Temporary Specification. To verify that you are not a\nrobot, please enter your email address to receive a link to a page that\nfacilitates email communication with the relevant contact(s).\n\nWeb-based WHOIS:\n  https://domains.markmonitor.com/whois\n\nIf you have a legitimate interest in viewing the non-public WHOIS details, send\nyour request and the reasons for your request to whoisrequest@markmonitor.com\nand specify the domain name in the subject line. We will review that request and\nmay ask for supporting documentation and explanation.\n\nThe data in MarkMonitor’s WHOIS database is provided for information purposes,\nand to assist persons in obtaining information about or related to a domain\nname’s registration record. While MarkMonitor believes the data to be accurate,\nthe data is provided "as is" with no guarantee or warranties regarding its\naccuracy.\n\nBy submitting a WHOIS query, you agree that you will use this data only for\nlawful purposes and that, under no circumstances will you use this data to:\n  (1) allow, enable, or otherwise support the transmission by email, telephone,\nor facsimile of mass, unsolicited, commercial advertising, or spam; or\n  (2) enable high volume, automated, or electronic processes that send queries,\ndata, or email to MarkMonitor (or its systems) or the domain name contacts (or\nits systems).\n\nMarkMonitor reserves the right to modify these terms at any time.\n\nBy submitting this query, you agree to abide by this policy.\n\nMarkMonitor Domain Management(TM)\nProtecting companies and consumers in a digital world.\n\nVisit MarkMonitor at https://www.markmonitor.com\nContact us at +1.8007459229\nIn Europe, at +44.02032062220\n--\n', 'server': None}]}
  ```
+
+A short intro into the cli whoisdomain command
+```
+whoisdomain
+    [ -v | --verbose ]
+        # set verbose to True, this will be forwarded to whois.query
+
+    [ -I | --IgnoreReturncode ]
+        # sets the IgnoreReturncode to True, this will be forwarded to whois.query
+
+    [ -a | --all]
+        # test all existing tld currently supported,
+
+    [ -d <domain> | --domain = <domain> " ]
+        # only analyze the given domains
+        # the option can be repeated to specify more then one domain
+
+    [ -f <filename> | --file = <filename> " ]
+        # use the named file to test all domains (one domain per line)
+        # lines starting with # or empty lines are skipped, anything after the domain is ignored
+        # the option can be repeated to specify more then one file
+
+    [ -D <directory> | --Directory = <directory> " ]
+        # use the named directory, ald use all files ending in .txt as files containing domains
+        # files are processed as in the -f option so comments and empty lines are skipped
+        # the option can be repeated to specify more then one directory
+
+    [ -p | --print ]
+    also print text containing the raw output of whois
+
+    [ -R | --Ruleset ]
+    dump the ruleset for the tld and exit
+
+    [ -S | --SupportedTld ]
+    print all supported top level domains we know and exit
+
+    [ -C <file> | --Cleanup <file> ]
+    read the input file specified and run the same cleanup as in whois.query , then exit
+
+    # options are exclusive and without any options the whoisdomain program does nothing
+
+    # test one specific file with verbose and IgnoreReturncode
+    example: whoisdomain -v -I -f tests/ok-domains.txt 2>2 >out
+
+    # test one specific directory with verbose and IgnoreReturncode
+    example: whoisdomain -v -I -D tests 2>2 >out
+
+    # test two domains with verbose and IgnoreReturncode
+    example: whoisdomain -v -I -d meta.org -d meta.com 2>2 >out
+
+    # test all supported tld's with verbose and IgnoreReturncode
+    example: whoisdomain -v -I -a 2>2 >out
+
+    # test nothing
+    example: whoisdomain -v -I 2>2 >out
+
+```
 
 ## ccTLD & TLD support
 see the file: ./whoisdomain/tld_regexpr.py
