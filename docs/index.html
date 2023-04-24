@@ -1,5 +1,55 @@
-hello World2
+<h1>EntryPoint</h1>
 
+The main entry point into the library module:
+
+<pre>
+def query(
+    domain: str,
+    force: bool = False,
+    cache_file: Optional[str] = None,
+    cache_age: int = 60 * 60 * 48,
+    slow_down: int = 0,
+    ignore_returncode: bool = False,
+    server: Optional[str] = None,
+    verbose: bool = False,
+    with_cleanup_results: bool = False,
+    internationalized: bool = False,
+    include_raw_whois_text: bool = False,
+    return_raw_text_for_unsupported_tld: bool = False,
+    timeout: Optional[float] = None,
+    cmd: str = "whois",
+) -> Optional[Domain]:
+</pre>
+
+<p>domain</p>
+
+<p>force</p>
+
+<p>cache_file</p>
+
+<p>cache_age</p>
+
+<p>slow_down</p>
+
+<p>ignore_returncode</p>
+
+<p>server</p>
+
+<p>verbose</p>
+
+<p>with_cleanup_results</p>
+
+<p>internationalized</p>
+
+<p>include_raw_whois_text</p>
+
+<p>return_raw_text_for_unsupported_tld</p>
+
+<p>timeout</p>
+
+<p>cmd</p>
+
+<h1>The command line interface to the module</h1>
 <pre>
 whoisdomain
     [ -v | --verbose ]

@@ -1,5 +1,7 @@
 # whoisdomain
 
+* https://pypi.org/project/whoisdomain/
+
 A Python package for retrieving WHOIS information of DOMAIN'S ONLY.
 
 This package will not support querying ip CIDR ranges or AS information
