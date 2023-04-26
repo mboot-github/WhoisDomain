@@ -27,10 +27,10 @@ the third will start from 1 and be only used if more than one update will have t
  * optional specify the whois command on query(...,cmd="whois") as in: https://github.com/gen1us2k/python-whois/
  * the module is now 'mypy --strict' clean
  * the module now also exports a cli command domainwhois
+ * both the module and the cli now support showing the version with lib:whois.getVersion() or cli:whoisdomain -V
 
 ## Dependencies
-  * please install also the command line "whois" of your distribution
-  * this library parses the output of the "whois" cli command of your operating system
+  * please install also the command line "whois" of your distribution as this library parses the output of the "whois" cli command of your operating system
 
 ## Usage example
 
@@ -38,6 +38,7 @@ Install the cli `whois` of your operating system if it is not present already,
 e.g 'apt install whois' or 'yum install whois'
 
 ```
+# fedora 37
 sudo yum install whois
 pip install whoisdomain
 python
@@ -57,6 +58,7 @@ google.com
 
 # whoisdomain
 ```
+# fedora 37
 sudo yum install whois
 pip3 install whoisdomain
 whoisdomain -d google.com
@@ -145,7 +147,7 @@ whoisdomain
 
 ## ccTLD & TLD support
 see the file: ./whoisdomain/tld_regexpr.py
-or call whoisdomain.validTlds()
+or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
 
 ## Support
  * Python 3.x is supported for x >= 6
@@ -155,5 +157,5 @@ or call whoisdomain.validTlds()
   * this is a rename copy of original work done in: https://github.com/DannyCork/python-whois
   * the project is also related to the project: https://github.com/gen1us2k/python-whois
   * both seem derived from a older google.code site: https://code.google.com/archive/p/python-whois
-  * aside from the original authors, many others already contributed to the repositories
+  * aside from the original authors, many others already contributed to these repositories
   * if authors/contributors prefer to be named explicitly, they can add a line in Historical.txt
