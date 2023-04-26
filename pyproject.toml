@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "whoisdomain"
-version = "1.20230426.9"
+version = "1.20230426.14"
 authors = [
   { name="DannyCork"},
 ]

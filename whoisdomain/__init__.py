@@ -45,6 +45,10 @@ from .exceptions import (
     WhoisCommandTimeout,
 )
 
+from .version import (
+    VERSION,
+)
+
 __all__ = [
     "UnknownTld",
     "FailedParsingWhoisOutput",
@@ -57,6 +61,8 @@ __all__ = [
     "validTlds",
     "TLD_RE",
     "get_last_raw_whois_data",
+    "VERSION",
+    "getVersion",
 ]
 
 CACHE_FILE = None
@@ -349,3 +355,7 @@ def query(
 
 # Add get function to support return result in dictionary form
 get = _result2dict(query)
+
+
+def getVersion() -> str:
+    return VERSION

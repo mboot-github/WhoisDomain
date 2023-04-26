@@ -81,58 +81,66 @@ emails             list              ['abusecomplaints@markmonitor.com', 'whoisr
 A short intro into the cli whoisdomain command
 ```
 whoisdomain
-    [ -v | --verbose ]
-        # set verbose to True, this will be forwarded to whois.query
+    [ -h | --usage ]
+        print this text and exit
 
-    [ -I | --IgnoreReturncode ]
-        # sets the IgnoreReturncode to True, this will be forwarded to whois.query
-
-    [ -a | --all]
-        # test all existing tld currently supported,
-
-    [ -d <domain> | --domain = <domain> " ]
-        # only analyze the given domains
-        # the option can be repeated to specify more then one domain
-
-    [ -f <filename> | --file = <filename> " ]
-        # use the named file to test all domains (one domain per line)
-        # lines starting with # or empty lines are skipped, anything after the domain is ignored
-        # the option can be repeated to specify more then one file
-
-    [ -D <directory> | --Directory = <directory> " ]
-        # use the named directory, ald use all files ending in .txt as files containing domains
-        # files are processed as in the -f option so comments and empty lines are skipped
-        # the option can be repeated to specify more then one directory
-
-    [ -p | --print ]
-    also print text containing the raw output of whois
-
-    [ -R | --Ruleset ]
-    dump the ruleset for the tld and exit
+    [ -V | --Version ]
+        print the build version string
+        and exit
 
     [ -S | --SupportedTld ]
-    print all supported top level domains we know and exit
+        print all known top level domains
+        and exit
+
+    [ -a | --all]
+        test all existing tld currently supported
+        and exit
+
+    [ -f <filename> | --file = <filename> " ]
+        use the named file to test all domains (one domain per line)
+        lines starting with # or empty lines are skipped, anything after the domain is ignored
+        the option can be repeated to specify more then one file
+        exits after processing all the files
+
+    [ -D <directory> | --Directory = <directory> " ]
+        use the named directory, ald use all files ending in .txt as files containing domains
+        files are processed as in the -f option so comments and empty lines are skipped
+        the option can be repeated to specify more then one directory
+        exits after processing all the dirs
+
+    [ -d <domain> | --domain = <domain> " ]
+        only analyze the given domains
+        the option can be repeated to specify more domain's
+
+    [ -v | --verbose ]
+        set verbose to True,
+        verbose output will be printed on stderr only
+
+    [ -I | --IgnoreReturncode ]
+        sets the IgnoreReturncode to True,
+
+    [ -p | --print ]
+        also print text containing the raw output of the cli whois
+
+    [ -R | --Ruleset ]
+        dump the ruleset for the requested tld and exit
+        should be combined with -d to specify tld's
 
     [ -C <file> | --Cleanup <file> ]
-    read the input file specified and run the same cleanup as in whois.query , then exit
-
-    # options are exclusive and without any options the whoisdomain program does nothing
-
-    # test one specific file with verbose and IgnoreReturncode
-    example: whoisdomain -v -I -f tests/ok-domains.txt 2>2 >out
-
-    # test one specific directory with verbose and IgnoreReturncode
-    example: whoisdomain -v -I -D tests 2>2 >out
+        read the input file specified and run the same cleanup as in whois.query,
+        then exit
 
     # test two domains with verbose and IgnoreReturncode
-    example: whoisdomain -v -I -d meta.org -d meta.com 2>2 >out
+    example: whoisdomain -v -I -d meta.org -d meta.com
 
     # test all supported tld's with verbose and IgnoreReturncode
-    example: whoisdomain -v -I -a 2>2 >out
+    example: whoisdomain -v -I -a
 
-    # test nothing
-    example: whoisdomain -v -I 2>2 >out
+    # test one specific file with verbose and IgnoreReturncode
+    example: whoisdomain -v -I -f tests/ok-domains.txt
 
+    # test one specific directory with verbose and IgnoreReturncode
+    example: whoisdomain -v -I -D tests
 ```
 
 ## ccTLD & TLD support

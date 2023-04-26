@@ -26,6 +26,7 @@ setupVersionNumberToday()
     mkdir -p ./work/
     # keep track of the latest version string
     echo "${VERSION}.${DATE}.${TODAY_SEQ}" >./work/version
+    echo "VERSION = '${VERSION}.${DATE}.${TODAY_SEQ}'" >whoisdomain/version.py
 }
 
 makeTomlFile()
