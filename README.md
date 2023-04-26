@@ -39,7 +39,7 @@ e.g 'apt install whois' or 'yum install whois'
 
 ```
 sudo yum install whois
-$pip install whoisdomain
+pip install whoisdomain
 python
 >>> import whoisdomain as whois
 >>> d = whois.query('google.com')
@@ -55,9 +55,11 @@ google.com
 1997-09-15 09:00:00
 ```
 
-# example test2.py
+# whoisdomain
 ```
-./test2.py -d google.com
+sudo yum install whois
+pip3 install whoisdomain
+whoisdomain -d google.com
 
 test domain: <<<<<<<<<< google.com >>>>>>>>>>>>>>>>>>>>
 name               str               'google.com'
