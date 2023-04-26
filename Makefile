@@ -8,6 +8,9 @@ reformat:
 mypy:
 	mypy *.py whoisdomain
 
+local:
+	./test2.py -a 2> tmp/local-2 | tee tmp/local-1
+
 # using the lowest py version we support 3.6 currently
 docker36:
 	export VERSION=$(shell cat work/version) && \

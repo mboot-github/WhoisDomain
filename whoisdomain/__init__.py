@@ -1,4 +1,5 @@
 import sys
+import os
 from functools import wraps
 from typing import (
     cast,
@@ -64,6 +65,16 @@ __all__ = [
     "VERSION",
     "getVersion",
 ]
+
+WHOISDOMAIN: str = ""
+if os.getenv("WHOISDOMAIN"):
+    WHOISDOMAIN = str(os.getenv("WHOISDOMAIN"))
+
+WD = WHOISDOMAIN.upper().split(":")
+
+SIMPLISTIC = False
+if "SIMPISTIC" in WD:
+    SIMPLISTIC = True
 
 CACHE_FILE = None
 SLOW_DOWN = 0
@@ -239,6 +250,7 @@ def query(
     return_raw_text_for_unsupported_tld: bool = False,
     timeout: Optional[float] = None,
     cmd: str = "whois",
+    simplistic: bool = False,
 ) -> Optional[Domain]:
     """
     force=True          Don't use cache.
@@ -257,8 +269,9 @@ def query(
                         if reqested the full response is also returned.
     return_raw_text_for_unsupported_tld:
                         if the tld is unsupported, just try it anyway but return only the raw text.
-    timeout:
-                        timeout in seconds for the whois command to return a result.
+    timeout:            timeout in seconds for the whois command to return a result.
+    cmd:                explicitly specify the path to the whois you want to use.
+    simplistic:         when simplistic is True we return None for most exceptions and dont pass info why we have no data.
     """
     global LastWhois
     LastWhois["Try"] = []  # init on start of query
