@@ -1,6 +1,6 @@
 FROM python:3.6-alpine
-
-RUN apk update && apk add whois && pip install -i https://test.pypi.org/simple/ whoisdomain
+ARG VERSION
+RUN apk update && apk add whois && pip install -i https://test.pypi.org/simple/ whoisdomain==$VERSION
 
 ENTRYPOINT ["whoisdomain"]
 CMD ["--help"]
