@@ -11,6 +11,9 @@ mypy:
 local:
 	./test2.py -a 2> tmp/local-2 | tee tmp/local-1
 
+build:
+	./build.sh
+
 # using the lowest py version we support 3.6 currently
 docker36:
 	export VERSION=$(shell cat work/version) && \
@@ -46,9 +49,12 @@ pypi-test:
 testTestPypiUpload:
 	./testTestPyPiUpload.sh 2>tmp/$@-2 | tee tmp/$@-1
 
+testLocalWhl:
+	./testLocalWhl.sh 2>tmp/$@-2 | tee tmp/$@-1
+
 # this is for pypi owners after all tests have finished
 pypi:
 	./pypi.sh
 
-# this builds a new test pypi and installs ot in a venv for a full test run
-prepareTest: reformat mypy pypi-test testTestPypiUpload
+# this builds a new test pypi and installs it in a venv for a full test run
+prepareTest: reformat build mypy testLocalWhl

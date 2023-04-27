@@ -14,6 +14,8 @@ from typing import (
 
 import whoisdomain as whois  # to be compatible with dannycork
 
+# if we are not running as test2.py run in a simplistic way
+SIMPLISTIC: bool = False
 
 Verbose: bool = False
 PrintGetRawWhoisResult: bool = False
@@ -209,6 +211,7 @@ def testItem(
         internationalized=True,
         include_raw_whois_text=PrintGetRawWhoisResult,
         timeout=timout,
+        simplistic=SIMPLISTIC,
     )
 
     if w is None:
@@ -226,11 +229,18 @@ def testItem(
 
     wd = w.__dict__
     for k, v in wd.items():
-        ss = "%-18s %-17s "
-        if isinstance(v, str):
-            print((ss + "'%s'") % (k, xType(v), v))
+        if SIMPLISTIC:
+            ss = "%-18s "
+            if isinstance(v, str):
+                print((ss + "'%s'") % (k, v))
+            else:
+                print((ss + "%s") % (k, v))
         else:
-            print((ss + "%s") % (k, xType(v), v))
+            ss = "%-18s %-17s "
+            if isinstance(v, str):
+                print((ss + "'%s'") % (k, xType(v), v))
+            else:
+                print((ss + "%s") % (k, xType(v), v))
 
     # print("\n", whois.get_last_raw_whois_data())
 
@@ -446,6 +456,13 @@ def main() -> None:
     global IgnoreReturncode
     global PrintGetRawWhoisResult
     global Ruleset
+    global SIMPLISTIC
+
+    name: str = os.path.basename(sys.argv[0])
+    if name == "test2.py":
+        SIMPLISTIC = False
+    else:
+        SIMPLISTIC = True
 
     try:
         opts, args = getopt.getopt(

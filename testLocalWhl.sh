@@ -20,16 +20,6 @@ installFromDistWhl()
     pip3 install dist/${WHAT}-${VERSION}-py3-none-any.whl
 }
 
-installFromTestPyPi()
-{
-    sleep $time
-    while true
-    do
-        pip install -i https://test.pypi.org/simple/ ${WHAT}==${VERSION} && break
-        echo "sleeping ${time} seconds to allow the freshly uploaded image to become available on test.pypi" >&2
-    done
-}
-
 getInstalledVersion()
 {
     # after install

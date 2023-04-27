@@ -1,7 +1,7 @@
 #! /bin/bash
 
-version=$( cat ./work/version )
+VERSION=$( cat ./work/version )
 
-ls -l ./dist/*${version}* && {
-    twine upload dist/*${version}*
+ls -l ./dist/*${VERSION}* && {
+    twine upload dist/*${VERSION}*
 }
