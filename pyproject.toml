@@ -2,16 +2,34 @@
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build]
+only-packages = true
+
+include = [
+    "whoisdomain/*.py",
+]
+
+exclude = [
+    "/Old/*",
+    "/lib/*",
+    "/etc/*",
+    "/bin/*",
+    "/testdata/*",
+    "Makefile",
+    ".gitignore",
+    "/.gitignore",
+]
 
 [project]
 name = "whoisdomain"
-version = "1.20230427.4"
+version = "1.20230427.15"
+
 authors = [
   { name="DannyCork"},
 ]
 
 maintainers = [
-  { name="Maarten Boot", email="mboot.github@gmail.com" },
+  { name="Maarten Boot", email="130295084+mboot-github@users.noreply.github.com" },
 ]
 
 description = "Python package for retrieving WHOIS information of domains."
@@ -49,6 +67,7 @@ keywords = [
 
 [project.scripts]
 whoisdomain = 'whoisdomain.main:main'
+
 
 [project.urls]
 "Bug Tracker" = "https://github.com/mboot-github/WhoisDomain/issues"

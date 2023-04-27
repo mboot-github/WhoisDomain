@@ -4,6 +4,8 @@ import os
 import re
 import getopt
 import sys
+import json
+
 from typing import (
     Optional,
     Tuple,
@@ -17,6 +19,7 @@ import whoisdomain as whois  # to be compatible with dannycork
 # if we are not running as test2.py run in a simplistic way
 SIMPLISTIC: bool = False
 
+PrintJson: bool = False
 Verbose: bool = False
 PrintGetRawWhoisResult: bool = False
 Ruleset: bool = False
@@ -187,8 +190,9 @@ class ResponseCleaner:
 
 
 def prepItem(d: str) -> None:
-    print("")
-    print(f"test domain: <<<<<<<<<< {d} >>>>>>>>>>>>>>>>>>>>")
+    if PrintJson is False:
+        print("")
+        print(f"test domain: <<<<<<<<<< {d} >>>>>>>>>>>>>>>>>>>>")
 
 
 def xType(x: Any) -> str:
@@ -228,6 +232,13 @@ def testItem(
     # if we return not None: the elements that ars always there ars domain_name , tld, dnssec
 
     wd = w.__dict__
+    if PrintJson is True:
+        for f in ["creation_date", "expiration_date", "last_updated"]:
+            if f in wd:
+                wd[f] = f"{wd[f]}"
+        print(json.dumps(wd))
+        return
+
     for k, v in wd.items():
         if SIMPLISTIC:
             ss = "%-18s "
@@ -403,6 +414,9 @@ def usage() -> None:
         set verbose to True,
         verbose output will be printed on stderr only
 
+    [ -j | --json ]
+        print each result as json
+
     [ -I | --IgnoreReturncode ]
         sets the IgnoreReturncode to True,
 
@@ -452,6 +466,7 @@ def showFailures() -> None:
 
 
 def main() -> None:
+    global PrintJson
     global Verbose
     global IgnoreReturncode
     global PrintGetRawWhoisResult
@@ -464,11 +479,16 @@ def main() -> None:
     else:
         SIMPLISTIC = True
 
+    if 0:
+        print(name, SIMPLISTIC)
+        exit(0)
+
     try:
         opts, args = getopt.getopt(
             sys.argv[1:],
-            "RSpvVIhaf:d:D:r:H:C:",
+            "jRSpvVIhaf:d:D:r:H:C:",
             [
+                "json",
                 "Ruleset",
                 "SupportedTld",
                 "print",
@@ -534,6 +554,9 @@ def main() -> None:
 
         if opt in ("-p", "--print"):
             PrintGetRawWhoisResult = True
+
+        if opt in ("-j", "--json"):
+            PrintJson = True
 
         if opt in ("-R", "--Ruleset"):
             Ruleset = True

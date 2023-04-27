@@ -194,6 +194,7 @@ def _doUnsupportedTldAnyway(
     server: Optional[str] = None,
     verbose: bool = False,
     wh: str = "whois",
+    simplistic: bool = False,
 ) -> Optional[Domain]:
     include_raw_whois_text = True
 
@@ -206,6 +207,7 @@ def _doUnsupportedTldAnyway(
         server=server,
         verbose=verbose,
         wh=wh,
+        simplistic=simplistic,
     )
 
     # we will only return minimal data
@@ -294,6 +296,7 @@ def query(
         tld,
         return_raw_text_for_unsupported_tld,
     )  # may raise UnknownTld
+
     if thisTld is None:
         return _doUnsupportedTldAnyway(
             tld,
@@ -303,6 +306,7 @@ def query(
             server=server,
             verbose=verbose,
             wh=wh,
+            simplistic=simplistic,
         )
 
     _verifyPrivateREgistry(thisTld)  # may raise WhoisPrivateRegistry
@@ -329,7 +333,9 @@ def query(
             server=server,
             verbose=verbose,
             timeout=timeout,
+            simplistic=simplistic,
         )
+
         tryMe = {
             "Domain": ".".join(dl),
             "rawData": whois_str,
@@ -343,6 +349,7 @@ def query(
             dl=dl,
             verbose=verbose,
             with_cleanup_results=with_cleanup_results,
+            simplistic=simplistic,
         )
 
         # do we have a result and does it have a domain name

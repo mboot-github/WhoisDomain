@@ -1,4 +1,5 @@
 #! /bin/bash
+export PATH=".:$PATH"
 
 DATE=$( date +%Y%m%d )
 
@@ -48,9 +49,7 @@ buildDist()
 
 main()
 {
-    ./reformat-code.sh
-    mypy --implicit-optional *.py
-    mypy --implicit-optional whoisdomain
+    bin/reformat-code.sh
 
     setupVersionNumberToday
     makeTomlFile

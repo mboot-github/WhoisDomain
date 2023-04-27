@@ -1,23 +1,28 @@
+WHAT = whoisdomain
+
 simple: prepareTest
 
 all: prepareTest dockerTests36 dockerTests
 
 reformat:
-	./reformat-code.sh
+	./bin/reformat-code.sh
 
 mypy:
-	mypy *.py whoisdomain
+	mypy bin/*.py $(WHAT)
 
-local:
-	./test2.py -a 2> tmp/local-2 | tee tmp/local-1
+test2:
+	./test2.py -a 2> tmp/$@-2 | tee tmp/$@-1
+
+test3:
+	./test3.py -a 2> tmp/$@-2 | tee tmp/$@-1
 
 build:
-	./build.sh
+	./bin/build.sh
 
 # using the lowest py version we support 3.6 currently
 docker36:
 	export VERSION=$(shell cat work/version) && \
-	docker build --build-arg VERSION --tag whoisdomain36-$(shell cat work/version) --tag whoisdomain36 -f Dockerfile-py36 .
+	docker build --build-arg VERSION --tag $(WHAT)36-$(shell cat work/version) --tag $(WHAT)36 -f Dockerfile-py36 .
 
 dockerRun36:
 	docker run whoisdomain36-$(shell cat work/version) -d google.com
@@ -25,36 +30,36 @@ dockerRun36:
 dockerTest36:
 	docker run whoisdomain36-$(shell cat work/version) -a 2>tmp/$@-2 | tee tmp/$@-1
 
-dockerTests36: docker36 dockerRun36 dockerTest36
+dockerTests36: pypi-test docker36 dockerRun36 dockerTest36
 
 # using the latest py version
 docker:
 	export VERSION=$(shell cat work/version) && \
-	docker build --build-arg VERSION --tag whoisdomain-$(shell cat work/version) --tag whoisdomain -f Dockerfile .
+	docker build --build-arg VERSION --tag $(WHAT)-$(shell cat work/version) --tag $(WHAT) -f Dockerfile .
 
 dockerRun:
-	docker run whoisdomain-$(shell cat work/version) -d google.com
+	docker run $(WHAT)-$(shell cat work/version) -d google.com
 
 dockerTest:
-	docker run whoisdomain-$(shell cat work/version) -a 2>tmp/$@-2 | tee tmp/$@-1
+	docker run $(WHAT)-$(shell cat work/version) -a 2>tmp/$@-2 | tee tmp/$@-1
 
-dockerTests: docker dockerRun dockerTest
-
-# this is only for pypi builders
-pypi-test:
-	./pypi-test.sh
+dockerTests: pypi-test docker dockerRun dockerTest
 
 # test the module as downloaded from the test.pypi.org; there is a delay between upload and availability:
 # TODO verify that the latest version is the version we need
 testTestPypiUpload:
-	./testTestPyPiUpload.sh 2>tmp/$@-2 | tee tmp/$@-1
+	./bin/testTestPyPiUpload.sh 2>tmp/$@-2 | tee tmp/$@-1
 
 testLocalWhl:
-	./testLocalWhl.sh 2>tmp/$@-2 | tee tmp/$@-1
+	./bin/testLocalWhl.sh 2>tmp/$@-2 | tee tmp/$@-1
+
+# this is only for pypi builders
+pypi-test:
+	./bin/pypi-test.sh
 
 # this is for pypi owners after all tests have finished
 pypi:
-	./pypi.sh
+	./bin/pypi.sh
 
 # this builds a new test pypi and installs it in a venv for a full test run
-prepareTest: reformat build mypy testLocalWhl
+prepareTest: reformat mypy build testLocalWhl

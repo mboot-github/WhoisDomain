@@ -1,0 +1,7 @@
+include license
+include README.md
+exclude Old
+exclude etc
+exclude bin
+exclude lib
+exclude work
