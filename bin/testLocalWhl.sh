@@ -30,7 +30,7 @@ getInstalledVersion()
 testAllIfCorrectVersion()
 {
     [ "$WE_HAVE" == "$VERSION" ] && {
-        whoisdomain -a
+        whoisdomain -f testdata/DOMAINS.txt
         rm -rf ${ENV}
         exit 0
     }

@@ -1,8 +1,26 @@
 WHAT = whoisdomain
+SIMPLEDOMAINS = $(shell  ls testdata)
+# ==========================================================
+# ==========================================================
 
-simple: prepareTest
+# build a new whl file are run a test local only, no docker no upload
+TestSimple: prepareTest
 
-all: prepareTest dockerTests36 dockerTests
+TestSimple2: TestSimple mypyTest
+
+TestAll: TestSimple mypyTest dockerTests36 dockerTests
+
+# build a test-mypi and download the image in a venv ane run a test
+mypyTest: pypi-test testTestPypiUpload
+
+# build a docker images with python 3.6.x and run a test -a
+dockerTests36: docker36 dockerRun36 dockerTest36
+
+# build a docker images with the latest python and run a test -a
+dockerTests: docker dockerRun dockerTest
+
+# ==========================================================
+# ==========================================================
 
 reformat:
 	./bin/reformat-code.sh
@@ -10,14 +28,13 @@ reformat:
 mypy:
 	mypy bin/*.py $(WHAT)
 
-test2:
-	./test2.py -a 2> tmp/$@-2 | tee tmp/$@-1
-
-test3:
-	./test3.py -a 2> tmp/$@-2 | tee tmp/$@-1
-
 build:
 	./bin/build.sh
+
+testLocalWhl:
+	./bin/testLocalWhl.sh 2>tmp/$@-2 | tee tmp/$@-1
+
+prepareTest: whoisdomain reformat mypy build testLocalWhl
 
 # using the lowest py version we support 3.6 currently
 docker36:
@@ -25,12 +42,10 @@ docker36:
 	docker build --build-arg VERSION --tag $(WHAT)36-$(shell cat work/version) --tag $(WHAT)36 -f Dockerfile-py36 .
 
 dockerRun36:
-	docker run whoisdomain36-$(shell cat work/version) -d google.com
+	docker run -v ./testdata:/testdata whoisdomain36-$(shell cat work/version) -d google.com
 
 dockerTest36:
-	docker run whoisdomain36-$(shell cat work/version) -a 2>tmp/$@-2 | tee tmp/$@-1
-
-dockerTests36: pypi-test docker36 dockerRun36 dockerTest36
+	docker run -v ./testdata:/testdata whoisdomain36-$(shell cat work/version) -f /testdata/DOMAINS.txt  2>tmp/$@-2 | tee tmp/$@-1
 
 # using the latest py version
 docker:
@@ -38,22 +53,20 @@ docker:
 	docker build --build-arg VERSION --tag $(WHAT)-$(shell cat work/version) --tag $(WHAT) -f Dockerfile .
 
 dockerRun:
-	docker run $(WHAT)-$(shell cat work/version) -d google.com
+	docker run -v ./testdata:/testdata $(WHAT)-$(shell cat work/version) -d google.com
 
 dockerTest:
-	docker run $(WHAT)-$(shell cat work/version) -a 2>tmp/$@-2 | tee tmp/$@-1
+	docker run -v ./testdata:/testdata $(WHAT)-$(shell cat work/version) -f /testdata/DOMAINS.txt 2>tmp/$@-2 | tee tmp/$@-1
 
-dockerTests: pypi-test docker dockerRun dockerTest
+# this builds a new test pypi and installs it in a venv for a full test run
+dockerTests: pypi-test testTestPypiUpload docker dockerRun dockerTest
 
 # test the module as downloaded from the test.pypi.org; there is a delay between upload and availability:
 # TODO verify that the latest version is the version we need
 testTestPypiUpload:
 	./bin/testTestPyPiUpload.sh 2>tmp/$@-2 | tee tmp/$@-1
 
-testLocalWhl:
-	./bin/testLocalWhl.sh 2>tmp/$@-2 | tee tmp/$@-1
-
-# this is only for pypi builders
+# this is only the upload now for pypi builders
 pypi-test:
 	./bin/pypi-test.sh
 
@@ -61,5 +74,11 @@ pypi-test:
 pypi:
 	./bin/pypi.sh
 
-# this builds a new test pypi and installs it in a venv for a full test run
-prepareTest: reformat mypy build testLocalWhl
+# test2 has the data type in the output
+test2:
+	./test2.py -f testdata/DOMAINS.txt 2> tmp/$@-2 | tee tmp/$@-1
+
+# test3 simulates the whoisdomain command and has no data type in the output
+test3:
+	./test3.py -f testdata/DOMAINS.txt 2> tmp/$@-2 | tee tmp/$@-1
+

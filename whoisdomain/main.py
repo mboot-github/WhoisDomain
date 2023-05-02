@@ -610,22 +610,18 @@ def main() -> None:
 
     if len(dirs):
         fileData = {}
-        print("## ===== TEST DIRECTORIES")
         for dName in dirs:
             getTestFilesAll(dName, fileData)
         for testFile in fileData:
-            print(f"## ===== TEST FILE: {testFile}")
             testDomains(fileData[testFile])
         showFailures()
         sys.exit(0)
 
     if len(files):
         fileData = {}
-        print("## ===== TEST FILES")
         for testFile in files:
             getTestFileOne(testFile, fileData)
         for testFile in fileData:
-            print(f"## ===== TEST FILE: {testFile}")
             testDomains(fileData[testFile])
         showFailures()
         sys.exit(0)
