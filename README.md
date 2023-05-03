@@ -28,6 +28,7 @@ the third will start from 1 and be only used if more than one update will have t
  * the module is now 'mypy --strict' clean
  * the module now also exports a cli command domainwhois
  * both the module and the cli now support showing the version with lib:whois.getVersion() or cli:whoisdomain -V
+ * the whoisdomain can now output json data (one per domain: e.g 'whoisdomain -d google.com -j' )
 
 ## Dependencies
   * please install also the command line "whois" of your distribution as this library parses the output of the "whois" cli command of your operating system
@@ -118,6 +119,9 @@ whoisdomain
         set verbose to True,
         verbose output will be printed on stderr only
 
+    [ -j | --json ]
+        print each result as json
+
     [ -I | --IgnoreReturncode ]
         sets the IgnoreReturncode to True,
 
@@ -143,8 +147,34 @@ whoisdomain
 
     # test one specific directory with verbose and IgnoreReturncode
     example: whoisdomain -v -I -D tests
+
 ```
 
+# Json output
+```
+{
+  "name": "hello.xyz",
+  "tld": "xyz",
+  "registrar": "Namecheap",
+  "registrant_country": "IS",
+  "creation_date": "2014-03-20 15:01:22",
+  "expiration_date": "2024-03-20 23:59:59",
+  "last_updated": "2023-03-14 09:24:32",
+  "status": "clientTransferProhibited https://icann.org/epp#clientTransferProhibited",
+  "statuses": [
+    "clientTransferProhibited https://icann.org/epp#clientTransferProhibited"
+  ],
+  "dnssec": false,
+  "name_servers": [
+    "dns1.registrar-servers.com",
+    "dns2.registrar-servers.com"
+  ],
+  "registrant": "Privacy service provided by Withheld for Privacy ehf",
+  "emails": [
+    "abuse@namecheap.com"
+  ]
+}
+```
 ## ccTLD & TLD support
 see the file: ./whoisdomain/tld_regexpr.py
 or call lib:whoisdomain.validTlds() or cli:whoisdomain -S

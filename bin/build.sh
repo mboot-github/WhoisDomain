@@ -49,8 +49,15 @@ buildDist()
 
 main()
 {
-    git status whoisdomain && {
-        return
+    # do we have a version
+    [ -f work/version ] && {
+        # is it today
+        grep $DATE work/version && {
+            # any changes in the actual code
+            git status whoisdomain && {
+                return
+            }
+        }
     }
 
     bin/reformat-code.sh
