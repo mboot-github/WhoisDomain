@@ -34,7 +34,7 @@ build:
 testLocalWhl:
 	./bin/testLocalWhl.sh 2>tmp/$@-2 | tee tmp/$@-1
 
-prepareTest: whoisdomain reformat mypy build testLocalWhl
+prepareTest: reformat mypy build testLocalWhl
 
 # using the lowest py version we support 3.6 currently
 docker36:
