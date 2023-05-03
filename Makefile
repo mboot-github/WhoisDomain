@@ -43,7 +43,7 @@ build:
 
 # ==========================================================
 rlsecure-scan:
-	$(RLSECURE) scan \
+	@$(RLSECURE) scan \
 	--rl-store $(RLSTORE) \
 	--purl mboot-github/$(WHAT)@$(shell cat work/version) \
 	--file-path dist/$(WHAT)-$(shell cat work/version)*.whl \
@@ -51,7 +51,7 @@ rlsecure-scan:
 	--no-tracking
 
 rlsecure-list:
-	$(RLSECURE) list \
+	@$(RLSECURE) list \
 	--rl-store $(RLSTORE) \
 	--show-issues \
 	--show-risks \
@@ -60,7 +60,7 @@ rlsecure-list:
 	--no-color | tee rl-secure-list-$(shell cat work/version).txt
 
 rlsecure-status:
-	$(RLSECURE) status \
+	@$(RLSECURE) status \
 	--rl-store $(RLSTORE) \
 	--purl mboot-github/$(WHAT)@$(shell cat work/version) \
 	--show-status \
@@ -83,29 +83,36 @@ prepareTest: reformat mypy build rlsecure testLocalWhl
 
 # using the lowest py version we support 3.6 currently
 docker36:
-	export VERSION=$(shell cat work/version) && \
+	@export VERSION=$(shell cat work/version) && \
 	docker build --build-arg VERSION --tag $(WHAT)36-$(shell cat work/version) --tag $(WHAT)36 -tag mbootgithub/whoisdomain36 -f Dockerfile-py36 .
 
 dockerRun36:
-	docker run -v ./testdata:/testdata whoisdomain36-$(shell cat work/version) -d google.com
+	@docker run -v ./testdata:/testdata whoisdomain36-$(shell cat work/version) -d google.com
 
 dockerTest36:
-	docker run -v ./testdata:/testdata whoisdomain36-$(shell cat work/version) -f /testdata/DOMAINS.txt  2>tmp/$@-2 | tee tmp/$@-1
+	@docker run -v ./testdata:/testdata whoisdomain36-$(shell cat work/version) -f /testdata/DOMAINS.txt  2>tmp/$@-2 | tee tmp/$@-1
 
 # using the latest py version
 docker:
-	export VERSION=$(shell cat work/version) && \
+	@export VERSION=$(shell cat work/version) && \
 	docker build --build-arg VERSION --tag $(WHAT)-$(shell cat work/version) --tag $(WHAT) --tag mbootgithub/$(WHAT) -f Dockerfile . && \
 	docker image push --all-tags mbootgithub/$(WHAT)
 
 dockerRun:
-	docker run -v ./testdata:/testdata $(WHAT)-$(shell cat work/version) -d google.com
+	@docker run \
+		-v ./testdata:/testdata \
+		$(WHAT)-$(shell cat work/version) \
+		-d google.com -j | jq -r .
 
 dockerTest:
-	docker run -v ./testdata:/testdata $(WHAT)-$(shell cat work/version) -f /testdata/DOMAINS.txt 2>tmp/$@-2 | tee tmp/$@-1
+	@docker run \
+		-v ./testdata:/testdata \
+		$(WHAT)-$(shell cat work/version) \
+		-f /testdata/DOMAINS.txt 2>tmp/$@-2 | \
+		tee tmp/$@-1
 
 # this builds a new test pypi and installs it in a venv for a full test run
-dockerTests: pypi-test testTestPypiUpload docker dockerRun dockerTest
+dockerTests: rlsecure pypi-test testTestPypiUpload docker dockerRun dockerTest
 
 # test the module as downloaded from the test.pypi.org; there is a delay between upload and availability:
 # TODO verify that the latest version is the version we need
@@ -117,7 +124,7 @@ pypi-test:
 	./bin/pypi-test.sh
 
 # this is for pypi owners after all tests have finished
-pypi:
+pypi: rlsecure
 	./bin/pypi.sh
 
 # test2 has the data type in the output
