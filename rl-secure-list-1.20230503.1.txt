@@ -1,0 +1,12 @@
+rl-store: /home/mboot/.rl-secure
+  / mboot-github 
+      / whoisdomain 
+         @ [ CI:PASS ] 1.20230503.1  <OK> [H] 0       [M] 0       [L] 0     
+           [ License       o No restricted license inclusions             ]
+           [ Secrets       o No sensitive information found               ]
+           [ Vulnerability o No known vulnerabilities detected            ]
+           [ Mitigations   o No vulnerability mitigation issues           ]
+           [ Tampering     o No evidence of software tampering            ]
+           [ Malware       o No evidence of malware inclusion             ]
+           ----------------------------------------------------------------
+           ( 9 policies were not evaluated during analysis                )

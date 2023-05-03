@@ -1,7 +1,13 @@
 # ==========================================================
 # ==========================================================
+SHELL 		:= /bin/bash -l
 
-WHAT = whoisdomain
+RLSECURE 	:= ~/tmp/rl-secure/rl-secure
+RLSTORE 	:= ~/
+
+WHAT 		:= whoisdomain
+WHO 		:= mboot-github
+
 SIMPLEDOMAINS = $(shell  ls testdata)
 
 # ==========================================================
@@ -35,10 +41,45 @@ mypy:
 build:
 	./bin/build.sh
 
+# ==========================================================
+rlsecure-scan:
+	$(RLSECURE) scan \
+	--rl-store $(RLSTORE) \
+	--purl mboot-github/$(WHAT)@$(shell cat work/version) \
+	--file-path dist/$(WHAT)-$(shell cat work/version)*.whl \
+	--replace \
+	--no-tracking
+
+rlsecure-list:
+	$(RLSECURE) list \
+	--rl-store $(RLSTORE) \
+	--show-issues \
+	--show-risks \
+	--show-counts \
+	--purl mboot-github/$(WHAT)@$(shell cat work/version) \
+	--no-color | tee rl-secure-list-$(shell cat work/version).txt
+
+rlsecure-status:
+	$(RLSECURE) status \
+	--rl-store $(RLSTORE) \
+	--purl mboot-github/$(WHAT)@$(shell cat work/version) \
+	--show-status \
+	--show-malware \
+	--show-issues \
+	--vulnerabilities \
+	--show-secrets \
+	--with-evidence \
+	--return-status \
+	--no-color | tee rl-secure-status-$(shell cat work/version).txt
+
+# scan the most recent build and fail if the status fails
+rlsecure: rlsecure-scan rlsecure-list rlsecure-status
+
+# ==========================================================
 testLocalWhl:
 	./bin/testLocalWhl.sh 2>tmp/$@-2 | tee tmp/$@-1
 
-prepareTest: reformat mypy build testLocalWhl
+prepareTest: reformat mypy build rlsecure testLocalWhl
 
 # using the lowest py version we support 3.6 currently
 docker36:
