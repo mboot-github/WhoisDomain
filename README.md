@@ -33,6 +33,15 @@ the third will start from 1 and be only used if more than one update will have t
 ## Dependencies
   * please install also the command line "whois" of your distribution as this library parses the output of the "whois" cli command of your operating system
 
+## Docker
+ * docker pull mbootgithub/whoisdomain:latest
+ * docker run mbootgithub/whoisdomain -V # show version
+ * docker run mbootgithub/whoisdomain -d google.com # run one domain
+ * docker run mbootgithub/whoisdomain -a # run all tld
+ * docker run mbootgithub/whoisdomain -d google.com -j | jq -r . # run one domains , output in json and reformat with jq
+ * docker run mbootgithub/whoisdomain -d google.com -j | jq -r '.expiration_date' # output only expire date
+ * docker run mbootgithub/whoisdomain -d google.com -j | jq -r '[ .expiration_date, .creation_date ]
+
 ## Usage example
 
 Install the cli `whois` of your operating system if it is not present already,
