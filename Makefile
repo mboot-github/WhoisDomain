@@ -29,7 +29,7 @@ TestAll: TestSimple2 dockerTests
 mypyTest: pypi-test testTestPypi
 
 # build a docker images with the latest python and run a test -a
-dockerTests: docker dockerRun dockerTest
+dockerTests: docker dockerRun dockerTestdata
 
 # ==========================================================
 # ==========================================================
@@ -95,6 +95,7 @@ testLocalWhl:
 prepareTest: reformat mypy build rlsecure testLocalWhl
 
 # using the latest py version
+# note this uses the test.pypi.org for now
 docker:
 	@export VERSION=$(shell cat work/version) && \
 	docker build \
@@ -103,7 +104,7 @@ docker:
 		--tag $(DOCKER_WHO)/$(WHAT)-$$(VERSION) \
 		--tag $(WHAT)-$$(VERSION) \
 		--tag $(WHAT) \
-		-f Dockerfile .
+		-f Dockerfile-test .
 
 dockerRun:
 	@export VERSION=$(shell cat work/version) && \
@@ -112,7 +113,7 @@ dockerRun:
 		$(WHAT)-$$(VERSION) \
 		-d google.com -j | jq -r .
 
-dockerTest:
+dockerTestdata:
 	@export VERSION=$(shell cat work/version) && \
 	docker run \
 		-v ./testdata:/testdata \
@@ -125,11 +126,8 @@ dockerPush:
 	docker image push \
 		--all-tags $(DOCKER_WHO)/$(WHAT)
 
-# this builds a new test pypi and installs it in a venv for a full test run
-dockerTests: rlsecure pypi-test testTestPypi docker dockerRun dockerTest
+dockerTests: docker dockerRun dockerTestdata
 
-# test the module as downloaded from the test.pypi.org; there is a delay between upload and availability:
-# TODO verify that the latest version is the version we need
 testTestPypi:
 	./bin/testTestPyPiUpload.sh 2>tmp/$@-2 | tee tmp/$@-1
 
