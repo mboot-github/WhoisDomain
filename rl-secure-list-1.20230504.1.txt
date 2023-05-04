@@ -1,7 +1,7 @@
 rl-store: /home/mboot/.rl-secure
   / mboot-github 
       / whoisdomain 
-         @ [ CI:PASS ] 1.20230503.1  <OK> [H] 0       [M] 0       [L] 0     
+         @ [ CI:PASS ] 1.20230504.1  <OK> [H] 0       [M] 0       [L] 0     
            [ License       o No restricted license inclusions             ]
            [ Secrets       o No sensitive information found               ]
            [ Vulnerability o No known vulnerabilities detected            ]

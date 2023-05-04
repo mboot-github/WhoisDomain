@@ -1,30 +1,32 @@
 # ==========================================================
 # ==========================================================
+# https://docs.secure.software/cli
+
 SHELL 		:= /bin/bash -l
 
 RLSECURE 	:= ~/tmp/rl-secure/rl-secure
 RLSTORE 	:= ~/
 
 WHAT 		:= whoisdomain
-WHO 		:= mboot-github
+DOCKER_WHO	:= mbootgithub
 
 SIMPLEDOMAINS = $(shell  ls testdata)
 
+# PHONY targets: make will run its recipe regardless of whether a file with that name exists or what its last modification time is.
+.PHONY: TestSimple TestSimple2 TestAll clean
+
 # ==========================================================
 # ==========================================================
 
-# build a new whl file are run a test local only, no docker no upload
+# build a new whl file are run a test local only, no docker ,no upload to pypi
 TestSimple: prepareTest
 
 TestSimple2: TestSimple mypyTest
 
-TestAll: TestSimple mypyTest dockerTests36 dockerTests
+TestAll: TestSimple2 dockerTests
 
 # build a test-mypi and download the image in a venv ane run a test
-mypyTest: pypi-test testTestPypiUpload
-
-# build a docker images with python 3.6.x and run a test -a
-dockerTests36: docker36 dockerRun36 dockerTest36
+mypyTest: pypi-test testTestPypi
 
 # build a docker images with the latest python and run a test -a
 dockerTests: docker dockerRun dockerTest
@@ -32,48 +34,59 @@ dockerTests: docker dockerRun dockerTest
 # ==========================================================
 # ==========================================================
 
+# black pylama and mypy on the source directory
 reformat:
 	./bin/reformat-code.sh
 
+# only verify --strict all python code
 mypy:
-	mypy bin/*.py $(WHAT)
+	mypy *.py bin/*.py $(WHAT)
 
+# this step creates or updates the toml file
 build:
 	./bin/build.sh
 
 # ==========================================================
 rlsecure-scan:
-	@$(RLSECURE) scan \
+	@export VERSION=$(shell cat work/version) && \
+	$(RLSECURE) scan \
 	--rl-store $(RLSTORE) \
-	--purl mboot-github/$(WHAT)@$(shell cat work/version) \
-	--file-path dist/$(WHAT)-$(shell cat work/version)*.whl \
+	--purl mboot-github/$(WHAT)@$${VERSION} \
+	--file-path dist/$(WHAT)-$${VERSION}*.whl \
 	--replace \
 	--no-tracking
 
 rlsecure-list:
-	@$(RLSECURE) list \
+	@export VERSION=$(shell cat work/version) && \
+	$(RLSECURE) list \
 	--rl-store $(RLSTORE) \
-	--show-issues \
-	--show-risks \
-	--show-counts \
-	--purl mboot-github/$(WHAT)@$(shell cat work/version) \
-	--no-color | tee rl-secure-list-$(shell cat work/version).txt
+	--show-all \
+	--purl mboot-github/$(WHAT)@$${VERSION} \
+	--no-color | tee rlsecure/list-$${VERSION}.txt
 
 rlsecure-status:
-	@$(RLSECURE) status \
+	@export VERSION=$(shell cat work/version) && \
+	$(RLSECURE) status \
 	--rl-store $(RLSTORE) \
-	--purl mboot-github/$(WHAT)@$(shell cat work/version) \
-	--show-status \
-	--show-malware \
-	--show-issues \
-	--vulnerabilities \
-	--show-secrets \
-	--with-evidence \
+	--purl mboot-github/$(WHAT)@$${VERSION} \
+	--show-all \
 	--return-status \
-	--no-color | tee rl-secure-status-$(shell cat work/version).txt
+	--no-color | tee rlsecure/status-$${VERSION}.txt
+
+rlsecure-report:
+	@export VERSION=$(shell cat work/version) && \
+	$(RLSECURE) report \
+	--rl-store $(RLSTORE) \
+	--purl mboot-github/$(WHAT)@$${VERSION} \
+	--format=all \
+	--bundle=report-$(WHAT)-$${VERSION}.zip \
+	--output-path ./rlsecure
+
+rlsecure-version:
+	@$(RLSECURE) --version
 
 # scan the most recent build and fail if the status fails
-rlsecure: rlsecure-scan rlsecure-list rlsecure-status
+rlsecure: build rlsecure-scan rlsecure-list rlsecure-status rlsecure-report rlsecure-version
 
 # ==========================================================
 testLocalWhl:
@@ -81,42 +94,43 @@ testLocalWhl:
 
 prepareTest: reformat mypy build rlsecure testLocalWhl
 
-# using the lowest py version we support 3.6 currently
-docker36:
-	@export VERSION=$(shell cat work/version) && \
-	docker build --build-arg VERSION --tag $(WHAT)36-$(shell cat work/version) --tag $(WHAT)36 -tag mbootgithub/whoisdomain36 -f Dockerfile-py36 .
-
-dockerRun36:
-	@docker run -v ./testdata:/testdata whoisdomain36-$(shell cat work/version) -d google.com
-
-dockerTest36:
-	@docker run -v ./testdata:/testdata whoisdomain36-$(shell cat work/version) -f /testdata/DOMAINS.txt  2>tmp/$@-2 | tee tmp/$@-1
-
 # using the latest py version
 docker:
 	@export VERSION=$(shell cat work/version) && \
-	docker build --build-arg VERSION --tag $(WHAT)-$(shell cat work/version) --tag $(WHAT) --tag mbootgithub/$(WHAT) -f Dockerfile . && \
-	docker image push --all-tags mbootgithub/$(WHAT)
+	docker build \
+		--build-arg VERSION \
+		--tag $(DOCKER_WHO)/$(WHAT) \
+		--tag $(DOCKER_WHO)/$(WHAT)-$$(VERSION) \
+		--tag $(WHAT)-$$(VERSION) \
+		--tag $(WHAT) \
+		-f Dockerfile .
 
 dockerRun:
-	@docker run \
+	@export VERSION=$(shell cat work/version) && \
+	docker run \
 		-v ./testdata:/testdata \
-		$(WHAT)-$(shell cat work/version) \
+		$(WHAT)-$$(VERSION) \
 		-d google.com -j | jq -r .
 
 dockerTest:
-	@docker run \
+	@export VERSION=$(shell cat work/version) && \
+	docker run \
 		-v ./testdata:/testdata \
-		$(WHAT)-$(shell cat work/version) \
+		$(WHAT)-$$(VERSION) \
 		-f /testdata/DOMAINS.txt 2>tmp/$@-2 | \
 		tee tmp/$@-1
 
+dockerPush:
+	@export VERSION=$(shell cat work/version) && \
+	docker image push \
+		--all-tags $(DOCKER_WHO)/$(WHAT)
+
 # this builds a new test pypi and installs it in a venv for a full test run
-dockerTests: rlsecure pypi-test testTestPypiUpload docker dockerRun dockerTest
+dockerTests: rlsecure pypi-test testTestPypi docker dockerRun dockerTest
 
 # test the module as downloaded from the test.pypi.org; there is a delay between upload and availability:
 # TODO verify that the latest version is the version we need
-testTestPypiUpload:
+testTestPypi:
 	./bin/testTestPyPiUpload.sh 2>tmp/$@-2 | tee tmp/$@-1
 
 # this is only the upload now for pypi builders
@@ -135,3 +149,13 @@ test2:
 test3:
 	./test3.py -f testdata/DOMAINS.txt 2> tmp/$@-2 | tee tmp/$@-1
 
+release: build rlsecure pypi-test testTestPypi
+
+clean:
+	rm -rf dist/*
+	rm -f work/version
+	rm -rf tmp/*
+	rm -f ./rl-secure-list-*.txt
+	rm -f ./rl-secure-status-*.txt
+	rm -f pyproject.toml
+	docker image prune --all --force

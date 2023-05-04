@@ -1,7 +1,0 @@
-# centos7 is still on 3.6.x
-FROM python:3.6-alpine
-ARG VERSION
-RUN apk update && apk add whois && pip install -i https://test.pypi.org/simple/ whoisdomain==$VERSION
-
-ENTRYPOINT ["whoisdomain"]
-CMD ["--help"]
