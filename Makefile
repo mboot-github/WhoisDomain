@@ -21,6 +21,10 @@ SIMPLEDOMAINS = $(shell  ls testdata)
 # build a new whl file are run a test local only, no docker ,no upload to pypi
 TestSimple: reformat mypy test2 test3 build
 
+# ==========================================================
+testLocalWhl:
+	./bin/testLocalWhl.sh 2>tmp/$@-2 | tee tmp/$@-1
+
 # build a test-mypi and download the image in a venv ane run a test
 mypyTest: pypi-test testTestPypi
 
@@ -84,9 +88,6 @@ rlsecure-version:
 # scan the most recent build and fail if the status fails
 rlsecure: build rlsecure-scan rlsecure-list rlsecure-status rlsecure-report rlsecure-version
 
-# ==========================================================
-testLocalWhl:
-	./bin/testLocalWhl.sh 2>tmp/$@-2 | tee tmp/$@-1
 
 
 # using the latest py version

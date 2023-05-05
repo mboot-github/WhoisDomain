@@ -205,8 +205,9 @@ def testItem(
     printgetRawWhoisResult: bool = False,
 ) -> None:
     global PrintGetRawWhoisResult
+    global SIMPLISTIC
 
-    timout = 30  # seconds
+    timeout = 30  # seconds
 
     w = whois.query(
         d,
@@ -214,7 +215,7 @@ def testItem(
         verbose=Verbose,
         internationalized=True,
         include_raw_whois_text=PrintGetRawWhoisResult,
-        timeout=timout,
+        timeout=timeout,
         simplistic=SIMPLISTIC,
     )
 
@@ -479,10 +480,6 @@ def main() -> None:
     else:
         SIMPLISTIC = True
 
-    if 0:
-        print(name, SIMPLISTIC)
-        exit(0)
-
     try:
         opts, args = getopt.getopt(
             sys.argv[1:],
@@ -596,13 +593,15 @@ def main() -> None:
             if domain not in domains:
                 domains.append(domain)
 
+    if Verbose:
+        print(f"{name} SIMPLISTIC: {SIMPLISTIC}", file=sys.stderr)
+
     if Ruleset is True and len(domains):
         for domain in domains:
             ShowRuleset(domain)
         sys.exit(0)
 
     if testAllTld:
-        print("## ===== TEST CURRENT TLD's")
         allMetaTld = makeMetaAllCurrentTld(allHaving, allRegex)
         testDomains(allMetaTld)
         showFailures()

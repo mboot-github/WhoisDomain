@@ -55,7 +55,7 @@ main()
         grep $DATE work/version && {
             # any changes in the actual code
             git status whoisdomain | grep modified || {
-                return
+                exit 0
             }
         }
     }

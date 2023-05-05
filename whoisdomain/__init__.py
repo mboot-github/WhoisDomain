@@ -11,7 +11,10 @@ from typing import (
     Callable,
 )
 
-from ._1_query import do_query
+from ._1_query import (
+    do_query,
+)
+
 from ._2_parse import (
     do_parse,
     NoneStrings,
@@ -114,6 +117,7 @@ def _fromDomainStringToTld(
     domain: str,
     internationalized: bool,
     verbose: bool = False,
+    simplistic: bool = False,
 ) -> Tuple[Optional[str], Optional[List[str]]]:
     domain = domain.lower().strip().rstrip(".")  # Remove the trailing dot to support FQDN.
     d: List[str] = domain.split(".")
@@ -126,7 +130,7 @@ def _fromDomainStringToTld(
     if len(d) == 1:
         return None, None
 
-    tld: str = filterTldToSupportedPattern(domain, d, verbose)
+    tld: str = filterTldToSupportedPattern(domain, d, verbose)  # may raise UnknownTld
     if verbose:
         print(f"filterTldToSupportedPattern returns tld: {tld}", file=sys.stderr)
 
@@ -162,7 +166,7 @@ def _verifyPrivateRegistry(
     # signal we know the tld but it has no whos or does not respond with any information
     if thisTld.get("_privateRegistry"):
         if simplistic is False:
-            msg = "This tld has either no whois server or responds only with minimal information"
+            msg = "WhoisPrivateRegistry"
             raise WhoisPrivateRegistry(msg)
         return True
     return False
@@ -258,19 +262,31 @@ def _doOneLookup(
     simplistic: bool = False,
 ) -> Optional[Domain]:
 
-    whois_str = do_query(
-        dl=dl,
-        force=force,
-        cache_file=cache_file,
-        cache_age=cache_age,
-        slow_down=slow_down,
-        ignore_returncode=ignore_returncode,
-        server=server,
-        verbose=verbose,
-        timeout=timeout,
-        wh=wh,
-        simplistic=simplistic,
-    )
+    try:
+        whois_str = do_query(
+            dl=dl,
+            force=force,
+            cache_file=cache_file,
+            cache_age=cache_age,
+            slow_down=slow_down,
+            ignore_returncode=ignore_returncode,
+            server=server,
+            verbose=verbose,
+            timeout=timeout,
+            wh=wh,
+            simplistic=simplistic,
+        )
+    except Exception as e:
+        if simplistic:
+            return Domain(
+                data={},
+                whois_str=None,
+                verbose=verbose,
+                include_raw_whois_text=include_raw_whois_text,
+                exeptionStr=f"{e}",
+            )
+
+        raise e
 
     LastWhois["Try"].append(
         {
@@ -358,13 +374,26 @@ def query(
     assert isinstance(domain, str), Exception("`domain` - must be <str>")
     return_raw_text_for_unsupported_tld = bool(return_raw_text_for_unsupported_tld)
 
-    tld, dl = _fromDomainStringToTld(
-        domain,
-        internationalized,
-        verbose,
-    )
-    if tld is None:
-        return None
+    try:
+        tld, dl = _fromDomainStringToTld(  # may raise UnknownTld
+            domain,
+            internationalized,
+            verbose,
+        )
+
+        if tld is None:
+            return None
+    except Exception as e:
+        if simplistic:
+            return Domain(
+                data={},
+                whois_str=None,
+                verbose=verbose,
+                include_raw_whois_text=include_raw_whois_text,
+                exeptionStr="UnknownTld",
+            )
+
+        raise (e)
 
     dl = cast(List[str], dl)
     if tld not in TLD_RE.keys():
@@ -387,7 +416,7 @@ def query(
                 whois_str=None,
                 verbose=verbose,
                 include_raw_whois_text=include_raw_whois_text,
-                exeptionStr=msg,
+                exeptionStr="UnknownTld",
             )
 
         raise UnknownTld(msg)

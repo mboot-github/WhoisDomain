@@ -5,7 +5,7 @@ from .exceptions import UnknownDateFormat
 
 from typing import Any, List, Dict, Optional
 
-PYTHON_VERSION = sys.version_info[0]
+# PYTHON_VERSION = sys.version_info[0]
 
 
 class Domain:
