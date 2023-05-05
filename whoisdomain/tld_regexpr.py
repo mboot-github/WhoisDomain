@@ -2768,3 +2768,9 @@ ZZ["онлайн"] = {
     "extend": "com",
     # "expiration_date": r"Registry Expiry Date:\s?(.+)",
 }
+
+ZZ["ps"] = {
+    # Registrant Name
+    "extend": "com",
+    "registrant": r"Registrant\s+Name:\s?(.+)",
+}

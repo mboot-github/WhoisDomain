@@ -2,7 +2,11 @@ FROM python:alpine
 
 ARG VERSION
 
-RUN apk update && apk add whois && pip install -i https://pypi.org/simple/ whoisdomain==$VERSION
+LABEL version="$VERSION"
+
+RUN apk update --no-cache
+RUN apk add --no-cache whois
+RUN pip install --no-cache-dir -i https://pypi.org/simple/ whoisdomain==$VERSION
 
 ENTRYPOINT ["whoisdomain"]
 

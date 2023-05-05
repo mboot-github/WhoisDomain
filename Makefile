@@ -97,17 +97,17 @@ prepareTest: reformat mypy build rlsecure testLocalWhl
 # using the latest py version
 # note this uses the test.pypi.org for now
 docker:
-	@export VERSION=$(shell cat work/version) && \
+	export VERSION=$(shell cat work/version) && \
 	docker build \
 		--build-arg VERSION \
 		--tag $(DOCKER_WHO)/$(WHAT) \
-		--tag $(DOCKER_WHO)/$(WHAT)-$$(VERSION) \
-		--tag $(WHAT)-$$(VERSION) \
+		--tag $(DOCKER_WHO)/$(WHAT)-$${VERSION} \
+		--tag $(WHAT)-$${VERSION} \
 		--tag $(WHAT) \
 		-f Dockerfile-test .
 
 dockerRun:
-	@export VERSION=$(shell cat work/version) && \
+	export VERSION=$(shell cat work/version) && \
 	docker run \
 		-v ./testdata:/testdata \
 		$(WHAT)-$$(VERSION) \
@@ -122,7 +122,7 @@ dockerTestdata:
 		tee tmp/$@-1
 
 dockerPush:
-	@export VERSION=$(shell cat work/version) && \
+	export VERSION=$(shell cat work/version) && \
 	docker image push \
 		--all-tags $(DOCKER_WHO)/$(WHAT)
 
