@@ -19,11 +19,7 @@ SIMPLEDOMAINS = $(shell  ls testdata)
 # ==========================================================
 
 # build a new whl file are run a test local only, no docker ,no upload to pypi
-TestSimple: prepareTest
-
-TestSimple2: TestSimple mypyTest
-
-TestAll: TestSimple2 dockerTests
+TestSimple: reformat mypy test2 test3 build
 
 # build a test-mypi and download the image in a venv ane run a test
 mypyTest: pypi-test testTestPypi
@@ -92,7 +88,6 @@ rlsecure: build rlsecure-scan rlsecure-list rlsecure-status rlsecure-report rlse
 testLocalWhl:
 	./bin/testLocalWhl.sh 2>tmp/$@-2 | tee tmp/$@-1
 
-prepareTest: reformat mypy build rlsecure testLocalWhl
 
 # using the latest py version
 # note this uses the test.pypi.org for now
@@ -140,11 +135,11 @@ pypi: rlsecure
 	./bin/pypi.sh
 
 # test2 has the data type in the output
-test2:
+test2: reformat mypy
 	./test2.py -f testdata/DOMAINS.txt 2> tmp/$@-2 | tee tmp/$@-1
 
 # test3 simulates the whoisdomain command and has no data type in the output
-test3:
+test3: reformat mypy
 	./test3.py -f testdata/DOMAINS.txt 2> tmp/$@-2 | tee tmp/$@-1
 
 release: build rlsecure pypi-test testTestPypi

@@ -12,8 +12,14 @@ from typing import (
 
 from ._0_init_tld import TLD_RE
 
-from .exceptions import FailedParsingWhoisOutput
-from .exceptions import WhoisQuotaExceeded
+from ._3_adjust import (
+    Domain,
+)
+
+from .exceptions import (
+    FailedParsingWhoisOutput,
+    WhoisQuotaExceeded,
+)
 
 Verbose: bool = True
 
@@ -51,22 +57,182 @@ QUOTASTRINGS: List[str] = [
 ]
 
 
-def NoneStrings() -> List[str]:
-    return sorted(NONESTRINGS)
+def _handleShortResponse(
+    tld: str,
+    dl: List[str],
+    whois_str: str,
+    verbose: bool = False,
+    simplistic: bool = False,
+    include_raw_whois_text: bool = False,
+) -> Optional[Domain]:
+    if verbose:
+        d = ".".join(dl)
+        print(f"line count < 5:: {tld} {d} {whois_str}", file=sys.stderr)
+
+    # TODO: some short responses are actually valid:
+    # lookfor Domain: and Status but all other fields are missing so the regexec could fail
+    # this domain is taken already or reserved
+
+    # whois syswow.64-b.it
+    # [Querying whois.nic.it]
+    # [whois.nic.it]
+    # Domain:             syswow.64-b.it
+    # Status:             UNASSIGNABLE
+
+    s = whois_str.strip().lower()
+
+    # NOTE: from here s is lowercase only
+    # ---------------------------------
+    noneStrings = NoneStrings()
+    for i in noneStrings:
+        if i in s:
+            return None
+
+    # ---------------------------------
+    # is there any error string in the result
+    if s.count("error"):
+        if verbose:
+            print("i see 'error' in the result, return: None", file=sys.stderr)
+        return None
+
+    # ---------------------------------
+    quotaStrings = QuotaStrings()
+    for i in quotaStrings:
+        if i in s:
+            if simplistic:
+                msg = "WhoisQuotaExceeded"
+                return Domain(
+                    data={},
+                    whois_str=whois_str,
+                    verbose=verbose,
+                    include_raw_whois_text=include_raw_whois_text,
+                    exeptionStr=msg,
+                )
+            raise WhoisQuotaExceeded(whois_str)
+
+    if simplistic:
+        msg = "FailedParsingWhoisOutput"
+        return Domain(
+            data={},
+            whois_str=whois_str,
+            verbose=verbose,
+            include_raw_whois_text=include_raw_whois_text,
+            exeptionStr=msg,
+        )
+
+    raise FailedParsingWhoisOutput(whois_str)
 
 
-def NoneStringsAdd(aString: str) -> None:
-    if aString and isinstance(aString, str) and len(aString) > 0:
-        NONESTRINGS.append(aString)
+def _doDnsSec(
+    whois_str: str,
+) -> bool:
+    whois_dnssec: Any = whois_str.split("DNSSEC:")
+    if len(whois_dnssec) >= 2:
+        whois_dnssec = whois_dnssec[1].split("\n")[0]
+        if whois_dnssec.strip() == "signedDelegation" or whois_dnssec.strip() == "yes":
+            return True
+    return False
 
 
-def QuotaStrings() -> List[str]:
-    return sorted(QUOTASTRINGS)
+def _doIfServerNameLookForDomainName(
+    whois_str: str,
+    verbose: bool = False,
+) -> str:
+    # not often available anymore
+    if re.findall(r"Server Name:\s?(.+)", whois_str, re.IGNORECASE):
+        if verbose:
+            msg = "i have seen Server Name:, looking for Domain Name:"
+            print(msg, file=sys.stderr)
+        whois_str = whois_str[whois_str.find("Domain Name:") :]
+    return whois_str
 
 
-def QuotaStringsAdd(aString: str) -> None:
-    if aString and isinstance(aString, str) and len(aString) > 0:
-        NONESTRINGS.append(aString)
+def _doExtractPattensIanaFromWhoisString(
+    tld: str,
+    r: Dict[str, Any],
+    whois_str: str,
+    verbose: bool = False,
+) -> Dict[str, Any]:
+    # now handle the actual format if this whois response
+    iana = {
+        "domain_name": r"domain:\s?([^\n]+)",
+        "registrar": r"organisation:\s?([^\n]+)",
+        "creation_date": r"created:\s?([^\n]+)",
+    }
+    for k, v in iana.items():
+        zz = re.findall(v, whois_str)
+        if zz:
+            if verbose:
+                print(f"parsing iana data only for tld: {tld}, {zz}", file=sys.stderr)
+            r[k] = zz
+    return r
+
+
+def _doExtractPattensFromWhoisString(
+    tld: str,
+    r: Dict[str, Any],
+    whois_str: str,
+    verbose: bool = False,
+) -> Dict[str, Any]:
+    for k, v in TLD_RE.get(tld, TLD_RE["com"]).items():  # use TLD_RE["com"] as default if a regex is missing
+        if k.startswith("_"):  # skip meta element like: _server or _privateRegistry
+            continue
+
+        # Historical: here we use 'empty string' as default, not None
+        if v is None:
+            r[k] = [""]
+        else:
+            r[k] = v.findall(whois_str) or [""]
+
+    return r
+
+
+def _doSourceIana(
+    tld: str,
+    r: Dict[str, Any],
+    whois_str: str,
+    verbose: bool = False,
+) -> Tuple[str, Optional[Dict[str, Any]]]:
+    # here we can handle the example.com and example.net permanent IANA domains
+    k = "source:       IANA"
+
+    if verbose:
+        msg = f"i have seen {k}"
+        print(msg, file=sys.stderr)
+
+    whois_splitted = whois_str.split(k)
+    z = len(whois_splitted)
+    if z > 2:
+        return k.join(whois_splitted[1:]), None
+
+    if z == 2 and whois_splitted[1].strip() != "":
+        # if we see source: IANA and the part after is not only whitespace
+        if verbose:
+            msg = f"after: {k} we see not only whitespace: {whois_splitted[1]}"
+            print(msg, file=sys.stderr)
+
+        return whois_splitted[1], None
+
+    # try to parse this as a IANA domain as after is only whitespace
+    r = _doExtractPattensFromWhoisString(
+        tld,
+        r,
+        whois_str,
+        verbose,
+    )  # set default values
+
+    # now handle the actual format if this whois response
+    r = _doExtractPattensIanaFromWhoisString(
+        tld,
+        r,
+        whois_str,
+        verbose,
+    )
+
+    return whois_str, r
+
+
+# PUBLIC
 
 
 def cleanupWhoisResponse(
@@ -119,159 +285,22 @@ def cleanupWhoisResponse(
     return "\n".join(tmp2)
 
 
-def handleShortResponse(
-    tld: str,
-    dl: List[str],
-    whois_str: str,
-    verbose: bool = False,
-) -> None:
-    # returns None or raises one of (WhoisQuotaExceeded, FailedParsingWhoisOutput)
-    if verbose:
-        d = ".".join(dl)
-        print(f"line count < 5:: {tld} {d} {whois_str}", file=sys.stderr)
-
-    # TODO: some short responses are actually valid:
-    # lookfor Domain: and Status but all other fields are missing so the regexec could fail
-    # this domain is taken already or reserved
-
-    # whois syswow.64-b.it
-    # [Querying whois.nic.it]
-    # [whois.nic.it]
-    # Domain:             syswow.64-b.it
-    # Status:             UNASSIGNABLE
-
-    s = whois_str.strip().lower()
-
-    # NOTE: from here s is lowercase only
-    # ---------------------------------
-    noneStrings = NoneStrings()
-    for i in noneStrings:
-        if i in s:
-            return None
-
-    # ---------------------------------
-    # is there any error string in the result
-    if s.count("error"):
-        if verbose:
-            print("i see 'error' in the result, return: None", file=sys.stderr)
-        return None
-
-    # ---------------------------------
-    quotaStrings = QuotaStrings()
-    for i in quotaStrings:
-        if i in s:
-            raise WhoisQuotaExceeded(whois_str)
-
-    raise FailedParsingWhoisOutput(whois_str)
+def NoneStrings() -> List[str]:
+    return sorted(NONESTRINGS)
 
 
-def doDnsSec(
-    whois_str: str,
-) -> bool:
-    whois_dnssec: Any = whois_str.split("DNSSEC:")
-    if len(whois_dnssec) >= 2:
-        whois_dnssec = whois_dnssec[1].split("\n")[0]
-        if whois_dnssec.strip() == "signedDelegation" or whois_dnssec.strip() == "yes":
-            return True
-    return False
+def NoneStringsAdd(aString: str) -> None:
+    if aString and isinstance(aString, str) and len(aString) > 0:
+        NONESTRINGS.append(aString)
 
 
-def doIfServerNameLookForDomainName(
-    whois_str: str,
-    verbose: bool = False,
-) -> str:
-    # not often available anymore
-    if re.findall(r"Server Name:\s?(.+)", whois_str, re.IGNORECASE):
-        if verbose:
-            msg = "i have seen Server Name:, looking for Domain Name:"
-            print(msg, file=sys.stderr)
-        whois_str = whois_str[whois_str.find("Domain Name:") :]
-    return whois_str
+def QuotaStrings() -> List[str]:
+    return sorted(QUOTASTRINGS)
 
 
-def doExtractPattensIanaFromWhoisString(
-    tld: str,
-    r: Dict[str, Any],
-    whois_str: str,
-    verbose: bool = False,
-) -> Dict[str, Any]:
-    # now handle the actual format if this whois response
-    iana = {
-        "domain_name": r"domain:\s?([^\n]+)",
-        "registrar": r"organisation:\s?([^\n]+)",
-        "creation_date": r"created:\s?([^\n]+)",
-    }
-    for k, v in iana.items():
-        zz = re.findall(v, whois_str)
-        if zz:
-            if verbose:
-                print(f"parsing iana data only for tld: {tld}, {zz}", file=sys.stderr)
-            r[k] = zz
-    return r
-
-
-def doExtractPattensFromWhoisString(
-    tld: str,
-    r: Dict[str, Any],
-    whois_str: str,
-    verbose: bool = False,
-) -> Dict[str, Any]:
-    for k, v in TLD_RE.get(tld, TLD_RE["com"]).items():  # use TLD_RE["com"] as default if a regex is missing
-        if k.startswith("_"):  # skip meta element like: _server or _privateRegistry
-            continue
-
-        # Historical: here we use 'empty string' as default, not None
-        if v is None:
-            r[k] = [""]
-        else:
-            r[k] = v.findall(whois_str) or [""]
-
-    return r
-
-
-def doSourceIana(
-    tld: str,
-    r: Dict[str, Any],
-    whois_str: str,
-    verbose: bool = False,
-) -> Tuple[str, Optional[Dict[str, Any]]]:
-    # here we can handle the example.com and example.net permanent IANA domains
-    k = "source:       IANA"
-
-    if verbose:
-        msg = f"i have seen {k}"
-        print(msg, file=sys.stderr)
-
-    whois_splitted = whois_str.split(k)
-    z = len(whois_splitted)
-    if z > 2:
-        return k.join(whois_splitted[1:]), None
-
-    if z == 2 and whois_splitted[1].strip() != "":
-        # if we see source: IANA and the part after is not only whitespace
-        if verbose:
-            msg = f"after: {k} we see not only whitespace: {whois_splitted[1]}"
-            print(msg, file=sys.stderr)
-
-        return whois_splitted[1], None
-
-    # try to parse this as a IANA domain as after is only whitespace
-    r = doExtractPattensFromWhoisString(
-        tld,
-        r,
-        whois_str,
-        verbose,
-    )  # set default values
-
-    # now handle the actual format if this whois response
-    r = doExtractPattensIanaFromWhoisString(
-        tld,
-        r,
-        whois_str,
-        verbose,
-    )
-
-    return whois_str, r
+def QuotaStringsAdd(aString: str) -> None:
+    if aString and isinstance(aString, str) and len(aString) > 0:
+        NONESTRINGS.append(aString)
 
 
 def do_parse(
@@ -281,7 +310,8 @@ def do_parse(
     verbose: bool = False,
     with_cleanup_results: bool = False,
     simplistic: bool = False,
-) -> Optional[Dict[str, Any]]:
+    include_raw_whois_text: bool = False,
+) -> Any:
 
     whois_str = cleanupWhoisResponse(
         whois_str=whois_str,
@@ -290,22 +320,29 @@ def do_parse(
     )
 
     if whois_str.count("\n") < 5:
-        # return handleShortResponse(tld, dl, whois_str, verbose)
-        handleShortResponse(tld, dl, whois_str, verbose)
-        return None
+        result = _handleShortResponse(  # may raise:    FailedParsingWhoisOutput,    WhoisQuotaExceeded,
+            tld=tld,
+            dl=dl,
+            whois_str=whois_str,
+            verbose=verbose,
+            simplistic=simplistic,
+            include_raw_whois_text=include_raw_whois_text,
+        )
+        return result
 
+    # this is the beginning of the return data
     r: Dict[str, Any] = {
         "tld": tld,
-        "DNSSEC": doDnsSec(whois_str),
+        "DNSSEC": _doDnsSec(whois_str),
     }
 
     if "source:       IANA" in whois_str:  # prepare for handling historical IANA domains
-        whois_str, ianaDomain = doSourceIana(tld, r, whois_str, verbose)
+        whois_str, ianaDomain = _doSourceIana(tld, r, whois_str, verbose)
         if ianaDomain is not None:
             ianaDomain = cast(Optional[Dict[str, Any]], ianaDomain)
             return ianaDomain
 
     if "Server Name" in whois_str:  # handle old type Server Name (not very common anymore)
-        whois_str = doIfServerNameLookForDomainName(whois_str, verbose)
+        whois_str = _doIfServerNameLookForDomainName(whois_str, verbose)
 
-    return doExtractPattensFromWhoisString(tld, r, whois_str, verbose)
+    return _doExtractPattensFromWhoisString(tld, r, whois_str, verbose)

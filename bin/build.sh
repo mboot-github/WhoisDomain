@@ -54,7 +54,7 @@ main()
         # is it today
         grep $DATE work/version && {
             # any changes in the actual code
-            git status whoisdomain && {
+            git status whoisdomain | grep modified || {
                 return
             }
         }
@@ -65,6 +65,8 @@ main()
     setupVersionNumberToday
     makeTomlFile
     buildDist
+    git add .
+    echo " commit the current changes"
 }
 
 main

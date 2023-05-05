@@ -34,7 +34,7 @@ ZZ["com"] = {
     # the trailing domain must have minimal 2 parts firstname.lastname@fld.tld
     # it may actually have more then 4 levels
     # to match the dot in firstname.lastname we must use \.
-    "emails": r"[\w\.-]+@[\w\.-]+\.[\w]{2,4}",
+    "emails": r"([\w\.-]+@[\w\.-]+\.[\w]{2,4})",
 }
 
 # United Kingdom - academic sub-domain
@@ -396,7 +396,7 @@ ZZ["ee"] = {
     "updated_date": r"Domain:(?:\n+.+\n*)*changed:\s+(.+)\n",
     "name_servers": r"nserver:\s*(.+)",
     "status": r"Domain:(?:\n+.+\n*)*status:\s+(.+)\n",
-    "emails": r"[\w\.-]+@[\w\.-]+\.[\w]{2,4}",
+    # "emails": r"[\w\.-]+@[\w\.-]+\.[\w]{2,4}",
 }
 
 ZZ["eu"] = {
@@ -526,6 +526,7 @@ ZZ["ir"] = {
 }
 
 ZZ["is"] = {
+    "extend": "com",
     "domain_name": r"domain:\s?(.+)",
     "registrar": None,
     "registrant": r"registrant:\s?(.+)",
@@ -535,7 +536,7 @@ ZZ["is"] = {
     "updated_date": None,
     "name_servers": r"nserver:\s?(.+)",
     "status": None,
-    "emails": r"[\w\.-]+@[\w\.-]+\.[\w]{2,4}",
+    # "emails": r"[\w\.-]+@[\w\.-]+\.[\w]{2,4}",
 }
 
 ZZ["it"] = {
@@ -571,7 +572,7 @@ ZZ["jp"] = {
     "name_servers": r"\[Name Server\]\s*(.+)",
     #    'status':                   r'\[状態\]\s?(.+)',
     "status": r"\[Status\]\s?(.+)",
-    "emails": r"[\w\.-]+@[\w\.-]+\.[\w]{2,4}",
+    "emails": r"([\w\.-]+@[\w\.-]+\.[\w]{2,4})",
 }
 
 # The Japanese whois servers always return English unless a Japanese locale is specified in the user's LANG environmental variable.
@@ -685,7 +686,7 @@ ZZ["ml"] = {
     "creation_date": r"Domain registered: *(.+)",
     "expiration_date": r"Record will expire on: *(.+)",
     "name_servers": r"Domain Nameservers:\s*(.+)\n\s*(.+)\n",
-    "emails": r"[\w\.-]+@[\w\.-]+\.[\w]{2,4}",
+    # "emails": r"[\w\.-]+@[\w\.-]+\.[\w]{2,4}",
 }
 
 ZZ["mobi"] = {
@@ -805,7 +806,7 @@ ZZ["nz"] = {
     "updated_date": r"domain_datelastmodified:\s?(.+)",
     "name_servers": r"ns_name_[0-9]{2}:\s?(.+)",
     "status": r"query_status:\s?(.+)",
-    "emails": r"[\w\.-]+@[\w\.-]+\.[\w]{2,4}",
+    "emails": r"([\w\.-]+@[\w\.-]+\.[\w]{2,4})",
 }
 
 ZZ["org"] = {
@@ -1031,7 +1032,7 @@ ZZ["tn"] = {
     "updated_date": None,
     "name_servers": r"DNS servers\n(?:Name\.+:\s*(\S+)\n)(?:Name\.+:\s*(\S+)\n)?(?:Name\.+:\s*(\S+)\n)?(?:Name\.+:\s*(\S+)\n)?",
     "status": r"Domain status\.+:(.+)",
-    "emails": r"[\w\.-]+@[\w\.-]+\.[\w]{2,4}",
+    # "emails": r"[\w\.-]+@[\w\.-]+\.[\w]{2,4}",
 }
 
 ZZ["tokyo"] = {
