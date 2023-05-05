@@ -23,14 +23,23 @@ installFromDistWhl()
 getInstalledVersion()
 {
     # after install
-    WE_HAVE=$( whoisdomain -V )
+    WE_HAVE=$( $WHAT -V )
     echo "$WE_HAVE" >&2
+}
+
+testSimpleIfCorrectVersion()
+{
+    [ "$WE_HAVE" == "$VERSION" ] && {
+        $WHAT -f testdata/DOMAINS.txt
+        rm -rf ${ENV}
+        exit 0
+    }
 }
 
 testAllIfCorrectVersion()
 {
     [ "$WE_HAVE" == "$VERSION" ] && {
-        whoisdomain -f testdata/DOMAINS.txt
+        $WHAT -a
         rm -rf ${ENV}
         exit 0
     }

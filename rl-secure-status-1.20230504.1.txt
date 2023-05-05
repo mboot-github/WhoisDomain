@@ -1,2 +1,0 @@
-[ CI:TEXT ] Everything is awesome!
-[ CI:PASS ] <OK> [H] 0       [M] 0       [L] 0     
