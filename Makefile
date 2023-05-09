@@ -29,7 +29,7 @@ testLocalWhl:
 mypyTest: pypi-test testTestPypi
 
 # build a docker images with the latest python and run a test -a
-dockerTests: docker dockerRun dockerTestdata
+dockerTests: mypyTest docker dockerRun dockerTestdata
 
 # ==========================================================
 # ==========================================================
@@ -88,11 +88,9 @@ rlsecure-version:
 # scan the most recent build and fail if the status fails
 rlsecure: build rlsecure-scan rlsecure-list rlsecure-status rlsecure-report rlsecure-version
 
-
-
 # using the latest py version
 # note this uses the test.pypi.org for now
-docker:
+docker: build
 	export VERSION=$(shell cat work/version) && \
 	docker build \
 		--build-arg VERSION \
@@ -122,8 +120,6 @@ dockerPush:
 	docker image push \
 		--all-tags $(DOCKER_WHO)/$(WHAT)
 
-dockerTests: docker dockerRun dockerTestdata
-
 testTestPypi:
 	./bin/testTestPyPiUpload.sh 2>tmp/$@-2 | tee tmp/$@-1
 
@@ -146,10 +142,12 @@ test3: reformat mypy
 release: build rlsecure pypi-test testTestPypi
 
 clean:
-	rm -rf dist/*
-	rm -f work/version
 	rm -rf tmp/*
 	rm -f ./rl-secure-list-*.txt
 	rm -f ./rl-secure-status-*.txt
 	rm -f pyproject.toml
 	docker image prune --all --force
+
+cleanDist:
+	rm -rf dist/*
+	# rm -f work/version
