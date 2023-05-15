@@ -54,16 +54,15 @@ jobs:
                 --package-path=/packages/whoisdomain*$(cat work/version)*.whl \
                 --report-path=/report \
                 --report-format=all
-            exit 1
 
-      # ==================================================================      
       - name: Archive Report
         if: success() || failure()
         uses: actions/upload-artifact@v3
         with:
           name: report-${{ env.DT_NOW }}
           path: report
-         
+
+      # ==================================================================               
       - name: Deploy simulate
         run: |
           echo "simulate a deploy"
