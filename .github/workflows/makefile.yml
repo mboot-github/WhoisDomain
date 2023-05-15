@@ -54,6 +54,7 @@ jobs:
                 --package-path=/packages/whoisdomain*$(cat work/version)*.whl \
                 --report-path=/report \
                 --report-format=all
+            exit 1
 
       # ==================================================================      
       - name: Archive Report
