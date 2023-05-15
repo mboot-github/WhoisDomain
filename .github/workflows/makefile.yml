@@ -8,8 +8,6 @@ on:
   
 jobs:
   build_wheel:
-    env:
-      BUILD_VERSION: $(cat work/version)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -25,14 +23,14 @@ jobs:
         run: |
           python -m pip install --user --upgrade build
           python -m build
-          ls dist/whoisdomain*${BUILD_VERSION}*.whl | xargs pip install
+          ls dist/whoisdomain*$(cat work/version)*.whl | xargs pip install
           
       # ==================================================================      
       - name: prepare for rl-scanner
         run: |
           rm -rf report # we need a empty report directory
-          mkdir -p packages report-${BUILD_VERSION} # prepare the 2 volume mounts
-          cp dist/whoisdomain*${BUILD_VERSION}*.whl packages # copy the package to scan to the input volume location
+          mkdir -p packages report # prepare the 2 volume mounts
+          cp dist/whoisdomain*$(cat work/version)*.whl packages # copy the package to scan to the input volume location
 
       # ==================================================================      
       - name: Test with rl-scanner
@@ -48,7 +46,7 @@ jobs:
             -e RLSECURE_SITE_KEY="${RL_DEPLOY_SITE_KEY}" \
             reversinglabs/rl-scanner \
             rl-scan \
-                --package-path=/packages/whoisdomain*${BUILD_VERSION}*.whl \
+                --package-path=/packages/whoisdomain*$(cat work/version)*.whl \
                 --report-path=/report \
                 --report-format=all
 
@@ -57,5 +55,10 @@ jobs:
         if: success() || failure()
         uses: actions/upload-artifact@v3
         with:
-          name: report-${BUILD_VERSION}
+          name: report
           path: report
+          
+     - name: simulate a deploy action
+       run: |
+         echo "simulate a deploy"
+         ls -l dist/
