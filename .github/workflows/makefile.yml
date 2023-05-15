@@ -25,14 +25,14 @@ jobs:
         run: |
           python -m pip install --user --upgrade build
           python -m build
-          ls dist/whoisdomain*$(cat work/version)*.whl | xargs pip install
+          ls dist/whoisdomain*${BUILD_VERSION}*.whl | xargs pip install
           
       # ==================================================================      
       - name: prepare for rl-scanner
         run: |
           rm -rf report # we need a empty report directory
-          mkdir -p packages report # prepare the 2 volume mounts
-          cp dist/*$(cat work/version)*.whl packages # copy the package to scan to the input volume location
+          mkdir -p packages report-${BUILD_VERSION} # prepare the 2 volume mounts
+          cp dist/whoisdomain*${BUILD_VERSION}*.whl packages # copy the package to scan to the input volume location
 
       # ==================================================================      
       - name: Test with rl-scanner
@@ -43,12 +43,12 @@ jobs:
           docker run --pull always --rm \
             -u $(id -u):$(id -g) \
             -v "$(pwd)/packages:/packages:ro" \
-            -v "$(pwd)/report:/report" \
+            -v "$(pwd)/report-${BUILD_VERSION}:/report" \
             -e RLSECURE_ENCODED_LICENSE="${RL_DEPLOY_ENCODED_KEY}" \
             -e RLSECURE_SITE_KEY="${RL_DEPLOY_SITE_KEY}" \
             reversinglabs/rl-scanner \
             rl-scan \
-                --package-path=/packages/whoisdomain*$(cat work/version)*.whl \
+                --package-path=/packages/whoisdomain*${BUILD_VERSION}*.whl \
                 --report-path=/report \
                 --report-format=all
 
@@ -57,5 +57,5 @@ jobs:
         if: success() || failure()
         uses: actions/upload-artifact@v3
         with:
-          name: report
+          name: report-${BUILD_VERSION}
           path: report
