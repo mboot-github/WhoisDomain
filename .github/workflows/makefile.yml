@@ -1,4 +1,4 @@
-name: Makefile CI
+name: Demonstration SCAN
 
 on:
   push:
@@ -11,26 +11,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
+
+      # ==================================================================      
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.7
           
+      # ==================================================================      
       - name: Build wheel
         run: |
           python -m pip install --user --upgrade build
           python -m build
           ls dist/*$(cat work/version)*.whl | xargs pip install
           # ./test3.py -f testdata/DOMAINS.txt # currently we have no whois cli
+          
+      # ==================================================================      
+      - name: prepare for rl-scanner
+        run: |
+          rm -rf report
+          mkdir -p packages report
+          cp dist/*$(cat work/version)*.whl packages
+
+      # ==================================================================      
       - name: Test with rl-scanner
         env: # Or as an environment variable
           RL_DEPLOY_SITE_KEY: ${{ secrets.RL_DEPLOY_SITE_KEY }}
           RL_DEPLOY_ENCODED_KEY: ${{ secrets.RL_DEPLOY_ENCODED_KEY }}
         run: |
-          rm -rf report
-          mkdir -p packages report
-          cp dist/*$(cat work/version)*.whl packages
           docker run --pull always --rm \
             -u $(id -u):$(id -g) \
             -v "$(pwd)/packages:/packages:ro" \
@@ -42,4 +50,9 @@ jobs:
                 --package-path=/packages/whoisdomain*$(cat work/version)*.whl \
                 --report-path=/report \
                 --report-format=all
-
+            echo $?
+            
+      # ==================================================================      
+      - name: show the report
+        run: |
+          ls -lR report
