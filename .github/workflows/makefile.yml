@@ -41,7 +41,7 @@ jobs:
           docker run --pull always --rm \
             -u $(id -u):$(id -g) \
             -v "$(pwd)/packages:/packages:ro" \
-            -v "$(pwd)/report-${BUILD_VERSION}:/report" \
+            -v "$(pwd)/report:/report" \
             -e RLSECURE_ENCODED_LICENSE="${RL_DEPLOY_ENCODED_KEY}" \
             -e RLSECURE_SITE_KEY="${RL_DEPLOY_SITE_KEY}" \
             reversinglabs/rl-scanner \
