@@ -28,8 +28,8 @@ jobs:
       # ==================================================================      
       - name: Prepare for rl-scanner
         run: |
-          rm -rf report # we need a empty report directory
-          mkdir -p packages report # prepare the 2 volume mounts
+          rm -rf report-${{ github.event.repository.updated_at}} # we need a empty report directory
+          mkdir -p packages report-${{ github.event.repository.updated_at}} # prepare the 2 volume mounts
           cp dist/whoisdomain*$(cat work/version)*.whl packages # copy the package to scan to the input volume location
 
       # ==================================================================      
@@ -41,7 +41,7 @@ jobs:
           docker run --pull always --rm \
             -u $(id -u):$(id -g) \
             -v "$(pwd)/packages:/packages:ro" \
-            -v "$(pwd)/report:/report" \
+            -v "$(pwd)/report-${{ github.event.repository.updated_at}}:/report" \
             -e RLSECURE_ENCODED_LICENSE="${RL_DEPLOY_ENCODED_KEY}" \
             -e RLSECURE_SITE_KEY="${RL_DEPLOY_SITE_KEY}" \
             reversinglabs/rl-scanner \
@@ -55,8 +55,8 @@ jobs:
         if: success() || failure()
         uses: actions/upload-artifact@v3
         with:
-          name: report
-          path: report
+          name: report-${{ github.event.repository.updated_at}}
+          path: report-${{ github.event.repository.updated_at}}
          
       - name: Deploy simulate
         run: |
