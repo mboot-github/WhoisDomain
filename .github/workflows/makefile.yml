@@ -8,6 +8,8 @@ on:
   
 jobs:
   build_wheel:
+    env:
+      BUILD_VERSION: $(cat work/version)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
