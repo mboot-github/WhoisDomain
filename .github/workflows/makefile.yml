@@ -25,6 +25,18 @@ jobs:
           # ./test3.py -f testdata/DOMAINS.txt # currently we have no whois cli
       - name: Test with rl-scanner
         run: |
-          ls -l
-          id
-          
+          rm -rf report
+          mkdir -p packages report
+          cp dist/*$(cat work/version)*.whl packages
+          docker run --pull always --rm \
+            -u $(id -u):$(id -g) \
+            -v "$(pwd)/packages:/packages:ro" \
+            -v "$(pwd)/report:/report" \
+            -e RLSECURE_ENCODED_LICENSE="${RL_DEPLOY_ENCODED_KEY}" \
+            -e RLSECURE_SITE_KEY="${RL_DEPLOY_SITE_KEY}" \
+            reversinglabs/rl-scanner \
+            rl-scan \
+                --package-path=/packages/whoisdomain*$(cat work/version)*.whl \
+                --report-path=/report \
+                --report-format=all
+
