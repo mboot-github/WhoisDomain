@@ -10,11 +10,11 @@ jobs:
   build_wheel:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # ==================================================================      
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.7
           
@@ -23,19 +23,18 @@ jobs:
         run: |
           python -m pip install --user --upgrade build
           python -m build
-          ls dist/*$(cat work/version)*.whl | xargs pip install
-          # ./test3.py -f testdata/DOMAINS.txt # currently we have no whois cli
+          ls dist/whoisdomain*$(cat work/version)*.whl | xargs pip install
           
       # ==================================================================      
       - name: prepare for rl-scanner
         run: |
-          rm -rf report
-          mkdir -p packages report
-          cp dist/*$(cat work/version)*.whl packages
+          rm -rf report # we need a empty report directory
+          mkdir -p packages report # prepare the 2 volume mounts
+          cp dist/*$(cat work/version)*.whl packages # copy the package to scan to the input volume location
 
       # ==================================================================      
       - name: Test with rl-scanner
-        env: # Or as an environment variable
+        env: # use environment variables
           RL_DEPLOY_SITE_KEY: ${{ secrets.RL_DEPLOY_SITE_KEY }}
           RL_DEPLOY_ENCODED_KEY: ${{ secrets.RL_DEPLOY_ENCODED_KEY }}
         run: |
@@ -50,9 +49,11 @@ jobs:
                 --package-path=/packages/whoisdomain*$(cat work/version)*.whl \
                 --report-path=/report \
                 --report-format=all
-            echo $?
-            
+
       # ==================================================================      
-      - name: show the report
-        run: |
-          ls -lR report
+      - name: Archive Report
+        if: success() || failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: report
+          path: report
