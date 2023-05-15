@@ -11,6 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
+      # ==================================================================      
+      - name: Current Date Time
+        run: |
+          echo "DT_NOW=$(date +%Y%m%d-%H%M%S)" >> ${GITHUB_ENV}
 
       # ==================================================================      
       - name: Set up Python
@@ -55,7 +60,7 @@ jobs:
         if: success() || failure()
         uses: actions/upload-artifact@v3
         with:
-          name: report-${{ github.event.repository.updated_at}}
+          name: report-${{ env.DT_NOW }}
           path: report
          
       - name: Deploy simulate
