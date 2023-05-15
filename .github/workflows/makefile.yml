@@ -24,6 +24,9 @@ jobs:
           ls dist/*$(cat work/version)*.whl | xargs pip install
           # ./test3.py -f testdata/DOMAINS.txt # currently we have no whois cli
       - name: Test with rl-scanner
+        env: # Or as an environment variable
+          RL_DEPLOY_SITE_KEY: ${{ secrets.RL_DEPLOY_SITE_KEY }}
+          RL_DEPLOY_ENCODED_KEY: ${{ secrets.RL_DEPLOY_ENCODED_KEY }}
         run: |
           rm -rf report
           mkdir -p packages report
