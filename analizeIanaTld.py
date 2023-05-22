@@ -7,6 +7,9 @@ from typing import (
 )
 
 import sys
+import io
+import re
+import time
 import requests_cache
 import dns.resolver
 import json
@@ -53,7 +56,7 @@ class IanaDatabase:
             exit(101)
         return result
 
-    def createTable(self) -> None:
+    def createTableTld(self) -> None:
         sql = """
 CREATE TABLE IF NOT EXISTS IANA_TLD (
     Link            TEXT PRIMARY KEY,
@@ -69,7 +72,22 @@ CREATE TABLE IF NOT EXISTS IANA_TLD (
         if self.verbose:
             print(rr, file=sys.stderr)
 
-    def makeInsOrUpdSql(
+    def createTablePsl(self) -> None:
+        sql = """
+CREATE TABLE IF NOT EXISTS IANA_PSL (
+    Tld             TEXT NOT NULL,
+    Psl             TEXT UNIQUE,
+    Level           INTEGER NOT NULL,
+    Type            TEXT NOT NULL,
+    Comment         TEXT,
+    PRIMARY KEY (Tld, Psl)
+);
+"""
+        rr = self.doSql(sql)
+        if self.verbose:
+            print(rr, file=sys.stderr)
+
+    def prepData(
         self,
         columns: List[str],
         values: List[str],
@@ -81,20 +99,48 @@ CREATE TABLE IF NOT EXISTS IANA_TLD (
         i = 0
         while i < len(values):
             v = "NULL"
-            if values[i]:
+            if values[i] is not None:
                 v = values[i]
-                if not isinstance(v, str):
+                if not isinstance(v, str) and not isinstance(v, int):
                     v = json.dumps(v, ensure_ascii=False)
-                v = "'" + v + "'"
+                if isinstance(v, str):
+                    v = "'" + v + "'"
+                if isinstance(v, int):
+                    v = int(v)
             data.append(v)
             vvv.append("?")
             i += 1
 
         vv = ",".join(vvv)
+        return cc, vv, data
 
+    def makeInsOrUpdSqlTld(
+        self,
+        columns: List[str],
+        values: List[str],
+    ):
+        cc, vv, data = self.prepData(columns, values)
         return (
             f"""
 INSERT OR REPLACE INTO IANA_TLD (
+    {cc}
+) VALUES(
+    {vv}
+);
+""",
+            data,
+        )
+
+    def makeInsOrUpdSqlPsl(
+        self,
+        columns: List[str],
+        values: List[str],
+    ):
+        cc, vv, data = self.prepData(columns, values)
+
+        return (
+            f"""
+INSERT OR REPLACE INTO IANA_PSL (
     {cc}
 ) VALUES(
     {vv}
@@ -135,7 +181,14 @@ class IanaCrawler:
         self,
         url: str,
     ) -> BeautifulSoup:
-        response = self.Session.get(url)
+        try:
+            response = self.Session.get(url)
+        except Exception as e:
+            # in case of no data, sleep and try again
+            print(e, file=sys.stderr)
+            time.sleep(15)
+            response = self.Session.get(url)
+
         soup = BeautifulSoup(response.text, "html.parser")
         return soup
 
@@ -221,6 +274,8 @@ class IanaCrawler:
         tldItem: List[str],
     ) -> List[str]:
         url = tldItem[0]
+        print(url, file=sys.stderr)
+
         if tldItem[3] == "Not assigned":
             tldItem[3] = None
 
@@ -265,18 +320,54 @@ class IanaCrawler:
         }
 
 
+class PslGrabber:
+    # notes: https://github.com/publicsuffix/list/wiki/Format
+
+    URL: str = "https://publicsuffix.org/list/public_suffix_list.dat"
+    CacheTime = 3600 * 24  # default 24 hours
+    Session = None
+    cacheName = ".psl_cache"
+    verbose: bool = False
+    cacheBackend: str = "filesystem"
+
+    def __init__(self, verbose: bool = False):
+        self.verbose = verbose
+        self.Session = requests_cache.CachedSession(
+            self.cacheName,
+            backend=self.cacheBackend,
+        )
+
+    def getUrl(self) -> str:
+        return self.URL
+
+    def getData(
+        self,
+        url: str,
+    ):
+        response = self.Session.get(url)
+        return response
+
+    def ColumnsPsl(self):
+        return [
+            "Tld",
+            "Psl",
+            "Level",
+            "Type",
+            "Comment",
+        ]
+
+
 def xMain():
     verbose = False
     dbFileName = "IanaDb.sqlite"
 
     iad = IanaDatabase(verbose=verbose)
     iad.connectDb(dbFileName)
-    iad.createTable()
+    iad.createTableTld()
+    iad.createTablePsl()
 
     resolver = dns.resolver.Resolver()
-    resolver.cache = dns.resolver.Cache(
-        cleaning_interval=3600
-    )  # does not cache to file only in memory, currently
+    resolver.cache = dns.resolver.Cache(cleaning_interval=3600)  # does not cache to file only in memory, currently
 
     iac = IanaCrawler(verbose=verbose, resolver=resolver)
     iac.getTldInfo()
@@ -285,11 +376,51 @@ def xMain():
     xx = iac.getResults()
 
     for item in xx["data"]:
-        sql, data = iad.makeInsOrUpdSql(xx["header"], item)
+        sql, data = iad.makeInsOrUpdSqlTld(xx["header"], item)
         rr = iad.doSql(sql, data)
-        print(rr)
 
     print(json.dumps(iac.getResults(), indent=2, ensure_ascii=False))
+
+    pg = PslGrabber()
+    response = pg.getData(pg.getUrl())
+    text = response.text
+    buf = io.StringIO(text)
+
+    section = ""
+    while True:
+        line = buf.readline()
+        if not line:
+            break
+
+        z = line.strip()
+        if len(z):
+            if "// ===END " in z:
+                section = ""
+
+            if "// ===BEGIN ICANN" in z:
+                section = "ICANN"
+
+            if "// ===BEGIN PRIVATE" in z:
+                section = "PRIVATE"
+
+            if section == "PRIVATE":
+                continue
+
+            if re.match(r"^\s*//", z):
+                # print("SKIP", z)
+                continue
+
+            n = 0
+            z = z.split()[0]
+            if "." in z:
+                tld = z.split(".")[-1]
+                n = len(z.split("."))
+            else:
+                tld = z
+
+            sql, data = iad.makeInsOrUpdSqlPsl(pg.ColumnsPsl(), [tld, z, n, section, None])
+            print(data)
+            r = iad.doSql(sql, data)
 
 
 xMain()
