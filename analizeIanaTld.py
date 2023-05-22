@@ -42,15 +42,20 @@ class IanaDatabase:
         self,
         sql: str,
         data: Any = None,
+        withCommit: bool = True,
     ):
         self.testValidConnection()
         cur = self.conn.cursor()
+
         try:
             if data:
                 result = cur.execute(sql, data)
             else:
                 result = cur.execute(sql)
-            self.conn.commit()
+
+            if withCommit:
+                self.conn.commit()
+
         except Exception as e:
             print(sql, e, file=sys.stderr)
             exit(101)
@@ -239,6 +244,17 @@ class IanaCrawler:
 
         self.columns.insert(0, "Link")
 
+    def getTldPWithString(
+        self,
+        url: str,
+        text: str,
+    ) -> Optional[str]:
+        soup = self.getBasicBs(url)
+        gfg = soup.find_all(lambda tag: tag.name == "p" and text in tag.text)
+        if len(gfg):
+            return gfg[0].text.strip()
+        return None
+
     def getTldWhois(
         self,
         url: str,
@@ -249,6 +265,7 @@ class IanaCrawler:
         if len(gfg):
             return gfg[0].text.strip()
         return None
+        #
 
     def resolveWhois(
         self,
@@ -279,15 +296,28 @@ class IanaCrawler:
         if tldItem[3] == "Not assigned":
             tldItem[3] = None
 
-        regData = self.getTldWhois(self.getUrl() + "/" + url + ".html")
-        if regData:
-            regData = regData.replace("URL for registration services", "RegistrationUrl")
-            regData = regData.replace("WHOIS Server", "Whois")
-            regDataA = regData.split("\n")
-            for s in ["Whois", "RegistrationUrl"]:
+        n = "Whois"
+        regDataW = self.getTldPWithString(self.getUrl() + "/" + url + ".html", "WHOIS")
+        if regDataW:
+            regDataW = regDataW.replace("WHOIS Server", n)
+            regDataA = regDataW.split("\n")
+
+            print(n, regDataA, file=sys.stderr)
+            for s in [n]:
                 tldItem.append(self.getAdditionalItem(s, regDataA))
         else:
             tldItem.append(None)
+
+        n = "RegistrationUrl"
+        regDataU = self.getTldPWithString(self.getUrl() + "/" + url + ".html", "URL for registration services")
+        if regDataU:
+            regDataU = regDataU.replace("URL for registration services", n)
+            regDataA = regDataU.split("\n")
+
+            print(n, regDataA, file=sys.stderr)
+            for s in [n]:
+                tldItem.append(self.getAdditionalItem(s, regDataA))
+        else:
             tldItem.append(None)
 
         if tldItem[4]:
