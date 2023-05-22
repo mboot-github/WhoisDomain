@@ -120,16 +120,56 @@ FROM
             print(f'ZZ["{tld}"] = ' + '{"_privateRegistry": True}')
             continue
 
-        if "whois.afilias-srs.net" in resolve:
-            print(f'ZZ["{tld}"] = ' + '{"_server": "whois.afilias-srs.net", "extend": "com"}')
+        # typical extend = com domains
+        nn = [
+            "whois.afilias-srs.net",
+            "whois2.afilias-grs.net",
+            "whois.nic.google",
+            "whois.nic.gmo",
+            "whois.gtld.knet.cn",
+            "whois.registry.in",
+            "whois.ngtld.cn",
+        ]
+
+        found = False
+        for n in nn:
+            if n in resolve:
+                print(f'ZZ["{tld}"] = ' + '{"_server": "' + n + '", "extend": "com"}')
+                found = True
+            if found:
+                break
+        if found:
+            continue
+
+        n = "whois.sgnic.sg"
+        if n in resolve:
+            print(f'ZZ["{tld}"] = ' + '{"_server": "' + n + '", "extend": "sg"}')
+            continue
+
+        # only extend (based on already existing tld)
+        n = "whois.teleinfo.cn"
+        if n in resolve:
+            print(f'ZZ["{tld}"] = ' + '{"extend": "_teleinfo"}')
+            continue
+
+        n = "whois.centralnic.com"
+        if n in resolve:
+            print(f'ZZ["{tld}"] = ' + '{"extend": "_centralnic"}')
+            continue
+
+        n = "whois.twnic.net.tw"
+        if n in resolve:
+            print(f'ZZ["{tld}"] = ' + '{"extend": "tw"}')
             continue
 
         if reg == "NULL" and w == "NULL":
-            continue # unclear, we have existing ns records indicating some tld's actually exist but have no whois, lets skip for now
+            continue  # unclear, we have existing ns records indicating some tld's actually exist but have no whois, lets skip for now
             print(f'ZZ["{tld}"] = ' + '{"_privateRegistry": True}')
 
-        # print("# MISSING", tld, manager.replace("\n", ";"), w, resolve, reg)
+        if w == "NULL":
+            continue
 
+        print("# MISSING", tld, manager.replace("\n", ";"), w, resolve, reg)
 
 
 xMain()
