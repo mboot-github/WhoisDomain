@@ -19,7 +19,7 @@ from bs4 import BeautifulSoup
 
 class IanaDatabase:
     verbose: bool = False
-    conn = None
+    conn: Any = None
 
     def __init__(
         self,
@@ -45,7 +45,7 @@ class IanaDatabase:
         withCommit: bool = True,
     ):
         self.testValidConnection()
-        cur = self.conn.cursor()
+        cur: Any = self.conn.cursor()
 
         try:
             if data:
@@ -157,20 +157,20 @@ INSERT OR REPLACE INTO IANA_PSL (
 
 class IanaCrawler:
     URL: str = "https://www.iana.org/domains/root/db"
-    CacheTime = 3600 * 24  # default 24 hours
-    Session = None
-    cacheName = ".iana_cache"
+    CacheTime: int = 3600 * 24  # default 24 hours
+    Session: Any = None
+    cacheName: str = ".iana_cache"
     verbose: bool = False
     cacheBackend: str = "filesystem"
-    records = []
-    columns = []
+    records: List[Any] = []
+    columns: List[Any] = []
 
-    resolver = None
+    resolver: Any = None
 
     def __init__(
         self,
         verbose: bool = False,
-        resolver=None,
+        resolver: Any = None,
     ):
         self.verbose = verbose
         self.resolver = resolver
@@ -214,10 +214,10 @@ class IanaCrawler:
 
     def getTldInfo(self) -> None:
         soup = self.getBasicBs(self.getUrl())
-        table = soup.find("table")  # the first table has the tld data
+        table: Any = soup.find("table")  # the first table has the tld data
 
-        self.records = []
-        self.columns = []
+        self.records: List[Any] = []
+        self.columns: List[Any] = []
         n = 0
         for tr in table.findAll("tr"):
             n += 1
@@ -271,7 +271,7 @@ class IanaCrawler:
         self,
         whois: str,
     ) -> List[Any]:
-        ll = []
+        ll: List[Any] = []
         if self.resolver:
             answer = list(self.resolver.resolve(whois, "A").response.answer)
             for a in answer:
@@ -288,7 +288,7 @@ class IanaCrawler:
 
     def addInfoToOneTld(
         self,
-        tldItem: List[str],
+        tldItem: List[Any],
     ) -> List[str]:
         url = tldItem[0]
         print(url, file=sys.stderr)
@@ -355,7 +355,7 @@ class PslGrabber:
 
     URL: str = "https://publicsuffix.org/list/public_suffix_list.dat"
     CacheTime = 3600 * 24  # default 24 hours
-    Session = None
+    Session: Any = None
     cacheName = ".psl_cache"
     verbose: bool = False
     cacheBackend: str = "filesystem"

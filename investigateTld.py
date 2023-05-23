@@ -21,7 +21,7 @@ from whoisdomain import tld_regexpr
 
 class IanaDatabase:
     verbose: bool = False
-    conn = None
+    conn: Any = None
 
     def __init__(
         self,
@@ -33,7 +33,7 @@ class IanaDatabase:
         self,
         fileName: str,
     ) -> None:
-        self.conn = sqlite3.connect(fileName)
+        self.conn: Any = sqlite3.connect(fileName)
         self.testValidConnection()
 
     def testValidConnection(self) -> None:
@@ -46,7 +46,7 @@ class IanaDatabase:
         data: Any = None,
     ):
         self.testValidConnection()
-        cur = self.conn.cursor()
+        cur: Any = self.conn.cursor()
 
         try:
             if data:
@@ -83,13 +83,26 @@ class IanaDatabase:
         return result
 
 
+def extractServers(aDict: Dict):
+    servers = []
+    k = "_server"
+    for key in aDict.keys():
+        if k in aDict[key]:
+            server = aDict[key][k]
+            if server not in servers:
+                servers.append(server)
+    return sorted(servers)
+
+
 def xMain():
     verbose = False
     dbFileName = "IanaDb.sqlite"
 
     iad = IanaDatabase(verbose=verbose)
     iad.connectDb(dbFileName)
-
+    ss = extractServers(tld_regexpr.ZZ)
+    print(ss)
+    exit(0)
     # investigate all known iana tld and see if we have them
 
     sql = """
@@ -121,45 +134,44 @@ FROM
             continue
 
         # typical extend = com domains
-        nn = [
-            "whois.afilias-srs.net",
-            "whois2.afilias-grs.net",
-            "whois.nic.google",
-            "whois.nic.gmo",
-            "whois.gtld.knet.cn",
-            "whois.registry.in",
-            "whois.ngtld.cn",
-        ]
+
+        mm = {
+            "com": [
+                "whois.afilias-srs.net",
+                "whois2.afilias-grs.net",
+                "whois.nic.google",
+                "whois.nic.gmo",
+                "whois.gtld.knet.cn",
+                "whois.registry.in",
+                "whois.ngtld.cn",
+            ],
+            "sg": [
+                "whois.sgnic.sg",
+            ],
+            "_teleinfo": [
+                "whois.teleinfo.cn",
+            ],
+            "tw": [
+                "whois.twnic.net.tw",
+            ],
+            "_centralnic": [
+                "whois.centralnic.com",
+            ],
+        }
 
         found = False
-        for n in nn:
-            if n in resolve:
-                print(f'ZZ["{tld}"] = ' + '{"_server": "' + n + '", "extend": "com"}')
-                found = True
+        for key, value in mm.items():
+            for n in value:
+                if n in resolve:
+                    print(f'ZZ["{tld}"] = ' + '{"_server": "' + n + '", "extend": "' + key + '"}')
+                    found = True
+
+                if found:
+                    break
             if found:
                 break
+
         if found:
-            continue
-
-        n = "whois.sgnic.sg"
-        if n in resolve:
-            print(f'ZZ["{tld}"] = ' + '{"_server": "' + n + '", "extend": "sg"}')
-            continue
-
-        # only extend (based on already existing tld)
-        n = "whois.teleinfo.cn"
-        if n in resolve:
-            print(f'ZZ["{tld}"] = ' + '{"extend": "_teleinfo"}')
-            continue
-
-        n = "whois.centralnic.com"
-        if n in resolve:
-            print(f'ZZ["{tld}"] = ' + '{"extend": "_centralnic"}')
-            continue
-
-        n = "whois.twnic.net.tw"
-        if n in resolve:
-            print(f'ZZ["{tld}"] = ' + '{"extend": "tw"}')
             continue
 
         if reg == "NULL" and w == "NULL":

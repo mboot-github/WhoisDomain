@@ -2803,7 +2803,7 @@ ZZ["beats"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["bl"] = {"_privateRegistry": True}
 ZZ["blanco"] = {"_privateRegistry": True}
 ZZ["bnl"] = {"_privateRegistry": True}
-ZZ["bnpparibas"] = {"_server": "whois.afilias-srs.net", "extend": "com"}  #'group.bnpparibas' works
+ZZ["bnpparibas"] = {"_server": "whois.afilias-srs.net", "extend": "com"}  # 'group.bnpparibas' works
 ZZ["boehringer"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["boots"] = {"_privateRegistry": True}
 ZZ["bq"] = {"_privateRegistry": True}
@@ -3020,4 +3020,3 @@ ZZ["xn--xkc2dl3a5ee0h"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--xhq521b"] = {"_server": "whois.ngtld.cn", "extend": "com"}
 ZZ["xn--kprw13d"] = {"extend": "tw"}
 ZZ["xn--kpry57d"] = {"extend": "tw"}
-
