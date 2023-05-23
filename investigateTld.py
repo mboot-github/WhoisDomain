@@ -3,85 +3,16 @@
 # should run after a valida database is created with analizeIanaTld.py
 
 from typing import (
-    Optional,
-    List,
+    # Optional,
+    # List,
     Dict,
     Any,
-    Tuple,
+    # Tuple,
 )
 
-import sys
-import io
-import re
-import time
-import json
-import sqlite3
 
 from whoisdomain import tld_regexpr
-
-
-class IanaDatabase:
-    verbose: bool = False
-    conn: Any = None
-
-    def __init__(
-        self,
-        verbose: bool = False,
-    ):
-        self.verbose = verbose
-
-    def connectDb(
-        self,
-        fileName: str,
-    ) -> None:
-        self.conn: Any = sqlite3.connect(fileName)
-        self.testValidConnection()
-
-    def testValidConnection(self) -> None:
-        if self.conn is None:
-            raise Exception("No valid connection to the database exist")
-
-    def selectSql(
-        self,
-        sql: str,
-        data: Any = None,
-    ) -> Tuple[Any, Any]:
-        self.testValidConnection()
-        cur: Any = self.conn.cursor()
-
-        try:
-            if data:
-                result = cur.execute(sql, data)
-            else:
-                result = cur.execute(sql)
-
-        except Exception as e:
-            print(sql, data, e, file=sys.stderr)
-            exit(101)
-        return result, cur
-
-    def doSql(
-        self,
-        sql: str,
-        data: Any = None,
-        withCommit: bool = True,
-    ) -> Any:
-        self.testValidConnection()
-        cur = self.conn.cursor()
-
-        try:
-            if data:
-                result = cur.execute(sql, data)
-            else:
-                result = cur.execute(sql)
-
-            if withCommit:
-                self.conn.commit()
-
-        except Exception as e:
-            print(sql, data, e, file=sys.stderr)
-            exit(101)
-        return result
+from ianaDatabase import IanaDatabase
 
 
 def extractServers(aDict: Dict[str, Any]) -> Dict[str, Any]:
