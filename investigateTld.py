@@ -7,6 +7,7 @@ from typing import (
     List,
     Dict,
     Any,
+    Tuple,
 )
 
 import sys
@@ -44,7 +45,7 @@ class IanaDatabase:
         self,
         sql: str,
         data: Any = None,
-    ):
+    ) -> Tuple[Any, Any]:
         self.testValidConnection()
         cur: Any = self.conn.cursor()
 
@@ -64,7 +65,7 @@ class IanaDatabase:
         sql: str,
         data: Any = None,
         withCommit: bool = True,
-    ):
+    ) -> Any:
         self.testValidConnection()
         cur = self.conn.cursor()
 
@@ -83,7 +84,7 @@ class IanaDatabase:
         return result
 
 
-def extractServers(aDict: Dict):
+def extractServers(aDict: Dict[str, Any]) -> Dict[str, Any]:
     servers: Dict[str, Any] = {}
     k = "_server"
     for key in aDict.keys():
@@ -95,7 +96,7 @@ def extractServers(aDict: Dict):
     return servers
 
 
-def xMain():
+def xMain() -> None:
     verbose = False
     dbFileName = "IanaDb.sqlite"
 

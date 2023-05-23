@@ -4,6 +4,7 @@ from typing import (
     List,
     Dict,
     Any,
+    Tuple,
 )
 
 import sys
@@ -11,7 +12,11 @@ import io
 import re
 import time
 import requests_cache
-import dns.resolver
+from dns.resolver import (
+    Resolver,
+    LRUCache,
+)
+
 import json
 import sqlite3
 from bs4 import BeautifulSoup
@@ -43,7 +48,7 @@ class IanaDatabase:
         sql: str,
         data: Any = None,
         withCommit: bool = True,
-    ):
+    ) -> Any:
         self.testValidConnection()
         cur: Any = self.conn.cursor()
 
@@ -96,7 +101,7 @@ CREATE TABLE IF NOT EXISTS IANA_PSL (
         self,
         columns: List[str],
         values: List[str],
-    ):
+    ) -> Tuple[str, str, List[Any]]:
         cc = "`" + "`,`".join(columns) + "`"
 
         data = []
@@ -123,7 +128,7 @@ CREATE TABLE IF NOT EXISTS IANA_PSL (
         self,
         columns: List[str],
         values: List[str],
-    ):
+    ) -> Tuple[str, List[Any]]:
         cc, vv, data = self.prepData(columns, values)
         return (
             f"""
@@ -140,7 +145,7 @@ INSERT OR REPLACE INTO IANA_TLD (
         self,
         columns: List[str],
         values: List[str],
-    ):
+    ) -> Tuple[str, List[Any]]:
         cc, vv, data = self.prepData(columns, values)
 
         return (
@@ -200,8 +205,9 @@ class IanaCrawler:
     def getAdditionalItem(
         self,
         what: str,
-        data: List,
+        data: List[str],
     ) -> Optional[str]:
+
         for i in [0, 1]:
             try:
                 z: str = f"{what}:"
@@ -250,9 +256,10 @@ class IanaCrawler:
         text: str,
     ) -> Optional[str]:
         soup = self.getBasicBs(url)
-        gfg = soup.find_all(lambda tag: tag.name == "p" and text in tag.text)
+        gfg: List[Any] = soup.find_all(lambda tag: tag.name == "p" and text in tag.text)
         if len(gfg):
-            return gfg[0].text.strip()
+            s: str = gfg[0].text.strip()
+            return s
         return None
 
     def resolveWhois(
@@ -357,11 +364,11 @@ class PslGrabber:
     def getData(
         self,
         url: str,
-    ):
+    ) -> Any:
         response = self.Session.get(url)
         return response
 
-    def ColumnsPsl(self):
+    def ColumnsPsl(self) -> List[str]:
         return [
             "Tld",
             "Psl",
@@ -371,17 +378,18 @@ class PslGrabber:
         ]
 
 
-def xMain():
-    verbose = False
-    dbFileName = "IanaDb.sqlite"
+def xMain() -> None:
+    verbose: bool = False
+    dbFileName: str = "IanaDb.sqlite"
 
-    iad = IanaDatabase(verbose=verbose)
+    iad: Any = IanaDatabase(verbose=verbose)
     iad.connectDb(dbFileName)
     iad.createTableTld()
     iad.createTablePsl()
 
-    resolver = dns.resolver.Resolver()
-    resolver.cache = dns.resolver.Cache(cleaning_interval=3600)  # does not cache to file only in memory, currently
+    resolver: Resolver = Resolver()
+    # resolver.cache = dns.resolver.Cache(cleaning_interval=3600)  # does not cache to file only in memory, currently
+    resolver.cache = LRUCache()  # type: ignore
 
     iac = IanaCrawler(verbose=verbose, resolver=resolver)
     iac.getTldInfo()

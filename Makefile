@@ -40,7 +40,7 @@ reformat:
 
 # only verify --strict all python code
 mypy:
-	mypy *.py bin/*.py $(WHAT)
+	mypy --strict *.py bin/*.py $(WHAT)
 
 # this step creates or updates the toml file
 build:
