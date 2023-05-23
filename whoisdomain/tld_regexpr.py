@@ -401,6 +401,7 @@ ZZ["ee"] = {
 
 ZZ["eu"] = {
     "extend": "com",
+    "_server": "whois.eu",
     "registrar": r"Name:\s?(.+)",
     "domain_name": r"\nDomain:\s*(.+)",
     "name_servers": r"Name servers:\n(?:\s+(\S+)\n)(?:\s+(\S+)\n)?(?:\s+(\S+)\n)?(?:\s+(\S+)\n)?(?:\s+(\S+)\n)?(?:\s+(\S+)\n)\n?",
@@ -460,6 +461,7 @@ ZZ["hn"] = {
 # Hong Kong
 ZZ["hk"] = {
     "extend": "com",
+    "_server": "whois.hkirc.hk",
     "domain_name": r"Domain Name:\s+(.+)",
     "registrar": r"Registrar Name:\s?(.+)",
     "registrant": r"Company English Name.*:\s?(.+)",
@@ -3020,3 +3022,25 @@ ZZ["xn--xkc2dl3a5ee0h"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--xhq521b"] = {"_server": "whois.ngtld.cn", "extend": "com"}
 ZZ["xn--kprw13d"] = {"extend": "tw"}
 ZZ["xn--kpry57d"] = {"extend": "tw"}
+ZZ["th"] = {"_server": "whois.thnic.co.th", "extend": "co.th"}
+#  whois.thnic.co.th ['co.th']
+ZZ["xn--d1alf"] = {"_server": "whois.marnet.mk", "extend": "mk"}
+#  whois.marnet.mk ['mk']
+ZZ["xn--mgb9awbf"] = {"_server": "whois.registry.om", "extend": "om"}
+#  whois.registry.om ['om']
+ZZ["xn--mgbah1a3hjkrd"] = {"_server": "whois.nic.mr", "extend": "mr"}
+#  whois.nic.mr ['mr']
+ZZ["xn--mix891f"] = {"_server": "whois.monic.mo", "extend": "mo"}
+#  whois.monic.mo ['mo']
+ZZ["xn--o3cw4h"] = {"_server": "whois.thnic.co.th", "extend": "co.th"}
+#  whois.thnic.co.th ['co.th']
+ZZ["xn--ogbpf8fl"] = {"_server": "whois.tld.sy", "extend": "sy"}
+#  whois.tld.sy ['sy']
+ZZ["xn--wgbl6a"] = {"_server": "whois.registry.qa", "extend": "qa"}
+#  whois.registry.qa ['qa']
+ZZ["xn--j6w193g"] = {"_server": "whois.hkirc.hk", "extend": "hk"}
+#  whois.hkirc.hk ['hk']
+ZZ["xn--e1a4c"] = {"_server": "whois.eu", "extend": "eu"}
+#  whois.eu ['eu']
+ZZ["xn--qxa6a"] = {"_server": "whois.eu", "extend": "eu"}
+#  whois.eu ['eu']

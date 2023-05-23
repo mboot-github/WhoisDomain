@@ -84,14 +84,15 @@ class IanaDatabase:
 
 
 def extractServers(aDict: Dict):
-    servers = []
+    servers: Dict[str, Any] = {}
     k = "_server"
     for key in aDict.keys():
         if k in aDict[key]:
             server = aDict[key][k]
             if server not in servers:
-                servers.append(server)
-    return sorted(servers)
+                servers[server] = []
+            servers[server].append(key)
+    return servers
 
 
 def xMain():
@@ -101,8 +102,7 @@ def xMain():
     iad = IanaDatabase(verbose=verbose)
     iad.connectDb(dbFileName)
     ss = extractServers(tld_regexpr.ZZ)
-    print(ss)
-    exit(0)
+
     # investigate all known iana tld and see if we have them
 
     sql = """
@@ -132,8 +132,6 @@ FROM
         if manager == "NULL":
             print(f'ZZ["{tld}"] = ' + '{"_privateRegistry": True}')
             continue
-
-        # typical extend = com domains
 
         mm = {
             "com": [
@@ -179,6 +177,12 @@ FROM
             print(f'ZZ["{tld}"] = ' + '{"_privateRegistry": True}')
 
         if w == "NULL":
+            continue
+
+        w = w.replace("'", "")
+        if w in ss:
+            print(f'ZZ["{tld}"] = ' + '{"_server": "' + w + '", "extend": "' + ss[w][0] + '"}')
+            print("# ", w, ss[w])
             continue
 
         print("# MISSING", tld, manager.replace("\n", ";"), w, resolve, reg)

@@ -255,18 +255,6 @@ class IanaCrawler:
             return gfg[0].text.strip()
         return None
 
-    def getTldWhois(
-        self,
-        url: str,
-    ) -> Optional[str]:
-        soup = self.getBasicBs(url)
-        text: str = "WHOIS"
-        gfg = soup.find_all(lambda tag: tag.name == "p" and text in tag.text)
-        if len(gfg):
-            return gfg[0].text.strip()
-        return None
-        #
-
     def resolveWhois(
         self,
         whois: str,
@@ -291,40 +279,36 @@ class IanaCrawler:
         tldItem: List[Any],
     ) -> List[str]:
         url = tldItem[0]
-        print(url, file=sys.stderr)
+
+        if self.verbose:
+            print(url, file=sys.stderr)
 
         if tldItem[3] == "Not assigned":
             tldItem[3] = None
 
-        n = "Whois"
-        regDataW = self.getTldPWithString(self.getUrl() + "/" + url + ".html", "WHOIS")
-        if regDataW:
-            regDataW = regDataW.replace("WHOIS Server", n)
-            regDataA = regDataW.split("\n")
+        zz = {
+            "Whois": "WHOIS Server",
+            "RegistrationUrl": "URL for registration services",
+        }
+        for key, val in zz.items():
+            regDataW = self.getTldPWithString(self.getUrl() + "/" + url + ".html", val)
+            if regDataW:
+                regDataW = regDataW.replace(val, key)
+                regDataA = regDataW.split("\n")
 
-            print(n, regDataA, file=sys.stderr)
-            for s in [n]:
-                tldItem.append(self.getAdditionalItem(s, regDataA))
-        else:
-            tldItem.append(None)
-
-        n = "RegistrationUrl"
-        regDataU = self.getTldPWithString(self.getUrl() + "/" + url + ".html", "URL for registration services")
-        if regDataU:
-            regDataU = regDataU.replace("URL for registration services", n)
-            regDataA = regDataU.split("\n")
-
-            print(n, regDataA, file=sys.stderr)
-            for s in [n]:
-                tldItem.append(self.getAdditionalItem(s, regDataA))
-        else:
-            tldItem.append(None)
+                for s in [key]:
+                    tldItem.append(self.getAdditionalItem(s, regDataA))
+            else:
+                tldItem.append(None)
 
         if tldItem[4]:
             ll = self.resolveWhois(tldItem[4])
             tldItem.append(ll)
         else:
             tldItem.append(None)
+
+        if self.verbose:
+            print(url, tldItem, file=sys.stderr)
 
         return tldItem
 
@@ -409,7 +393,8 @@ def xMain():
         sql, data = iad.makeInsOrUpdSqlTld(xx["header"], item)
         rr = iad.doSql(sql, data)
 
-    print(json.dumps(iac.getResults(), indent=2, ensure_ascii=False))
+    if verbose:
+        print(json.dumps(iac.getResults(), indent=2, ensure_ascii=False))
 
     pg = PslGrabber()
     response = pg.getData(pg.getUrl())
@@ -449,7 +434,8 @@ def xMain():
                 tld = z
 
             sql, data = iad.makeInsOrUpdSqlPsl(pg.ColumnsPsl(), [tld, z, n, section, None])
-            print(data)
+            if verbose:
+                print(data)
             r = iad.doSql(sql, data)
 
 
