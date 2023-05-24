@@ -1,10 +1,6 @@
 #! /usr/bin/env python3
 from typing import (
-    # Optional,
-    # List,
-    # Dict,
     Any,
-    # Tuple,
 )
 
 import io
@@ -22,7 +18,7 @@ from ianaDatabase import IanaDatabase
 
 
 def xMain() -> None:
-    verbose: bool = False
+    verbose: bool = True
     dbFileName: str = "IanaDb.sqlite"
 
     iad: Any = IanaDatabase(verbose=verbose)
@@ -31,19 +27,15 @@ def xMain() -> None:
     iad.createTablePsl()
 
     resolver: Resolver = Resolver()
-    # resolver.cache = dns.resolver.Cache(cleaning_interval=3600)  # does not cache to file only in memory, currently
     resolver.cache = LRUCache()  # type: ignore
 
     iac = IanaCrawler(verbose=verbose, resolver=resolver)
     iac.getTldInfo()
     iac.addInfoToAllTld()
-
     xx = iac.getResults()
-
     for item in xx["data"]:
         sql, data = iad.makeInsOrUpdSqlTld(xx["header"], item)
         iad.doSql(sql, data)
-
     if verbose:
         print(json.dumps(iac.getResults(), indent=2, ensure_ascii=False))
 

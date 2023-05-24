@@ -139,6 +139,11 @@ test2: reformat mypy
 test3: reformat mypy
 	./test3.py -f testdata/DOMAINS.txt 2> tmp/$@-2 | tee tmp/$@-1
 
+# update the sqlite db with the latest tld info and psl info and suggest missing tld's we can add with a simple fix
+suggest:
+	./analizeIanaTld.py
+	./investigateTld.py | tee out
+
 release: build rlsecure pypi-test testTestPypi
 
 clean:

@@ -188,6 +188,7 @@ ZZ["biz"] = {
 
 ZZ["br"] = {
     "extend": "com",
+    "_server": "whois.registro.br",
     "domain_name": r"domain:\s?(.+)",
     "registrar": "nic.br",
     "registrant": None,
@@ -198,6 +199,7 @@ ZZ["br"] = {
     "name_servers": r"nserver:\s*(.+)",
     "status": r"status:\s?(.+)",
 }
+
 
 ZZ["by"] = {  # fix multiple dns by removing test for \n at the beginning as it is not needed
     "extend": "com",
@@ -3044,3 +3046,16 @@ ZZ["xn--e1a4c"] = {"_server": "whois.eu", "extend": "eu"}
 #  whois.eu ['eu']
 ZZ["xn--qxa6a"] = {"_server": "whois.eu", "extend": "eu"}
 #  whois.eu ['eu']
+
+ZZ["bom"] = { "extend": "com", "_server": "whois.gtlds.nic.br"}
+ZZ["final"] = {"_server": "whois.gtlds.nic.br", "extend": "bom"}
+#  whois.gtlds.nic.br ['bom']
+ZZ["globo"] = {"_server": "whois.gtlds.nic.br", "extend": "bom"}
+#  whois.gtlds.nic.br ['bom']
+ZZ["natura"] = {"_server": "whois.gtlds.nic.br", "extend": "bom"}
+#  whois.gtlds.nic.br ['bom']
+ZZ["rio"] = {"_server": "whois.gtlds.nic.br", "extend": "bom"}
+#  whois.gtlds.nic.br ['bom']
+ZZ["uol"] = {"_server": "whois.gtlds.nic.br", "extend": "bom"}
+#  whois.gtlds.nic.br ['bom']
+

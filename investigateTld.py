@@ -3,11 +3,8 @@
 # should run after a valida database is created with analizeIanaTld.py
 
 from typing import (
-    # Optional,
-    # List,
     Dict,
     Any,
-    # Tuple,
 )
 
 
@@ -106,6 +103,7 @@ FROM
 
         if reg == "NULL" and w == "NULL":
             continue  # unclear, we have existing ns records indicating some tld's actually exist but have no whois, lets skip for now
+            # TODO add ns records
             print(f'ZZ["{tld}"] = ' + '{"_privateRegistry": True}')
 
         if w == "NULL":
