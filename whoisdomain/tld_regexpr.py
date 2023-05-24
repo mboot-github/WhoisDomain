@@ -627,6 +627,7 @@ ZZ["kn"] = {
 
 ZZ["kr"] = {
     "extend": "com",
+    "_server": "whois.kr",
     "domain_name": r"Domain Name\s*:\s?(.+)",
     "registrar": r"Authorized Agency\s*:\s*(.+)",
     "registrant": r"Registrant\s*:\s*(.+)",
@@ -818,9 +819,7 @@ ZZ["org"] = {
     "name_servers": r"Name Server:\s?(.+)\s*",
 }
 
-ZZ["ovh"] = {
-    "extend": "com",
-}
+ZZ["ovh"] = {"extend": "com", "_server": "whois.nic.ovh"}
 
 ZZ["pe"] = {
     "extend": "com",
@@ -3047,7 +3046,7 @@ ZZ["xn--e1a4c"] = {"_server": "whois.eu", "extend": "eu"}
 ZZ["xn--qxa6a"] = {"_server": "whois.eu", "extend": "eu"}
 #  whois.eu ['eu']
 
-ZZ["bom"] = { "extend": "com", "_server": "whois.gtlds.nic.br"}
+ZZ["bom"] = {"extend": "com", "_server": "whois.gtlds.nic.br"}
 ZZ["final"] = {"_server": "whois.gtlds.nic.br", "extend": "bom"}
 #  whois.gtlds.nic.br ['bom']
 ZZ["globo"] = {"_server": "whois.gtlds.nic.br", "extend": "bom"}
@@ -3058,4 +3057,9 @@ ZZ["rio"] = {"_server": "whois.gtlds.nic.br", "extend": "bom"}
 #  whois.gtlds.nic.br ['bom']
 ZZ["uol"] = {"_server": "whois.gtlds.nic.br", "extend": "bom"}
 #  whois.gtlds.nic.br ['bom']
+ZZ["xn--3e0b707e"] = {"_server": "whois.kr", "extend": "kr"}
+#  whois.kr ['kr']
+ZZ["xn--cg4bki"] = {"_server": "whois.kr", "extend": "kr"}
+#  whois.kr ['kr']
+
 

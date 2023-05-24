@@ -121,7 +121,13 @@ class IanaCrawler:
     ) -> List[Any]:
         ll: List[Any] = []
         if self.resolver:
-            answer = list(self.resolver.resolve(whois, "A").response.answer)
+            try:
+                answer = list(self.resolver.resolve(whois, "A").response.answer)
+            except Exception as e:
+                print(whois, e, file=sys.stderr)
+                time.sleep(30)
+                answer = list(self.resolver.resolve(whois, "A").response.answer)
+
             for a in answer:
                 s = str(a)
                 if "\n" in s:

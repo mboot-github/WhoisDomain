@@ -7,7 +7,7 @@ from typing import (
     Any,
 )
 
-
+import re
 from whoisdomain import tld_regexpr
 from ianaDatabase import IanaDatabase
 
@@ -50,16 +50,26 @@ FROM
     rr, cur = iad.selectSql(sql)
     for row in cur:
         tld = row[0].replace("'", "")
+        tld2 = "".join(map(lambda s: s and re.sub('[^\w\s]', '', s), row[1]))
         manager = row[3]
         w = row[4]
         resolve = row[5]
         reg = row[6]
 
-        if tld in tld_regexpr.ZZ:
+        if tld2 == tld and tld in tld_regexpr.ZZ:
+            continue
+
+        if tld2 in tld_regexpr.ZZ and tld in tld_regexpr.ZZ:
             continue
 
         if manager == "NULL":
-            print(f'ZZ["{tld}"] = ' + '{"_privateRegistry": True}')
+            if tld not in tld_regexpr.ZZ:
+                print(f'ZZ["{tld}"] = ' + '{"_privateRegistry": True}')
+
+            if tld2 != tld:
+                if tld2 not in tld_regexpr.ZZ:
+                    print(f'ZZ["{tld2}"] = ' + '{"_privateRegistry": True}')
+
             continue
 
         mm = {
@@ -90,7 +100,11 @@ FROM
         for key, value in mm.items():
             for n in value:
                 if n in resolve:
-                    print(f'ZZ["{tld}"] = ' + '{"_server": "' + n + '", "extend": "' + key + '"}')
+                    if tld not in tld_regexpr.ZZ:
+                        print(f'ZZ["{tld}"] = ' + '{"_server": "' + n + '", "extend": "' + key + '"}')
+                    if tld2 != tld:
+                        if tld2 not in tld_regexpr.ZZ:
+                            print(f'ZZ["{tld2}"] = ' + '{"_server": "' + n + '", "extend": "' + key + '"}')
                     found = True
 
                 if found:
@@ -104,18 +118,23 @@ FROM
         if reg == "NULL" and w == "NULL":
             continue  # unclear, we have existing ns records indicating some tld's actually exist but have no whois, lets skip for now
             # TODO add ns records
-            print(f'ZZ["{tld}"] = ' + '{"_privateRegistry": True}')
+            if tld not in tld_regexpr.ZZ:
+                print(f'ZZ["{tld}"] = ' + '{"_privateRegistry": True}')
 
         if w == "NULL":
             continue
 
         w = w.replace("'", "")
         if w in ss:
-            print(f'ZZ["{tld}"] = ' + '{"_server": "' + w + '", "extend": "' + ss[w][0] + '"}')
-            print("# ", w, ss[w])
+            if tld not in tld_regexpr.ZZ:
+                print(f'ZZ["{tld}"] = ' + '{"_server": "' + w + '", "extend": "' + ss[w][0] + '"}', "# ", w, ss[w])
+
+            if tld2 != tld:
+                if tld2 not in tld_regexpr.ZZ:
+                    print(f'ZZ["{tld2}"] = ' + '{"_server": "' + w + '", "extend": "' + ss[w][0] + '"}', "# ", w, ss[w])
             continue
 
-        print("# MISSING", tld, manager.replace("\n", ";"), w, resolve, reg)
+        print("# MISSING", tld, tld2, manager.replace("\n", ";"), w, resolve, reg)
 
 
 xMain()
