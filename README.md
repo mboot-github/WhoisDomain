@@ -74,20 +74,19 @@ pip3 install whoisdomain
 whoisdomain -d google.com
 
 test domain: <<<<<<<<<< google.com >>>>>>>>>>>>>>>>>>>>
-name               str               'google.com'
-tld                str               'com'
-registrar          str               'MarkMonitor, Inc.'
-registrant_country str               'US'
-creation_date      datetime.datetime 1997-09-15 09:00:00
-expiration_date    datetime.datetime 2028-09-13 09:00:00
-last_updated       datetime.datetime 2019-09-09 17:39:04
-status             str               'clientUpdateProhibited (https://www.icann.org/epp#clientUpdateProhibited)'
-statuses           list              ['clientDeleteProhibited (https://www.icann.org/epp#clientDeleteProhibited)', 'clientTransferProhibited (https://www.icann.org/epp#clientTransferProhibited)', 'clientUpdateProhibited (https://www.icann.org/epp#clientUpdateProhibited)', 'serverDeleteProhibited (https://www.icann.org/epp#serverDeleteProhibited)', 'serverTransferProhibited (https://www.icann.org/epp#serverTransferProhibited)', 'serverUpdateProhibited (https://www.icann.org/epp#serverUpdateProhibited)']
-dnssec             bool              False
-name_servers       list              ['ns1.google.com', 'ns2.google.com', 'ns3.google.com', 'ns4.google.com']
-registrant         str               'Google LLC'
-emails             list              ['abusecomplaints@markmonitor.com', 'whoisrequest@markmonitor.com']
-
+name               'google.com'
+tld                'com'
+registrar          'MarkMonitor, Inc.'
+registrant_country 'US'
+creation_date      1997-09-15 09:00:00
+expiration_date    2028-09-13 09:00:00
+last_updated       2019-09-09 17:39:04
+status             'clientUpdateProhibited (https://www.icann.org/epp#clientUpdateProhibited)'
+statuses           ['clientDeleteProhibited (https://www.icann.org/epp#clientDeleteProhibited)', 'clientTransferProhibited (https://www.icann.org/epp#clientTransferProhibited)', 'clientUpdateProhibited (https://www.icann.org/epp#clientUpdateProhibited)', 'serverDeleteProhibited (https://www.icann.org/epp#serverDeleteProhibited)', 'serverTransferProhibited (https://www.icann.org/epp#serverTransferProhibited)', 'serverUpdateProhibited (https://www.icann.org/epp#serverUpdateProhibited)']
+dnssec             False
+name_servers       ['ns1.google.com', 'ns2.google.com', 'ns3.google.com', 'ns4.google.com']
+registrant         'Google LLC'
+emails             ['abusecomplaints@markmonitor.com', 'whoisrequest@markmonitor.com']
  ```
 
 A short intro into the cli whoisdomain command
