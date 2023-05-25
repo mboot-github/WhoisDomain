@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-time=120
+time=300
 
 ENV="tmp/t1"
 VERSION=$( cat ./work/version )

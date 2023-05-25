@@ -262,7 +262,7 @@ def cleanupWhoisResponse(
         if with_cleanup_results is True and line.startswith("%"):  # only remove if requested
             continue
 
-        if withRedacted is True:
+        if withRedacted is False:
             if "REDACTED FOR PRIVACY" in line:  # these lines contibute nothing so ignore
                 continue
 

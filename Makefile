@@ -86,7 +86,7 @@ rlsecure-version:
 	@$(RLSECURE) --version
 
 # scan the most recent build and fail if the status fails
-rlsecure: build rlsecure-scan rlsecure-list rlsecure-status rlsecure-report rlsecure-version
+rlsecure: rlsecure-scan rlsecure-list rlsecure-status rlsecure-report rlsecure-version
 
 # using the latest py version
 # note this uses the test.pypi.org for now
