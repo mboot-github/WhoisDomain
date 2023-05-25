@@ -83,6 +83,11 @@ def _makeWhoisCommandToRun(
 ) -> List[str]:
     domain = ".".join(dl)
 
+    if " " in wh:
+        whList = wh.split(" ")
+    else:
+        whList = [wh]
+
     if platform.system() == "Windows":
         if wh == "whois":  # only if the use did not specify what whois to use
             if os.path.exists("whois.exe"):
@@ -99,15 +104,16 @@ def _makeWhoisCommandToRun(
 
                 if not find:
                     _tryInstallMissingWhoisOnWindows(verbose)
+        whList = [wh]
 
         if server:
-            return [wh, "-v", "-nobanner", domain, server]
-        return [wh, "-v", "-nobanner", domain]
+            return whList + ["-v", "-nobanner", domain, server]
+        return whList + ["-v", "-nobanner", domain]
 
     # not windows
     if server:
-        return [wh, domain, "-h", server]
-    return [wh, domain]
+        return whList + [domain, "-h", server]
+    return whList + [domain]
 
 
 def _do_whois_query(
@@ -124,9 +130,14 @@ def _do_whois_query(
     if os.getenv("TEST_WHOIS_PYTHON"):
         return _testWhoisPythonFromStaticTestData(dl, ignore_returncode, server, verbose)
 
-    cmd = _makeWhoisCommandToRun(dl=dl, server=server, verbose=verbose, wh=wh)
+    cmd = _makeWhoisCommandToRun(
+        dl=dl,
+        server=server,
+        verbose=verbose,
+        wh=wh,
+    )
     if verbose:
-        print(cmd, file=sys.stderr)
+        print(cmd, wh, file=sys.stderr)
 
     # LANG=en is added to make the ".jp" output consist across all environments
     p = subprocess.Popen(

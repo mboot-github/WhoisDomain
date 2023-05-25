@@ -260,6 +260,7 @@ def _doOneLookup(
     timeout: Optional[float] = None,
     wh: str = "whois",
     simplistic: bool = False,
+    withRedacted: bool = False,
 ) -> Optional[Domain]:
 
     try:
@@ -304,6 +305,7 @@ def _doOneLookup(
         with_cleanup_results=with_cleanup_results,
         simplistic=simplistic,
         include_raw_whois_text=include_raw_whois_text,
+        withRedacted=withRedacted,
     )
 
     if isinstance(data, Domain):
@@ -344,6 +346,7 @@ def query(
     timeout: Optional[float] = None,
     cmd: str = "whois",
     simplistic: bool = False,
+    withRedacted: bool = False,
 ) -> Optional[Domain]:
     """
     force=True          Don't use cache.
@@ -365,7 +368,9 @@ def query(
     timeout:            timeout in seconds for the whois command to return a result.
     cmd:                explicitly specify the path to the whois you want to use.
     simplistic:         when simplistic is True we return None for most exceptions and dont pass info why we have no data.
+    withRedacted:       show redacted output , default no redacted data is shown
     """
+
     global LastWhois
     LastWhois["Try"] = []  # init on start of query
 
@@ -461,6 +466,7 @@ def query(
             timeout=timeout,
             wh=wh,
             simplistic=simplistic,
+            withRedacted=withRedacted,
         )
         if result:
             return result

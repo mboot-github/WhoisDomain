@@ -141,8 +141,8 @@ test3: reformat mypy
 
 # update the sqlite db with the latest tld info and psl info and suggest missing tld's we can add with a simple fix
 suggest:
-	./analizeIanaTld.py
-	./investigateTld.py | tee out
+	( cd analizer; ./analizeIanaTld.py )
+	( cd analizer; ./investigateTld.py ) | tee out
 
 release: build rlsecure pypi-test testTestPypi
 

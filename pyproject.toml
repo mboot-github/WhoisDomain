@@ -22,7 +22,7 @@ exclude = [
 
 [project]
 name = "whoisdomain"
-version = "1.20230524.4"
+version = "1.20230525.5"
 
 authors = [
   { name="DannyCork"},

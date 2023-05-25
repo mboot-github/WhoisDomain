@@ -8,8 +8,15 @@ from typing import (
 )
 
 import re
-from whoisdomain import tld_regexpr
+import idna as idna2
+
 from ianaDatabase import IanaDatabase
+
+import sys
+
+sys.path.append("..")
+
+from whoisdomain import tld_regexpr
 
 
 def extractServers(aDict: Dict[str, Any]) -> Dict[str, Any]:
@@ -50,7 +57,26 @@ FROM
     rr, cur = iad.selectSql(sql)
     for row in cur:
         tld = row[0].replace("'", "")
-        tld2 = "".join(map(lambda s: s and re.sub('[^\w\s]', '', s), row[1]))
+        tld2 = "".join(map(lambda s: s and re.sub("[^\w\s]", "", s), row[1]))
+        tld3 = row[1].replace(".", "").replace("'", "").replace("\u200f", "").replace("\u200e", "")
+        tld4 = tld3
+        try:
+            tld3 = idna2.encode(tld3).decode() or tld3
+        except Exception as e:
+            print(f"## {tld} {tld2} {tld3}")
+            continue
+
+        tld4 = tld4.encode("idna").decode()
+        if tld != tld2:
+            if tld2 not in ss:
+                print(tld, tld2, tld3, tld4, tld.encode("idna"))
+
+        continue
+
+        if tld != tld3:
+            print(f"#SKIP {tld} {tld2} { tld3}")
+            continue
+
         manager = row[3]
         w = row[4]
         resolve = row[5]
@@ -134,7 +160,7 @@ FROM
                     print(f'ZZ["{tld2}"] = ' + '{"_server": "' + w + '", "extend": "' + ss[w][0] + '"}', "# ", w, ss[w])
             continue
 
-        print("# MISSING", tld, tld2, manager.replace("\n", ";"), w, resolve, reg)
+        print("# MISSING", tld, tld2, tld3, manager.replace("\n", ";"), w, resolve, reg)
 
 
 xMain()

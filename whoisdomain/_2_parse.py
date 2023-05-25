@@ -239,6 +239,7 @@ def cleanupWhoisResponse(
     whois_str: str,
     verbose: bool = False,
     with_cleanup_results: bool = False,
+    withRedacted: bool = False,
 ) -> str:
     tmp2: List[str] = []
 
@@ -261,8 +262,9 @@ def cleanupWhoisResponse(
         if with_cleanup_results is True and line.startswith("%"):  # only remove if requested
             continue
 
-        if "REDACTED FOR PRIVACY" in line:  # these lines contibute nothing so ignore
-            continue
+        if withRedacted is True:
+            if "REDACTED FOR PRIVACY" in line:  # these lines contibute nothing so ignore
+                continue
 
         if (
             "Please query the RDDS service of the Registrar of Record" in line
@@ -311,12 +313,14 @@ def do_parse(
     with_cleanup_results: bool = False,
     simplistic: bool = False,
     include_raw_whois_text: bool = False,
+    withRedacted: bool = False,
 ) -> Any:
 
     whois_str = cleanupWhoisResponse(
         whois_str=whois_str,
         verbose=verbose,
         with_cleanup_results=with_cleanup_results,
+        withRedacted=withRedacted,
     )
 
     if whois_str.count("\n") < 5:
