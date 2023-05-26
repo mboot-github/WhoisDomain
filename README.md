@@ -29,6 +29,8 @@ the third will start from 1 and be only used if more than one update will have t
  * the module now also exports a cli command domainwhois
  * both the module and the cli now support showing the version with lib:whois.getVersion() or cli:whoisdomain -V
  * the whoisdomain can now output json data (one per domain: e.g 'whoisdomain -d google.com -j' )
+ * withRedacted: bool = False has been added to query(), if set to True any redacted fields will now be shown also (also supported in the cli whoisdomain as --withRedacted)
+ * a analizer directory is presend in the github repo that will be used to look for new IANA tls's currently unsupported but maching known whois servers
 
 ## Dependencies
   * please install also the command line "whois" of your distribution as this library parses the output of the "whois" cli command of your operating system
