@@ -58,8 +58,48 @@ FROM
     for row in cur:
         tld = row[0].replace("'", "")
         tld2 = "".join(map(lambda s: s and re.sub("[^\w\s]", "", s), row[1]))
+
         tld3 = row[1].replace(".", "").replace("'", "").replace("\u200f", "").replace("\u200e", "")
         tld4 = tld3
+
+        manager = row[3]
+        w = row[4].replace("'", "")
+        resolve = row[5]
+        reg = row[6]
+
+        # look for a whois server in iana with a different or no server in the list
+        if not w:
+            continue
+
+        if tld not in tld_regexpr.ZZ:
+            continue
+
+        k = "_server"
+        s1 = ""
+
+        TLD = tld_regexpr.ZZ[tld]
+        if k in TLD:
+            s1 = TLD[k]
+
+        if "whois.centralnicregistry.com." in resolve:
+            if s1 == w and "extend" in TLD and TLD["extend"] in ["_centralnic", "com"]:
+                continue
+            print(f"ZZ['{tld}']" + ' = {"extend": "_centralnic", "_server":' + f'"{w}"' + "}")
+            print("#", s1, w, TLD["extend"], TLD)
+            continue
+
+        if "whois.donuts.co" in resolve:
+            if s1 == w and "extend" in TLD and TLD["extend"] in ["_donuts", "com"]:
+                continue
+            print(f"ZZ['{tld}']" + ' = {"extend": "_donuts", "_server":' + f'"{w}"' + "}")
+            print("#", s1, w, TLD["extend"], TLD)
+            continue
+
+        continue
+        if w != s1:
+            print(tld, s1, w, resolve)
+        continue
+
         try:
             tld3 = idna2.encode(tld3).decode() or tld3
         except Exception as e:
@@ -76,11 +116,6 @@ FROM
         if tld != tld3:
             print(f"#SKIP {tld} {tld2} { tld3}")
             continue
-
-        manager = row[3]
-        w = row[4]
-        resolve = row[5]
-        reg = row[6]
 
         if tld2 == tld and tld in tld_regexpr.ZZ:
             continue

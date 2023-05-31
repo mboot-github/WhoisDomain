@@ -32,6 +32,8 @@ setupVersionNumberToday()
 
 makeTomlFile()
 {
+    return
+
     cat pyproject.toml-template |
     awk -vversion="${VERSION}" -vdate="${DATE}" -vseq="${TODAY_SEQ}" '
     /@VERSION@/  { sub(/@VERSION@/,version) }
@@ -63,7 +65,7 @@ main()
     bin/reformat-code.sh
 
     setupVersionNumberToday
-    makeTomlFile
+    # makeTomlFile
     buildDist
     git add .
     echo " commit the current changes"

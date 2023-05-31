@@ -22,7 +22,7 @@ exclude = [
 
 [project]
 name = "whoisdomain"
-version = "1.20230525.9"
+dynamic = ['version']
 
 authors = [
   { name="DannyCork"},
@@ -43,14 +43,7 @@ classifiers = [
     "Operating System :: OS Independent",
     "Intended Audience :: Developers",
     "Environment :: Console",
-
-    "Programming Language :: Python :: 3.6",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-
+    "Programming Language :: Python :: 3",
     "Topic :: Internet",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
@@ -68,6 +61,12 @@ keywords = [
 [project.scripts]
 whoisdomain = 'whoisdomain.main:main'
 
+[tool.hatch.version]
+path = "whoisdomain/version.py"
+
+[tool.pylama]
+max_line_length = 160
+skip = "*/.pytest_cache/*, */.tox/*, */mypy_cache/*, ./dist, ./docs"
 
 [project.urls]
 "Bug Tracker" = "https://github.com/mboot-github/WhoisDomain/issues"
