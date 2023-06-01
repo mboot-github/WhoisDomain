@@ -24,7 +24,7 @@ ZZ["com"] = {
     "extend": None,
     "domain_name": r"Domain Name\s*:\s*(.+)",
     "registrar": r"Registrar:\s?(.+)",
-    "registrant": r"Registrant\s*Organi(?:s|z)ation:\s?([^\n]*)",  # this seems to match Registrant Street: if Registrant Organization: is empty
+    "registrant": r"Registrant\s*Organi(?:s|z)ation:([^\n]*)",  # this seems to match Registrant Street: if Registrant Organization: is empty
     "registrant_country": r"Registrant Country:\s?(.+)",
     "creation_date": r"Creation Date:[ \t]*([^\n]*)",
     "expiration_date": r"(?:Expiry|Expiration) Date:[ \t]*([^\n]*)",  # Expiration Date
