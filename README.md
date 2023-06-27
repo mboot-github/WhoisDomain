@@ -202,3 +202,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
 
 ## Updates
   * 1.20230627.2 add Kenia proper whois server and known second level domains
+  * add rw tld proper whois server and second level ; restore mistakenly deleted .toml file

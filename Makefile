@@ -152,7 +152,6 @@ clean:
 	rm -rf tmp/*
 	rm -f ./rl-secure-list-*.txt
 	rm -f ./rl-secure-status-*.txt
-	rm -f pyproject.toml
 	docker image prune --all --force
 
 cleanDist:
