@@ -1945,11 +1945,17 @@ ZZ["com.py"] = {"extend": "_privateReg"}
 ZZ["sr"] = {"extend": "_privateReg"}
 
 # Kenia
+# ke : http://www.kenic.or.ke/index.php/en/ke-domains/ke-domains
 ZZ["ke"] = {"extend": "com", "_server": "whois.kenic.or.ke"}
-ZZ["co.ke"] = {"extend": "ke"}
-ZZ["or.ke"] = {"extend": "ke"}
 ZZ["ac.ke"] = {"extend": "ke"}
+ZZ["co.ke"] = {"extend": "ke"}
 ZZ["go.ke"] = {"extend": "ke"}
+ZZ["info.ke"] = {"extend": "ke"}
+ZZ["me.ke"] = {"extend": "ke"}
+ZZ["mobi.ke"] = {"extend": "ke"}
+ZZ["ne.ke"] = {"extend": "ke"}
+ZZ["or.ke"] = {"extend": "ke"}
+ZZ["sc.ke"] = {"extend": "ke"}
 
 # https://www.iana.org/domains/root/db/td.html
 # td = {"extend": "_privateReg"} # Chad (French: Tchad) made available for use in 1997.
