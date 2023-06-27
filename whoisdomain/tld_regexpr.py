@@ -1933,8 +1933,13 @@ ZZ["pk"] = {"extend": "_privateReg"}
 ZZ["py"] = {"extend": "_privateReg"}  # Paraguay:https://www.iana.org/domains/root/db/py.html
 ZZ["com.py"] = {"extend": "_privateReg"}
 ZZ["sr"] = {"extend": "_privateReg"}
-ZZ["ke"] = {"extend": "_privateReg"}  # Kenia
-ZZ["co.ke"] = {"extend": "_privateReg"}
+
+# Kenia
+ZZ["ke"] = {"extend": "com", "_server": "whois.kenic.or.ke"}
+ZZ["co.ke"] = {"extend": "ke"}
+ZZ["or.ke"] = {"extend": "ke"}
+ZZ["ac.ke"] = {"extend": "ke"}
+ZZ["go.ke"] = {"extend": "ke"}
 
 # https://www.iana.org/domains/root/db/td.html
 # td = {"extend": "_privateReg"} # Chad (French: Tchad) made available for use in 1997.
