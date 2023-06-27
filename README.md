@@ -199,3 +199,6 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * both seem derived from a older google.code site: https://code.google.com/archive/p/python-whois
   * aside from the original authors, many others already contributed to these repositories
   * if authors/contributors prefer to be named explicitly, they can add a line in Historical.txt
+
+## Updates
+  * 1.20230627.2 add Kenia proper whois server and known second level domains

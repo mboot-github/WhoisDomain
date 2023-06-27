@@ -2,15 +2,17 @@
 
 time=300
 
-ENV="tmp/t1"
 VERSION=$( cat ./work/version )
 WHAT="whoisdomain"
 PACKAGE_FILE="dist/${WHAT}-${VERSION}-py3-none-any.whl"
+TMPDIR="tmp"
+ENV="${TMPDIR}/t1"
 
 makeVenv()
 {
-    mkdir -p tmp
-    rm -rf tmp/t1
+    mkdir -p ${TMPDIR}
+    rm -rf ${TMPDIR}/t1
+
     python3 -m venv ${ENV}
     source ./${ENV}/bin/activate
 }
@@ -41,6 +43,7 @@ testAllIfCorrectVersion()
 {
     [ "$WE_HAVE" == "$VERSION" ] && {
         whoisdomain -f testdata/DOMAINS.txt
+        # clean up the venv
         rm -rf ${ENV}
         exit 0
     }
@@ -50,7 +53,8 @@ main()
 {
     [ -f "${PACKAGE_FILE}" ] && {
         makeVenv
-        installFromDistWhl
+        # installFromDistWhl
+        installFromTestPyPi
         getInstalledVersion
         testAllIfCorrectVersion
     }
