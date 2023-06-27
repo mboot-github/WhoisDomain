@@ -1165,7 +1165,7 @@ ZZ["gy"] = {"extend": "com"}
 
 # Multiple initialization
 ZZ["ca"] = {"extend": "bank"}
-ZZ["rw"] = {"extend": "bank"}
+ZZ["rw"] = {"extend": "com", "_server": "whois.ricta.org.rw"}
 ZZ["mu"] = {"extend": "bank"}
 ZZ["mu"] = {"extend": "bank"}
 
