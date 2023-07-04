@@ -148,6 +148,13 @@ reformat:
 mypy:
 	mypy --strict *.py bin/*.py $(WHAT)
 
+pylint:
+	python -m pylint --max-line-length=160 whoisdomain/ | \
+	awk '/missing/ && /docstring/ { next } \
+	/C0103/ { next } \
+	/too-many-lines/ { next } \
+	{ print}'
+
 clean:
 	rm -rf tmp/*
 	rm -f ./rl-secure-list-*.txt

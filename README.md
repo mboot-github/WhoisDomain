@@ -35,6 +35,10 @@ the third will start from 1 and be only used if more than one update will have t
 ## Dependencies
   * please install also the command line "whois" of your distribution as this library parses the output of the "whois" cli command of your operating system
 
+## Notes for Mac users
+  * it has been observed that the default cli whois on Mac is showing each forward step in its output, this makes parsing the result very unreliable.
+  * using a brew install whois will give in general better results.
+
 ## Docker
  * docker pull mbootgithub/whoisdomain:latest
  * docker run mbootgithub/whoisdomain -V # show version
@@ -203,3 +207,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
 ## Updates
   * 1.20230627.2 add Kenia proper whois server and known second level domains
   * 1.20230627.3 add rw tld proper whois server and second level ; restore mistakenly deleted .toml file
+  * 1.20230627.3 additional kenia second level domains
