@@ -1,5 +1,7 @@
 #! /usr/bin/env bash
 
+set -x
+
 time=300
 
 VERSION=$( cat ./work/version )
