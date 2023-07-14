@@ -900,6 +900,16 @@ ZZ["ru"] = {
     "status": r"\nstate:\s*(.+)",
 }
 
+# Russian commercial sub-domain
+ZZ["com.ru"] = {
+    "extend": "ru",
+    "domain_name": r"^domain:\s*(.+)",
+    "_server": "whois.nic.ru",
+}
+# Russian city sub-domains
+ZZ["msk.ru"] = {"extend": "com.ru"}
+ZZ["spb.ru"] = {"extend": "com.ru"}
+
 # Rossíyskaya Federátsiya) is the Cyrillic country code top-level domain for the Russian Federation,
 # In the Domain Name System it has the ASCII DNS name xn--p1ai.
 
