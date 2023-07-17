@@ -902,7 +902,7 @@ ZZ["ru"] = {
     "expiration_date": r"paid-till:\s*(.+)",
     "name_servers": r"nserver:\s*(.+)",
     "status": r"state:\s*(.+)",
-    "_server": " whois.tcinet.ru",
+    "_server": "whois.tcinet.ru",
 }
 ZZ["com.ru"] = {"extend": "ru", "_server": "whois.nic.ru"}  # test: mining.com.ru
 
