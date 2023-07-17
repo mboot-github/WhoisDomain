@@ -210,3 +210,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * 1.20230627.3 additional kenia second level domains
   * 1.20230712.2 tld .edu now can have up to 10 nameservers; remove action on pull request
   * 1.20230717.1 add tld: com.ru, msk.ru, spb.ru  (all have a test documented), also update the tld: ru, the newlines are not needed.
+  * 1.20230717.2 add option to parse partial result after timout has occurred (parse_partial_response:bool default False); this will need `stdbuf` installed otherwise it will fail

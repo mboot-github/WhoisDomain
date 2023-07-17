@@ -666,7 +666,7 @@ ZZ["lt"] = {
 ZZ["lv"] = {
     "extend": "com",
     "domain_name": r"domain:\s*(.+)",
-    "creation_date": r"Registered:\s*(.+)\n", # actually there seem to be no dates
+    "creation_date": r"Registered:\s*(.+)\n",  # actually there seem to be no dates
     "updated_date": r"Changed:\s*(.+)\n",
     "expiration_date": r"paid-till:\s*(.+)",
     "name_servers": r"nserver:\s*(.+)",
@@ -904,7 +904,7 @@ ZZ["ru"] = {
     "status": r"state:\s*(.+)",
     "_server": " whois.tcinet.ru",
 }
-ZZ["com.ru"] = {    "extend": "ru",  "_server": "whois.nic.ru" }   # test: mining.com.ru
+ZZ["com.ru"] = {"extend": "ru", "_server": "whois.nic.ru"}  # test: mining.com.ru
 
 # Russian city sub-domains
 ZZ["msk.ru"] = {"extend": "com.ru"}  # test with: mining.msk.ru
@@ -913,15 +913,9 @@ ZZ["spb.ru"] = {"extend": "com.ru"}  # test with iac.spb.ru
 # Rossíyskaya Federátsiya) is the Cyrillic country code top-level domain for the Russian Federation,
 # In the Domain Name System it has the ASCII DNS name xn--p1ai.
 
-ZZ["ru.rf"] = {
-    "extend": "ru"
-}
-ZZ["рф"] = {
-    "extend": "ru"
-}
-ZZ["xn--p1ai"] = {
-    "extend": "ru"
-}
+ZZ["ru.rf"] = {"extend": "ru"}
+ZZ["рф"] = {"extend": "ru"}
+ZZ["xn--p1ai"] = {"extend": "ru"}
 
 ZZ["sa"] = {
     "extend": "com",

@@ -17,7 +17,7 @@ CACHE_MAX_AGE = 60 * 60 * 48  # 48h
 IS_WINDOWS = platform.system() == "Windows"
 
 if not IS_WINDOWS and shutil.which("stdbuf"):
-    STDBUF_OFF_CMD = ['stdbuf', '-o0']
+    STDBUF_OFF_CMD = ["stdbuf", "-o0"]
 else:
     STDBUF_OFF_CMD = []
 
