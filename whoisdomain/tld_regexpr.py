@@ -906,8 +906,8 @@ ZZ["com.ru"] = {
     # test: mining.com.ru
 }
 # Russian city sub-domains
-ZZ["msk.ru"] = {"extend": "com.ru"} # test with: mining.msk.ru
-ZZ["spb.ru"] = {"extend": "com.ru"} # test with iac.spb.ru
+ZZ["msk.ru"] = {"extend": "com.ru"}  # test with: mining.msk.ru
+ZZ["spb.ru"] = {"extend": "com.ru"}  # test with iac.spb.ru
 
 # Rossíyskaya Federátsiya) is the Cyrillic country code top-level domain for the Russian Federation,
 # In the Domain Name System it has the ASCII DNS name xn--p1ai.

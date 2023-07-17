@@ -123,7 +123,7 @@ class IanaCrawler:
         if self.resolver:
             answer: List[Any] = []
 
-            n:int = 3
+            n: int = 3
             while n:
                 try:
                     answer = list(self.resolver.resolve(whois, "A").response.answer)
