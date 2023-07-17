@@ -13,6 +13,8 @@ from typing import Dict, List, Optional, Tuple
 CACHE: Dict[str, Tuple[int, str]] = {}
 CACHE_MAX_AGE = 60 * 60 * 48  # 48h
 
+STDBUF_OFF_CMD = ['stdbuf', '-o0']
+
 
 def _cache_load(cf: str) -> None:
     if not os.path.isfile(cf):
@@ -122,6 +124,7 @@ def _do_whois_query(
     server: Optional[str] = None,
     verbose: bool = False,
     timeout: Optional[float] = None,
+    parse_partial_response: bool = False,
     wh: str = "whois",
     simplistic: bool = False,
 ) -> str:
@@ -141,7 +144,8 @@ def _do_whois_query(
 
     # LANG=en is added to make the ".jp" output consist across all environments
     p = subprocess.Popen(
-        cmd,
+        # STDBUF_OFF_CMD needed to not lose data on kill
+        STDBUF_OFF_CMD + cmd,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         env={"LANG": "en"} if dl[-1] in ".jp" else None,
@@ -152,8 +156,12 @@ def _do_whois_query(
     except subprocess.TimeoutExpired:
         # Kill the child process & flush any output buffers
         p.kill()
-        p.communicate()
-        raise WhoisCommandTimeout(f"timeout: query took more then {timeout} seconds")
+        r = p.communicate()[0].decode(errors="ignore")
+        # In most cases whois servers returns partial domain data really fast
+        # after that delay occurs (probably intentional) before returning contact data.
+        # Add this option to cover those cases
+        if not parse_partial_response:
+            raise WhoisCommandTimeout(f"timeout: query took more then {timeout} seconds")
 
     if verbose:
         print(r, file=sys.stderr)
@@ -187,6 +195,7 @@ def do_query(
     server: Optional[str] = None,
     verbose: bool = False,
     timeout: Optional[float] = None,
+    parse_partial_response: bool = False,
     wh: str = "whois",
     simplistic: bool = False,
 ) -> str:
@@ -216,6 +225,7 @@ def do_query(
                 server=server,
                 verbose=verbose,
                 timeout=timeout,
+                parse_partial_response=parse_partial_response,
                 wh=wh,
                 simplistic=simplistic,
             ),
