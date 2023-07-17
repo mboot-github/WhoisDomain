@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#
 from typing import (
     Optional,
     List,
@@ -121,12 +121,17 @@ class IanaCrawler:
     ) -> List[Any]:
         ll: List[Any] = []
         if self.resolver:
-            try:
-                answer = list(self.resolver.resolve(whois, "A").response.answer)
-            except Exception as e:
-                print(whois, e, file=sys.stderr)
-                time.sleep(30)
-                answer = list(self.resolver.resolve(whois, "A").response.answer)
+            answer: List[Any] = []
+
+            n:int = 3
+            while n:
+                try:
+                    answer = list(self.resolver.resolve(whois, "A").response.answer)
+                    break
+                except Exception as e:
+                    print(whois, e, n, file=sys.stderr)
+                    time.sleep(5)
+                    n = n - 1
 
             for a in answer:
                 s = str(a)
@@ -138,6 +143,7 @@ class IanaCrawler:
 
                 if self.verbose:
                     print(a)
+
         return ll
 
     def addInfoToOneTld(

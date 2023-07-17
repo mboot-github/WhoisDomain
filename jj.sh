@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# look for differences after updates og the regexes
+# look for differences after updates of the regexes
 
 ls tmp/A/test-*.txt |
 while read item

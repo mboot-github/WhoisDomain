@@ -1,4 +1,9 @@
 #! /usr/bin/env python3
+
+"""
+Analyze all tld's currently in the iana root db
+"""
+
 from typing import (
     Any,
 )
@@ -36,6 +41,7 @@ def xMain() -> None:
     for item in xx["data"]:
         sql, data = iad.makeInsOrUpdSqlTld(xx["header"], item)
         iad.doSql(sql, data)
+
     if verbose:
         print(json.dumps(iac.getResults(), indent=2, ensure_ascii=False))
 

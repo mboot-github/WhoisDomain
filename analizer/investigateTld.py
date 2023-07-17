@@ -1,6 +1,6 @@
 #! /usr/bin/env python3
 
-# should run after a valida database is created with analizeIanaTld.py
+# should run after a valid database is created with analizeIanaTld.py
 
 from typing import (
     Dict,
@@ -82,17 +82,33 @@ FROM
             s1 = TLD[k]
 
         if "whois.centralnicregistry.com." in resolve:
-            if s1 == w and "extend" in TLD and TLD["extend"] in ["_centralnic", "com"]:
+            continue
+            kk = "_centralnic"
+            if s1 == w and "extend" in TLD and TLD["extend"] in [kk, "com"]:
                 continue
-            print(f"ZZ['{tld}']" + ' = {"extend": "_centralnic", "_server":' + f'"{w}"' + "}")
-            print("#", s1, w, TLD["extend"], TLD)
+
+            s = f"ZZ['{tld}']" + ' = {"extend": ' + f"{kk}, " + '"_server":' + f'"{w}"' + "} # < suggest ### "
+
+            if "extend" in TLD:
+                print(s, "# current > ", s1, w, TLD["extend"], TLD)
+            else:
+                print(s, "# current > ", s1, w, "_no_extend_", TLD)
+
             continue
 
         if "whois.donuts.co" in resolve:
-            if s1 == w and "extend" in TLD and TLD["extend"] in ["_donuts", "com"]:
+            continue
+            kk = "_donuts"
+            if s1 == w and "extend" in TLD and TLD["extend"] in [kk, "com"]:
                 continue
-            print(f"ZZ['{tld}']" + ' = {"extend": "_donuts", "_server":' + f'"{w}"' + "}")
-            print("#", s1, w, TLD["extend"], TLD)
+
+            s = f"ZZ['{tld}']" + ' = {"extend": ' + f"{kk}, " + '"_server":' + f'"{w}"' + "} # suggest ### "
+
+            if "extend" in TLD:
+                print(s, "# current ", s1, w, TLD["extend"], TLD)
+            else:
+                print(s, "# current ", s1, w, "_no_extend_", TLD)
+
             continue
 
         continue
