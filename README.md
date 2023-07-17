@@ -209,4 +209,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * 1.20230627.3 add rw tld proper whois server and second level ; restore mistakenly deleted .toml file
   * 1.20230627.3 additional kenia second level domains
   * 1.20230712.2 tld .edu now can have up to 10 nameservers; remove action on pull request
-  * 1.20230717.1 add tld: com.ru, msk.ru, spb.ru  (all have a test dockumented), also update the tld: ru, the newlines are note needed.
+  * 1.20230717.1 add tld: com.ru, msk.ru, spb.ru  (all have a test documented), also update the tld: ru, the newlines are not needed.

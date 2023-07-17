@@ -664,10 +664,14 @@ ZZ["lt"] = {
 }
 
 ZZ["lv"] = {
-    "extend": "ru",
-    "creation_date": r"Registered:\s*(.+)\n",
+    "extend": "com",
+    "domain_name": r"domain:\s*(.+)",
+    "creation_date": r"Registered:\s*(.+)\n", # actually there seem to be no dates
     "updated_date": r"Changed:\s*(.+)\n",
+    "expiration_date": r"paid-till:\s*(.+)",
+    "name_servers": r"nserver:\s*(.+)",
     "status": r"Status:\s?(.+)",
+    "_server": "whois.nic.lv",
 }
 
 ZZ["me"] = {
@@ -898,13 +902,10 @@ ZZ["ru"] = {
     "expiration_date": r"paid-till:\s*(.+)",
     "name_servers": r"nserver:\s*(.+)",
     "status": r"state:\s*(.+)",
+    "_server": " whois.tcinet.ru",
 }
-ZZ["com.ru"] = {
-    "extend": "ru",
-    # "domain_name": r"^domain:\s*(.+)",
-    "_server": "whois.nic.ru",
-    # test: mining.com.ru
-}
+ZZ["com.ru"] = {    "extend": "ru",  "_server": "whois.nic.ru" }   # test: mining.com.ru
+
 # Russian city sub-domains
 ZZ["msk.ru"] = {"extend": "com.ru"}  # test with: mining.msk.ru
 ZZ["spb.ru"] = {"extend": "com.ru"}  # test with iac.spb.ru
@@ -913,16 +914,13 @@ ZZ["spb.ru"] = {"extend": "com.ru"}  # test with iac.spb.ru
 # In the Domain Name System it has the ASCII DNS name xn--p1ai.
 
 ZZ["ru.rf"] = {
-    "extend": "ru",
-    "_server": "whois.tcinet.ru",
+    "extend": "ru"
 }
 ZZ["рф"] = {
-    "extend": "ru",
-    "_server": "whois.tcinet.ru",
+    "extend": "ru"
 }
 ZZ["xn--p1ai"] = {
-    "extend": "ru",
-    "_server": "whois.tcinet.ru",
+    "extend": "ru"
 }
 
 ZZ["sa"] = {
