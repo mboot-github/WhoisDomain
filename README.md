@@ -40,6 +40,8 @@ the third will start from 1 and be only used if more than one update will have t
   * using a brew install whois will give in general better results.
 
 ## Docker
+https://hub.docker.com/r/mbootgithub/whoisdomain
+
  * docker pull mbootgithub/whoisdomain:latest
  * docker run mbootgithub/whoisdomain -V # show version
  * docker run mbootgithub/whoisdomain -d google.com # run one domain
@@ -204,6 +206,7 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * aside from the original authors, many others already contributed to these repositories
   * if authors/contributors prefer to be named explicitly, they can add a line in Historical.txt
 
+
 ## Updates
   * 1.20230627.2 add Kenia proper whois server and known second level domains
   * 1.20230627.3 add rw tld proper whois server and second level ; restore mistakenly deleted .toml file
@@ -211,3 +214,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * 1.20230712.2 tld .edu now can have up to 10 nameservers; remove action on pull request
   * 1.20230717.1 add tld: com.ru, msk.ru, spb.ru  (all have a test documented), also update the tld: ru, the newlines are not needed.
   * 1.20230717.2 add option to parse partial result after timout has occurred (parse_partial_response:bool default False); this will need `stdbuf` installed otherwise it will fail
+

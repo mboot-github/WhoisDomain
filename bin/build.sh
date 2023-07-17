@@ -56,7 +56,7 @@ main()
         # is it today
         grep $DATE work/version && {
             # any changes in the actual code
-            git status whoisdomain | grep modified || {
+            git status whoisdomain README.md | grep modified || {
                 exit 0
             }
         }

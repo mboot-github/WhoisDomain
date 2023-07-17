@@ -120,6 +120,7 @@ releaseTest: build rlsecure pypi-test testTestPypi
 # this is for pypi owners after all tests have finished
 pypi: rlsecure
 	./bin/upload_to_pypi.sh
+	git tag -m "version-$$(cat work/version)" $$(cat work/version)
 
 release: build rlsecure pypi
 
