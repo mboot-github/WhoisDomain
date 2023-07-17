@@ -4,6 +4,7 @@ import sys
 import os
 import platform
 import json
+import shutil
 from .exceptions import WhoisCommandFailed, WhoisCommandTimeout
 
 from typing import Dict, List, Optional, Tuple
@@ -13,7 +14,12 @@ from typing import Dict, List, Optional, Tuple
 CACHE: Dict[str, Tuple[int, str]] = {}
 CACHE_MAX_AGE = 60 * 60 * 48  # 48h
 
-STDBUF_OFF_CMD = ['stdbuf', '-o0']
+IS_WINDOWS = platform.system() == "Windows"
+
+if not IS_WINDOWS and shutil.which("stdbuf"):
+    STDBUF_OFF_CMD = ['stdbuf', '-o0']
+else:
+    STDBUF_OFF_CMD = []
 
 
 def _cache_load(cf: str) -> None:
@@ -90,7 +96,7 @@ def _makeWhoisCommandToRun(
     else:
         whList = [wh]
 
-    if platform.system() == "Windows":
+    if IS_WINDOWS:
         if wh == "whois":  # only if the use did not specify what whois to use
             if os.path.exists("whois.exe"):
                 wh = r".\whois.exe"
@@ -160,7 +166,7 @@ def _do_whois_query(
         # In most cases whois servers returns partial domain data really fast
         # after that delay occurs (probably intentional) before returning contact data.
         # Add this option to cover those cases
-        if not parse_partial_response:
+        if not parse_partial_response or not r:
             raise WhoisCommandTimeout(f"timeout: query took more then {timeout} seconds")
 
     if verbose:

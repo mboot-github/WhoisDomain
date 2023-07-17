@@ -370,7 +370,7 @@ def query(
                         if the tld is unsupported, just try it anyway but return only the raw text.
     timeout:            timeout in seconds for the whois command to return a result.
     parse_partial_response:
-                        try to parse partial response when cmd timed out
+                        try to parse partial response when cmd timed out (stdbuf should be in PATH for best results)
     cmd:                explicitly specify the path to the whois you want to use.
     simplistic:         when simplistic is True we return None for most exceptions and dont pass info why we have no data.
     withRedacted:       show redacted output , default no redacted data is shown
