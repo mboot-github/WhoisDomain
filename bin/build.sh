@@ -25,23 +25,18 @@ setupVersionNumberToday()
         TODAY_SEQ=$(( TODAY_SEQ + 1))
     fi
 
+    V="${VERSION}.${DATE}.${TODAY_SEQ}"
+
+    # DID YOU UPDATE THE README ?
+    grep "${V}" README.md || {
+        echo "MISSING VERSION UPDATE IN README for this version: ${V}"
+        exit 1
+    }
+
     mkdir -p ./work/
     # keep track of the latest version string
-    echo "${VERSION}.${DATE}.${TODAY_SEQ}" >"./${VERSION_FILE}"
-    echo "VERSION = \"${VERSION}.${DATE}.${TODAY_SEQ}\"" >whoisdomain/version.py
-}
-
-makeTomlFile()
-{
-    return
-
-    cat pyproject.toml-template |
-    awk -vversion="${VERSION}" -vdate="${DATE}" -vseq="${TODAY_SEQ}" '
-    /@VERSION@/  { sub(/@VERSION@/,version) }
-    /@YYYYMMDD@/ { sub(/@YYYYMMDD@/,date) }
-    /@SEQ@/      { sub(/@SEQ@/,seq) }
-    { print }
-    ' >pyproject.toml
+    echo "${V}" >"./${VERSION_FILE}"
+    echo "VERSION = \"${V}\"" >whoisdomain/version.py
 }
 
 buildDist()
