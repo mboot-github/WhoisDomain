@@ -2,6 +2,7 @@
 export PATH=".:$PATH"
 
 DATE=$( date +%Y%m%d )
+VERSION_FILE="work/version"
 
 setupVersionNumberToday()
 {
@@ -26,7 +27,7 @@ setupVersionNumberToday()
 
     mkdir -p ./work/
     # keep track of the latest version string
-    echo "${VERSION}.${DATE}.${TODAY_SEQ}" >./work/version
+    echo "${VERSION}.${DATE}.${TODAY_SEQ}" >"./${VERSION_FILE}"
     echo "VERSION = \"${VERSION}.${DATE}.${TODAY_SEQ}\"" >whoisdomain/version.py
 }
 
@@ -51,13 +52,17 @@ buildDist()
 
 main()
 {
-    # do we have a version
-    [ -f work/version ] && {
-        # is it today
-        grep $DATE work/version && {
-            # any changes in the actual code
-            git status whoisdomain README.md | grep modified || {
-                exit 0
+    what="$1"
+
+    [ "$what" != "force" ]  && {
+        # do we have a version
+        [ -f "${VERSION_FILE}" ] && {
+            # is it today
+            grep $DATE "${VERSION_FILE}" && {
+                # any changes in the actual code
+                git status whoisdomain README.md | grep modified || {
+                    exit 0
+                }
             }
         }
     }
@@ -65,10 +70,13 @@ main()
     bin/reformat-code.sh
 
     setupVersionNumberToday
-    # makeTomlFile
     buildDist
+    V=$(cat "${VERSION_FILE}")
+
     git add .
-    echo " commit the current changes"
+    git commit -a -m "version ${V}"
+    git tag -m "version ${V}"  ${V}
+    git push --tags
 }
 
-main
+main $*
