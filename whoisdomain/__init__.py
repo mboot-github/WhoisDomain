@@ -178,6 +178,7 @@ def _doServerHintsForThisTld(
     server: Optional[str],
     verbose: bool = False,
 ) -> Optional[str]:
+    # note _server hints currently are not passes down when using "extend", that may have been my error during the initial implementation
     # allow server hints using "_server" from the tld_regexpr.py file
     thisTldServer = thisTld.get("_server")
     if server is None and thisTldServer:
