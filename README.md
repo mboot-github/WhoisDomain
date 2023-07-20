@@ -215,3 +215,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * 1.20230717.2 add option to parse partial result after timout has occurred (parse_partial_response:bool default False); this will need `stdbuf` installed otherwise it will fail
   * 1.20230718.3 fix typo in whois server hint for tld: ru
   * 1.20230720.1 add gov.tr; switch off status:available and status:free as None response, we should not interprete the result by default (we can add a option later)
+  * 1.20230720.2 fix server hints for derived second level "xxx.tr", add processing "_test" hints during 'test2.py -a'

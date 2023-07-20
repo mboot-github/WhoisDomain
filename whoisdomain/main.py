@@ -27,6 +27,7 @@ Ruleset: bool = False
 
 Failures: Dict[str, Any] = {}
 IgnoreReturncode: bool = False
+TestAllTld: bool = False
 
 
 class ResponseCleaner:
@@ -208,6 +209,7 @@ def testItem(
     global PrintGetRawWhoisResult
     global SIMPLISTIC
     global WithRedacted
+    global TestAllTld
 
     timeout = 30  # seconds
 
@@ -349,13 +351,26 @@ def makeMetaAllCurrentTld(
     allHaving: Optional[str] = None,
     allRegex: Optional[str] = None,
 ) -> List[str]:
+    global TestAllTld
+
+    def appendHint(
+        allRegex: Optional[str],
+        tld: str,
+    ) -> None:
+        if TestAllTld is True:
+            hint = whois.getTestHint(tld)
+            hint = hint if hint else f"meta.{tld}"
+            rr.append(f"{hint}")
+        else:
+            rr.append(f"meta.{tld}")
+
     rr: List[str] = []
     for tld in getAllCurrentTld():
         if allRegex:
             if re.search(allRegex, tld):
-                rr.append(f"meta.{tld}")
+                appendHint(allRegex, tld)
         else:
-            rr.append(f"meta.{tld}")
+            appendHint(allRegex, tld)
 
     return rr
 
@@ -477,6 +492,7 @@ def main() -> None:
     global Ruleset
     global SIMPLISTIC
     global WithRedacted
+    global TestAllTld
 
     name: str = os.path.basename(sys.argv[0])
     if name == "test2.py":
@@ -510,7 +526,7 @@ def main() -> None:
         usage()
         sys.exit(2)
 
-    testAllTld: bool = False
+    # TestAllTld: bool = False
 
     allHaving: Optional[str] = None  # from all supported tld only process the ones having this :: TODO ::
     allRegex: Optional[str] = None  # from all supported tld process only the ones matching this regex
@@ -544,14 +560,14 @@ def main() -> None:
             WithRedacted = True
 
         if opt in ("-a", "--all"):
-            testAllTld = True
+            TestAllTld = True
 
         if opt in ("-H", "--having"):
-            testAllTld = True
+            TestAllTld = True
             allHaving = str(arg)
 
         if opt in ("-r", "--reg"):
-            testAllTld = True
+            TestAllTld = True
             allRegex = str(arg)
 
         if opt in ("-v", "--verbose"):
@@ -594,7 +610,7 @@ def main() -> None:
 
             if filename not in files:
                 files.append(filename)
-                testAllTld = False
+                TestAllTld = False
 
         if opt in ("-d", "--domain"):
             domain = arg
@@ -609,7 +625,7 @@ def main() -> None:
             ShowRuleset(domain)
         sys.exit(0)
 
-    if testAllTld:
+    if TestAllTld:
         allMetaTld = makeMetaAllCurrentTld(allHaving, allRegex)
         testDomains(allMetaTld)
         showFailures()

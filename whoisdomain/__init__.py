@@ -77,6 +77,7 @@ __all__ = [
     "QuotaStrings",
     "QuotaStringsAdd",
     "cleanupWhoisResponse",
+    "getTestHint",
 ]
 
 WHOISDOMAIN: str = ""
@@ -496,3 +497,14 @@ get = _result2dict(query)
 
 def getVersion() -> str:
     return VERSION
+
+
+def getTestHint(tld: str) -> Optional[str]:
+    if tld not in ZZ:
+        return None
+
+    k: str = "_test"
+    if k not in ZZ[tld]:
+        return None
+
+    return str(ZZ[tld][k])
