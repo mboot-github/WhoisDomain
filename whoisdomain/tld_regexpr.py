@@ -299,7 +299,7 @@ ZZ["com.tr"] = {
     "expiration_date": r"Expires on\.+:\s?(.+).",  # note the trailing . on both dates fields
     "updated_date": "",
     # "name_servers": r"\*\* Domain Servers:\n(?:(\S+)\n)(?:(\S+)\n)?(?:(\S+)\n)?(?:(\S+)\n)?(?:(\S+)\n)?(?:(\S+)\n)\n?",
-    "name_servers": r"\*\* Domain Servers:\n(?:(\S+).*\n)?(?:(\S+).*\n)?(?:(\S+).*\n)?(?:(\S+).*\n)?", # allow for ip addresses after the name server
+    "name_servers": r"\*\* Domain Servers:\n(?:(\S+).*\n)?(?:(\S+).*\n)?(?:(\S+).*\n)?(?:(\S+).*\n)?",  # allow for ip addresses after the name server
     "status": None,
     "_server": "whois.trabis.gov.tr",
     # "_test": "googl.com.tr"

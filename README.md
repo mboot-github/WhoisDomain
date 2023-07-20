@@ -214,3 +214,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * 1.20230717.1 add tld: com.ru, msk.ru, spb.ru  (all have a test documented), also update the tld: ru, the newlines are not needed.
   * 1.20230717.2 add option to parse partial result after timout has occurred (parse_partial_response:bool default False); this will need `stdbuf` installed otherwise it will fail
   * 1.20230718.3 fix typo in whois server hint for tld: ru
+  * 1.20230720.1 add gov.tr; switch off status:available and status:free as None response, we should not interprete the result by default (we can add a option later)
