@@ -287,6 +287,8 @@ ZZ["com.au"] = {
     "extend": "au",
 }
 
+ZZ["tr"] = {"extend": "_privateReg"}  # whois.nic.tr is an alias for whois.trabis.gov.tr.
+
 ZZ["com.tr"] = {
     "extend": "com",
     "domain_name": r"\*\* Domain Name:\s?(.+)",
@@ -296,15 +298,23 @@ ZZ["com.tr"] = {
     "creation_date": r"Created on\.+:\s?(.+).",
     "expiration_date": r"Expires on\.+:\s?(.+).",  # note the trailing . on both dates fields
     "updated_date": "",
-    "name_servers": r"\*\* Domain Servers:\n(?:(\S+)\n)(?:(\S+)\n)?(?:(\S+)\n)?(?:(\S+)\n)?(?:(\S+)\n)?(?:(\S+)\n)\n?",
+    # "name_servers": r"\*\* Domain Servers:\n(?:(\S+)\n)(?:(\S+)\n)?(?:(\S+)\n)?(?:(\S+)\n)?(?:(\S+)\n)?(?:(\S+)\n)\n?",
+    "name_servers": r"\*\* Domain Servers:\n(?:(\S+).*\n)?(?:(\S+).*\n)?(?:(\S+).*\n)?(?:(\S+).*\n)?", # allow for ip addresses after the name server
     "status": None,
+    "_server": "whois.trabis.gov.tr",
+    # "_test": "googl.com.tr"
+}
+
+ZZ["gov.tr"] = {
+    "extend": "com.tr",
+    # "name_servers": r"\*\* Domain Servers:\n(?:(\S+).*\n)?(?:(\S+).*\n)?(?:(\S+).*\n)?(?:(\S+).*\n)?", # this has ip addresses after the nameserver
+    # "_test": "www.turkiye.gov.tr",
 }
 
 ZZ["edu.tr"] = {"extend": "com.tr"}
-
 ZZ["org.tr"] = {"extend": "com.tr"}
-
 ZZ["net.tr"] = {"extend": "com.tr"}
+
 
 ZZ["co.il"] = {
     "extend": "com",
@@ -2072,7 +2082,6 @@ ZZ["org.ph"] = {"extend": "ph"}
 ZZ["net.ph"] = {"extend": "ph"}
 ZZ["zm"] = {"extend": "com"}
 ZZ["sy"] = {"extend": "_privateReg", "_server": "whois.tld.sy"}
-ZZ["tr"] = {"extend": "_privateReg"}
 ZZ["onl"] = {"extend": "com"}
 ZZ["blue"] = {"extend": "com"}
 ZZ["garden"] = {"extend": "com", "_server": "whois.nic.garden"}
