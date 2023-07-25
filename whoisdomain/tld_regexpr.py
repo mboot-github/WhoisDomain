@@ -3,6 +3,11 @@ from typing import (
     Any,
 )
 
+# interesting:
+# https://github.com/rfc1036/whois/blob/next/tld_serv_list
+# https://github.com/rfc1036/whois/blob/next/new_gtlds_list
+# seems the most up to date and maintained
+
 ZZ: Dict[str, Any] = {}
 
 # elements starting with _
