@@ -59,7 +59,7 @@ ZZ["co.uk"] = {
     "extend": "uk",
     "domain_name": r"Domain name:\s+(.+)",
     "registrar": r"Registrar:\s+(.+)",
-    "name_servers": r"Name servers:(?:\n\s+(\S+))?(?:\n\s+(\S+))?(?:\n\s+(\S+))?(?:\n\s+(\S+))?\n\n",  # capture up to 4
+    "name_servers": r"Name servers:(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?\n\n",  # capture up to 10
     "status": r"Registration status:\s*(.+)",
     "creation_date": r"Registered on:(.+)",
     "expiration_date": r"Expiry date:(.+)",
@@ -1114,7 +1114,7 @@ ZZ["uk"] = {
     "creation_date": r"Registered on:\s*(.+)",
     "expiration_date": r"Expiry date:\s*(.+)",
     "updated_date": r"Last updated:\s*(.+)",
-    "name_servers": r"Name Servers:\s*(\S+)\r?\n(?:\s+(\S+)\r?\n)?(?:\s+(\S+)\r?\n)?(?:\s+(\S+)\r?\n)?",
+    "name_servers": r"Name Servers:\s*(\S+).*\r?\n(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?",
     "status": r"Registration status:\n\s*(.+)",
 }
 
