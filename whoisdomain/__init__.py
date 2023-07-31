@@ -130,31 +130,32 @@ def _fromDomainStringToTld(
     simplistic: bool = False,
 ) -> Tuple[Optional[str], Optional[List[str]]]:
     domain = domain.lower().strip().rstrip(".")  # Remove the trailing dot to support FQDN.
-    d: List[str] = domain.split(".")
+
+    dList: List[str] = domain.split(".")
     if verbose:
-        print(d, file=sys.stderr)
+        print(dList, file=sys.stderr)
 
-    if d[0] == "www":
-        d = d[1:]
+    if dList[0] == "www":
+        dList = dList[1:]
 
-    if len(d) == 1:
+    if len(dList) == 1:
         return None, None
 
-    tld: str = filterTldToSupportedPattern(domain, d, verbose)  # may raise UnknownTld
+    tldString: str = filterTldToSupportedPattern(domain, dList, verbose)  # may raise UnknownTld
     if verbose:
-        print(f"filterTldToSupportedPattern returns tld: {tld}", file=sys.stderr)
+        print(f"filterTldToSupportedPattern returns tld: {tldString}", file=sys.stderr)
 
     if internationalized and isinstance(internationalized, bool):
-        d = _internationalizedDomainNameToPunyCode(d)
+        dList = _internationalizedDomainNameToPunyCode(dList)
 
     if verbose:
-        print(tld, d, file=sys.stderr)
+        print(tldString, dList, file=sys.stderr)
 
-    return tld, d
+    return tldString, dList
 
 
 def _validateWeKnowTheToplevelDomain(
-    tld: str,
+    tldString: str,
     return_raw_text_for_unsupported_tld: bool = False,
 ) -> Optional[str]:
     # may raise UnknownTld
@@ -162,7 +163,7 @@ def _validateWeKnowTheToplevelDomain(
         # we dont raise we return None so we can handle unsupported domains anyway
         return None
 
-    a = f"The TLD {tld} is currently not supported by this package."
+    a = f"The TLD {tldString} is currently not supported by this package."
     b = "Use validTlds() to see what toplevel domains are supported."
     msg = f"{a} {b}"
     return msg
@@ -183,7 +184,7 @@ def _verifyPrivateRegistry(
 
 
 def _doServerHintsForThisTld(
-    tld: str,
+    tldString: str,
     thisTld: Dict[str, Any],
     server: Optional[str],
     verbose: bool = False,
@@ -194,12 +195,12 @@ def _doServerHintsForThisTld(
     if server is None and thisTldServer:
         server = thisTldServer
         if verbose:
-            print(f"using _server hint {server} for tld: {tld}", file=sys.stderr)
+            print(f"using _server hint {server} for tld: {tldString}", file=sys.stderr)
     return server
 
 
 def _doSlowdownHintForThisTld(
-    tld: str,
+    tldString: str,
     thisTld: Dict[str, Any],
     slow_down: int,
     verbose: bool = False,
@@ -209,13 +210,13 @@ def _doSlowdownHintForThisTld(
     if slow_down == 0 and slowDown and slowDown > 0:
         slow_down = slowDown
         if verbose:
-            print(f"using _slowdown hint {slowDown} for tld: {tld}", file=sys.stderr)
+            print(f"using _slowdown hint {slowDown} for tld: {tldString}", file=sys.stderr)
     return slow_down
 
 
 def _doUnsupportedTldAnyway(
-    tld: str,
-    dl: List[str],
+    tldString: str,
+    dList: List[str],
     ignore_returncode: bool = False,
     slow_down: int = 0,
     server: Optional[str] = None,
@@ -228,7 +229,7 @@ def _doUnsupportedTldAnyway(
     # we will not hunt for possible valid first level domains as we have no actual feedback
 
     whoisStr = do_query(
-        dl=dl,
+        dList=dList,
         slow_down=slow_down,
         ignore_returncode=ignore_returncode,
         server=server,
@@ -239,10 +240,10 @@ def _doUnsupportedTldAnyway(
 
     # we will only return minimal data
     data = {
-        "tld": tld,
+        "tld": tldString,
         "domain_name": [],
     }
-    data["domain_name"] = [".".join(dl)]  # note the fields are default all array, except tld
+    data["domain_name"] = [".".join(dList)]  # note the fields are default all array, except tld
 
     if verbose:
         print(data, file=sys.stderr)
@@ -257,8 +258,8 @@ def _doUnsupportedTldAnyway(
 
 
 def _doOneLookup(
-    tld: str,
-    dl: List[str],
+    tldString: str,
+    dList: List[str],
     force: bool = False,
     cache_file: Optional[str] = None,
     cache_age: int = 60 * 60 * 48,
@@ -277,7 +278,7 @@ def _doOneLookup(
 
     try:
         whoisStr = do_query(
-            dl=dl,
+            dList=dList,
             force=force,
             cache_file=cache_file,
             cache_age=cache_age,
@@ -304,7 +305,7 @@ def _doOneLookup(
 
     LastWhois["Try"].append(
         {
-            "Domain": ".".join(dl),
+            "Domain": ".".join(dList),
             "rawData": whoisStr,
             "server": server,
         }
@@ -312,8 +313,8 @@ def _doOneLookup(
 
     data = do_parse(
         whoisStr=whoisStr,
-        tld=tld,
-        dl=dl,
+        tldString=tldString,
+        dList=dList,
         verbose=verbose,
         with_cleanup_results=with_cleanup_results,
         simplistic=simplistic,
@@ -352,16 +353,16 @@ def cleanupUnsupportedTld(
 ) -> Tuple[Optional[str], Optional[List[str]], Optional[Domain]]:
 
     try:
-        tld, dl = _fromDomainStringToTld(  # may raise UnknownTld
+        tldString, dList = _fromDomainStringToTld(  # may raise UnknownTld
             domain,
             internationalized,
             verbose,
         )
 
-        if tld is None:
+        if tldString is None:
             return None, None, None
 
-        return tld, dl, None
+        return tldString, dList, None
     except Exception as e:
         if simplistic:
             return (
@@ -433,13 +434,13 @@ def query(
 
     # =================================================
     try:
-        tld, dl = _fromDomainStringToTld(  # may raise UnknownTld
+        tldString, dList = _fromDomainStringToTld(  # may raise UnknownTld
             domain,
             internationalized,
             verbose,
         )
 
-        if tld is None:
+        if tldString is None:
             return None
     except Exception as e:
         if simplistic:
@@ -454,14 +455,14 @@ def query(
         raise (e)
 
     # =================================================
-    dl = cast(List[str], dl)
-    if tld not in TLD_RE.keys():
-        msg = _validateWeKnowTheToplevelDomain(tld, return_raw_text_for_unsupported_tld)
+    dList = cast(List[str], dList)
+    if tldString not in TLD_RE.keys():
+        msg = _validateWeKnowTheToplevelDomain(tldString, return_raw_text_for_unsupported_tld)
 
         if msg is None:
             return _doUnsupportedTldAnyway(
-                tld,
-                dl,
+                tldString,
+                dList,
                 ignore_returncode=ignore_returncode,
                 slow_down=slow_down,
                 server=server,
@@ -481,7 +482,7 @@ def query(
         raise UnknownTld(msg)
 
     # =================================================
-    thisTld = cast(Dict[str, Any], TLD_RE.get(tld))
+    thisTld = cast(Dict[str, Any], TLD_RE.get(tldString))
 
     if _verifyPrivateRegistry(thisTld, simplistic):  # may raise WhoisPrivateRegistry
         msg = "This tld has either no whois server or responds only with minimal information"
@@ -494,10 +495,10 @@ def query(
         )
 
     # =================================================
-    server = _doServerHintsForThisTld(tld, thisTld, server, verbose)
+    server = _doServerHintsForThisTld(tldString, thisTld, server, verbose)
 
     slow_down = slow_down or SLOW_DOWN
-    slow_down = _doSlowdownHintForThisTld(tld, thisTld, slow_down, verbose)
+    slow_down = _doSlowdownHintForThisTld(tldString, thisTld, slow_down, verbose)
 
     # if the tld is a multi level we should not move further down than the tld itself
     # we currently allow progressive lookups until we find something:
@@ -505,11 +506,11 @@ def query(
     # but if the tld is yyy.zzz we should only try xxx.yyy.zzz
 
     cache_file = cache_file or CACHE_FILE
-    tldLevel = tld.split(".")
+    tldLevel = tldString.split(".")
     while 1:
         result = _doOneLookup(
-            tld=tld,
-            dl=dl,
+            tldString=tldString,
+            dList=dList,
             force=force,
             cache_file=cache_file,
             cache_age=cache_age,
@@ -528,10 +529,10 @@ def query(
         if result:
             return result
 
-        if len(dl) > (len(tldLevel) + 1):
-            dl = dl[1:]  # strip one element from the front and try again
+        if len(dList) > (len(tldLevel) + 1):
+            dList = dList[1:]  # strip one element from the front and try again
             if verbose:
-                print(f"try again with {dl}, {len(dl)}, {len(tldLevel) + 1}", file=sys.stderr)
+                print(f"try again with {dList}, {len(dList)}, {len(tldLevel) + 1}", file=sys.stderr)
             continue
 
         # no result or no domain but we can not reduce any further so we have None
@@ -548,12 +549,12 @@ def getVersion() -> str:
     return VERSION
 
 
-def getTestHint(tld: str) -> Optional[str]:
-    if tld not in ZZ:
+def getTestHint(tldString: str) -> Optional[str]:
+    if tldString not in ZZ:
         return None
 
     k: str = "_test"
-    if k not in ZZ[tld]:
+    if k not in ZZ[tldString]:
         return None
 
-    return str(ZZ[tld][k])
+    return str(ZZ[tldString][k])

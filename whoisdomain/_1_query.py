@@ -46,12 +46,12 @@ def _cache_save(cf: str) -> None:
 
 
 def _testWhoisPythonFromStaticTestData(
-    dl: List[str],
+    dList: List[str],
     ignore_returncode: bool,
     server: Optional[str] = None,
     verbose: bool = False,
 ) -> str:
-    domain = ".".join(dl)
+    domain = ".".join(dList)
     testDir = os.getenv("TEST_WHOIS_PYTHON")
     pathToTestFile = f"{testDir}/{domain}/input"
     if os.path.exists(pathToTestFile):
@@ -84,12 +84,12 @@ def _tryInstallMissingWhoisOnWindows(
 
 
 def _makeWhoisCommandToRun(
-    dl: List[str],
+    dList: List[str],
     server: Optional[str] = None,
     verbose: bool = False,
     wh: str = "whois",
 ) -> List[str]:
-    domain = ".".join(dl)
+    domain = ".".join(dList)
 
     if " " in wh:
         whList = wh.split(" ")
@@ -125,7 +125,7 @@ def _makeWhoisCommandToRun(
 
 
 def _do_whois_query(
-    dl: List[str],
+    dList: List[str],
     ignore_returncode: bool,
     server: Optional[str] = None,
     verbose: bool = False,
@@ -137,10 +137,10 @@ def _do_whois_query(
     # if getenv[TEST_WHOIS_PYTON] fake whois by reading static data from a file
     # this wasy we can actually implemnt a test run with known data in and expected data out
     if os.getenv("TEST_WHOIS_PYTHON"):
-        return _testWhoisPythonFromStaticTestData(dl, ignore_returncode, server, verbose)
+        return _testWhoisPythonFromStaticTestData(dList, ignore_returncode, server, verbose)
 
     cmd = _makeWhoisCommandToRun(
-        dl=dl,
+        dList=dList,
         server=server,
         verbose=verbose,
         wh=wh,
@@ -154,7 +154,7 @@ def _do_whois_query(
         STDBUF_OFF_CMD + cmd,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
-        env={"LANG": "en"} if dl[-1] in ".jp" else None,
+        env={"LANG": "en"} if dList[-1] in ".jp" else None,
     )
 
     try:
@@ -192,7 +192,7 @@ def _do_whois_query(
 
 
 def do_query(
-    dl: List[str],
+    dList: List[str],
     force: bool = False,
     cache_file: Optional[str] = None,
     cache_age: int = CACHE_MAX_AGE,
@@ -205,7 +205,7 @@ def do_query(
     wh: str = "whois",
     simplistic: bool = False,
 ) -> str:
-    k = ".".join(dl)
+    k = ".".join(dList)
 
     if cache_file:
         if verbose:
@@ -226,7 +226,7 @@ def do_query(
         CACHE[k] = (
             int(time.time()),
             _do_whois_query(
-                dl=dl,
+                dList=dList,
                 ignore_returncode=ignore_returncode,
                 server=server,
                 verbose=verbose,

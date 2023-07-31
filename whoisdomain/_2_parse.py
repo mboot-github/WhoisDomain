@@ -58,16 +58,16 @@ QUOTASTRINGS: List[str] = [
 
 
 def _handleShortResponse(
-    tld: str,
-    dl: List[str],
+    tldString: str,
+    dList: List[str],
     whoisStr: str,
     verbose: bool = False,
     simplistic: bool = False,
     include_raw_whois_text: bool = False,
 ) -> Optional[Domain]:
     if verbose:
-        d = ".".join(dl)
-        print(f"line count < 5:: {tld} {d} {whoisStr}", file=sys.stderr)
+        d = ".".join(dList)
+        print(f"line count < 5:: {tldString} {d} {whoisStr}", file=sys.stderr)
 
     # TODO: some short responses are actually valid:
     # lookfor Domain: and Status but all other fields are missing so the regexec could fail
@@ -148,7 +148,7 @@ def _doIfServerNameLookForDomainName(
 
 
 def _doExtractPattensIanaFromWhoisString(
-    tld: str,
+    tldString: str,
     r: Dict[str, Any],
     whoisStr: str,
     verbose: bool = False,
@@ -163,18 +163,18 @@ def _doExtractPattensIanaFromWhoisString(
         zz = re.findall(v, whoisStr)
         if zz:
             if verbose:
-                print(f"parsing iana data only for tld: {tld}, {zz}", file=sys.stderr)
+                print(f"parsing iana data only for tld: {tldString}, {zz}", file=sys.stderr)
             r[k] = zz
     return r
 
 
 def _doExtractPattensFromWhoisString(
-    tld: str,
+    tldString: str,
     r: Dict[str, Any],
     whoisStr: str,
     verbose: bool = False,
 ) -> Dict[str, Any]:
-    for k, v in TLD_RE.get(tld, TLD_RE["com"]).items():  # use TLD_RE["com"] as default if a regex is missing
+    for k, v in TLD_RE.get(tldString, TLD_RE["com"]).items():  # use TLD_RE["com"] as default if a regex is missing
         if k.startswith("_"):  # skip meta element like: _server or _privateRegistry
             continue
 
@@ -188,7 +188,7 @@ def _doExtractPattensFromWhoisString(
 
 
 def _doSourceIana(
-    tld: str,
+    tldString: str,
     r: Dict[str, Any],
     whoisStr: str,
     verbose: bool = False,
@@ -215,7 +215,7 @@ def _doSourceIana(
 
     # try to parse this as a IANA domain as after is only whitespace
     r = _doExtractPattensFromWhoisString(
-        tld,
+        tldString,
         r,
         whoisStr,
         verbose,
@@ -223,7 +223,7 @@ def _doSourceIana(
 
     # now handle the actual format if this whois response
     r = _doExtractPattensIanaFromWhoisString(
-        tld,
+        tldString,
         r,
         whoisStr,
         verbose,
@@ -305,8 +305,8 @@ def QuotaStringsAdd(aString: str) -> None:
 
 def do_parse(
     whoisStr: str,
-    tld: str,
-    dl: List[str],
+    tldString: str,
+    dList: List[str],
     verbose: bool = False,
     with_cleanup_results: bool = False,
     simplistic: bool = False,
@@ -323,8 +323,8 @@ def do_parse(
 
     if whoisStr.count("\n") < 5:
         result = _handleShortResponse(  # may raise:    FailedParsingWhoisOutput,    WhoisQuotaExceeded,
-            tld=tld,
-            dl=dl,
+            tldString=tldString,
+            dList=dList,
             whoisStr=whoisStr,
             verbose=verbose,
             simplistic=simplistic,
@@ -334,17 +334,33 @@ def do_parse(
 
     # this is the beginning of the return data
     r: Dict[str, Any] = {
-        "tld": tld,
+        "tld": tldString,
         "DNSSEC": _doDnsSec(whoisStr),
     }
 
     if "source:       IANA" in whoisStr:  # prepare for handling historical IANA domains
-        whoisStr, ianaDomain = _doSourceIana(tld, r, whoisStr, verbose)
+        whoisStr, ianaDomain = _doSourceIana(
+            tldString,
+            r,
+            whoisStr,
+            verbose,
+        )
         if ianaDomain is not None:
-            ianaDomain = cast(Optional[Dict[str, Any]], ianaDomain)
+            ianaDomain = cast(
+                Optional[Dict[str, Any]],
+                ianaDomain,
+            )
             return ianaDomain
 
     if "Server Name" in whoisStr:  # handle old type Server Name (not very common anymore)
-        whoisStr = _doIfServerNameLookForDomainName(whoisStr, verbose)
+        whoisStr = _doIfServerNameLookForDomainName(
+            whoisStr,
+            verbose,
+        )
 
-    return _doExtractPattensFromWhoisString(tld, r, whoisStr, verbose)
+    return _doExtractPattensFromWhoisString(
+        tldString,
+        r,
+        whoisStr,
+        verbose,
+    )
