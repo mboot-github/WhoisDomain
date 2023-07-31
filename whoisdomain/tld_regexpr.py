@@ -3,7 +3,8 @@ from typing import (
     Any,
 )
 
-def xStr(what:str, times: int = 1, firstMandatory: bool = True):
+
+def xStr(what: str, times: int = 1, firstMandatory: bool = True) -> str:
     # Often we want to repeat regex patterns,
     # ( typically with nameservers or status fields )
     # that becomes unreadable very fast.
@@ -14,27 +15,10 @@ def xStr(what:str, times: int = 1, firstMandatory: bool = True):
         return ""
 
     if firstMandatory and what[-1] == "?":
-        return what[:-1] + (what * (times -1))
+        return what[:-1] + (what * (times - 1))
     else:
         return what * times
 
-"""
-    "name_servers": r"Name servers:
-        (?:\n[ \t]+(\S+).*)?
-        (?:\n[ \t]+(\S+).*)?
-        (?:\n[ \t]+(\S+).*)?
-        (?:\n[ \t]+(\S+).*)?
-        (?:\n[ \t]+(\S+).*)?
-        (?:\n[ \t]+(\S+).*)?
-        (?:\n[ \t]+(\S+).*)?
-        (?:\n[ \t]+(\S+).*)?
-        (?:\n[ \t]+(\S+).*)?
-        (?:\n[ \t]+(\S+).*)?
-        \n\n",  # capture up to 10
-    can be replaced with:
-    "name_servers": r"Name servers:%s\n\n" % xStr(r'(?:\n[ \t]+(\S+).*)?', 10),  # capture up to 10
-    see co.uk
-"""
 
 # interesting:
 # https://github.com/rfc1036/whois/blob/next/tld_serv_list
@@ -92,8 +76,6 @@ ZZ["co.uk"] = {
     "extend": "uk",
     "domain_name": r"Domain name:\s+(.+)",
     "registrar": r"Registrar:\s+(.+)",
-    # "name_servers": r"Name servers:(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?\n\n",  # capture up to 10
-    # "name_servers": r"Name servers:%s\n\n" % xStr(r'(?:\n[ \t]+(\S+).*)?', 10),  # capture up to 10
     "status": r"Registration status:\s*(.+)",
     "creation_date": r"Registered on:(.+)",
     "expiration_date": r"Expiry date:(.+)",
@@ -128,7 +110,7 @@ ZZ["am"] = {
     "expiration_date": r"Expires:\s+(.+)",
     "updated_date": r"Last modified:\s+(.+)",
     # "name_servers": r"DNS servers.*:\n(?:\s+(\S+)\n)(?:\s+(\S+)\n)?(?:\s+(\S+)\n)?(?:\s+(\S+)\n)\n?",
-    "name_servers": r"DNS servers.*:\n%s" % xStr(r'(?:\s+(\S+)\n)?', 4),
+    "name_servers": r"DNS servers.*:\n%s" % xStr(r"(?:\s+(\S+)\n)?", 4),
 }
 
 # Amsterdam
@@ -196,8 +178,7 @@ ZZ["ax"] = {
 ZZ["aw"] = {
     "extend": "nl",
     # "name_servers": r"Domain nameservers:\s+(\S+)[ \t]*\r?\n(?:\s+(\S+))?",
-    "name_servers": r"Domain nameservers.*:\n%s" % xStr(r'(?:\s+(\S+)\n)?', 4),
-
+    "name_servers": r"Domain nameservers.*:\n%s" % xStr(r"(?:\s+(\S+)\n)?", 4),
 }
 
 # Banking TLD - ICANN
@@ -435,7 +416,8 @@ ZZ["edu"] = {
     "creation_date": r"Domain record activated:\s?(.+)",
     "updated_date": r"Domain record last updated:\s?(.+)",
     "expiration_date": r"Domain expires:\s?(.+)",
-    "name_servers": r"Name Servers:\s?(?:\t(.+)\n)(?:\t(.+)\n)?(?:\t(.+)\n)?(?:\t(.+)\n)?(?:\t(.+)\n)?(?:\t(.+)\n)?(?:\t(.+)\n)?(?:\t(.+)\n)?(?:\t(.+)\n)?(?:\t(.+)\n)?",
+    "name_servers": r"Name Servers:\s?%s" % xStr(r"(?:\t(.+)\n)?", 10),
+    "_test": "rutgers.edu",
 }
 
 # estonian
@@ -795,35 +777,10 @@ ZZ["nl"] = {
     "expiration_date": None,
     "registrant_country": None,
     "domain_name": r"Domain name:\s?(.+)",
-    "name_servers": r"Domain nameservers.*:\n%s" % xStr(r'(?:\s+(\S+)\n)?', 10),
-#    "name_servers": (
-#        r"""(?x:
-#            Domain\ nameservers:\s+(\S+)\r?\n # the first
-#            (?:\s+(\S+)\r?\n)?  # a optional 2th
-#            (?:\s+(\S+)\r?\n)?  # a optional 3th
-#            (?:\s+(\S+)\r?\n)?  # a optional 4th
-#            (?:\s+(\S+)\r?\n)?  # a optional 5th
-#            # there may be more, best use host -t ns <domain> to get the actual nameservers
-#        )"""
-#    ),
-    # the format with [A] or [AAAA] is no longer in use
-    #    "name_servers": (
-    #        r"""(?x:
-    #            Domain\ nameservers:[ \t]*\n
-    #            (?:[ \t]+) (\S+) (?:[ \t]+\S+)? \n       # ns1.tld.nl [A?]
-    #            (?:(?:[ \t]+) (\S+) (?:[ \t]+\S+)? \n)?  # opt-ns2.tld.nl [A?]
-    #            (?:(?:[ \t]+) (\S+) (?:[ \t]+\S+)? \n)?  # opt-ns2.tld.nl [AAAA?]
-    #            (?:(?:[ \t]+) (\S+) (?:[ \t]+\S+)? \n)?  # opt-ns3.tld.nl [A?]
-    #            (?:(?:[ \t]+) (\S+) (?:[ \t]+\S+)? \n)?  # opt-ns3.tld.nl [AAAA?]
-    #            (?:(?:[ \t]+) (\S+) (?:[ \t]+\S+)? \n)?  # opt-ns4.tld.nl [A?]
-    #            (?:(?:[ \t]+) (\S+) (?:[ \t]+\S+)? \n)?  # opt-ns4.tld.nl [AAAA?]
-    #            (?:(?:[ \t]+) (\S+) (?:[ \t]+\S+)? \n)?  # opt-ns5.tld.nl [A?]
-    #            (?:(?:[ \t]+) (\S+) (?:[ \t]+\S+)? \n)?  # opt-ns5.tld.nl [AAAA?]
-    #            # Don't check for final LF; there might be even more records..
-    #        )"""
-    #    ),
+    "name_servers": r"Domain nameservers.*:\n%s" % xStr(r"(?:\s+(\S+)\n)?", 10),
     "reseller": r"Reseller:\s?(.+)",
     "abuse_contact": r"Abuse Contact:\s?(.+)",
+    "_test": "google.nl",
 }
 
 # Norway
@@ -901,9 +858,7 @@ ZZ["pl"] = {
     "creation_date": r"\ncreated:\s*(.+)\n",
     "updated_date": r"\nlast modified:\s*(.+)\n",
     "expiration_date": r"\noption expiration date:\s*(.+)\n",
-    # ns: match up to 4
-    # "name_servers": r"nameservers:(?:\s+(\S+)[^\n]*\n)(?:\s+(\S+)[^\n]*\n)?(?:\s+(\S+)[^\n]*\n)?(?:\s+(\S+)[^\n]*\n)?",
-    "name_servers": r"nameservers:%s" % xStr('(?:\s+(\S+)[^\n]*\n)?', 4),
+    "name_servers": r"nameservers:%s" % xStr(r"(?:\s+(\S+)[^\n]*\n)?", 4),
     "status": r"\nStatus:\n\s*(.+)",
 }
 
@@ -926,7 +881,7 @@ ZZ["pt"] = {
     "expiration_date": r"Expiration Date:\s?(.+)",
     "updated_date": None,
     # nameservers have trailing info: Name Server: ns1.dnscpanel.com | IPv4:  and IPv6:
-    "name_servers": r"Name Server:(?:\s*(\S+)[^\n]*\n)(?:\s*(\S+)[^\n]*\n)?",
+    "name_servers": r"Name Server:%s" % xStr(r"(?:\s*(\S+)[^\n]*\n)?", 2),
     "status": r"Domain Status:\s?(.+)",
 }
 
@@ -1086,7 +1041,7 @@ ZZ["tn"] = {
     "creation_date": r"Creation date\.+:\s?(.+)",
     "expiration_date": None,
     "updated_date": None,
-    "name_servers": r"DNS servers\n(?:Name\.+:\s*(\S+)\n)(?:Name\.+:\s*(\S+)\n)?(?:Name\.+:\s*(\S+)\n)?(?:Name\.+:\s*(\S+)\n)?",
+    "name_servers": r"DNS servers\n%s" % xStr(r"(?:Name\.+:\s*(\S+)\n)?", 4),
     "status": r"Domain status\.+:(.+)",
     # "emails": r"[\w\.-]+@[\w\.-]+\.[\w]{2,4}",
 }
@@ -1154,8 +1109,7 @@ ZZ["uk"] = {
     "creation_date": r"Registered on:\s*(.+)",
     "expiration_date": r"Expiry date:\s*(.+)",
     "updated_date": r"Last updated:\s*(.+)",
-    # "name_servers": r"Name Servers:\s*(\S+).*\r?\n(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?",
-    "name_servers": r"Name servers:%s\n\n" % xStr(r'(?:\n[ \t]+(\S+).*)?', 10),  # capture up to 10
+    "name_servers": r"Name servers:%s\n\n" % xStr(r"(?:\n[ \t]+(\S+).*)?", 10),  # capture up to 10
     "status": r"Registration status:\n\s*(.+)",
 }
 
@@ -1169,7 +1123,7 @@ ZZ["uz"] = {
     "expiration_date": r"Expiration Date:\s?(.+)",
     "updated_date": r"Updated Date:\s?(.+)",
     "status": r"Status:\s?(.+)",
-    "name_servers": r"Domain servers in listed order:(?:\n\s+(\S+))(?:\n\s+(\S+))?(?:\n\s+(\S+))?(?:\n\s+(\S+))?\n\n",
+    "name_servers": r"Domain servers in listed order:%s\n\n" % xStr(r"(?:\n\s+(\S+))?", 4),
     # sometimes 'not.defined is returned as a nameserver (e.g. google.uz)
 }
 
@@ -1221,6 +1175,7 @@ ZZ["gy"] = {"extend": "com"}
 
 # Multiple initialization
 ZZ["ca"] = {"extend": "bank"}
+
 # Rwanda: https://en.wikipedia.org/wiki/.rw
 ZZ["rw"] = {"extend": "com", "_server": "whois.ricta.org.rw"}
 ZZ[".co.rw"] = {"extend": "rw"}
@@ -1614,7 +1569,8 @@ ZZ["bg"] = {
     "_server": "whois.register.bg",
     "domain_name": r"DOMAIN\s+NAME:\s+(.+)",
     "status": r"registration\s+status:\s(.+)",
-    "name_servers": r"NAME SERVER INFORMATION:\n(?:(.+)\n)(?:(.+)\n)?(?:(.+)\n)?(?:(.+)\n)?",
+    # "name_servers": r"NAME SERVER INFORMATION:\n(?:(.+)\n)(?:(.+)\n)?(?:(.+)\n)?(?:(.+)\n)?",
+    "name_servers": r"NAME SERVER INFORMATION:\n%s" % xStr(r"(?:(.+)\n)?", 4),
     "creation_date": None,
     "expiration_date": None,
     "updated_date": None,
@@ -1790,8 +1746,9 @@ ZZ["sg"] = {
     "updated_date": r"\s+Modified Date:\s+(.+)",
     "status": r"\s+Domain Status:\s(.+)",
     "registrant_country": None,
-    "name_servers": r"Name Servers:(?:\n[ \t]+(\S+)[^\n]*)(?:\n[ \t]+(\S+)[^\n]*)?(?:\n[ \t]+(\S+)[^\n]*)?(?:\n[ \t]+(\S+)[^\n]*)?",
+    "name_servers": r"Name Servers:%s" % xStr(r"(?:\n[ \t]+(\S+)[^\n]*)?", 4),
     # make sure the dnssec is not matched
+    "_test": "google.sg",
 }
 
 ZZ["srl"] = {
@@ -1820,7 +1777,8 @@ ZZ["tw"] = {
     "registrar": r"Registration\s+Service\s+Provider:\s+(.+)",
     "updated_date": None,
     "registrant_country": None,
-    "name_servers": r"Domain servers in listed order:\s*(\S+)[ \t]*\r?\n(?:\s+(\S+)[ \t]*\r?\n)?(?:\s+(\S+)[ \t]*\r?\n)?(?:\s+(\S+)[ \t]*\r?\n)?",
+    "name_servers": r"Domain servers in listed order:%s" % xStr(r"(?:\s+(\S+)[ \t]*\r?\n)?", 4),
+    "_test": "google.tw",
 }
 
 ZZ["com.tw"] = {
@@ -2101,13 +2059,7 @@ ZZ["mn"] = {"extend": "com"}
 ZZ["tl"] = {"extend": "com"}
 ZZ["gay"] = {"extend": "com", "_server": "whois.nic.gay"}
 ZZ["tt"] = {"extend": "_privateReg"}
-ZZ["mo"] = {
-    "extend": "com",
-    "creation_date": r"created on\s+(.+)",
-    "expiration_date": r"expires on\s+(.+)",
-    "name_servers": r"Domain name servers:\s*\-+(?:\s*(\S+)\n)(?:\s*(\S+)\n)?(?:\s*(\S+)\n)?(?:\s*(\S+)\n)?",
-}
-ZZ["com.mo"] = {"extend": "mo"}
+
 ZZ["st"] = {
     # .ST domains can now be registered with many different competing registrars. and hence different formats
     # >>> line appears quite early, valid info after would have been suppressed with the ^>>> cleanup rule: switched off
@@ -2233,6 +2185,7 @@ ZZ["mo"] = {
     "creation_date": r"Record created on (.+)",
     "expiration_date": r"Record expires on (.+)",
 }
+ZZ["com.mo"] = {"extend": "mo"}
 
 ZZ["ph"] = {"extend": "_privateReg"}
 
