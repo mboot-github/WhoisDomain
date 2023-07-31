@@ -3048,8 +3048,8 @@ ZZ["xn--rvc1e0am3e"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--s9brj9c"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--xkc2dl3a5ee0h"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--xhq521b"] = {"_server": "whois.ngtld.cn", "extend": "com"}
-ZZ["xn--kprw13d"] = {"extend": "tw"}
-ZZ["xn--kpry57d"] = {"extend": "tw"}
+ZZ["xn--kprw13d"] = {"extend": "tw", "_test": "google.xn--kprw13d"}
+ZZ["xn--kpry57d"] = {"extend": "tw", "_test": "google.xn--kpry57d"}
 ZZ["th"] = {"_server": "whois.thnic.co.th", "extend": "co.th"}
 # whois.thnic.co.th ['co.th']
 ZZ["xn--d1alf"] = {"_server": "whois.marnet.mk", "extend": "mk"}
@@ -3161,26 +3161,17 @@ ZZ["भरत"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["भरत"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["آزمایشی"] = {"_privateRegistry": True}
 ZZ["பரடச"] = {"_privateRegistry": True}
-ZZ["सगठन"] = {
-    "_server": "whois.nic.xn--i1b6b1a6a2e",
-    "extend": "xn--i1b6b1a6a2e",
-}  # whois.nic.xn--i1b6b1a6a2e ['xn--i1b6b1a6a2e']
+ZZ["सगठन"] = {"_server": "whois.nic.xn--i1b6b1a6a2e", "extend": "xn--i1b6b1a6a2e"}
 ZZ["网络"] = {"_server": "whois.ngtld.cn", "extend": "com"}
 ZZ["ком"] = {"_server": "whois.nic.xn--j1aef", "extend": "xn--j1aef"}  # whois.nic.xn--j1aef ['xn--j1aef']
 ZZ["香港"] = {"_server": "whois.hkirc.hk", "extend": "hk"}  # whois.hkirc.hk ['hk', 'xn--j6w193g']
-ZZ["亚马逊"] = {
-    "_server": "whois.nic.xn--jlq480n2rg",
-    "extend": "xn--jlq480n2rg",
-}  # whois.nic.xn--jlq480n2rg ['xn--jlq480n2rg']
+ZZ["亚马逊"] = {"_server": "whois.nic.xn--jlq480n2rg", "extend": "xn--jlq480n2rg"}
 ZZ["诺基亚"] = {"_privateRegistry": True}
 ZZ["δοκιμή"] = {"_privateRegistry": True}
-ZZ["飞利浦"] = {
-    "_server": "whois.nic.xn--kcrx77d1x4a",
-    "extend": "xn--kcrx77d1x4a",
-}  # whois.nic.xn--kcrx77d1x4a ['xn--kcrx77d1x4a']
+ZZ["飞利浦"] = {"_server": "whois.nic.xn--kcrx77d1x4a", "extend": "xn--kcrx77d1x4a"}
 ZZ["إختبار"] = {"_privateRegistry": True}
-ZZ["台湾"] = {"_server": "whois.twnic.net.tw", "extend": "tw"}
-ZZ["台灣"] = {"_server": "whois.twnic.net.tw", "extend": "tw"}
+ZZ["台湾"] = {"_server": "whois.twnic.net.tw", "extend": "tw", "_test": "google.台湾"}
+ZZ["台灣"] = {"_server": "whois.twnic.net.tw", "extend": "tw", "_test": "google.台灣"}
 ZZ["手表"] = {"_privateRegistry": True}
 ZZ["手机"] = {"_server": "whois.nic.xn--kput3i", "extend": "xn--kput3i"}  # whois.nic.xn--kput3i ['xn--kput3i']
 ZZ["عمان"] = {"_server": "whois.registry.om", "extend": "om"}  # whois.registry.om ['om', 'xn--mgb9awbf']
