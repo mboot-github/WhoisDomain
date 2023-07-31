@@ -3,11 +3,17 @@ from typing import (
     Any,
 )
 
-def xStr(what:str, times: int = 1):
+def xStr(what:str, times: int = 1, firstMandatory: bool = True):
     # often we want to repeat regex patterns,
     # that becomes unreadable very fast.
     # allow for a simplification that expands on usage
-    return what * times
+    if times < 1:
+        return ""
+
+    if firstMandatory and what[-1] == "?":
+        return what[:-1] + (what * (times -1))
+    else:
+        return what * times
 
 """
     "name_servers": r"Name servers:
