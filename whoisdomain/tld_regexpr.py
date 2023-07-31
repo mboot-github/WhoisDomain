@@ -3,6 +3,30 @@ from typing import (
     Any,
 )
 
+def xStr(what:str, times: int = 1):
+    # often we want to repeat regex patterns,
+    # that becomes unreadable very fast.
+    # allow for a simplification that expands on usage
+    return what * times
+
+"""
+    "name_servers": r"Name servers:
+        (?:\n[ \t]+(\S+).*)?
+        (?:\n[ \t]+(\S+).*)?
+        (?:\n[ \t]+(\S+).*)?
+        (?:\n[ \t]+(\S+).*)?
+        (?:\n[ \t]+(\S+).*)?
+        (?:\n[ \t]+(\S+).*)?
+        (?:\n[ \t]+(\S+).*)?
+        (?:\n[ \t]+(\S+).*)?
+        (?:\n[ \t]+(\S+).*)?
+        (?:\n[ \t]+(\S+).*)?
+        \n\n",  # capture up to 10
+    can be replaced with:
+    "name_servers": r"Name servers:%s\n\n" % xStr(r'(?:\n[ \t]+(\S+).*)?', 10),  # capture up to 10
+    see co.uk
+"""
+
 # interesting:
 # https://github.com/rfc1036/whois/blob/next/tld_serv_list
 # https://github.com/rfc1036/whois/blob/next/new_gtlds_list
@@ -59,13 +83,15 @@ ZZ["co.uk"] = {
     "extend": "uk",
     "domain_name": r"Domain name:\s+(.+)",
     "registrar": r"Registrar:\s+(.+)",
-    "name_servers": r"Name servers:(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?\n\n",  # capture up to 10
+    # "name_servers": r"Name servers:(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?(?:\n[ \t]+(\S+).*)?\n\n",  # capture up to 10
+    # "name_servers": r"Name servers:%s\n\n" % xStr(r'(?:\n[ \t]+(\S+).*)?', 10),  # capture up to 10
     "status": r"Registration status:\s*(.+)",
     "creation_date": r"Registered on:(.+)",
     "expiration_date": r"Expiry date:(.+)",
     "updated_date": r"Last updated:(.+)",
     "owner": r"Domain Owner:\s+(.+)",
     "registrant": r"Registrant:\n\s+(.+)",  # example meta.co.uk has a registrar google.co.uk has not
+    "_test": "livedns.co.uk",
 }
 
 ZZ["org.uk"] = {"extend": "co.uk"}
@@ -863,7 +889,8 @@ ZZ["pl"] = {
     "updated_date": r"\nlast modified:\s*(.+)\n",
     "expiration_date": r"\noption expiration date:\s*(.+)\n",
     # ns: match up to 4
-    "name_servers": r"nameservers:(?:\s+(\S+)[^\n]*\n)(?:\s+(\S+)[^\n]*\n)?(?:\s+(\S+)[^\n]*\n)?(?:\s+(\S+)[^\n]*\n)?",
+    # "name_servers": r"nameservers:(?:\s+(\S+)[^\n]*\n)(?:\s+(\S+)[^\n]*\n)?(?:\s+(\S+)[^\n]*\n)?(?:\s+(\S+)[^\n]*\n)?",
+    "name_servers": r"nameservers:%s" % xStr('(?:\s+(\S+)[^\n]*\n)?', 4),
     "status": r"\nStatus:\n\s*(.+)",
 }
 
@@ -1114,7 +1141,8 @@ ZZ["uk"] = {
     "creation_date": r"Registered on:\s*(.+)",
     "expiration_date": r"Expiry date:\s*(.+)",
     "updated_date": r"Last updated:\s*(.+)",
-    "name_servers": r"Name Servers:\s*(\S+).*\r?\n(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?",
+    # "name_servers": r"Name Servers:\s*(\S+).*\r?\n(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?(?:[ \t]+(\S+).*\r?\n)?",
+    "name_servers": r"Name servers:%s\n\n" % xStr(r'(?:\n[ \t]+(\S+).*)?', 10),  # capture up to 10
     "status": r"Registration status:\n\s*(.+)",
 }
 
