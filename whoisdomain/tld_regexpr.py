@@ -4,9 +4,12 @@ from typing import (
 )
 
 def xStr(what:str, times: int = 1, firstMandatory: bool = True):
-    # often we want to repeat regex patterns,
+    # Often we want to repeat regex patterns,
+    # ( typically with nameservers or status fields )
     # that becomes unreadable very fast.
     # allow for a simplification that expands on usage
+    # and allow forcing the first to be mandatory
+    # as default but overridable when needed
     if times < 1:
         return ""
 
@@ -124,7 +127,8 @@ ZZ["am"] = {
     "creation_date": r"Registered:\s+(.+)",
     "expiration_date": r"Expires:\s+(.+)",
     "updated_date": r"Last modified:\s+(.+)",
-    "name_servers": r"DNS servers.*:\n(?:\s+(\S+)\n)(?:\s+(\S+)\n)?(?:\s+(\S+)\n)?(?:\s+(\S+)\n)\n?",
+    # "name_servers": r"DNS servers.*:\n(?:\s+(\S+)\n)(?:\s+(\S+)\n)?(?:\s+(\S+)\n)?(?:\s+(\S+)\n)\n?",
+    "name_servers": r"DNS servers.*:\n%s" % xStr(r'(?:\s+(\S+)\n)?', 4),
 }
 
 # Amsterdam
@@ -191,7 +195,9 @@ ZZ["ax"] = {
 
 ZZ["aw"] = {
     "extend": "nl",
-    "name_servers": r"Domain nameservers:\s+(\S+)[ \t]*\r?\n(?:\s+(\S+))?",
+    # "name_servers": r"Domain nameservers:\s+(\S+)[ \t]*\r?\n(?:\s+(\S+))?",
+    "name_servers": r"Domain nameservers.*:\n%s" % xStr(r'(?:\s+(\S+)\n)?', 4),
+
 }
 
 # Banking TLD - ICANN
@@ -789,16 +795,17 @@ ZZ["nl"] = {
     "expiration_date": None,
     "registrant_country": None,
     "domain_name": r"Domain name:\s?(.+)",
-    "name_servers": (
-        r"""(?x:
-            Domain\ nameservers:\s+(\S+)\r?\n # the first
-            (?:\s+(\S+)\r?\n)?  # a optional 2th
-            (?:\s+(\S+)\r?\n)?  # a optional 3th
-            (?:\s+(\S+)\r?\n)?  # a optional 4th
-            (?:\s+(\S+)\r?\n)?  # a optional 5th
-            # there may be more, best use host -t ns <domain> to get the actual nameservers
-        )"""
-    ),
+    "name_servers": r"Domain nameservers.*:\n%s" % xStr(r'(?:\s+(\S+)\n)?', 10),
+#    "name_servers": (
+#        r"""(?x:
+#            Domain\ nameservers:\s+(\S+)\r?\n # the first
+#            (?:\s+(\S+)\r?\n)?  # a optional 2th
+#            (?:\s+(\S+)\r?\n)?  # a optional 3th
+#            (?:\s+(\S+)\r?\n)?  # a optional 4th
+#            (?:\s+(\S+)\r?\n)?  # a optional 5th
+#            # there may be more, best use host -t ns <domain> to get the actual nameservers
+#        )"""
+#    ),
     # the format with [A] or [AAAA] is no longer in use
     #    "name_servers": (
     #        r"""(?x:
