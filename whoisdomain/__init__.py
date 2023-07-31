@@ -11,6 +11,7 @@ from typing import (
     Callable,
 )
 
+
 from ._1_query import (
     do_query,
 )
@@ -52,6 +53,14 @@ from .exceptions import (
 from .version import (
     VERSION,
 )
+
+TLD_LIB_PRESENT: bool = False
+try:
+    import tld as libTld
+
+    TLD_LIB_PRESENT = True
+except Exception as e:
+    _ = e  # ignore any error
 
 __all__ = [
     # from exceptions
@@ -218,7 +227,7 @@ def _doUnsupportedTldAnyway(
 
     # we will not hunt for possible valid first level domains as we have no actual feedback
 
-    whois_str = do_query(
+    whoisStr = do_query(
         dl=dl,
         slow_down=slow_down,
         ignore_returncode=ignore_returncode,
@@ -240,7 +249,7 @@ def _doUnsupportedTldAnyway(
 
     return Domain(
         data=data,
-        whois_str=whois_str,
+        whoisStr=whoisStr,
         verbose=verbose,
         include_raw_whois_text=include_raw_whois_text,
         return_raw_text_for_unsupported_tld=True,
@@ -267,7 +276,7 @@ def _doOneLookup(
 ) -> Optional[Domain]:
 
     try:
-        whois_str = do_query(
+        whoisStr = do_query(
             dl=dl,
             force=force,
             cache_file=cache_file,
@@ -285,7 +294,7 @@ def _doOneLookup(
         if simplistic:
             return Domain(
                 data={},
-                whois_str=None,
+                whoisStr=None,
                 verbose=verbose,
                 include_raw_whois_text=include_raw_whois_text,
                 exeptionStr=f"{e}",
@@ -296,13 +305,13 @@ def _doOneLookup(
     LastWhois["Try"].append(
         {
             "Domain": ".".join(dl),
-            "rawData": whois_str,
+            "rawData": whoisStr,
             "server": server,
         }
     )
 
     data = do_parse(
-        whois_str=whois_str,
+        whoisStr=whoisStr,
         tld=tld,
         dl=dl,
         verbose=verbose,
@@ -319,7 +328,7 @@ def _doOneLookup(
     if data and data["domain_name"][0]:
         return Domain(
             data=data,
-            whois_str=whois_str,
+            whoisStr=whoisStr,
             verbose=verbose,
             include_raw_whois_text=include_raw_whois_text,
         )
@@ -332,6 +341,42 @@ def _doOneLookup(
 def get_last_raw_whois_data() -> Dict[str, Any]:
     global LastWhois
     return LastWhois
+
+
+def cleanupUnsupportedTld(
+    domain: str,
+    verbose: bool = False,
+    internationalized: bool = False,
+    include_raw_whois_text: bool = False,
+    simplistic: bool = False,
+) -> Tuple[Optional[str], Optional[List[str]], Optional[Domain]]:
+
+    try:
+        tld, dl = _fromDomainStringToTld(  # may raise UnknownTld
+            domain,
+            internationalized,
+            verbose,
+        )
+
+        if tld is None:
+            return None, None, None
+
+        return tld, dl, None
+    except Exception as e:
+        if simplistic:
+            return (
+                None,
+                None,
+                Domain(
+                    data={},
+                    whoisStr=None,
+                    verbose=verbose,
+                    include_raw_whois_text=include_raw_whois_text,
+                    exeptionStr="UnknownTld",
+                ),
+            )
+
+        raise (e)
 
 
 def query(
@@ -386,6 +431,7 @@ def query(
     assert isinstance(domain, str), Exception("`domain` - must be <str>")
     return_raw_text_for_unsupported_tld = bool(return_raw_text_for_unsupported_tld)
 
+    # =================================================
     try:
         tld, dl = _fromDomainStringToTld(  # may raise UnknownTld
             domain,
@@ -399,7 +445,7 @@ def query(
         if simplistic:
             return Domain(
                 data={},
-                whois_str=None,
+                whoisStr=None,
                 verbose=verbose,
                 include_raw_whois_text=include_raw_whois_text,
                 exeptionStr="UnknownTld",
@@ -407,6 +453,7 @@ def query(
 
         raise (e)
 
+    # =================================================
     dl = cast(List[str], dl)
     if tld not in TLD_RE.keys():
         msg = _validateWeKnowTheToplevelDomain(tld, return_raw_text_for_unsupported_tld)
@@ -425,7 +472,7 @@ def query(
         if simplistic:
             return Domain(
                 data={},
-                whois_str=None,
+                whoisStr=None,
                 verbose=verbose,
                 include_raw_whois_text=include_raw_whois_text,
                 exeptionStr="UnknownTld",
@@ -433,18 +480,20 @@ def query(
 
         raise UnknownTld(msg)
 
+    # =================================================
     thisTld = cast(Dict[str, Any], TLD_RE.get(tld))
 
     if _verifyPrivateRegistry(thisTld, simplistic):  # may raise WhoisPrivateRegistry
         msg = "This tld has either no whois server or responds only with minimal information"
         return Domain(
             data={},
-            whois_str=None,
+            whoisStr=None,
             verbose=verbose,
             include_raw_whois_text=include_raw_whois_text,
             exeptionStr=msg,
         )
 
+    # =================================================
     server = _doServerHintsForThisTld(tld, thisTld, server, verbose)
 
     slow_down = slow_down or SLOW_DOWN

@@ -117,14 +117,14 @@ class Domain:
     def __init__(
         self,
         data: Dict[str, Any],
-        whois_str: Optional[str] = None,
+        whoisStr: Optional[str] = None,
         verbose: bool = False,
         include_raw_whois_text: bool = False,
         return_raw_text_for_unsupported_tld: bool = False,
         exeptionStr: Optional[str] = None,
     ):
-        if include_raw_whois_text and whois_str is not None:
-            self.text = whois_str
+        if include_raw_whois_text and whoisStr is not None:
+            self.text = whoisStr
 
         if exeptionStr is not None:
             self._exception = exeptionStr
