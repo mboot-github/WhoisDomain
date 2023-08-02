@@ -1,16 +1,13 @@
 #! /usr/bin/env python3
 
-# import time
 import sys
 import os
 import json
 
 
 from typing import (
-    # Dict,
     Optional,
     Tuple,
-    # TypeVar,
 )
 
 from .simpleCacheBase import (
@@ -75,7 +72,10 @@ class SimpleCacheWithFile(SimpleCacheBase):
         self._cacheFileLoad()
         return super().cacheGet(keyString=keyString)
 
-    def cacheExpired(self, keyString: str) -> Optional[bool]:
+    def cacheExpired(
+        self,
+        keyString: str,
+    ) -> Optional[bool]:
         if keyString not in self.memCache:
             self.cacheGet(keyString=keyString)
 

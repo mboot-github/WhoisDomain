@@ -216,3 +216,6 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * 1.20230718.3 fix typo in whois server hint for tld: ru
   * 1.20230720.1 add gov.tr; switch off status:available and status:free as None response, we should not interprete the result by default (we can add a option later)
   * 1.20230720.2 fix server hints for derived second level "xxx.tr", add processing "_test" hints during 'test2.py -a'
+  * add external caching framework that can be overridden for use of your own caching implementation
+  * renaming various vars to mak them more verbose
+  * preparing for capturing all parameters in one object and parring that object around instead of many arguments in methods/functions

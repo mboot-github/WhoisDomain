@@ -3,15 +3,11 @@
 import time
 import sys
 
-# import os
-# import json
-
 
 from typing import (
     Dict,
     Optional,
     Tuple,
-    # TypeVar,
 )
 
 
@@ -29,7 +25,11 @@ class SimpleCacheBase:
         self.memCache = {}
         self.cacheMaxAge = cacheMaxAge
 
-    def cachePut(self, keyString: str, data: str) -> None:
+    def cachePut(
+        self,
+        keyString: str,
+        data: str,
+    ) -> None:
         if self.verbose:
             print(f"cachePut: {keyString}", file=sys.stderr)
 
@@ -39,13 +39,19 @@ class SimpleCacheBase:
             data,
         )
 
-    def cacheGet(self, keyString: str) -> Optional[Tuple[float, str]]:
+    def cacheGet(
+        self,
+        keyString: str,
+    ) -> Optional[Tuple[float, str]]:
         if self.verbose:
             print(f"cacheGet: {keyString}", file=sys.stderr)
 
         return self.memCache.get(keyString)
 
-    def cacheExpired(self, keyString: str) -> Optional[bool]:
+    def cacheExpired(
+        self,
+        keyString: str,
+    ) -> Optional[bool]:
         if self.verbose:
             print(f"cacheExpired: {keyString}", file=sys.stderr)
 
@@ -55,9 +61,6 @@ class SimpleCacheBase:
 
         hasExpired = cData[0] < (time.time() - self.cacheMaxAge)
         return hasExpired
-
-
-# CacheBased = TypeVar("CacheBased", bound=CacheBase)
 
 
 if __name__ == "__main__":
