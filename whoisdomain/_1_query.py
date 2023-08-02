@@ -30,7 +30,7 @@ if not IS_WINDOWS and shutil.which("stdbuf"):
 # actually also whois uses cache, so if you really dont want to use cache
 # you should also pass the --force-lookup flag (on linux)
 
-SCWF: Any = None
+CACHE_STUB: Any = None
 
 
 def _testWhoisPythonFromStaticTestData(
@@ -198,22 +198,22 @@ def do_query(
     wh: str = "whois",
     simplistic: bool = False,
 ) -> str:
-    global SCWF
+    global CACHE_STUB
 
-    # here you can override caching, if someone else already defined SCWF by this time, we use their caching
-    if SCWF is None:
-        SCWF = SimpleCacheWithFile(
+    # here you can override caching, if someone else already defined CACHE_STUB by this time, we use their caching
+    if CACHE_STUB is None:
+        CACHE_STUB = SimpleCacheWithFile(
             verbose=verbose,
             cacheFilePath=cache_file,
             cacheMaxAge=cache_age,
         )
 
-    # allways test SCWF is a subclass of SimpleCacheBase
-    isinstance(SCWF, SimpleCacheBase)
+    # allways test CACHE_STUB is a subclass of SimpleCacheBase
+    isinstance(CACHE_STUB, SimpleCacheBase)
 
     keyString = ".".join(dList)
 
-    cData: Optional[Tuple[float, str]] = SCWF.cacheGet(keyString)
+    cData: Optional[Tuple[float, str]] = CACHE_STUB.cacheGet(keyString)
     oldData: str = ""
 
     needFreshData: Optional[bool] = False
@@ -223,7 +223,7 @@ def do_query(
     if cData is None:
         needFreshData = True
     else:
-        needFreshData = SCWF.cacheExpired(keyString)
+        needFreshData = CACHE_STUB.cacheExpired(keyString)
         oldData = cData[1]
 
     if needFreshData is False:
@@ -245,6 +245,6 @@ def do_query(
     )
 
     # populate a fresh cache entry and save if needed
-    SCWF.cachePut(keyString, newData)
+    CACHE_STUB.cachePut(keyString, newData)
 
     return newData
