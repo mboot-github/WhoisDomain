@@ -130,10 +130,7 @@ def _result2dict(func: Any) -> Any:
 
 def _fromDomainStringToTld(
     domain: str,
-    # internationalized: bool,
-    # verbose: bool = False,
-    # simplistic: bool = False,
-    pc: Optional[ParameterContext] = None,
+    pc: ParameterContext,
 ) -> Tuple[Optional[str], Optional[List[str]]]:
     domain = domain.lower().strip().rstrip(".")  # Remove the trailing dot to support FQDN.
 
@@ -162,11 +159,10 @@ def _fromDomainStringToTld(
 
 def _validateWeKnowTheToplevelDomain(
     tldString: str,
-    return_raw_text_for_unsupported_tld: bool = False,
-    pc: Optional[ParameterContext] = None,
+    pc: ParameterContext,
 ) -> Optional[str]:
     # may raise UnknownTld
-    if return_raw_text_for_unsupported_tld:
+    if pc.return_raw_text_for_unsupported_tld:
         # we dont raise we return None so we can handle unsupported domains anyway
         return None
 
@@ -178,13 +174,12 @@ def _validateWeKnowTheToplevelDomain(
 
 def _verifyPrivateRegistry(
     thisTld: Dict[str, Any],
-    simplistic: bool = False,
-    pc: Optional[ParameterContext] = None,
+    pc: ParameterContext,
 ) -> bool:
     # may raise WhoisPrivateRegistry
     # signal we know the tld but it has no whos or does not respond with any information
     if thisTld.get("_privateRegistry"):
-        if simplistic is False:
+        if pc.simplistic is False:
             msg = "WhoisPrivateRegistry"
             raise WhoisPrivateRegistry(msg)
         return True
@@ -194,59 +189,51 @@ def _verifyPrivateRegistry(
 def _doServerHintsForThisTld(
     tldString: str,
     thisTld: Dict[str, Any],
-    server: Optional[str],
-    verbose: bool = False,
-    pc: Optional[ParameterContext] = None,
+    pc: ParameterContext,
 ) -> Optional[str]:
     # note _server hints currently are not passes down when using "extend", that may have been my error during the initial implementation
     # allow server hints using "_server" from the tld_regexpr.py file
     thisTldServer = thisTld.get("_server")
-    if server is None and thisTldServer:
-        server = thisTldServer
-        if verbose:
-            print(f"using _server hint {server} for tld: {tldString}", file=sys.stderr)
-    return server
+    if pc.server is None and thisTldServer:
+        pc.server = thisTldServer
+        if pc.verbose:
+            print(f"using _server hint {pc.server} for tld: {tldString}", file=sys.stderr)
+        return str(pc.server)
+    return None
 
 
 def _doSlowdownHintForThisTld(
     tldString: str,
     thisTld: Dict[str, Any],
-    slow_down: int,
-    verbose: bool = False,
-    pc: Optional[ParameterContext] = None,
+    pc: ParameterContext,
 ) -> int:
     # allow a configrable slowdown for some tld's
     slowDown = thisTld.get("_slowdown")
-    if slow_down == 0 and slowDown and slowDown > 0:
-        slow_down = slowDown
-        if verbose:
-            print(f"using _slowdown hint {slowDown} for tld: {tldString}", file=sys.stderr)
-    return slow_down
+    if slowDown:
+        if pc.slow_down == 0 and slowDown > 0:
+            pc.slow_down = slowDown
+            if pc.verbose:
+                print(f"using _slowdown hint {slowDown} for tld: {tldString}", file=sys.stderr)
+    return int(pc.slow_down)
 
 
 def _doUnsupportedTldAnyway(
     tldString: str,
     dList: List[str],
-    ignore_returncode: bool = False,
-    slow_down: int = 0,
-    server: Optional[str] = None,
-    verbose: bool = False,
-    wh: str = "whois",
-    simplistic: bool = False,
-    pc: Optional[ParameterContext] = None,
+    pc: ParameterContext,
 ) -> Optional[Domain]:
-    include_raw_whois_text = True
+    pc.include_raw_whois_text = True
 
     # we will not hunt for possible valid first level domains as we have no actual feedback
 
     whoisStr = do_query(
         dList=dList,
-        slow_down=slow_down,
-        ignore_returncode=ignore_returncode,
-        server=server,
-        verbose=verbose,
-        wh=wh,
-        simplistic=simplistic,
+        slow_down=pc.slow_down,
+        ignore_returncode=pc.ignore_returncode,
+        server=pc.server,
+        verbose=pc.verbose,
+        wh=pc.cmd,
+        simplistic=pc.simplistic,
     )
 
     # we will only return minimal data
@@ -256,14 +243,14 @@ def _doUnsupportedTldAnyway(
     }
     data["domain_name"] = [".".join(dList)]  # note the fields are default all array, except tld
 
-    if verbose:
+    if pc.verbose:
         print(data, file=sys.stderr)
 
     return Domain(
         data=data,
         whoisStr=whoisStr,
-        verbose=verbose,
-        include_raw_whois_text=include_raw_whois_text,
+        verbose=pc.verbose,
+        include_raw_whois_text=pc.include_raw_whois_text,
         return_raw_text_for_unsupported_tld=True,
     )
 
@@ -271,45 +258,31 @@ def _doUnsupportedTldAnyway(
 def _doOneLookup(
     tldString: str,
     dList: List[str],
-    force: bool = False,
-    cache_file: Optional[str] = None,
-    cache_age: int = 60 * 60 * 48,
-    slow_down: int = 0,
-    ignore_returncode: bool = False,
-    server: Optional[str] = None,
-    verbose: bool = False,
-    with_cleanup_results: bool = False,
-    include_raw_whois_text: bool = False,
-    timeout: Optional[float] = None,
-    parse_partial_response: bool = False,
-    wh: str = "whois",
-    simplistic: bool = False,
-    withRedacted: bool = False,
-    pc: Optional[ParameterContext] = None,
+    pc: ParameterContext,
 ) -> Optional[Domain]:
 
     try:
         whoisStr = do_query(
             dList=dList,
-            force=force,
-            cache_file=cache_file,
-            cache_age=cache_age,
-            slow_down=slow_down,
-            ignore_returncode=ignore_returncode,
-            server=server,
-            verbose=verbose,
-            timeout=timeout,
-            parse_partial_response=parse_partial_response,
-            wh=wh,
-            simplistic=simplistic,
+            force=pc.force,
+            cache_file=pc.cache_file,
+            cache_age=pc.cache_age,
+            slow_down=pc.slow_down,
+            ignore_returncode=pc.ignore_returncode,
+            server=pc.server,
+            verbose=pc.verbose,
+            timeout=pc.timeout,
+            parse_partial_response=pc.parse_partial_response,
+            wh=pc.cmd,
+            simplistic=pc.simplistic,
         )
     except Exception as e:
-        if simplistic:
+        if pc.simplistic:
             return Domain(
                 data={},
                 whoisStr=None,
-                verbose=verbose,
-                include_raw_whois_text=include_raw_whois_text,
+                verbose=pc.verbose,
+                include_raw_whois_text=pc.include_raw_whois_text,
                 exeptionStr=f"{e}",
             )
 
@@ -319,7 +292,7 @@ def _doOneLookup(
         {
             "Domain": ".".join(dList),
             "rawData": whoisStr,
-            "server": server,
+            "server": pc.server,
         }
     )
 
@@ -327,11 +300,11 @@ def _doOneLookup(
         whoisStr=whoisStr,
         tldString=tldString,
         dList=dList,
-        verbose=verbose,
-        with_cleanup_results=with_cleanup_results,
-        simplistic=simplistic,
-        include_raw_whois_text=include_raw_whois_text,
-        withRedacted=withRedacted,
+        verbose=pc.verbose,
+        with_cleanup_results=pc.with_cleanup_results,
+        simplistic=pc.simplistic,
+        include_raw_whois_text=pc.include_raw_whois_text,
+        withRedacted=pc.withRedacted,
     )
 
     if isinstance(data, Domain):
@@ -342,55 +315,15 @@ def _doOneLookup(
         return Domain(
             data=data,
             whoisStr=whoisStr,
-            verbose=verbose,
-            include_raw_whois_text=include_raw_whois_text,
+            verbose=pc.verbose,
+            include_raw_whois_text=pc.include_raw_whois_text,
         )
     return None
-
-
-# PUBLIC
 
 
 def get_last_raw_whois_data() -> Dict[str, Any]:
     global LastWhois
     return LastWhois
-
-
-def cleanupUnsupportedTld(
-    domain: str,
-    verbose: bool = False,
-    internationalized: bool = False,
-    include_raw_whois_text: bool = False,
-    simplistic: bool = False,
-    pc: Optional[ParameterContext] = None,
-) -> Tuple[Optional[str], Optional[List[str]], Optional[Domain]]:
-
-    try:
-        tldString, dList = _fromDomainStringToTld(  # may raise UnknownTld
-            domain,
-            # internationalized,
-            # verbose,
-        )
-
-        if tldString is None:
-            return None, None, None
-
-        return tldString, dList, None
-    except Exception as e:
-        if simplistic:
-            return (
-                None,
-                None,
-                Domain(
-                    data={},
-                    whoisStr=None,
-                    verbose=verbose,
-                    include_raw_whois_text=include_raw_whois_text,
-                    exeptionStr="UnknownTld",
-                ),
-            )
-
-        raise (e)
 
 
 def query(
@@ -459,7 +392,7 @@ def query(
     global LastWhois
     LastWhois["Try"] = []  # init on start of query
 
-    wh: str = cmd  # make it compatible with python-whois-extended
+    # wh: str = cmd  # make it compatible with python-whois-extended
 
     assert isinstance(domain, str), Exception("`domain` - must be <str>")
     return_raw_text_for_unsupported_tld = bool(return_raw_text_for_unsupported_tld)
@@ -468,15 +401,13 @@ def query(
     try:
         tldString, dList = _fromDomainStringToTld(  # may raise UnknownTld
             domain,
-            # internationalized,
-            # verbose,
             pc=pc,
         )
 
         if tldString is None:
             return None
     except Exception as e:
-        if simplistic:
+        if pc.simplistic:
             return Domain(
                 data={},
                 whoisStr=None,
@@ -492,7 +423,6 @@ def query(
     if tldString not in TLD_RE.keys():
         msg = _validateWeKnowTheToplevelDomain(
             tldString=tldString,
-            return_raw_text_for_unsupported_tld=return_raw_text_for_unsupported_tld,
             pc=pc,
         )
 
@@ -500,15 +430,9 @@ def query(
             return _doUnsupportedTldAnyway(
                 tldString=tldString,
                 dList=dList,
-                ignore_returncode=ignore_returncode,
-                slow_down=slow_down,
-                server=server,
-                verbose=verbose,
-                wh=wh,
-                simplistic=simplistic,
                 pc=pc,
             )
-        if simplistic:
+        if pc.simplistic:
             return Domain(
                 data={},
                 whoisStr=None,
@@ -524,7 +448,6 @@ def query(
 
     if _verifyPrivateRegistry(
         thisTld=thisTld,
-        simplistic=simplistic,
         pc=pc,
     ):  # may raise WhoisPrivateRegistry
         msg = "This tld has either no whois server or responds only with minimal information"
@@ -537,20 +460,16 @@ def query(
         )
 
     # =================================================
-    server = _doServerHintsForThisTld(
+    pc.server = _doServerHintsForThisTld(
         tldString=tldString,
         thisTld=thisTld,
-        server=server,
-        verbose=verbose,
         pc=pc,
     )
 
-    slow_down = slow_down or SLOW_DOWN
-    slow_down = _doSlowdownHintForThisTld(
+    pc.slow_down = pc.slow_down or SLOW_DOWN
+    pc.slow_down = _doSlowdownHintForThisTld(
         tldString=tldString,
         thisTld=thisTld,
-        slow_down=slow_down,
-        verbose=verbose,
         pc=pc,
     )
 
@@ -565,20 +484,6 @@ def query(
         result = _doOneLookup(
             tldString=tldString,
             dList=dList,
-            force=force,
-            cache_file=cache_file,
-            cache_age=cache_age,
-            slow_down=slow_down,
-            ignore_returncode=ignore_returncode,
-            server=server,
-            verbose=verbose,
-            with_cleanup_results=with_cleanup_results,
-            include_raw_whois_text=include_raw_whois_text,
-            timeout=timeout,
-            parse_partial_response=parse_partial_response,
-            wh=wh,
-            simplistic=simplistic,
-            withRedacted=withRedacted,
             pc=pc,
         )
         if result:
