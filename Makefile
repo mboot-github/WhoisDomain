@@ -141,6 +141,10 @@ suggest:
 	( cd analizer; ./investigateTld.py ) | tee out
 
 # black pylama and mypy on the source directory
+format:
+	./bin/reformat-code.sh
+
+# black pylama and mypy on the source directory
 reformat:
 	./bin/reformat-code.sh
 

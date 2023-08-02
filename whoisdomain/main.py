@@ -224,6 +224,8 @@ def testItem(
         timeout=timeout,
         simplistic=SIMPLISTIC,
         withRedacted=WithRedacted,
+        # cache_file="/tmp/testCache.json",  # temp test
+        # cache_age=300,  # temp test
     )
 
     if w is None:

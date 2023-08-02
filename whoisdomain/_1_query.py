@@ -10,13 +10,15 @@ from .exceptions import (
     WhoisCommandTimeout,
 )
 
-from .cacheSimple import CacheSimpleWithFile
+from .simpleCacheBase import SimpleCacheBase
+from .simpleCacheWithFile import SimpleCacheWithFile
 
 from typing import (
     # Dict,
     List,
     Optional,
     Tuple,
+    Any,
 )
 
 IS_WINDOWS: bool = platform.system() == "Windows"
@@ -25,7 +27,10 @@ STDBUF_OFF_CMD: List[str] = []
 if not IS_WINDOWS and shutil.which("stdbuf"):
     STDBUF_OFF_CMD = ["stdbuf", "-o0"]
 
-CSWF: CacheSimpleWithFile = CacheSimpleWithFile(verbose=False)
+# actually also whois uses cache, so if you really dont want to use cache
+# you should also pass the --force-lookup flag (on linux)
+
+SCWF: Any = None
 
 
 def _testWhoisPythonFromStaticTestData(
@@ -193,25 +198,32 @@ def do_query(
     wh: str = "whois",
     simplistic: bool = False,
 ) -> str:
-    # actually also whois uses cache, so if you really dont want to use cache
-    # you should also pass the --force-lookup flag (on linux)
+    global SCWF
+
+    # here you can override caching, if someone else already defined SCWF by this time, we use their caching
+    if SCWF is None:
+        SCWF = SimpleCacheWithFile(
+            verbose=verbose,
+            cacheFilePath=cache_file,
+            cacheMaxAge=cache_age,
+        )
+
+    # allways test SCWF is a subclass of SimpleCacheBase
+    isinstance(SCWF, SimpleCacheBase)
 
     keyString = ".".join(dList)
 
-    if cache_file:
-        CSWF.cacheFileLoad(cache_file)
-
-    cData: Optional[Tuple[float, str]] = CSWF.cacheGet(keyString)
+    cData: Optional[Tuple[float, str]] = SCWF.cacheGet(keyString)
     oldData: str = ""
 
-    needFreshData: bool = False
+    needFreshData: Optional[bool] = False
     if force is True:
         needFreshData = True
 
     if cData is None:
         needFreshData = True
     else:
-        needFreshData = cData[0] < (time.time() - cache_age)
+        needFreshData = SCWF.cacheExpired(keyString)
         oldData = cData[1]
 
     if needFreshData is False:
@@ -233,8 +245,6 @@ def do_query(
     )
 
     # populate a fresh cache entry and save if needed
-    CSWF.cachePut(keyString, newData)
-    if cache_file:
-        CSWF.cacheFileSave(cache_file)
+    SCWF.cachePut(keyString, newData)
 
     return newData
