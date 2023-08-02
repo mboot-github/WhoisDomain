@@ -81,6 +81,19 @@ class SimpleCacheWithFile(SimpleCacheBase):
 
         return super().cacheExpired(keyString=keyString)
 
+    def cacheGetData(
+        self,
+        keyString: str,
+    ) -> Optional[str]:
+        if self.verbose:
+            print(f"cacheGetData: {keyString}", file=sys.stderr)
+
+        tData: Optional[Tuple[float, str]] = self.cacheGet(keyString)
+        if tData is None:
+            return None
+
+        return tData[1]
+
 
 if __name__ == "__main__":
     pass

@@ -17,7 +17,7 @@ from typing import (
     # Dict,
     List,
     Optional,
-    Tuple,
+    # Tuple,
     Any,
 )
 
@@ -213,24 +213,25 @@ def do_query(
 
     keyString = ".".join(dList)
 
-    cData: Optional[Tuple[float, str]] = CACHE_STUB.cacheGet(keyString)
-    oldData: str = ""
+    oldData: Optional[str] = CACHE_STUB.cacheGetData(keyString)
 
-    needFreshData: Optional[bool] = False
+    needFreshData: bool = False
+
     if force is True:
         needFreshData = True
 
-    if cData is None:
+    if oldData is None:
         needFreshData = True
-    else:
-        needFreshData = CACHE_STUB.cacheExpired(keyString)
-        oldData = cData[1]
+
+    hasExpired: Optional[bool] = CACHE_STUB.cacheExpired(keyString)
+    if hasExpired is None:
+        needFreshData = True
+
+    if hasExpired is True:
+        needFreshData = True
 
     if needFreshData is False:
-        return oldData
-
-    if verbose and force:
-        print(f"force = {force}", file=sys.stderr)
+        return str(oldData)
 
     newData: str = _do_whois_query(
         dList=dList,

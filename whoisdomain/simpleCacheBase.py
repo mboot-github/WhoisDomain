@@ -48,6 +48,19 @@ class SimpleCacheBase:
 
         return self.memCache.get(keyString)
 
+    def cacheGetData(
+        self,
+        keyString: str,
+    ) -> Optional[str]:
+        if self.verbose:
+            print(f"cacheGetData: {keyString}", file=sys.stderr)
+
+        tData: Optional[Tuple[float, str]] = self.cacheGet(keyString)
+        if tData is None:
+            return None
+
+        return tData[1]
+
     def cacheExpired(
         self,
         keyString: str,
