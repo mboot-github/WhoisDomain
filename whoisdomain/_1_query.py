@@ -209,7 +209,7 @@ def do_query(
         )
 
     # allways test CACHE_STUB is a subclass of SimpleCacheBase
-    isinstance(CACHE_STUB, SimpleCacheBase)
+    assert isinstance(CACHE_STUB, SimpleCacheBase), Exception("CACHE_STUB - must inherit from SimpleCacheBase")
 
     keyString = ".".join(dList)
 

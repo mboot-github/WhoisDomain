@@ -392,8 +392,6 @@ def query(
     global LastWhois
     LastWhois["Try"] = []  # init on start of query
 
-    # wh: str = cmd  # make it compatible with python-whois-extended
-
     assert isinstance(domain, str), Exception("`domain` - must be <str>")
     return_raw_text_for_unsupported_tld = bool(return_raw_text_for_unsupported_tld)
 
@@ -403,9 +401,9 @@ def query(
             domain,
             pc=pc,
         )
-
         if tldString is None:
             return None
+
     except Exception as e:
         if pc.simplistic:
             return Domain(
@@ -478,7 +476,7 @@ def query(
     # so xxx.yyy.zzz will try both xxx.yyy.zzz and yyy.zzz
     # but if the tld is yyy.zzz we should only try xxx.yyy.zzz
 
-    cache_file = cache_file or CACHE_FILE
+    pc.cache_file = pc.cache_file or CACHE_FILE
     tldLevel = tldString.split(".")
     while 1:
         result = _doOneLookup(
