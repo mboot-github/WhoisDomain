@@ -530,7 +530,7 @@ def main() -> None:
     global SIMPLISTIC
     global WithRedacted
     global TestAllTld
-
+    global TestRunOnly
     name: str = os.path.basename(sys.argv[0])
     if name == "test2.py":
         SIMPLISTIC = False

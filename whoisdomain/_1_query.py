@@ -3,46 +3,29 @@ import time
 import sys
 import os
 import platform
-import json
 import shutil
-from .exceptions import WhoisCommandFailed, WhoisCommandTimeout
 
-from typing import Dict, List, Optional, Tuple
+from .exceptions import (
+    WhoisCommandFailed,
+    WhoisCommandTimeout,
+)
 
+from .cacheSimple import CacheSimpleWithFile
 
-# PYTHON_VERSION = sys.version_info[0]
-CACHE: Dict[str, Tuple[int, str]] = {}
-CACHE_MAX_AGE = 60 * 60 * 48  # 48h
+from typing import (
+    # Dict,
+    List,
+    Optional,
+    Tuple,
+)
 
-IS_WINDOWS = platform.system() == "Windows"
+IS_WINDOWS: bool = platform.system() == "Windows"
 
+STDBUF_OFF_CMD: List[str] = []
 if not IS_WINDOWS and shutil.which("stdbuf"):
     STDBUF_OFF_CMD = ["stdbuf", "-o0"]
-else:
-    STDBUF_OFF_CMD = []
 
-
-def _cache_load(cf: str) -> None:
-    if not os.path.isfile(cf):
-        return
-
-    global CACHE
-    f = open(cf, "r")
-
-    try:
-        CACHE = json.load(f)
-    except Exception as e:
-        print(f"ignore lson load err: {e}", file=sys.stderr)
-
-    f.close()
-
-
-def _cache_save(cf: str) -> None:
-    global CACHE
-
-    f = open(cf, "w")
-    json.dump(CACHE, f)
-    f.close()
+CSWF: CacheSimpleWithFile = CacheSimpleWithFile(verbose=False)
 
 
 def _testWhoisPythonFromStaticTestData(
@@ -133,6 +116,7 @@ def _do_whois_query(
     parse_partial_response: bool = False,
     wh: str = "whois",
     simplistic: bool = False,
+    slow_down: int = 0,
 ) -> str:
     # if getenv[TEST_WHOIS_PYTON] fake whois by reading static data from a file
     # this wasy we can actually implemnt a test run with known data in and expected data out
@@ -147,6 +131,10 @@ def _do_whois_query(
     )
     if verbose:
         print(cmd, wh, file=sys.stderr)
+
+    if slow_down:
+        # slow down before so we can force individual domains at a slower tempo
+        time.sleep(slow_down)
 
     # LANG=en is added to make the ".jp" output consist across all environments
     p = subprocess.Popen(
@@ -190,12 +178,12 @@ def _do_whois_query(
 
 # PUBLIC
 
-
+# future: use decorator for caching
 def do_query(
     dList: List[str],
     force: bool = False,
     cache_file: Optional[str] = None,
-    cache_age: int = CACHE_MAX_AGE,
+    cache_age: int = 60 * 60 * 48,
     slow_down: int = 0,
     ignore_returncode: bool = False,
     server: Optional[str] = None,
@@ -205,39 +193,48 @@ def do_query(
     wh: str = "whois",
     simplistic: bool = False,
 ) -> str:
-    k = ".".join(dList)
-
-    if cache_file:
-        if verbose:
-            print(f"using cache file: {cache_file}", file=sys.stderr)
-        _cache_load(cache_file)
-
     # actually also whois uses cache, so if you really dont want to use cache
     # you should also pass the --force-lookup flag (on linux)
-    if force or k not in CACHE or CACHE[k][0] < time.time() - cache_age:
-        if verbose:
-            print(f"force = {force}", file=sys.stderr)
 
-        # slow down before so we can force individual domains at a slower tempo
-        if slow_down:
-            time.sleep(slow_down)
+    keyString = ".".join(dList)
 
-        # populate a fresh cache entry
-        CACHE[k] = (
-            int(time.time()),
-            _do_whois_query(
-                dList=dList,
-                ignore_returncode=ignore_returncode,
-                server=server,
-                verbose=verbose,
-                timeout=timeout,
-                parse_partial_response=parse_partial_response,
-                wh=wh,
-                simplistic=simplistic,
-            ),
-        )
+    if cache_file:
+        CSWF.cacheFileLoad(cache_file)
 
-        if cache_file:
-            _cache_save(cache_file)
+    cData: Optional[Tuple[float, str]] = CSWF.cacheGet(keyString)
+    oldData: str = ""
 
-    return CACHE[k][1]
+    needFreshData: bool = False
+    if force is True:
+        needFreshData = True
+
+    if cData is None:
+        needFreshData = True
+    else:
+        needFreshData = cData[0] < (time.time() - cache_age)
+        oldData = cData[1]
+
+    if needFreshData is False:
+        return oldData
+
+    if verbose and force:
+        print(f"force = {force}", file=sys.stderr)
+
+    newData: str = _do_whois_query(
+        dList=dList,
+        ignore_returncode=ignore_returncode,
+        server=server,
+        verbose=verbose,
+        timeout=timeout,
+        parse_partial_response=parse_partial_response,
+        wh=wh,
+        simplistic=simplistic,
+        slow_down=slow_down,
+    )
+
+    # populate a fresh cache entry and save if needed
+    CSWF.cachePut(keyString, newData)
+    if cache_file:
+        CSWF.cacheFileSave(cache_file)
+
+    return newData
