@@ -44,6 +44,16 @@ NONESTRINGS: List[str] = [
     "this domain is currently available",
 ]
 
+
+def NoneStrings() -> List[str]:
+    return NONESTRINGS
+
+
+def NoneStringsAdd(aString: str) -> None:
+    if aString and isinstance(aString, str) and len(aString) > 0:
+        NONESTRINGS.append(aString)
+
+
 QUOTASTRINGS: List[str] = [
     "limit exceeded",
     "quota exceeded",
@@ -55,6 +65,15 @@ QUOTASTRINGS: List[str] = [
     "queried interval is too short",
     "number of allowed queries exceeded",
 ]
+
+
+def QuotaStrings() -> List[str]:
+    return QUOTASTRINGS
+
+
+def QuotaStringsAdd(aString: str) -> None:
+    if aString and isinstance(aString, str) and len(aString) > 0:
+        NONESTRINGS.append(aString)
 
 
 def _handleShortResponse(
@@ -283,24 +302,6 @@ def cleanupWhoisResponse(
         tmp2.append(line.strip("\r"))
 
     return "\n".join(tmp2)
-
-
-def NoneStrings() -> List[str]:
-    return NONESTRINGS
-
-
-def NoneStringsAdd(aString: str) -> None:
-    if aString and isinstance(aString, str) and len(aString) > 0:
-        NONESTRINGS.append(aString)
-
-
-def QuotaStrings() -> List[str]:
-    return QUOTASTRINGS
-
-
-def QuotaStringsAdd(aString: str) -> None:
-    if aString and isinstance(aString, str) and len(aString) > 0:
-        NONESTRINGS.append(aString)
 
 
 def do_parse(

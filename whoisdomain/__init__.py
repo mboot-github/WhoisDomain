@@ -14,6 +14,7 @@ from typing import (
 
 from ._1_query import (
     do_query,
+    CACHE_STUB,
 )
 
 from ._2_parse import (
@@ -54,6 +55,8 @@ from .version import (
     VERSION,
 )
 
+from .parameterContext import ParameterContext
+
 TLD_LIB_PRESENT: bool = False
 try:
     import tld as libTld
@@ -79,14 +82,16 @@ __all__ = [
     # from this file
     "get_last_raw_whois_data",
     "getVersion",
+    "getTestHint",
     "query",
+    # from query
+    "CACHE_STUB",
     # from parse
     "NoneStrings",
     "NoneStringsAdd",
     "QuotaStrings",
     "QuotaStringsAdd",
     "cleanupWhoisResponse",
-    "getTestHint",
 ]
 
 WHOISDOMAIN: str = ""
@@ -125,14 +130,15 @@ def _result2dict(func: Any) -> Any:
 
 def _fromDomainStringToTld(
     domain: str,
-    internationalized: bool,
-    verbose: bool = False,
-    simplistic: bool = False,
+    # internationalized: bool,
+    # verbose: bool = False,
+    # simplistic: bool = False,
+    pc: Optional[ParameterContext] = None,
 ) -> Tuple[Optional[str], Optional[List[str]]]:
     domain = domain.lower().strip().rstrip(".")  # Remove the trailing dot to support FQDN.
 
     dList: List[str] = domain.split(".")
-    if verbose:
+    if pc.verbose:
         print(dList, file=sys.stderr)
 
     if dList[0] == "www":
@@ -141,14 +147,14 @@ def _fromDomainStringToTld(
     if len(dList) == 1:
         return None, None
 
-    tldString: str = filterTldToSupportedPattern(domain, dList, verbose)  # may raise UnknownTld
-    if verbose:
+    tldString: str = filterTldToSupportedPattern(domain, dList, pc.verbose)  # may raise UnknownTld
+    if pc.verbose:
         print(f"filterTldToSupportedPattern returns tld: {tldString}", file=sys.stderr)
 
-    if internationalized and isinstance(internationalized, bool):
+    if pc.internationalized and isinstance(pc.internationalized, bool):
         dList = _internationalizedDomainNameToPunyCode(dList)
 
-    if verbose:
+    if pc.verbose:
         print(tldString, dList, file=sys.stderr)
 
     return tldString, dList
@@ -157,6 +163,7 @@ def _fromDomainStringToTld(
 def _validateWeKnowTheToplevelDomain(
     tldString: str,
     return_raw_text_for_unsupported_tld: bool = False,
+    pc: Optional[ParameterContext] = None,
 ) -> Optional[str]:
     # may raise UnknownTld
     if return_raw_text_for_unsupported_tld:
@@ -172,6 +179,7 @@ def _validateWeKnowTheToplevelDomain(
 def _verifyPrivateRegistry(
     thisTld: Dict[str, Any],
     simplistic: bool = False,
+    pc: Optional[ParameterContext] = None,
 ) -> bool:
     # may raise WhoisPrivateRegistry
     # signal we know the tld but it has no whos or does not respond with any information
@@ -188,6 +196,7 @@ def _doServerHintsForThisTld(
     thisTld: Dict[str, Any],
     server: Optional[str],
     verbose: bool = False,
+    pc: Optional[ParameterContext] = None,
 ) -> Optional[str]:
     # note _server hints currently are not passes down when using "extend", that may have been my error during the initial implementation
     # allow server hints using "_server" from the tld_regexpr.py file
@@ -204,6 +213,7 @@ def _doSlowdownHintForThisTld(
     thisTld: Dict[str, Any],
     slow_down: int,
     verbose: bool = False,
+    pc: Optional[ParameterContext] = None,
 ) -> int:
     # allow a configrable slowdown for some tld's
     slowDown = thisTld.get("_slowdown")
@@ -223,6 +233,7 @@ def _doUnsupportedTldAnyway(
     verbose: bool = False,
     wh: str = "whois",
     simplistic: bool = False,
+    pc: Optional[ParameterContext] = None,
 ) -> Optional[Domain]:
     include_raw_whois_text = True
 
@@ -274,6 +285,7 @@ def _doOneLookup(
     wh: str = "whois",
     simplistic: bool = False,
     withRedacted: bool = False,
+    pc: Optional[ParameterContext] = None,
 ) -> Optional[Domain]:
 
     try:
@@ -350,13 +362,14 @@ def cleanupUnsupportedTld(
     internationalized: bool = False,
     include_raw_whois_text: bool = False,
     simplistic: bool = False,
+    pc: Optional[ParameterContext] = None,
 ) -> Tuple[Optional[str], Optional[List[str]], Optional[Domain]]:
 
     try:
         tldString, dList = _fromDomainStringToTld(  # may raise UnknownTld
             domain,
-            internationalized,
-            verbose,
+            # internationalized,
+            # verbose,
         )
 
         if tldString is None:
@@ -424,6 +437,25 @@ def query(
     withRedacted:       show redacted output , default no redacted data is shown
     """
 
+    pc = ParameterContext(
+        force=force,
+        cache_file=cache_file,
+        cache_age=cache_age,
+        slow_down=slow_down,
+        ignore_returncode=ignore_returncode,
+        server=server,
+        verbose=verbose,
+        with_cleanup_results=with_cleanup_results,
+        internationalized=internationalized,
+        include_raw_whois_text=include_raw_whois_text,
+        return_raw_text_for_unsupported_tld=return_raw_text_for_unsupported_tld,
+        timeout=float(timeout) if timeout else float(0),
+        parse_partial_response=parse_partial_response,
+        cmd=cmd,
+        simplistic=simplistic,
+        withRedacted=withRedacted,
+    )
+
     global LastWhois
     LastWhois["Try"] = []  # init on start of query
 
@@ -436,8 +468,9 @@ def query(
     try:
         tldString, dList = _fromDomainStringToTld(  # may raise UnknownTld
             domain,
-            internationalized,
-            verbose,
+            # internationalized,
+            # verbose,
+            pc=pc,
         )
 
         if tldString is None:
@@ -457,18 +490,23 @@ def query(
     # =================================================
     dList = cast(List[str], dList)
     if tldString not in TLD_RE.keys():
-        msg = _validateWeKnowTheToplevelDomain(tldString, return_raw_text_for_unsupported_tld)
+        msg = _validateWeKnowTheToplevelDomain(
+            tldString=tldString,
+            return_raw_text_for_unsupported_tld=return_raw_text_for_unsupported_tld,
+            pc=pc,
+        )
 
         if msg is None:
             return _doUnsupportedTldAnyway(
-                tldString,
-                dList,
+                tldString=tldString,
+                dList=dList,
                 ignore_returncode=ignore_returncode,
                 slow_down=slow_down,
                 server=server,
                 verbose=verbose,
                 wh=wh,
                 simplistic=simplistic,
+                pc=pc,
             )
         if simplistic:
             return Domain(
@@ -484,7 +522,11 @@ def query(
     # =================================================
     thisTld = cast(Dict[str, Any], TLD_RE.get(tldString))
 
-    if _verifyPrivateRegistry(thisTld, simplistic):  # may raise WhoisPrivateRegistry
+    if _verifyPrivateRegistry(
+        thisTld=thisTld,
+        simplistic=simplistic,
+        pc=pc,
+    ):  # may raise WhoisPrivateRegistry
         msg = "This tld has either no whois server or responds only with minimal information"
         return Domain(
             data={},
@@ -495,10 +537,22 @@ def query(
         )
 
     # =================================================
-    server = _doServerHintsForThisTld(tldString, thisTld, server, verbose)
+    server = _doServerHintsForThisTld(
+        tldString=tldString,
+        thisTld=thisTld,
+        server=server,
+        verbose=verbose,
+        pc=pc,
+    )
 
     slow_down = slow_down or SLOW_DOWN
-    slow_down = _doSlowdownHintForThisTld(tldString, thisTld, slow_down, verbose)
+    slow_down = _doSlowdownHintForThisTld(
+        tldString=tldString,
+        thisTld=thisTld,
+        slow_down=slow_down,
+        verbose=verbose,
+        pc=pc,
+    )
 
     # if the tld is a multi level we should not move further down than the tld itself
     # we currently allow progressive lookups until we find something:
@@ -525,6 +579,7 @@ def query(
             wh=wh,
             simplistic=simplistic,
             withRedacted=withRedacted,
+            pc=pc,
         )
         if result:
             return result

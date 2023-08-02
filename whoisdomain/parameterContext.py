@@ -71,12 +71,6 @@ withRedacted:
     optional: true
     help: "show redacted output default no redacted data is shown"
 
-domain:
-    type: str
-    optional: false
-    # no default
-    help: ""
-
 cmd:
     type: str
     optional: true
