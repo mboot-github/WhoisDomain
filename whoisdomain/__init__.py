@@ -11,6 +11,26 @@ from typing import (
     Callable,
 )
 
+from .version import (
+    VERSION,
+)
+
+from .exceptions import (
+    UnknownTld,
+    FailedParsingWhoisOutput,
+    UnknownDateFormat,
+    WhoisCommandFailed,
+    WhoisPrivateRegistry,
+    WhoisQuotaExceeded,
+    WhoisCommandTimeout,
+)
+
+from ._0_init_tld import (
+    TLD_RE,
+    validTlds,
+    filterTldToSupportedPattern,
+    mergeExternalDictWithRegex,
+)
 
 from ._1_query import (
     do_query,
@@ -26,34 +46,14 @@ from ._2_parse import (
     cleanupWhoisResponse,
 )
 
-from ._3_adjust import (
-    Domain,
-)
+# from ._3_adjust import     Domain
 
 from .tld_regexpr import (
     ZZ,
 )
 
-from ._0_init_tld import (
-    TLD_RE,
-    validTlds,
-    filterTldToSupportedPattern,
-    mergeExternalDictWithRegex,
-)
+from .domain import Domain
 
-from .exceptions import (
-    UnknownTld,
-    FailedParsingWhoisOutput,
-    UnknownDateFormat,
-    WhoisCommandFailed,
-    WhoisPrivateRegistry,
-    WhoisQuotaExceeded,
-    WhoisCommandTimeout,
-)
-
-from .version import (
-    VERSION,
-)
 
 from .parameterContext import ParameterContext
 

@@ -1,3 +1,5 @@
+#! /usr/bin/env python3
+
 import re
 import sys
 
@@ -10,16 +12,15 @@ from typing import (
     Tuple,
 )
 
-from ._0_init_tld import TLD_RE
-
-from ._3_adjust import (
-    Domain,
-)
-
 from .exceptions import (
     FailedParsingWhoisOutput,
     WhoisQuotaExceeded,
 )
+
+from ._0_init_tld import TLD_RE
+
+from .domain import Domain
+
 
 from .parameterContext import ParameterContext
 
