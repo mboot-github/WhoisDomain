@@ -4,13 +4,21 @@ from typing import (
 )
 
 
+# Interesting for future enhancements:
+# https://github.com/rfc1036/whois/blob/next/tld_serv_list
+# https://github.com/rfc1036/whois/blob/next/new_gtlds_list
+# seems the most up to date and maintained
+
+# =================================================================
+# Often we want to repeat regex patterns,
+#   ( typically with nameservers or status fields )
+#   that becomes unreadable very fast.
+# Allow for a simplification that expands on usage and
+#   allow forcing the first to be mandatory as default,
+#   but overridable when needed
+
+
 def xStr(what: str, times: int = 1, firstMandatory: bool = True) -> str:
-    # Often we want to repeat regex patterns,
-    # ( typically with nameservers or status fields )
-    # that becomes unreadable very fast.
-    # allow for a simplification that expands on usage
-    # and allow forcing the first to be mandatory
-    # as default but overridable when needed
     if times < 1:
         return ""
 
@@ -20,28 +28,22 @@ def xStr(what: str, times: int = 1, firstMandatory: bool = True) -> str:
         return what * times
 
 
-# interesting:
-# https://github.com/rfc1036/whois/blob/next/tld_serv_list
-# https://github.com/rfc1036/whois/blob/next/new_gtlds_list
-# seems the most up to date and maintained
+# =================================================================
+# The database
 
-ZZ: Dict[str, Any] = {}
-
-# elements starting with _
+# Elements starting with _
 # are meta patterns and are not processed as domains
 # examples:  _donuts, _centralnic
 
-# elements ending in _
-# like id_ , is_, if_, in_, global_ are conflicting words in python without a trailing _
-# and auto replaced with a non conflicting word by adding a _ at the end
-
-# NOTE: many registrars use \r and some even have whitespace after the entry
 # Some items can be multiple: status, emails, name_servers
 # the remaining are always singular
 
-# when we finally apply the regexes we use IGNORE CASE allways on all matches
+# When we finally apply the regexes we use IGNORE CASE allways on all matches
 
-# Commercial TLD - Original Big 7
+
+ZZ: Dict[str, Any] = {}
+
+
 ZZ["com"] = {
     "extend": None,
     "domain_name": r"Domain Name\s*:\s*(.+)",
