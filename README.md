@@ -221,3 +221,5 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * preparing for capturing all parameters in one object and parring that object around instead of many arguments in methods/functions
   * switch to json so we dont need a additional dependency in ParamContext
   * finish rework args to ParameterContext, split of domain as file
+  * 1.20230803.1 frenzy refactor-release
+

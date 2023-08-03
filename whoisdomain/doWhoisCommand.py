@@ -115,7 +115,7 @@ def _makeWhoisCommandToRun(
     return whList + [domain]
 
 
-def _do_whois_query(
+def _execute_whois_query(
     dList: List[str],
     pc: ParameterContext,
 ) -> str:
@@ -221,7 +221,7 @@ def doWhoisAndReturnString(
     if needFreshData is False:
         return str(oldData)
 
-    newData: str = _do_whois_query(
+    newData: str = _execute_whois_query(
         dList=dList,
         pc=pc,
     )
