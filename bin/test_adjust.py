@@ -3,7 +3,7 @@
 
 # from https://github.com/maarten-boot/python-whois-extended
 
-from whoisdomain._3_adjust import str_to_date
+from whoisdomain.handleDateStrings import str_to_date
 
 from typing import (
     List,

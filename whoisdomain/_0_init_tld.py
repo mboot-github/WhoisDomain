@@ -118,6 +118,17 @@ def _buildRegCollection(
     return regCollection
 
 
+def _initOnImport() -> None:
+    global REG_COLLECTION_BY_KEY
+    # here we run the import processing
+    # we load all tld's on import so we dont lose time later
+    # we keep ZZ so we can later reuse it if we want to aoverrid or update tld's
+    REG_COLLECTION_BY_KEY = _buildRegCollection(ZZ)
+    override = False
+    for tld in ZZ.keys():
+        _initOne(tld, override)
+
+
 # ========================================
 # external use
 
@@ -168,15 +179,4 @@ def validTlds() -> List[str]:
     return sorted(TLD_RE.keys())
 
 
-def initOnImport() -> None:
-    global REG_COLLECTION_BY_KEY
-    # here we run the import processing
-    # we load all tld's on import so we dont lose time later
-    # we keep ZZ so we can later reuse it if we want to aoverrid or update tld's
-    REG_COLLECTION_BY_KEY = _buildRegCollection(ZZ)
-    override = False
-    for tld in ZZ.keys():
-        _initOne(tld, override)
-
-
-initOnImport()
+_initOnImport()

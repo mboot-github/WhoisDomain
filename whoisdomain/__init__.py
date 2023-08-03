@@ -32,12 +32,12 @@ from ._0_init_tld import (
     mergeExternalDictWithRegex,
 )
 
-from ._1_query import (
+from .doQuery import (
     do_query,
     CACHE_STUB,
 )
 
-from ._2_parse import (
+from .doParse import (
     do_parse,
     NoneStrings,
     NoneStringsAdd,
@@ -45,8 +45,6 @@ from ._2_parse import (
     QuotaStringsAdd,
     cleanupWhoisResponse,
 )
-
-# from ._3_adjust import     Domain
 
 from .tld_regexpr import (
     ZZ,

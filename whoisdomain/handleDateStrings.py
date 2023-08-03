@@ -5,9 +5,6 @@ import datetime
 from .exceptions import UnknownDateFormat
 
 from typing import (
-    # Any,
-    # List,
-    # Dict,
     Optional,
 )
 
@@ -147,3 +144,8 @@ def str_to_date(
             pass
 
     raise UnknownDateFormat("Unknown date format: '%s'" % text)
+
+
+if __name__ == "__main__":
+
+    pass
