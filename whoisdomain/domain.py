@@ -13,7 +13,7 @@ from ._3_adjust import str_to_date
 
 
 class Domain:
-    # mandatory fields we expect always to be present (but can be None or '')
+    # mandatory: fields we expect always to be present (but can be None or '')
     name: Optional[str] = None
     tld: Optional[str] = None
     registrar: Optional[str] = None
@@ -29,13 +29,14 @@ class Domain:
     dnssec: bool = False
     name_servers: List[str] = []
 
-    # optional fields
+    # optional: fields that may not be present at all, many have no regex
     owner: Optional[str] = None
     abuse_contact = None
     reseller = None
     registrant = None
     admin = None
     emails: List[str] = []
+    _exception: Optional[str] = None
 
     def _cleanupArray(
         self,
@@ -138,14 +139,27 @@ class Domain:
         if pc.return_raw_text_for_unsupported_tld is True:
             return
 
-        # process mandatory fields that we expact always to be present even if we have None or ''
+        # process mandatory fields that we expect always to be present
+        # even if we have None or ''
         self.registrar = data["registrar"][0].strip()
         self.registrant_country = data["registrant_country"][0].strip()
 
         # date time items
-        self.creation_date = str_to_date(data["creation_date"][0], self.tld, verbose=pc.verbose)
-        self.expiration_date = str_to_date(data["expiration_date"][0], self.tld, verbose=pc.verbose)
-        self.last_updated = str_to_date(data["updated_date"][0], self.tld, verbose=pc.verbose)
+        self.creation_date = str_to_date(
+            data["creation_date"][0],
+            self.tld,
+            verbose=pc.verbose,
+        )
+        self.expiration_date = str_to_date(
+            data["expiration_date"][0],
+            self.tld,
+            verbose=pc.verbose,
+        )
+        self.last_updated = str_to_date(
+            data["updated_date"][0],
+            self.tld,
+            verbose=pc.verbose,
+        )
 
         self.dnssec = data["DNSSEC"]
         self._doStatus(data)
