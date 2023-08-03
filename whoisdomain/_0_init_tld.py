@@ -12,6 +12,8 @@ from .exceptions import (
     UnknownTld,
 )
 
+# from .parameterContext import ParameterContext
+
 Verbose: bool = False
 TLD_RE: Dict[str, Dict[str, Any]] = {}
 REG_COLLECTION_BY_KEY: Dict[str, Any] = {}
@@ -50,7 +52,7 @@ def filterTldToSupportedPattern(
     raise UnknownTld(msg)
 
 
-def get_tld_re(tld: str, override: bool = False) -> Dict[str, Any]:
+def _get_tld_re(tld: str, override: bool = False) -> Dict[str, Any]:
     if override is False:
         if tld in TLD_RE:
             return TLD_RE[tld]
@@ -59,7 +61,7 @@ def get_tld_re(tld: str, override: bool = False) -> Dict[str, Any]:
 
     extend = v.get("extend")
     if extend:
-        e = get_tld_re(extend)  # call recursive
+        e = _get_tld_re(extend)  # call recursive
         tmp = e.copy()
         tmp.update(v)  # and merge results in tmp with caller data in v
         # The update() method updates the dictionary with the elements
@@ -95,14 +97,14 @@ def mergeExternalDictWithRegex(aDict: Dict[str, Any] = {}) -> None:
     # reprocess te regexes we newly defined or overrode
     override = True
     for tld in aDict.keys():
-        initOne(tld, override)
+        _initOne(tld, override)
 
 
-def initOne(tld: str, override: bool = False) -> None:
+def _initOne(tld: str, override: bool = False) -> None:
     if tld[0] == "_":  # skip meta domain patterns , these are not domains just handles we reuse
         return
 
-    what = get_tld_re(tld, override)
+    what = _get_tld_re(tld, override)
 
     # test if the string is identical after idna conversion
     d = tld.split(".")
@@ -117,7 +119,7 @@ def initOne(tld: str, override: bool = False) -> None:
         print(f"{tld} -> {tld2}", file=sys.stderr)
 
 
-def buildRegCollection(zz: Dict[str, Any]) -> Dict[str, Any]:
+def _buildRegCollection(zz: Dict[str, Any]) -> Dict[str, Any]:
     regCollection: Dict[str, Any] = {}
 
     # get all regexes
@@ -157,10 +159,10 @@ def initOnImport() -> None:
     # here we run the import processing
     # we load all tld's on import so we dont lose time later
     # we keep ZZ so we can later reuse it if we want to aoverrid or update tld's
-    REG_COLLECTION_BY_KEY = buildRegCollection(ZZ)
+    REG_COLLECTION_BY_KEY = _buildRegCollection(ZZ)
     override = False
     for tld in ZZ.keys():
-        initOne(tld, override)
+        _initOne(tld, override)
 
 
 initOnImport()
