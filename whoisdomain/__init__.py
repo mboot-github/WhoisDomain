@@ -241,12 +241,11 @@ def _doUnsupportedTldAnyway(
     if pc.verbose:
         print(data, file=sys.stderr)
 
+    pc.return_raw_text_for_unsupported_tld = (True,)
     return Domain(
         data=data,
+        pc=pc,
         whoisStr=whoisStr,
-        verbose=pc.verbose,
-        include_raw_whois_text=pc.include_raw_whois_text,
-        return_raw_text_for_unsupported_tld=True,
     )
 
 
@@ -265,9 +264,8 @@ def _doOneLookup(
         if pc.simplistic:
             return Domain(
                 data={},
+                pc=pc,
                 whoisStr=None,
-                verbose=pc.verbose,
-                include_raw_whois_text=pc.include_raw_whois_text,
                 exeptionStr=f"{e}",
             )
 
@@ -295,9 +293,8 @@ def _doOneLookup(
     if data and data["domain_name"][0]:
         return Domain(
             data=data,
+            pc=pc,
             whoisStr=whoisStr,
-            verbose=pc.verbose,
-            include_raw_whois_text=pc.include_raw_whois_text,
         )
     return None
 
@@ -389,9 +386,8 @@ def query(
         if pc.simplistic:
             return Domain(
                 data={},
+                pc=pc,
                 whoisStr=None,
-                verbose=verbose,
-                include_raw_whois_text=include_raw_whois_text,
                 exeptionStr="UnknownTld",
             )
 
@@ -414,9 +410,8 @@ def query(
         if pc.simplistic:
             return Domain(
                 data={},
+                pc=pc,
                 whoisStr=None,
-                verbose=verbose,
-                include_raw_whois_text=include_raw_whois_text,
                 exeptionStr="UnknownTld",
             )
 
@@ -432,9 +427,8 @@ def query(
         msg = "This tld has either no whois server or responds only with minimal information"
         return Domain(
             data={},
+            pc=pc,
             whoisStr=None,
-            verbose=verbose,
-            include_raw_whois_text=include_raw_whois_text,
             exeptionStr=msg,
         )
 

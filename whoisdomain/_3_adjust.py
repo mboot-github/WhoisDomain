@@ -3,9 +3,14 @@ import sys
 import datetime
 from .exceptions import UnknownDateFormat
 
-from typing import Any, List, Dict, Optional
+from typing import (
+    Any,
+    List,
+    Dict,
+    Optional,
+)
 
-# PYTHON_VERSION = sys.version_info[0]
+from .parameterContext import ParameterContext
 
 
 class Domain:
@@ -117,13 +122,11 @@ class Domain:
     def __init__(
         self,
         data: Dict[str, Any],
+        pc: ParameterContext,
         whoisStr: Optional[str] = None,
-        verbose: bool = False,
-        include_raw_whois_text: bool = False,
-        return_raw_text_for_unsupported_tld: bool = False,
         exeptionStr: Optional[str] = None,
     ):
-        if include_raw_whois_text and whoisStr is not None:
+        if pc.include_raw_whois_text and whoisStr is not None:
             self.text = whoisStr
 
         if exeptionStr is not None:
@@ -133,7 +136,7 @@ class Domain:
         self.name = data["domain_name"][0].strip().lower()
         self.tld = data["tld"].lower()
 
-        if return_raw_text_for_unsupported_tld is True:
+        if pc.return_raw_text_for_unsupported_tld is True:
             return
 
         # process mandatory fields that we expact always to be present even if we have None or ''
@@ -141,9 +144,9 @@ class Domain:
         self.registrant_country = data["registrant_country"][0].strip()
 
         # date time items
-        self.creation_date = str_to_date(data["creation_date"][0], self.tld, verbose=verbose)
-        self.expiration_date = str_to_date(data["expiration_date"][0], self.tld, verbose=verbose)
-        self.last_updated = str_to_date(data["updated_date"][0], self.tld, verbose=verbose)
+        self.creation_date = str_to_date(data["creation_date"][0], self.tld, verbose=pc.verbose)
+        self.expiration_date = str_to_date(data["expiration_date"][0], self.tld, verbose=pc.verbose)
+        self.last_updated = str_to_date(data["updated_date"][0], self.tld, verbose=pc.verbose)
 
         self.dnssec = data["DNSSEC"]
         self._doStatus(data)

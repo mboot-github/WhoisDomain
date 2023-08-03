@@ -122,9 +122,8 @@ def _handleShortResponse(
                 msg = "WhoisQuotaExceeded"
                 return Domain(
                     data={},
+                    pc=pc,
                     whoisStr=whoisStr,
-                    verbose=pc.verbose,
-                    include_raw_whois_text=pc.include_raw_whois_text,
                     exeptionStr=msg,
                 )
             raise WhoisQuotaExceeded(whoisStr)
@@ -133,9 +132,8 @@ def _handleShortResponse(
         msg = "FailedParsingWhoisOutput"
         return Domain(
             data={},
+            pc=pc,
             whoisStr=whoisStr,
-            verbose=pc.verbose,
-            include_raw_whois_text=pc.include_raw_whois_text,
             exeptionStr=msg,
         )
 
