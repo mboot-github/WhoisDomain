@@ -285,11 +285,7 @@ def _doOneLookup(
         whoisStr=whoisStr,
         tldString=tldString,
         dList=dList,
-        verbose=pc.verbose,
-        with_cleanup_results=pc.with_cleanup_results,
-        simplistic=pc.simplistic,
-        include_raw_whois_text=pc.include_raw_whois_text,
-        withRedacted=pc.withRedacted,
+        pc=pc,
     )
 
     if isinstance(data, Domain):
