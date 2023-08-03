@@ -228,12 +228,7 @@ def _doUnsupportedTldAnyway(
 
     whoisStr = do_query(
         dList=dList,
-        slow_down=pc.slow_down,
-        ignore_returncode=pc.ignore_returncode,
-        server=pc.server,
-        verbose=pc.verbose,
-        wh=pc.cmd,
-        simplistic=pc.simplistic,
+        pc=pc,
     )
 
     # we will only return minimal data
@@ -264,17 +259,7 @@ def _doOneLookup(
     try:
         whoisStr = do_query(
             dList=dList,
-            force=pc.force,
-            cache_file=pc.cache_file,
-            cache_age=pc.cache_age,
-            slow_down=pc.slow_down,
-            ignore_returncode=pc.ignore_returncode,
-            server=pc.server,
-            verbose=pc.verbose,
-            timeout=pc.timeout,
-            parse_partial_response=pc.parse_partial_response,
-            wh=pc.cmd,
-            simplistic=pc.simplistic,
+            pc=pc,
         )
     except Exception as e:
         if pc.simplistic:

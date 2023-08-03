@@ -21,6 +21,9 @@ from typing import (
     Any,
 )
 
+from .parameterContext import ParameterContext
+
+
 IS_WINDOWS: bool = platform.system() == "Windows"
 
 STDBUF_OFF_CMD: List[str] = []
@@ -35,9 +38,7 @@ CACHE_STUB: Any = None
 
 def _testWhoisPythonFromStaticTestData(
     dList: List[str],
-    ignore_returncode: bool,
-    server: Optional[str] = None,
-    verbose: bool = False,
+    pc: ParameterContext,
 ) -> str:
     domain = ".".join(dList)
     testDir = os.getenv("TEST_WHOIS_PYTHON")
@@ -51,7 +52,7 @@ def _testWhoisPythonFromStaticTestData(
 
 
 def _tryInstallMissingWhoisOnWindows(
-    verbose: bool = False,
+    pc: ParameterContext,
 ) -> None:
     """
     Windows 'whois' command wrapper
@@ -59,7 +60,7 @@ def _tryInstallMissingWhoisOnWindows(
     """
     folder = os.getcwd()
     copy_command = r"copy \\live.sysinternals.com\tools\whois.exe " + folder
-    if verbose:
+    if pc.verbose:
         print("downloading dependencies", file=sys.stderr)
         print(copy_command, file=sys.stderr)
 
@@ -73,73 +74,67 @@ def _tryInstallMissingWhoisOnWindows(
 
 def _makeWhoisCommandToRun(
     dList: List[str],
-    server: Optional[str] = None,
-    verbose: bool = False,
-    wh: str = "whois",
+    pc: ParameterContext,
 ) -> List[str]:
     domain = ".".join(dList)
 
-    if " " in wh:
-        whList = wh.split(" ")
-    else:
-        whList = [wh]
+    whList: List[str] = [pc.cmd]
+    if " " in pc.cmd:
+        whList = pc.cmd.split(" ")
 
     if IS_WINDOWS:
-        if wh == "whois":  # only if the use did not specify what whois to use
-            if os.path.exists("whois.exe"):
-                wh = r".\whois.exe"
+        if pc.cmd == "whois":  # only if the use did not specify what whois to use
+            k: str = "whois.exe"
+            if os.path.exists(k):
+                pc.cmd = os.path.join(".", k)
             else:
                 find = False
                 paths = os.environ["path"].split(";")
                 for path in paths:
-                    wpath = os.path.join(path, "whois.exe")
+                    wpath = os.path.join(path, k)
                     if os.path.exists(wpath):
-                        wh = wpath
+                        pc.cmd = wpath
                         find = True
                         break
 
                 if not find:
-                    _tryInstallMissingWhoisOnWindows(verbose)
-        whList = [wh]
+                    _tryInstallMissingWhoisOnWindows(
+                        pc=pc,
+                    )
+        whList = [pc.cmd]
 
-        if server:
-            return whList + ["-v", "-nobanner", domain, server]
+        if pc.server:
+            return whList + ["-v", "-nobanner", domain, pc.server]
         return whList + ["-v", "-nobanner", domain]
 
     # not windows
-    if server:
-        return whList + [domain, "-h", server]
+    if pc.server:
+        return whList + [domain, "-h", pc.server]
     return whList + [domain]
 
 
 def _do_whois_query(
     dList: List[str],
-    ignore_returncode: bool,
-    server: Optional[str] = None,
-    verbose: bool = False,
-    timeout: Optional[float] = None,
-    parse_partial_response: bool = False,
-    wh: str = "whois",
-    simplistic: bool = False,
-    slow_down: int = 0,
+    pc: ParameterContext,
 ) -> str:
     # if getenv[TEST_WHOIS_PYTON] fake whois by reading static data from a file
     # this wasy we can actually implemnt a test run with known data in and expected data out
     if os.getenv("TEST_WHOIS_PYTHON"):
-        return _testWhoisPythonFromStaticTestData(dList, ignore_returncode, server, verbose)
+        return _testWhoisPythonFromStaticTestData(
+            dList,
+            pc=pc,
+        )
 
     cmd = _makeWhoisCommandToRun(
         dList=dList,
-        server=server,
-        verbose=verbose,
-        wh=wh,
+        pc=pc,
     )
-    if verbose:
-        print(cmd, wh, file=sys.stderr)
+    if pc.verbose:
+        print(cmd, pc.cmd, file=sys.stderr)
 
-    if slow_down:
+    if pc.slow_down:
         # slow down before so we can force individual domains at a slower tempo
-        time.sleep(slow_down)
+        time.sleep(pc.slow_down)
 
     # LANG=en is added to make the ".jp" output consist across all environments
     p = subprocess.Popen(
@@ -151,7 +146,9 @@ def _do_whois_query(
     )
 
     try:
-        r = p.communicate(timeout=timeout)[0].decode(errors="ignore")
+        r = p.communicate(timeout=pc.timeout,)[
+            0
+        ].decode(errors="ignore")
     except subprocess.TimeoutExpired:
         # Kill the child process & flush any output buffers
         p.kill()
@@ -159,21 +156,20 @@ def _do_whois_query(
         # In most cases whois servers returns partial domain data really fast
         # after that delay occurs (probably intentional) before returning contact data.
         # Add this option to cover those cases
-        if not parse_partial_response or not r:
-            raise WhoisCommandTimeout(f"timeout: query took more then {timeout} seconds")
+        if not pc.parse_partial_response or not r:
+            raise WhoisCommandTimeout(f"timeout: query took more then {pc.timeout} seconds")
 
-    if verbose:
+    if pc.verbose:
         print(r, file=sys.stderr)
 
-    if ignore_returncode is False and p.returncode not in [0, 1]:
-        # network error, "fgets: Connection reset by peer" fix, ignore
+    if pc.ignore_returncode is False and p.returncode not in [0, 1]:
         if "fgets: Connection reset by peer" in r:
             return r.replace("fgets: Connection reset by peer", "")
-        # connect: Connection refused
-        elif "connect: Connection refused" in r:
+
+        if "connect: Connection refused" in r:
             return r.replace("connect: Connection refused", "")
 
-        if simplistic:
+        if pc.simplistic:
             return r
 
         raise WhoisCommandFailed(r)
@@ -186,26 +182,16 @@ def _do_whois_query(
 # future: use decorator for caching
 def do_query(
     dList: List[str],
-    force: bool = False,
-    cache_file: Optional[str] = None,
-    cache_age: int = 60 * 60 * 48,
-    slow_down: int = 0,
-    ignore_returncode: bool = False,
-    server: Optional[str] = None,
-    verbose: bool = False,
-    timeout: Optional[float] = None,
-    parse_partial_response: bool = False,
-    wh: str = "whois",
-    simplistic: bool = False,
+    pc: ParameterContext,
 ) -> str:
     global CACHE_STUB
 
     # here you can override caching, if someone else already defined CACHE_STUB by this time, we use their caching
     if CACHE_STUB is None:
         CACHE_STUB = SimpleCacheWithFile(
-            verbose=verbose,
-            cacheFilePath=cache_file,
-            cacheMaxAge=cache_age,
+            verbose=pc.verbose,
+            cacheFilePath=pc.cache_file,
+            cacheMaxAge=pc.cache_age,
         )
 
     # allways test CACHE_STUB is a subclass of SimpleCacheBase
@@ -217,7 +203,7 @@ def do_query(
 
     needFreshData: bool = False
 
-    if force is True:
+    if pc.force is True:
         needFreshData = True
 
     if oldData is None:
@@ -235,14 +221,7 @@ def do_query(
 
     newData: str = _do_whois_query(
         dList=dList,
-        ignore_returncode=ignore_returncode,
-        server=server,
-        verbose=verbose,
-        timeout=timeout,
-        parse_partial_response=parse_partial_response,
-        wh=wh,
-        simplistic=simplistic,
-        slow_down=slow_down,
+        pc=pc,
     )
 
     # populate a fresh cache entry and save if needed

@@ -219,3 +219,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * add external caching framework that can be overridden for use of your own caching implementation
   * renaming various vars to mak them more verbose
   * preparing for capturing all parameters in one object and parring that object around instead of many arguments in methods/functions
+  * switch to json so we dont need a additional dependency in ParamContext
