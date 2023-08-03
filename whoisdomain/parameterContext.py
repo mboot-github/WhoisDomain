@@ -1,112 +1,112 @@
 #! /usr/bin/env python3
 
-# import sys
-import yaml
+import json
 
 from typing import (
     List,
     Dict,
     Any,
-    #    Callable,
 )
 
-ParamsYamlString: str = """
-ignore_returncode:
-    type: bool
-    default: false
-    optional: true
-    help: "if the whois command fails with code 1 still process the data returned as normal."
-
-force:
-    type: bool
-    default: false
-    optional: true
-    help: "Don't use cache."
-
-verbose:
-    type: bool
-    default: false
-    optional: true
-    help: "print relevant information on steps taken to standard error"
-
-with_cleanup_results:
-    type: bool
-    default: false
-    optional: true
-    help: "cleanup lines starting with % and REDACTED FOR PRIVACY"
-
-internationalized:
-    type: bool
-    default: false
-    optional: true
-    help: "if true convert with internationalizedDomainNameToPunyCode()."
-
-include_raw_whois_text:
-    type: bool
-    default: false
-    optional: true
-    help: "if reqested the full response is also returned."
-
-return_raw_text_for_unsupported_tld:
-    type: bool
-    default: false
-    optional: true
-    help: ""
-
-parse_partial_response:
-    type: bool
-    default: false
-    optional: true
-    help: "try to parse partial response when cmd timed out (stdbuf should be in PATH for best results)"
-
-simplistic:
-    type: bool
-    default: false
-    optional: true
-    help: "when simplistic is true we return null for most exceptions and dont pass info why we have no data."
-
-withRedacted:
-    type: bool
-    default: false
-    optional: true
-    help: "show redacted output default no redacted data is shown"
-
-cmd:
-    type: str
-    optional: true
-    default: "whois"
-    help: "specify the path to the cli whois you want to use."
-
-cache_file:
-    type: str
-    optional: true
-    default: null
-    help: "Use file to store cache not only memory."
-
-server:
-    type: str
-    optional: true
-    default: null
-    help: "use this whois server for making this query: Linux/Mac: 'whois -h <server> <domain>' Windows: 'whois.exe <domain> <server>'"
-
-cache_age:
-    type: int
-    optional: true
-    default: 172800
-    help: "Cache expiration time for given domain in seconds 60*60*48 (48 hours)"
-
-slow_down:
-    type: int
-    optional: true
-    default: 0  # no lookup slow down (zero seconds)
-    help: "Time [s] it will wait after you query WHOIS database."
-
-timeout:
-    type: float
-    optional: true
-    default: null
-    help: "timeout in seconds for the whois command to return a result."
-
+ParamsStringJson: str = """
+{
+  "ignore_returncode": {
+    "type": "bool",
+    "default": false,
+    "optional": true,
+    "help": "if the whois command fails with code 1 still process the data returned as normal."
+  },
+  "force": {
+    "type": "bool",
+    "default": false,
+    "optional": true,
+    "help": "Don't use cache."
+  },
+  "verbose": {
+    "type": "bool",
+    "default": false,
+    "optional": true,
+    "help": "print relevant information on steps taken to standard error"
+  },
+  "with_cleanup_results": {
+    "type": "bool",
+    "default": false,
+    "optional": true,
+    "help": "cleanup lines starting with % and REDACTED FOR PRIVACY"
+  },
+  "internationalized": {
+    "type": "bool",
+    "default": false,
+    "optional": true,
+    "help": "if true convert with internationalizedDomainNameToPunyCode()."
+  },
+  "include_raw_whois_text": {
+    "type": "bool",
+    "default": false,
+    "optional": true,
+    "help": "if reqested the full response is also returned."
+  },
+  "return_raw_text_for_unsupported_tld": {
+    "type": "bool",
+    "default": false,
+    "optional": true,
+    "help": ""
+  },
+  "parse_partial_response": {
+    "type": "bool",
+    "default": false,
+    "optional": true,
+    "help": "try to parse partial response when cmd timed out (stdbuf should be in PATH for best results)"
+  },
+  "simplistic": {
+    "type": "bool",
+    "default": false,
+    "optional": true,
+    "help": "when simplistic is true we return null for most exceptions and dont pass info why we have no data."
+  },
+  "withRedacted": {
+    "type": "bool",
+    "default": false,
+    "optional": true,
+    "help": "show redacted output default no redacted data is shown"
+  },
+  "cmd": {
+    "type": "str",
+    "optional": true,
+    "default": "whois",
+    "help": "specify the path to the cli whois you want to use."
+  },
+  "cache_file": {
+    "type": "str",
+    "optional": true,
+    "default": null,
+    "help": "Use file to store cache not only memory."
+  },
+  "server": {
+    "type": "str",
+    "optional": true,
+    "default": null,
+    "help": "use this whois server for making this query: Linux/Mac: 'whois -h <server> <domain>' Windows: 'whois.exe <domain> <server>'"
+  },
+  "cache_age": {
+    "type": "int",
+    "optional": true,
+    "default": 172800,
+    "help": "Cache expiration time for given domain in seconds 60*60*48 (48 hours)"
+  },
+  "slow_down": {
+    "type": "int",
+    "optional": true,
+    "default": 0,
+    "help": "Time [s] it will wait after you query WHOIS database."
+  },
+  "timeout": {
+    "type": "float",
+    "optional": true,
+    "default": null,
+    "help": "timeout in seconds for the whois command to return a result."
+  }
+}
 """
 
 
@@ -168,7 +168,7 @@ class ParameterContext:
         self,
         **kwargs: Any,
     ) -> None:
-        self.params = yaml.safe_load(ParamsYamlString)
+        self.params = json.loads(ParamsStringJson)
         self.value = {}
 
         mandatory: List[str] = self.loadDefaults()
