@@ -25,55 +25,42 @@ class SimpleCacheBase:
         self.memCache = {}
         self.cacheMaxAge = cacheMaxAge
 
-    def cachePut(
+    def put(
         self,
         keyString: str,
         data: str,
-    ) -> None:
+    ) -> str:
         if self.verbose:
-            print(f"cachePut: {keyString}", file=sys.stderr)
+            print(f"put: {keyString}", file=sys.stderr)
 
         # store the currentTime and data tuple (time, data)
         self.memCache[keyString] = (
             int(time.time()),
             data,
         )
+        return data
 
-    def cacheGet(
-        self,
-        keyString: str,
-    ) -> Optional[Tuple[float, str]]:
-        if self.verbose:
-            print(f"cacheGet: {keyString}", file=sys.stderr)
-
-        return self.memCache.get(keyString)
-
-    def cacheGetData(
+    def get(
         self,
         keyString: str,
     ) -> Optional[str]:
-        if self.verbose:
-            print(f"cacheGetData: {keyString}", file=sys.stderr)
-
-        tData: Optional[Tuple[float, str]] = self.cacheGet(keyString)
-        if tData is None:
-            return None
-
-        return tData[1]
-
-    def cacheExpired(
-        self,
-        keyString: str,
-    ) -> Optional[bool]:
-        if self.verbose:
-            print(f"cacheExpired: {keyString}", file=sys.stderr)
 
         cData = self.memCache.get(keyString)
         if cData is None:
+            if self.verbose:
+                print(f"get: no data for {keyString}", file=sys.stderr)
             return None
 
-        hasExpired = cData[0] < (time.time() - self.cacheMaxAge)
-        return hasExpired
+        t = time.time()
+        hasExpired = cData[0] < (t - self.cacheMaxAge)
+        if hasExpired is True:
+            if self.verbose:
+                print(f"get: data has expired {keyString} {cData[0]}, {t}, {self.cacheMaxAge}", file=sys.stderr)
+            return None
+
+        if self.verbose:
+            print(f"get: {keyString}", file=sys.stderr)
+        return cData[1]
 
 
 if __name__ == "__main__":

@@ -179,17 +179,14 @@ def _execute_whois_query(
     return r
 
 
-# PUBLIC
-
-# future: use decorator for caching
-def doWhoisAndReturnString(
-    dList: List[str],
+def initDefaultCache(
     pc: ParameterContext,
-) -> str:
+) -> Any:
     global CACHE_STUB
 
     # here you can override caching, if someone else already defined CACHE_STUB by this time, we use their caching
     if CACHE_STUB is None:
+        # if no cache defined init the default cache (optional with file storage based on pc)
         CACHE_STUB = SimpleCacheWithFile(
             verbose=pc.verbose,
             cacheFilePath=pc.cache_file,
@@ -198,35 +195,28 @@ def doWhoisAndReturnString(
 
     # allways test CACHE_STUB is a subclass of SimpleCacheBase
     assert isinstance(CACHE_STUB, SimpleCacheBase), Exception("CACHE_STUB - must inherit from SimpleCacheBase")
+    return CACHE_STUB
 
+
+# PUBLIC
+
+# future: use decorator for caching
+def doWhoisAndReturnString(
+    dList: List[str],
+    pc: ParameterContext,
+) -> str:
+    cache = initDefaultCache(pc)
     keyString = ".".join(dList)
 
-    oldData: Optional[str] = CACHE_STUB.cacheGetData(keyString)
-
-    needFreshData: bool = False
-
-    if pc.force is True:
-        needFreshData = True
-
-    if oldData is None:
-        needFreshData = True
-
-    hasExpired: Optional[bool] = CACHE_STUB.cacheExpired(keyString)
-    if hasExpired is None:
-        needFreshData = True
-
-    if hasExpired is True:
-        needFreshData = True
-
-    if needFreshData is False:
-        return str(oldData)
+    if pc.force is False:
+        oldData: Optional[str] = cache.get(keyString)
+        if oldData is not None:
+            return str(oldData)
 
     newData: str = _execute_whois_query(
         dList=dList,
         pc=pc,
     )
 
-    # populate a fresh cache entry and save if needed
-    CACHE_STUB.cachePut(keyString, newData)
-
+    cache.put(keyString, newData)
     return newData

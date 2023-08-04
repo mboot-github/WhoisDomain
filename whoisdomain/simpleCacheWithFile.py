@@ -7,7 +7,7 @@ import json
 
 from typing import (
     Optional,
-    Tuple,
+    # Tuple,
 )
 
 from .simpleCacheBase import (
@@ -27,7 +27,7 @@ class SimpleCacheWithFile(SimpleCacheBase):
         super().__init__(verbose=verbose, cacheMaxAge=cacheMaxAge)
         self.cacheFilePath = cacheFilePath
 
-    def _cacheFileLoad(
+    def _fileLoad(
         self,
     ) -> None:
         if self.cacheFilePath is None:
@@ -37,7 +37,7 @@ class SimpleCacheWithFile(SimpleCacheBase):
             return
 
         if self.verbose:
-            print(f"cacheFileLoad: {self.cacheFilePath}", file=sys.stderr)
+            print(f"fileLoad: {self.cacheFilePath}", file=sys.stderr)
 
         with open(self.cacheFilePath, "r") as f:
             try:
@@ -45,54 +45,33 @@ class SimpleCacheWithFile(SimpleCacheBase):
             except Exception as e:
                 print(f"ignore json load err: {e}", file=sys.stderr)
 
-    def _cacheFileSave(
+    def _fileSave(
         self,
     ) -> None:
         if self.cacheFilePath is None:
             return
 
         if self.verbose:
-            print(f"_cacheFileSave: {self.cacheFilePath}", file=sys.stderr)
+            print(f"_fileSave: {self.cacheFilePath}", file=sys.stderr)
 
         with open(self.cacheFilePath, "w") as f:
             json.dump(self.memCache, f)
 
-    def cachePut(
+    def put(
         self,
         keyString: str,
         data: str,
-    ) -> None:
-        super().cachePut(keyString=keyString, data=data)
-        self._cacheFileSave()
+    ) -> str:
+        super().put(keyString=keyString, data=data)
+        self._fileSave()
+        return data
 
-    def cacheGet(
-        self,
-        keyString: str,
-    ) -> Optional[Tuple[float, str]]:
-        self._cacheFileLoad()
-        return super().cacheGet(keyString=keyString)
-
-    def cacheExpired(
-        self,
-        keyString: str,
-    ) -> Optional[bool]:
-        if keyString not in self.memCache:
-            self.cacheGet(keyString=keyString)
-
-        return super().cacheExpired(keyString=keyString)
-
-    def cacheGetData(
+    def get(
         self,
         keyString: str,
     ) -> Optional[str]:
-        if self.verbose:
-            print(f"cacheGetData: {keyString}", file=sys.stderr)
-
-        tData: Optional[Tuple[float, str]] = self.cacheGet(keyString)
-        if tData is None:
-            return None
-
-        return tData[1]
+        self._fileLoad()
+        return super().get(keyString=keyString)
 
 
 if __name__ == "__main__":
