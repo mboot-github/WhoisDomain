@@ -783,6 +783,7 @@ ZZ["nl"] = {
     "reseller": r"Reseller:\s?(.+)",
     "abuse_contact": r"Abuse Contact:\s?(.+)",
     "_test": "google.nl",
+    "_slowdown": 5,
 }
 
 # Norway

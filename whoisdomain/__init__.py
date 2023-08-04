@@ -32,15 +32,9 @@ from ._0_init_tld import (
     mergeExternalDictWithRegex,
 )
 
-from .doQuery import (
-    query,
-    get_last_raw_whois_data,
-)
-
-from .doWhoisCommand import (
-    CACHE_STUB,
-)
-
+from .doQuery import query
+from .lastWhois import get_last_raw_whois_data
+from .doWhoisCommand import CACHE_STUB
 from .noneStrings import NoneStrings, NoneStringsAdd
 from .quotaStrings import QuotaStrings, QuotaStringsAdd
 

@@ -62,17 +62,12 @@ def doWhoisAndReturnString(
     cache = _initDefaultCache(pc)
     keyString = ".".join(dList)
 
-    try:
-        if pc.force is False:
-            oldData: Optional[str] = cache.get(keyString)
-            if oldData is not None:
-                return str(oldData)
+    if pc.force is False:
+        oldData: Optional[str] = cache.get(keyString)
+        if oldData is not None:
+            return str(oldData)
 
-        newData = _getNewDataForKey(dList=dList, pc=pc)
-        cache.put(keyString, newData)
-    except Exception as e:
-        msg: str = f"cache get/put has issues: {e}"
-        print(msg, file=sys.stderr)
-        exit(101)
+    newData = _getNewDataForKey(dList=dList, pc=pc)
+    cache.put(keyString, newData)
 
     return newData
