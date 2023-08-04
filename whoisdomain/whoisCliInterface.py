@@ -22,6 +22,8 @@ from .parameterContext import ParameterContext
 class WhoisCliInterface:
     pc: ParameterContext
     dList: List[str]
+    domain: str
+    rawWhoisResultString: str
 
     def __init__(
         self,
@@ -29,6 +31,8 @@ class WhoisCliInterface:
         pc: ParameterContext,
     ):
         self.dList = dList
+        self.domain: str = ".".join(self.dList)
+
         self.pc = pc
         self.IS_WINDOWS: bool = platform.system() == "Windows"
 
@@ -36,18 +40,7 @@ class WhoisCliInterface:
         if not self.IS_WINDOWS and shutil.which("stdbuf"):
             self.STDBUF_OFF_CMD = ["stdbuf", "-o0"]
 
-    def _testWhoisPythonFromStaticTestData(self) -> str:
-        domain = ".".join(self.dList)
-        testDir = os.getenv("TEST_WHOIS_PYTHON")
-        pathToTestFile = f"{testDir}/{domain}/input"
-        if os.path.exists(pathToTestFile):
-            with open(pathToTestFile, mode="rb") as f:  # switch to binary mode as that is what Popen uses
-                # make sure the data is treated exactly the same as the output of Popen
-                return f.read().decode(errors="ignore")
-
-        raise WhoisCommandFailed("")
-
-    def _tryInstallMissingWhoisOnWindows(self) -> None:
+    def tryInstallMissingWhoisOnWindows(self) -> None:
         """
         Windows 'whois' command wrapper
         https://docs.microsoft.com/en-us/sysinternals/downloads/whois
@@ -65,91 +58,114 @@ class WhoisCliInterface:
             shell=True,
         )
 
-    def _makeWhoisCommandToRun(self) -> List[str]:
-        domain = ".".join(self.dList)
+    def onWindowsFindWhoisCliAndInstallIfNeeded(self, k: str) -> None:
+        paths = os.environ["path"].split(";")
+        for path in paths:
+            wpath = os.path.join(path, k)
+            if os.path.exists(wpath):
+                self.pc.cmd = wpath  # note we update cmd if we find one
+                return
 
-        whList: List[str] = [self.pc.cmd]
+        # this should be optional default FALSE,
+        # you dont want the module to install external data normally
+        # TODO
+        self.tryInstallMissingWhoisOnWindows()
+
+    def makeWhoisCommandToRunWindows(
+        self,
+        whoisCommandList: List[str],
+    ) -> List[str]:
+        if self.pc.cmd == "whois":  # the default string
+            k: str = "whois.exe"
+            if os.path.exists(k):
+                self.pc.cmd = os.path.join(".", k)
+            else:
+                self.onWindowsFindWhoisCliAndInstallIfNeeded(k)
+
+        whoisCommandList = [self.pc.cmd]
+
+        if self.pc.server:
+            return whoisCommandList + ["-v", "-nobanner", self.domain, self.pc.server]
+        return whoisCommandList + ["-v", "-nobanner", self.domain]
+
+    def makeWhoisCommandToRun(self) -> List[str]:
+        whoisCommandList: List[str] = [self.pc.cmd]
         if " " in self.pc.cmd:
-            whList = self.pc.cmd.split(" ")
+            whoisCommandList = self.pc.cmd.split(" ")
 
         if self.IS_WINDOWS:
-            if self.pc.cmd == "whois":  # only if the use did not specify what whois to use
-                k: str = "whois.exe"
-                if os.path.exists(k):
-                    self.pc.cmd = os.path.join(".", k)
-                else:
-                    find = False
-                    paths = os.environ["path"].split(";")
-                    for path in paths:
-                        wpath = os.path.join(path, k)
-                        if os.path.exists(wpath):
-                            self.pc.cmd = wpath
-                            find = True
-                            break
+            return self.makeWhoisCommandToRunWindows(
+                whoisCommandList=whoisCommandList,
+            )
 
-                    if not find:
-                        self._tryInstallMissingWhoisOnWindows()
-            whList = [self.pc.cmd]
-
-            if self.pc.server:
-                return whList + ["-v", "-nobanner", domain, self.pc.server]
-            return whList + ["-v", "-nobanner", domain]
-
-        # not windows
         if self.pc.server:
-            return whList + [domain, "-h", self.pc.server]
-        return whList + [domain]
+            return whoisCommandList + [self.domain, "-h", self.pc.server]
+        return whoisCommandList + [self.domain]
 
-    def execute_whois_query(self) -> str:
-        # if getenv[TEST_WHOIS_PYTON] fake whois by reading static data from a file
-        # this wasy we can actually implemnt a test run with known data in and expected data out
-        if os.getenv("TEST_WHOIS_PYTHON"):
-            return self._testWhoisPythonFromStaticTestData()
-
-        cmd = self._makeWhoisCommandToRun()
+    def postProcessingResult(self) -> str:
         if self.pc.verbose:
-            print(cmd, self.pc.cmd, file=sys.stderr)
+            print(self.rawWhoisResultString, file=sys.stderr)
 
-        if self.pc.slow_down:
-            # slow down before so we can force individual domains at a slower tempo
-            time.sleep(self.pc.slow_down)
+        if self.pc.ignore_returncode is False and self.processHandle.returncode not in [0, 1]:
+            if "fgets: Connection reset by peer" in self.rawWhoisResultString:
+                return self.rawWhoisResultString.replace("fgets: Connection reset by peer", "")
+
+            if "connect: Connection refused" in self.rawWhoisResultString:
+                return self.rawWhoisResultString.replace("connect: Connection refused", "")
+
+            if self.pc.simplistic:
+                return self.rawWhoisResultString
+
+            raise WhoisCommandFailed(self.rawWhoisResultString)
+
+        return str(self.rawWhoisResultString)
+
+    def runWhoisCliOnThisOs(self) -> str:
 
         # LANG=en is added to make the ".jp" output consist across all environments
-        p = subprocess.Popen(
+        self.processHandle = subprocess.Popen(
             # STDBUF_OFF_CMD needed to not lose data on kill
-            self.STDBUF_OFF_CMD + cmd,
+            self.STDBUF_OFF_CMD + self.makeWhoisCommandToRun(),
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             env={"LANG": "en"} if self.dList[-1] in ".jp" else None,
         )
 
         try:
-            r = p.communicate(timeout=self.pc.timeout,)[
+            self.rawWhoisResultString = self.processHandle.communicate(timeout=self.pc.timeout,)[
                 0
             ].decode(errors="ignore")
         except subprocess.TimeoutExpired:
             # Kill the child process & flush any output buffers
-            p.kill()
-            r = p.communicate()[0].decode(errors="ignore")
+            self.processHandle.kill()
+            self.rawWhoisResultString = self.processHandle.communicate()[0].decode(errors="ignore")
             # In most cases whois servers returns partial domain data really fast
             # after that delay occurs (probably intentional) before returning contact data.
             # Add this option to cover those cases
-            if not self.pc.parse_partial_response or not r:
+            if not self.pc.parse_partial_response or not self.rawWhoisResultString:
                 raise WhoisCommandTimeout(f"timeout: query took more then {self.pc.timeout} seconds")
 
-        if self.pc.verbose:
-            print(r, file=sys.stderr)
+        return self.postProcessingResult()
 
-        if self.pc.ignore_returncode is False and p.returncode not in [0, 1]:
-            if "fgets: Connection reset by peer" in r:
-                return r.replace("fgets: Connection reset by peer", "")
+    def returnWhoisPythonFromStaticTestData(self) -> str:
+        testDir = os.getenv("TEST_WHOIS_PYTHON")
 
-            if "connect: Connection refused" in r:
-                return r.replace("connect: Connection refused", "")
+        pathToTestFile = f"{testDir}/{self.domain}/input"
+        if os.path.exists(pathToTestFile):
+            with open(pathToTestFile, mode="rb") as f:  # switch to binary mode as that is what Popen uses
+                # make sure the data is treated exactly the same as the output of Popen
+                return f.read().decode(errors="ignore")
 
-            if self.pc.simplistic:
-                return r
+        raise WhoisCommandFailed("")
 
-            raise WhoisCommandFailed(r)
+    def executeWhoisQueryOrReturnFileData(self) -> str:
+        # if getenv[TEST_WHOIS_PYTON] fake whois by reading static data from a file
+        # this wasy we can actually implemnt a test run with known data in and expected data out
+        if os.getenv("TEST_WHOIS_PYTHON"):
+            return self.returnWhoisPythonFromStaticTestData()
 
-        return r
+        # slow down before so we can force individual domains at a slower tempo
+        if self.pc.slow_down:
+            time.sleep(self.pc.slow_down)
+
+        return self.runWhoisCliOnThisOs()

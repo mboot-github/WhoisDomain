@@ -57,7 +57,7 @@ def _getNewDataForKey(
         dList=dList,
         pc=pc,
     )
-    return wci.execute_whois_query()
+    return wci.executeWhoisQueryOrReturnFileData()
 
 
 # PUBLIC
