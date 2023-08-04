@@ -105,6 +105,12 @@ ParamsStringJson: str = """
     "optional": true,
     "default": null,
     "help": "timeout in seconds for the whois command to return a result."
+  },
+  "withVerifyCacheStubType": {
+    "type": "bool",
+    "default": true,
+    "optional": true,
+    "help": "allow switching off the cache_stub 'isinstance(CACHE_STUB, SimpleCacheBase)' verify"
   }
 }
 """

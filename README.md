@@ -225,3 +225,5 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * 1.20230804.1 testing
   * 1.20230804.2 testing after remove of leading dot in rw second level domains
   * 1.20230804.3 simplefy cache implementation after feedback from: baderdean
+  * "more lembas bread", refactor parse and query
+  * allow switching off: 'isinstance(CACHE_STUB, SimpleCacheBase)'

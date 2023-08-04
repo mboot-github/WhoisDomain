@@ -15,6 +15,10 @@ SIMPLEDOMAINS = $(shell ls testdata)
 # PHONY targets: make will run its recipe regardless of whether a file with that name exists or what its last modification time is.
 .PHONY: TestSimple TestSimple2 TestAll clean
 
+first: reformat mypy
+
+second: first test2
+
 # ==========================================================
 # run a test sequence local only, no docker ,no upload to pypi
 LocalTestSimple: reformat mypy test2

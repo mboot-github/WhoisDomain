@@ -1,5 +1,7 @@
 #!  /usr/bin/env python3
 
+import sys
+
 from .simpleCacheBase import SimpleCacheBase
 from .simpleCacheWithFile import SimpleCacheWithFile
 
@@ -35,7 +37,9 @@ def _initDefaultCache(
         )
 
     # allways test CACHE_STUB is a subclass of SimpleCacheBase
-    assert isinstance(CACHE_STUB, SimpleCacheBase), Exception("CACHE_STUB - must inherit from SimpleCacheBase")
+    if pc.withVerifyCacheStubType:
+        assert isinstance(CACHE_STUB, SimpleCacheBase), Exception("CACHE_STUB - must inherit from SimpleCacheBase")
+
     return CACHE_STUB
 
 
@@ -58,11 +62,17 @@ def doWhoisAndReturnString(
     cache = _initDefaultCache(pc)
     keyString = ".".join(dList)
 
-    if pc.force is False:
-        oldData: Optional[str] = cache.get(keyString)
-        if oldData is not None:
-            return str(oldData)
+    try:
+        if pc.force is False:
+            oldData: Optional[str] = cache.get(keyString)
+            if oldData is not None:
+                return str(oldData)
 
-    newData = _getNewDataForKey(dList=dList, pc=pc)
-    cache.put(keyString, newData)
+        newData = _getNewDataForKey(dList=dList, pc=pc)
+        cache.put(keyString, newData)
+    except Exception as e:
+        msg: str = f"cache get/put has issues: {e}"
+        print(msg, file=sys.stderr)
+        exit(101)
+
     return newData
