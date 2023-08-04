@@ -41,11 +41,10 @@ from .doWhoisCommand import (
     CACHE_STUB,
 )
 
+from .noneStrings import NoneStrings, NoneStringsAdd
+from .quotaStrings import QuotaStrings, QuotaStringsAdd
+
 from .doParse import (
-    NoneStrings,
-    NoneStringsAdd,
-    QuotaStrings,
-    QuotaStringsAdd,
     cleanupWhoisResponse,
 )
 

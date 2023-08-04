@@ -1,9 +1,5 @@
 #!  /usr/bin/env python3
 
-import platform
-import shutil
-
-
 from .simpleCacheBase import SimpleCacheBase
 from .simpleCacheWithFile import SimpleCacheWithFile
 
@@ -17,12 +13,6 @@ from typing import (
 
 from .parameterContext import ParameterContext
 from .whoisCliInterface import WhoisCliInterface
-
-IS_WINDOWS: bool = platform.system() == "Windows"
-
-STDBUF_OFF_CMD: List[str] = []
-if not IS_WINDOWS and shutil.which("stdbuf"):
-    STDBUF_OFF_CMD = ["stdbuf", "-o0"]
 
 # actually also whois uses cache, so if you really dont want to use cache
 # you should also pass the --force-lookup flag (on linux)
@@ -60,9 +50,7 @@ def _getNewDataForKey(
     return wci.executeWhoisQueryOrReturnFileData()
 
 
-# PUBLIC
-
-# future: use decorator for caching
+# TODO: future: can we use decorator for caching?
 def doWhoisAndReturnString(
     dList: List[str],
     pc: ParameterContext,
