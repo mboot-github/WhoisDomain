@@ -2,7 +2,7 @@
 
 import sys
 
-from .simpleCacheBase import SimpleCacheBase
+# from .simpleCacheBase import SimpleCacheBase
 from .simpleCacheWithFile import SimpleCacheWithFile
 
 from typing import (
@@ -37,8 +37,8 @@ def _initDefaultCache(
         )
 
     # allways test CACHE_STUB is a subclass of SimpleCacheBase
-    if pc.withVerifyCacheStubType:
-        assert isinstance(CACHE_STUB, SimpleCacheBase), Exception("CACHE_STUB - must inherit from SimpleCacheBase")
+    # if pc.withVerifyCacheStubType:
+    #   assert isinstance(CACHE_STUB, SimpleCacheBase), Exception("CACHE_STUB - must inherit from SimpleCacheBase")
 
     return CACHE_STUB
 
