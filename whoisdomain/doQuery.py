@@ -46,9 +46,16 @@ if "SIMPISTIC" in WD:
 CACHE_FILE = None
 SLOW_DOWN = 0
 
+# -------------------------------------------
+# -------------------------------------------
 LastWhois: Dict[str, Any] = {
     "Try": [],
 }
+
+
+def initLastWhois() -> None:
+    global LastWhois
+    LastWhois["Try"] = []  # init on start of query
 
 
 def get_last_raw_whois_data() -> Dict[str, Any]:
@@ -56,37 +63,71 @@ def get_last_raw_whois_data() -> Dict[str, Any]:
     return LastWhois
 
 
+def updateLastWhois(
+    dList: List[str],
+    whoisStr: str,
+    pc: ParameterContext,
+) -> None:
+    global LastWhois
+    LastWhois["Try"].append(
+        {
+            "Domain": ".".join(dList),
+            "rawData": whoisStr,
+            "server": pc.server,
+        }
+    )
+
+
+# -------------------------------------------
+# -------------------------------------------
+
+
 def _internationalizedDomainNameToPunyCode(d: List[str]) -> List[str]:
     return [k.encode("idna").decode() or k for k in d]
 
 
-def _fromDomainStringToTld(
-    domain: str,
-    pc: ParameterContext,
-) -> Tuple[Optional[str], Optional[List[str]]]:
-    domain = domain.lower().strip().rstrip(".")  # Remove the trailing dot to support FQDN.
+class ProcessWhoisDomainRequest:
+    domain: str
+    pc: ParameterContext
 
-    dList: List[str] = domain.split(".")
-    if pc.verbose:
-        print(dList, file=sys.stderr)
+    def __init__(
+        self,
+        domain: str,
+        pc: ParameterContext,
+    ) -> None:
+        self.domain = domain
+        self.pc = pc
 
-    if dList[0] == "www":
-        dList = dList[1:]
+    def _fromDomainStringToTld(
+        self,
+    ) -> Tuple[str, Optional[str], Optional[List[str]]]:
+        self.domain = self.domain.lower().strip().rstrip(".")  # Remove the trailing dot to support FQDN.
 
-    if len(dList) == 1:
-        return None, None
+        dList: List[str] = self.domain.split(".")
+        if self.pc.verbose:
+            print(dList, file=sys.stderr)
 
-    tldString: str = filterTldToSupportedPattern(domain, dList, pc.verbose)  # may raise UnknownTld
-    if pc.verbose:
-        print(f"filterTldToSupportedPattern returns tld: {tldString}", file=sys.stderr)
+        if dList[0] == "www":
+            dList = dList[1:]
 
-    if pc.internationalized and isinstance(pc.internationalized, bool):
-        dList = _internationalizedDomainNameToPunyCode(dList)
+        if len(dList) == 1:
+            return self.domain, None, None
 
-    if pc.verbose:
-        print(tldString, dList, file=sys.stderr)
+        tldString: str = filterTldToSupportedPattern(
+            self.domain,
+            dList,
+            self.pc.verbose,
+        )  # may raise UnknownTld
+        if self.pc.verbose:
+            print(f"filterTldToSupportedPattern returns tld: {tldString}", file=sys.stderr)
 
-    return tldString, dList
+        if self.pc.internationalized:
+            dList = _internationalizedDomainNameToPunyCode(dList)
+
+        if self.pc.verbose:
+            print(tldString, dList, file=sys.stderr)
+
+        return self.domain, tldString, dList
 
 
 def _validateWeKnowTheToplevelDomain(
@@ -203,12 +244,10 @@ def _doOneLookup(
 
         raise e
 
-    LastWhois["Try"].append(
-        {
-            "Domain": ".".join(dList),
-            "rawData": whoisStr,
-            "server": pc.server,
-        }
+    updateLastWhois(
+        dList=dList,
+        whoisStr=whoisStr,
+        pc=pc,
     )
 
     data = do_parse(
@@ -250,8 +289,11 @@ def query(
     simplistic: bool = False,
     withRedacted: bool = False,
     pc: Optional[ParameterContext] = None,
+    # if you use pc as argument all above params (except domain are ignored)
 ) -> Optional[Domain]:
     # see documentation about paramaters in parameterContext.py
+
+    assert isinstance(domain, str), Exception("`domain` - must be <str>")
 
     if pc is None:
         pc = ParameterContext(
@@ -274,21 +316,17 @@ def query(
         )
     # else:
 
-    global LastWhois
-    LastWhois["Try"] = []  # init on start of query
+    initLastWhois()
 
-    assert isinstance(domain, str), Exception("`domain` - must be <str>")
-    return_raw_text_for_unsupported_tld = bool(return_raw_text_for_unsupported_tld)
-
+    pwdr = ProcessWhoisDomainRequest(
+        domain=domain,
+        pc=pc,
+    )
     # =================================================
     try:
-        tldString, dList = _fromDomainStringToTld(  # may raise UnknownTld
-            domain,
-            pc=pc,
-        )
+        domain, tldString, dList = pwdr._fromDomainStringToTld()  # may raise UnknownTld
         if tldString is None:
             return None
-
     except Exception as e:
         if pc.simplistic:
             return Domain(
@@ -297,8 +335,8 @@ def query(
                 whoisStr=None,
                 exeptionStr="UnknownTld",
             )
-
-        raise (e)
+        else:
+            raise (e)
 
     # =================================================
     dList = cast(List[str], dList)
