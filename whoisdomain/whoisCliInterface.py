@@ -159,8 +159,10 @@ class WhoisCliInterface:
         raise WhoisCommandFailed("")
 
     def executeWhoisQueryOrReturnFileData(self) -> str:
-        # if getenv[TEST_WHOIS_PYTON] fake whois by reading static data from a file
-        # this wasy we can actually implemnt a test run with known data in and expected data out
+        # if getenv[TEST_WHOIS_PYTON] then
+        #   fake whois by reading static data from a file
+        #     this way we can actually implemnt a test run
+        #       with known data in and expected data out
         if os.getenv("TEST_WHOIS_PYTHON"):
             return self.returnWhoisPythonFromStaticTestData()
 

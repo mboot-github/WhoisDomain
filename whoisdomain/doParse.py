@@ -80,26 +80,8 @@ def do_parse(
     wp = WhoisParser(
         tldString=tldString,
         dList=dList,
-        whoisStr=cleanupWhoisResponse(
-            whoisStr=whoisStr,
-            pc=pc,
-        ),
+        whoisStr=whoisStr,
         pc=pc,
     )
 
-    if whoisStr.count("\n") < 5:
-        result = wp._handleShortResponse()  # may raise:    FailedParsingWhoisOutput,    WhoisQuotaExceeded,
-        return result
-
-    if "source:       IANA" in whoisStr:
-        # prepare for handling historical IANA domains
-        whoisStr, ianaDomain = wp._doSourceIana()  # resultDict=wp.resultDict
-        if ianaDomain is not None:
-            # ianaDomain = cast(Optional[Dict[str, Any]], ianaDomain)
-            return ianaDomain
-
-    if "Server Name" in whoisStr:
-        # handle old type Server Name (not very common anymore)
-        wp._doIfServerNameLookForDomainName()
-
-    return wp._doExtractPattensFromWhoisString()  # resultDict=wp.resultDict,
+    return wp.parse()

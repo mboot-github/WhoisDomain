@@ -45,6 +45,7 @@ class WhoisParser:
             "tld": tldString,
             "DNSSEC": self._doDnsSec(),
         }
+        self.cleanupWhoisResponse()
 
     def _doExtractPattensIanaFromWhoisString(
         self,
@@ -192,3 +193,62 @@ class WhoisParser:
             )
 
         raise FailedParsingWhoisOutput(self.whoisStr)
+
+    def cleanupWhoisResponse(
+        self,
+        pc: Optional[ParameterContext] = None,
+    ) -> str:
+        tmp2: List[str] = []
+
+        skipFromHere = False
+        tmp: List[str] = self.whoisStr.split("\n")
+        for line in tmp:
+            if skipFromHere is True:
+                continue
+
+            # some servers respond with: % Quota exceeded in the comment section (lines starting with %)
+            if "quota exceeded" in line.lower():
+                raise WhoisQuotaExceeded(self.whoisStr)
+
+            if self.pc.with_cleanup_results is True and line.startswith("%"):  # only remove if requested
+                continue
+
+            if self.pc.withRedacted is False:
+                if "REDACTED FOR PRIVACY" in line:  # these lines contibute nothing so ignore
+                    continue
+
+            if "Please query the RDDS service of the Registrar of Record" in line:  # these lines contibute nothing so ignore
+                continue
+
+            # regular responses may at the end have meta info starting with a line >>> some texte <<<
+            # similar trailing info exists with lines starting with -- but we wil handle them later
+            # unfortunalery we have domains (google.st) that have this early at the top
+            if 0:
+                if line.startswith(">>>"):
+                    skipFromHere = True
+                    continue
+
+            if line.startswith("Terms of Use:"):  # these lines contibute nothing so ignore
+                continue
+
+            tmp2.append(line.strip("\r"))
+
+        return "\n".join(tmp2)
+
+    def parse(self) -> Optional[Dict[str, Any]] | Optional[Domain]:
+        if self.whoisStr.count("\n") < 5:
+            result = self._handleShortResponse()  # may raise:    FailedParsingWhoisOutput,    WhoisQuotaExceeded,
+            return result
+
+        if "source:       IANA" in self.whoisStr:
+            # prepare for handling historical IANA domains
+            self.whoisStr, ianaDomain = self._doSourceIana()  # resultDict=self.resultDict
+            if ianaDomain is not None:
+                # ianaDomain = cast(Optional[Dict[str, Any]], ianaDomain)
+                return ianaDomain
+
+        if "Server Name" in self.whoisStr:
+            # handle old type Server Name (not very common anymore)
+            self._doIfServerNameLookForDomainName()
+
+        return self._doExtractPattensFromWhoisString()  # resultDict=self.resultDict,
