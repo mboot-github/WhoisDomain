@@ -4,8 +4,8 @@ from typing import (
     Any,
     Dict,
     Optional,
-    List,
     Tuple,
+    List,
 )
 
 import re
@@ -196,7 +196,6 @@ class WhoisParser:
 
     def cleanupWhoisResponse(
         self,
-        pc: Optional[ParameterContext] = None,
     ) -> str:
         tmp2: List[str] = []
 
@@ -233,22 +232,23 @@ class WhoisParser:
 
             tmp2.append(line.strip("\r"))
 
-        return "\n".join(tmp2)
+        self.whoisStr = "\n".join(tmp2)
+        return self.whoisStr
 
-    def parse(self) -> Optional[Dict[str, Any]] | Optional[Domain]:
+    def parse(self) -> Tuple[Optional[Dict[str, Any]] | Optional[Domain], str]:
         if self.whoisStr.count("\n") < 5:
             result = self._handleShortResponse()  # may raise:    FailedParsingWhoisOutput,    WhoisQuotaExceeded,
-            return result
+            return result, self.whoisStr
 
         if "source:       IANA" in self.whoisStr:
             # prepare for handling historical IANA domains
             self.whoisStr, ianaDomain = self._doSourceIana()  # resultDict=self.resultDict
             if ianaDomain is not None:
                 # ianaDomain = cast(Optional[Dict[str, Any]], ianaDomain)
-                return ianaDomain
+                return ianaDomain, self.whoisStr
 
         if "Server Name" in self.whoisStr:
             # handle old type Server Name (not very common anymore)
             self._doIfServerNameLookForDomainName()
 
-        return self._doExtractPattensFromWhoisString()  # resultDict=self.resultDict,
+        return self._doExtractPattensFromWhoisString(), self.whoisStr

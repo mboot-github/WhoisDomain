@@ -167,12 +167,20 @@ class ProcessWhoisDomainRequest:
             pc=self.pc,
         )
 
-        data = do_parse(
+        if self.pc.verbose:
+            # is not cleaned
+            print(whoisStr, file=sys.stderr)
+
+        data, whoisStr = do_parse(
             whoisStr=whoisStr,
             tldString=str(self.tldString),
             dList=dList,
             pc=self.pc,
         )
+
+        if self.pc.verbose:
+            # should be cleaned now
+            print(whoisStr, file=sys.stderr)
 
         if isinstance(data, Domain):
             return data
