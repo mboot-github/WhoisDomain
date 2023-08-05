@@ -224,8 +224,8 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * 1.20230803.1 frenzy refactor-release
   * 1.20230804.1 testing
   * 1.20230804.2 testing after remove of leading dot in rw second level domains
-  * 1.20230804.3 simplefy cache implementation after feedback from: baderdean
+  * 1.20230804.3 simplefy cache implementation after feedback from `baderdean`
   * "more lembas bread", refactor parse and query
   * remove option to typecheck CACHE_STUB, use try/catch/exit instead, does not work when timout happens, removed ;-(
-  * refactor doQuery create processWhoisDomainREquest, split of lastWhois
+  * refactor doQuery create processWhoisDomainRequest, split of lastWhois
 

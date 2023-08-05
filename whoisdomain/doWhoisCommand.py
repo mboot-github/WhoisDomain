@@ -1,6 +1,6 @@
 #!  /usr/bin/env python3
 
-import sys
+# import sys
 
 # from .simpleCacheBase import SimpleCacheBase
 from .simpleCacheWithFile import SimpleCacheWithFile

@@ -215,18 +215,29 @@ def testItem(
 
     timeout = 30  # seconds
 
-    w = whois.query(
-        d,
+    withCacheTest: bool = False
+    if withCacheTest:
+        # test passing pre initialized caching stub
+        cache_file = "/tmp/testCache.json"
+        cache_age = 300
+        whois.CACHE_STUB = whois.SimpleCacheWithFile(
+            verbose=Verbose,
+            cacheFilePath=cache_file,
+            cacheMaxAge=cache_age,
+        )
+
+    pc = whois.ParameterContext(
         ignore_returncode=IgnoreReturncode,
         verbose=Verbose,
         internationalized=True,
         include_raw_whois_text=PrintGetRawWhoisResult,
-        timeout=timeout,
+        timeout=float(timeout),
         simplistic=SIMPLISTIC,
         withRedacted=WithRedacted,
-        # cache_file="/tmp/testCache.json",  # temp test
-        # cache_age=300,  # temp test
     )
+
+    # use the new query (can also simply use q2()
+    w = whois.query(domain=d, pc=pc)
 
     if w is None:
         print("None")

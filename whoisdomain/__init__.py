@@ -32,11 +32,13 @@ from ._0_init_tld import (
     mergeExternalDictWithRegex,
 )
 
-from .doQuery import query
+from .doQuery import query, q2
 from .lastWhois import get_last_raw_whois_data
 from .doWhoisCommand import CACHE_STUB
 from .noneStrings import NoneStrings, NoneStringsAdd
 from .quotaStrings import QuotaStrings, QuotaStringsAdd
+from .simpleCacheBase import SimpleCacheBase
+from .simpleCacheWithFile import SimpleCacheWithFile
 
 from .doParse import (
     cleanupWhoisResponse,
@@ -72,6 +74,7 @@ __all__ = [
     "ParameterContext",
     # from doQuery
     "query",
+    "q2",
     "get_last_raw_whois_data",
     # fromm this file
     "getVersion",
@@ -84,6 +87,9 @@ __all__ = [
     "QuotaStrings",
     "QuotaStringsAdd",
     "cleanupWhoisResponse",  # we will drop this most likely
+    # from simpleCacheWithFile
+    "SimpleCacheBase",
+    "SimpleCacheWithFile",
 ]
 
 

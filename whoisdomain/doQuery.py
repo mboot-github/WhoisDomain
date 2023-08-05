@@ -1,19 +1,9 @@
-import sys
 import os
 
 from typing import (
-    cast,
     Optional,
-    List,
-    Dict,
-    Any,
 )
 
-from .exceptions import (
-    UnknownTld,
-)
-
-from ._0_init_tld import TLD_RE
 from .domain import Domain
 from .parameterContext import ParameterContext
 from .processWhoisDomainRequest import ProcessWhoisDomainRequest
@@ -31,6 +21,19 @@ if "SIMPISTIC" in WD:
     SIMPLISTIC = True
 
 # CACHE_FILE = None
+
+
+def q2(
+    domain: str,
+    pc: ParameterContext,
+) -> Optional[Domain]:
+
+    pwdr = ProcessWhoisDomainRequest(
+        domain=domain,
+        pc=pc,
+    )
+
+    return pwdr.processRequest()
 
 
 def query(
@@ -58,6 +61,8 @@ def query(
 
     assert isinstance(domain, str), Exception("`domain` - must be <str>")
 
+    initLastWhois()
+
     if pc is None:
         pc = ParameterContext(
             force=force,
@@ -77,90 +82,5 @@ def query(
             simplistic=simplistic,
             withRedacted=withRedacted,
         )
-    # else:
 
-    # pc.cache_file = pc.cache_file or None
-
-    initLastWhois()
-
-    pwdr = ProcessWhoisDomainRequest(
-        domain=domain,
-        pc=pc,
-    )
-    # =================================================
-    try:
-        domain, tldString, dList = pwdr._fromDomainStringToTld()  # may raise UnknownTld
-        if tldString is None:
-            return None
-    except Exception as e:
-        if pc.simplistic:
-            return Domain(
-                data={},
-                pc=pc,
-                whoisStr=None,
-                exeptionStr="UnknownTld",
-            )
-        else:
-            raise (e)
-
-    pwdr.setThisTldSring(tldString)
-
-    # =================================================
-    dList = cast(List[str], dList)
-    if tldString not in TLD_RE.keys():
-        msg = pwdr.makeMessageForUnsupportedTld()
-        if msg is None:
-            return pwdr._doUnsupportedTldAnyway(
-                dList=dList,
-            )
-
-        if pc.simplistic:
-            return Domain(
-                data={},
-                pc=pc,
-                whoisStr=None,
-                exeptionStr="UnknownTld",
-            )
-
-        raise UnknownTld(msg)
-
-    # =================================================
-    pwdr.setThisTldEntry(cast(Dict[str, Any], TLD_RE.get(tldString)))
-
-    if pwdr._verifyPrivateRegistry():  # may raise WhoisPrivateRegistry
-        msg = "This tld has either no whois server or responds only with minimal information"
-        return Domain(
-            data={},
-            pc=pc,
-            whoisStr=None,
-            exeptionStr=msg,
-        )
-
-    # =================================================
-    pwdr._doServerHintsForThisTld()
-    pwdr._doSlowdownHintForThisTld()
-
-    # if the tld is a multi level we should not move further down than the tld itself
-    # we currently allow progressive lookups until we find something:
-    # so xxx.yyy.zzz will try both xxx.yyy.zzz and yyy.zzz
-    # but if the tld is yyy.zzz we should only try xxx.yyy.zzz
-
-    tldLevel = tldString.split(".")
-    while True:  # loop until we decide we are done
-        result = pwdr.doOneLookup(
-            tldString=tldString,
-            dList=dList,
-        )
-        if result:
-            return result
-
-        if len(dList) > (len(tldLevel) + 1):
-            dList = dList[1:]  # strip one element from the front and try again
-            if verbose:
-                print(f"try again with {dList}, {len(dList)}, {len(tldLevel) + 1}", file=sys.stderr)
-            continue
-
-        # no result or no domain but we can not reduce any further so we have None
-        return None
-
-    return None
+    return q2(domain=domain, pc=pc)
