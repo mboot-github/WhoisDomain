@@ -228,4 +228,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * "more lembas bread", refactor parse and query
   * remove option to typecheck CACHE_STUB, use try/catch/exit instead, does not work when timout happens, removed ;-(
   * refactor doQuery create processWhoisDomainRequest, split of lastWhois
-
+  * 1.20230806.1 testing done, prep new release: "more lembas bread"
