@@ -77,6 +77,24 @@ rlsecure-version:
 # build a docker images with the latest python and run a test -a
 dockerTests: docker dockerRunLocal dockerTestdata
 
+testdocker:
+	export VERSION=$(shell cat work/version) && \
+	docker build \
+		--build-arg VERSION \
+		--tag $(DOCKER_WHO)/$(WHAT)-test \
+		--tag $(DOCKER_WHO)/$(WHAT)-$${VERSION}-test \
+		--tag $(WHAT)-$${VERSION}-test \
+		--tag $(WHAT)-test \
+		-f Dockerfile-test .
+
+testdockerTestdata:
+	@export VERSION=$(shell cat work/version) && \
+	docker run \
+		-v ./testdata:/testdata \
+		$(WHAT)-$${VERSION}-test \
+		-f /testdata/DOMAINS.txt 2>tmp/$@-2 | \
+		tee tmp/$@-1
+
 docker:
 	export VERSION=$(shell cat work/version) && \
 	docker build \
@@ -108,18 +126,18 @@ dockerPush:
 		--all-tags $(DOCKER_WHO)/$(WHAT)
 
 # ====================================================
-# uploading to pypi an pypi-test
+# uploading to pypi an pypiTestUpload
 # build a test-mypi and download the image in a venv ane run a test
-pypiTest: pypi-test testTestPypi
+pypiTest: pypiTestUpload testTestPypi
 
 # this is only the upload now for pypi builders
-pypi-test:
+pypiTestUpload:
 	./bin/upload_to_pypiTest.sh
 
 testTestPypi:
 	./bin/testTestPyPiUpload.sh 2>tmp/$@-2 | tee tmp/$@-1
 
-releaseTest: build rlsecure pypi-test testTestPypi
+releaseTest: build rlsecure pypiTestUpload testTestPypi
 
 # this is for pypi owners after all tests have finished
 pypi: rlsecure
