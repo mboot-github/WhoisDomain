@@ -34,7 +34,7 @@ from ._0_init_tld import (
 
 from .doQuery import query, q2
 from .lastWhois import get_last_raw_whois_data
-from .doWhoisCommand import CACHE_STUB
+from .doWhoisCommand import setMyCache
 from .noneStrings import NoneStrings, NoneStringsAdd
 from .quotaStrings import QuotaStrings, QuotaStringsAdd
 from .simpleCacheBase import SimpleCacheBase
@@ -80,7 +80,7 @@ __all__ = [
     "getVersion",
     "getTestHint",
     # from doWhoisCommand
-    "CACHE_STUB",  # to build your own caching interface
+    "setMyCache",  # to build your own caching interface
     # from doParse
     "NoneStrings",
     "NoneStringsAdd",

@@ -26,6 +26,7 @@ def updateLastWhois(
 
 def initLastWhois() -> None:
     global LastWhois
+    LastWhois = {}
     LastWhois["Try"] = []  # init on start of query
 
 

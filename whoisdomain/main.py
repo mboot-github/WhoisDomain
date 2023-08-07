@@ -220,10 +220,12 @@ def testItem(
         # test passing pre initialized caching stub
         cache_file = "/tmp/testCache.json"
         cache_age = 300
-        whois.CACHE_STUB = whois.SimpleCacheWithFile(
-            verbose=Verbose,
-            cacheFilePath=cache_file,
-            cacheMaxAge=cache_age,
+        whois.setMyCache(
+            whois.SimpleCacheWithFile(
+                verbose=Verbose,
+                cacheFilePath=cache_file,
+                cacheMaxAge=cache_age,
+            ),
         )
 
     pc = whois.ParameterContext(

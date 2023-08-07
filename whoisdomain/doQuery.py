@@ -21,13 +21,13 @@ SIMPLISTIC = False
 if "SIMPISTIC" in WD:
     SIMPLISTIC = True
 
-# CACHE_FILE = None
-
 
 def q2(
     domain: str,
     pc: ParameterContext,
 ) -> Optional[Domain]:
+
+    initLastWhois()
 
     pwdr = ProcessWhoisDomainRequest(
         domain=domain,
@@ -61,8 +61,6 @@ def query(
     # see documentation about paramaters in parameterContext.py
 
     assert isinstance(domain, str), Exception("`domain` - must be <str>")
-
-    initLastWhois()
 
     if pc is None:
         pc = ParameterContext(

@@ -211,8 +211,6 @@ class ProcessWhoisDomainRequest:
             else:
                 raise (e)
 
-        # self.setThisTldString(tldString)
-
         # =================================================
         dList = cast(List[str], dList)
         if self.tldString not in TLD_RE.keys():
