@@ -37,8 +37,11 @@ from .lastWhois import get_last_raw_whois_data
 from .doWhoisCommand import setMyCache
 from .noneStrings import NoneStrings, NoneStringsAdd
 from .quotaStrings import QuotaStrings, QuotaStringsAdd
+
 from .simpleCacheBase import SimpleCacheBase
 from .simpleCacheWithFile import SimpleCacheWithFile
+from .dummyCache import DummyCache
+from .dbmCache import DBMCache
 
 from .doParse import (
     cleanupWhoisResponse,
@@ -87,9 +90,11 @@ __all__ = [
     "QuotaStrings",
     "QuotaStringsAdd",
     "cleanupWhoisResponse",  # we will drop this most likely
-    # from simpleCacheWithFile
+    # from Cache
     "SimpleCacheBase",
     "SimpleCacheWithFile",
+    "DummyCache",
+    "DBMCache",
 ]
 
 

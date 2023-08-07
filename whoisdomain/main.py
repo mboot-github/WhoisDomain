@@ -207,33 +207,20 @@ def testItem(
     d: str,
     printgetRawWhoisResult: bool = False,
 ) -> None:
+    global IgnoreReturncode
+    global Verbose
     global PrintGetRawWhoisResult
     global SIMPLISTIC
     global WithRedacted
+
     global TestAllTld
     global TestRunOnly
-
-    timeout = 30  # seconds
-
-    withCacheTest: bool = False
-    if withCacheTest:
-        # test passing pre initialized caching stub
-        cache_file = "/tmp/testCache.json"
-        cache_age = 300
-        whois.setMyCache(
-            whois.SimpleCacheWithFile(
-                verbose=Verbose,
-                cacheFilePath=cache_file,
-                cacheMaxAge=cache_age,
-            ),
-        )
 
     pc = whois.ParameterContext(
         ignore_returncode=IgnoreReturncode,
         verbose=Verbose,
         internationalized=True,
         include_raw_whois_text=PrintGetRawWhoisResult,
-        timeout=float(timeout),
         simplistic=SIMPLISTIC,
         withRedacted=WithRedacted,
     )
@@ -555,8 +542,9 @@ def main() -> None:
     try:
         opts, args = getopt.getopt(
             sys.argv[1:],
-            "tjRSpvVIhaf:d:D:r:H:C:",
+            "TtjRSpvVIhaf:d:D:r:H:C:",
             [
+                "Testing",
                 "test",
                 "json",
                 "Ruleset",
@@ -631,6 +619,14 @@ def main() -> None:
 
         if opt in ("-j", "--json"):
             PrintJson = True
+
+        if opt in ("-T", "--Testing"):
+            whois.setMyCache(
+                whois.DBMCache(
+                    dbmFile="testfile.dbm",
+                    verbose=Verbose,
+                ),
+            )
 
         if opt in ("-t", "--test"):
             # collect all _test entries defined and only run those,
@@ -721,4 +717,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+
     main()
