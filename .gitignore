@@ -76,3 +76,4 @@ tmp/
 rlsecure/
 *_cache/
 *.sqlite
+*.dbm
