@@ -1,6 +1,6 @@
 #!  /usr/bin/env python3
 
-# import sys
+import sys
 
 # from .simpleCacheBase import SimpleCacheBase
 from .simpleCacheWithFile import SimpleCacheWithFile
@@ -35,10 +35,9 @@ def _initDefaultCache(
             cacheFilePath=pc.cache_file,
             cacheMaxAge=pc.cache_age,
         )
-
-    # allways test CACHE_STUB is a subclass of SimpleCacheBase
-    # if pc.withVerifyCacheStubType:
-    #   assert isinstance(CACHE_STUB, SimpleCacheBase), Exception("CACHE_STUB - must inherit from SimpleCacheBase")
+    else:
+        if pc.verbose:
+            print("cache already initialized", file=sys.stderr)
 
     return CACHE_STUB
 
@@ -61,6 +60,9 @@ def doWhoisAndReturnString(
 ) -> str:
     cache = _initDefaultCache(pc)
     keyString = ".".join(dList)
+
+    if pc.verbose:
+        print(f"force: {pc.force}", file=sys.stderr)
 
     if pc.force is False:
         oldData: Optional[str] = cache.get(keyString)

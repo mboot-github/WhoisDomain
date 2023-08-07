@@ -130,6 +130,8 @@ class WhoisCliInterface:
             stderr=subprocess.STDOUT,
             env={"LANG": "en"} if self.dList[-1] in ".jp" else None,
         )
+        if self.pc.verbose:
+            print(f"timout: {self.pc.timeout}", file=sys.stderr)
 
         try:
             self.rawWhoisResultString = self.processHandle.communicate(timeout=self.pc.timeout,)[

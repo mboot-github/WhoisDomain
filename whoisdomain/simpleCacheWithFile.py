@@ -26,6 +26,8 @@ class SimpleCacheWithFile(SimpleCacheBase):
     ) -> None:
         super().__init__(verbose=verbose, cacheMaxAge=cacheMaxAge)
         self.cacheFilePath = cacheFilePath
+        if self.verbose:
+            print("init SimpleCacheWithFile", file=sys.stderr)
 
     def _fileLoad(
         self,

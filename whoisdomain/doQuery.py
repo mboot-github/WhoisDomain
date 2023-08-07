@@ -1,4 +1,5 @@
 import os
+import sys
 
 from typing import (
     Optional,
@@ -76,11 +77,14 @@ def query(
             internationalized=internationalized,
             include_raw_whois_text=include_raw_whois_text,
             return_raw_text_for_unsupported_tld=return_raw_text_for_unsupported_tld,
-            timeout=float(timeout) if timeout else float(0),
+            timeout=timeout,
             parse_partial_response=parse_partial_response,
             cmd=cmd,
             simplistic=simplistic,
             withRedacted=withRedacted,
         )
+
+    if verbose:
+        print(pc, file=sys.stderr)
 
     return q2(domain=domain, pc=pc)

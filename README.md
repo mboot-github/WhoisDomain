@@ -229,3 +229,5 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * remove option to typecheck CACHE_STUB, use try/catch/exit instead, does not work when timout happens, removed ;-(
   * refactor doQuery create processWhoisDomainRequest, split of lastWhois
   * 1.20230806.1 testing done, prep new release: "more lembas bread"
+  * bug found with the default timeout: if no timeout is specified the program fails: all pypi released befote 2023-07-17 yanked
+  * 1.20230807.1 fix default timeout

@@ -103,7 +103,7 @@ ParamsStringJson: str = """
   "timeout": {
     "type": "float",
     "optional": true,
-    "default": null,
+    "default": 30.0,
     "help": "timeout in seconds for the whois command to return a result."
   }
 }
@@ -206,8 +206,8 @@ class ParameterContext:
                 if not isinstance(value, self.KT[t]):
                     msg = f"unknown type: {t} for {name}, {value}"
                     raise TypeError(msg)
-
-            self.value[name] = value
+                self.value[name] = value
+            # leave the default
 
 
 if __name__ == "__main__":
