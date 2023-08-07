@@ -24,11 +24,22 @@ whoisdomain.setMyCache(
     ),
 )
 
-# do a lookup
-d = whoisdomain.q2(
-    "google.com",
-    pc,
+whoisdomain.setMyCache(
+    whoisdomain.RedisCache(
+        verbose=verbose,
+    ),
 )
 
-# print results
-print(d.__dict__)
+def lookup(what: str):
+    # do a lookup
+    d = whoisdomain.q2(
+        what,
+        pc,
+    )
+
+    # print results
+    print(d.__dict__)
+
+what: str = "google.com"
+lookup(what)
+lookup(what)

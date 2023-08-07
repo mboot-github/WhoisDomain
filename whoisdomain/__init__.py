@@ -38,10 +38,6 @@ from .doWhoisCommand import setMyCache
 from .noneStrings import NoneStrings, NoneStringsAdd
 from .quotaStrings import QuotaStrings, QuotaStringsAdd
 
-from .simpleCacheBase import SimpleCacheBase
-from .simpleCacheWithFile import SimpleCacheWithFile
-from .dummyCache import DummyCache
-from .dbmCache import DBMCache
 
 from .doParse import (
     cleanupWhoisResponse,
@@ -50,6 +46,12 @@ from .doParse import (
 from .tld_regexpr import ZZ
 from .domain import Domain
 from .parameterContext import ParameterContext
+
+from .simpleCacheBase import SimpleCacheBase
+from .simpleCacheWithFile import SimpleCacheWithFile
+from .dummyCache import DummyCache
+from .dbmCache import DBMCache
+from .redisCache import RedisCache
 
 TLD_LIB_PRESENT: bool = False
 try:
@@ -95,6 +97,7 @@ __all__ = [
     "SimpleCacheWithFile",
     "DummyCache",
     "DBMCache",
+    "RedisCache",
 ]
 
 
