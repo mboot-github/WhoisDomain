@@ -30,7 +30,8 @@ whoisdomain.setMyCache(
     ),
 )
 
-def lookup(what: str):
+
+def lookup(what: str) -> None:
     # do a lookup
     d = whoisdomain.q2(
         what,
@@ -39,6 +40,7 @@ def lookup(what: str):
 
     # print results
     print(d.__dict__)
+
 
 what: str = "google.com"
 lookup(what)

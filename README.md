@@ -231,3 +231,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * 1.20230806.1 testing done, prep new release: "more lembas bread"
   * bug found with the default timeout: if no timeout is specified the program fails: all pypi releases before 2023-07-17 yanked
   * 1.20230807.1 fix default timeout
+  * add DummyCache, DBMCache, RedisCache with simple test in testCache.py, testing custom cache options

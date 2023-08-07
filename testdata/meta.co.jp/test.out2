@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< meta.co.jp >>>>>>>>>>>>>>>>>>>>
+name               str               'meta.co.jp'
+tld                str               'co.jp'
+registrar          str               'JPRS'
+registrant_country str               ''
+creation_date      datetime.datetime 1994-04-01 00:00:00
+expiration_date    NoneType          None
+last_updated       datetime.datetime 2023-04-30 18:02:23
+dnssec             bool              False
+status             str               'Connected (2024/04/30)'
+statuses           list              ['Connected (2024/04/30)']
+name_servers       list              ['ns.meta.co.jp', 'ns2.meta.co.jp', 'ns2.sphere.ad.jp']
+registrant         str               ''
+emails             list              []

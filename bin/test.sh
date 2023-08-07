@@ -26,6 +26,18 @@ testOneDomain()
     tee "$TestDataDir/$domain/diff.out"
 }
 
+testOneDomain2()
+{
+    domain="$1"
+    [ ! -d "$TestDataDir/$domain" ] && return
+
+    echo "testing: $domain"
+    ./test2.py -T -d "$domain" >"$TestDataDir/$domain/test.out2"
+
+    diff "$TestDataDir/$domain/output" "$TestDataDir/$domain/test.out2" |
+    tee "$TestDataDir/$domain/diff.out2"
+}
+
 main()
 {
     prepPath "testdata" # set a default
@@ -37,6 +49,7 @@ main()
     while read line
     do
         testOneDomain $(basename $line)
+        testOneDomain2 $(basename $line)
     done
 }
 

@@ -16,6 +16,8 @@ SIMPLEDOMAINS = $(shell ls testdata)
 .PHONY: TestSimple TestSimple2 TestAll clean
 
 first: reformat mypy
+	./test1.py
+	./testCache.py
 
 second: first test2
 

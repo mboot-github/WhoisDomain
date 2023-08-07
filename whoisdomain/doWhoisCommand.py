@@ -27,7 +27,7 @@ def setMyCache(myCache: Any) -> None:
     if myCache:
         CACHE_STUB = myCache
 
-    print(f"CACHE_STUB {CACHE_STUB}", file=sys.stderr)
+    # print(f"CACHE_STUB {CACHE_STUB}", file=sys.stderr)
 
 
 def _initDefaultCache(
