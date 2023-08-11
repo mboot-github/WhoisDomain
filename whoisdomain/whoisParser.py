@@ -6,6 +6,7 @@ from typing import (
     Optional,
     Tuple,
     List,
+    Union,
 )
 
 import re
@@ -235,7 +236,7 @@ class WhoisParser:
         self.whoisStr = "\n".join(tmp2)
         return self.whoisStr
 
-    def parse(self) -> Tuple[Optional[Dict[str, Any]] | Optional[Domain], str]:
+    def parse(self) -> Tuple[Union[Optional[Dict[str, Any]], Optional[Domain]], str]:
         if self.whoisStr.count("\n") < 5:
             result = self._handleShortResponse()  # may raise:    FailedParsingWhoisOutput,    WhoisQuotaExceeded,
             return result, self.whoisStr

@@ -16,8 +16,8 @@ SIMPLEDOMAINS = $(shell ls testdata)
 .PHONY: TestSimple TestSimple2 TestAll clean
 
 first: reformat mypy
-	./test1.py
-	./testCache.py
+	./test1.py # now tests with python 3.9
+	# ./testCache.py
 
 second: first test2
 

@@ -7,6 +7,7 @@ from typing import (
     Optional,
     Tuple,
     List,
+    Union,
 )
 
 
@@ -76,7 +77,7 @@ def do_parse(
     tldString: str,
     dList: List[str],
     pc: ParameterContext,
-) -> Tuple[Optional[Dict[str, Any]] | Optional[Domain], str]:  # was Any
+) -> Tuple[Union[Optional[Dict[str, Any]], Optional[Domain]], str]:  # was Any
 
     wp = WhoisParser(
         tldString=tldString,
