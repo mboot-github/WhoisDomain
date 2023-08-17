@@ -16,7 +16,7 @@ the third will start from 1 and be only used if more than one update will have t
  * Simple interface to access parsed WHOIS data for a given domain.
  * Able to extract data for all the popular TLDs (com, org, net, biz, info, pl, jp, uk, nz,  ...).
  * Query a WHOIS server directly instead of going through an intermediate web service like many others do.
- * Works with Python >= 3.6
+ * Works with Python >= 3.9
  * All dates as datetime objects.
  * Possibility to cache results.
  * Verbose output on stderr during debugging to see how the internal functions are doing their work
@@ -196,7 +196,7 @@ see the file: ./whoisdomain/tld_regexpr.py
 or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
 
 ## Support
- * Python 3.x is supported for x >= 6
+ * Python 3.x is supported for x >= 9
  * Python 2.x IS NOT supported.
 
 ## Author's
@@ -233,3 +233,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * 1.20230807.1 fix default timeout
   * add DummyCache, DBMCache, RedisCache with simple test in testCache.py, testing custom cache options
   * 1.20230811.1 ; replace type hint | with Union for py3.9 compat; switch off experimental redis tools
+  * switch off 3.[6-8] minimal is 3.9 we test against
