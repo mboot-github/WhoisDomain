@@ -9,7 +9,7 @@ from .domain import Domain
 from .parameterContext import ParameterContext
 from .processWhoisDomainRequest import ProcessWhoisDomainRequest
 from .lastWhois import initLastWhois
-
+from .dataContext import DataContext
 
 WHOISDOMAIN: str = ""
 if os.getenv("WHOISDOMAIN"):
@@ -29,9 +29,14 @@ def q2(
 
     initLastWhois()
 
+    dc = DataContext(
+        pc=pc,
+        domain=domain,
+    )
     pwdr = ProcessWhoisDomainRequest(
         domain=domain,
         pc=pc,
+        dc=dc,
     )
 
     return pwdr.processRequest()

@@ -22,6 +22,7 @@ from .domain import Domain
 from .parameterContext import ParameterContext
 from .noneStrings import NoneStrings
 from .quotaStrings import QuotaStrings
+from .dataContext import DataContext
 
 
 class WhoisParser:
@@ -37,11 +38,14 @@ class WhoisParser:
         dList: List[str],
         whoisStr: str,
         pc: ParameterContext,
+        dc: DataContext,
     ) -> None:
         self.tldString = tldString
         self.dList = dList
         self.whoisStr = whoisStr
         self.pc = pc
+        self.dc = dc
+        #
         self.resultDict: Dict[str, Any] = {
             "tld": tldString,
             "DNSSEC": self._doDnsSec(),
@@ -176,21 +180,29 @@ class WhoisParser:
             if i in s:
                 if self.pc.simplistic:
                     msg = "WhoisQuotaExceeded"
+                    self.dc.exeptionStr = msg
+                    self.dc.whoisStr = self.whoisStr
+
                     return Domain(
-                        data={},
+                        # data=self.dc.data,
                         pc=self.pc,
-                        whoisStr=self.whoisStr,
-                        exeptionStr=msg,
+                        dc=self.dc,
+                        # whoisStr=self.whoisStr,
+                        # exeptionStr=self.dc.exeptionStr,
                     )
                 raise WhoisQuotaExceeded(self.whoisStr)
 
         if self.pc.simplistic:
             msg = "FailedParsingWhoisOutput"
+            self.dc.exeptionStr = msg
+            self.dc.whoisStr = self.whoisStr
+
             return Domain(
-                data={},
+                # data=self.dc.data,
                 pc=self.pc,
-                whoisStr=self.whoisStr,
-                exeptionStr=msg,
+                dc=self.dc,
+                # whoisStr=self.whoisStr,
+                # exeptionStr=self.dc.exeptionStr,
             )
 
         raise FailedParsingWhoisOutput(self.whoisStr)
@@ -236,7 +248,10 @@ class WhoisParser:
         self.whoisStr = "\n".join(tmp2)
         return self.whoisStr
 
-    def parse(self) -> Tuple[Union[Optional[Dict[str, Any]], Optional[Domain]], str]:
+    def parse(
+        self,
+    ) -> Tuple[Union[Optional[Dict[str, Any]], Optional[Domain]], str]:
+
         if self.whoisStr.count("\n") < 5:
             result = self._handleShortResponse()  # may raise:    FailedParsingWhoisOutput,    WhoisQuotaExceeded,
             return result, self.whoisStr
@@ -245,7 +260,6 @@ class WhoisParser:
             # prepare for handling historical IANA domains
             self.whoisStr, ianaDomain = self._doSourceIana()  # resultDict=self.resultDict
             if ianaDomain is not None:
-                # ianaDomain = cast(Optional[Dict[str, Any]], ianaDomain)
                 return ianaDomain, self.whoisStr
 
         if "Server Name" in self.whoisStr:

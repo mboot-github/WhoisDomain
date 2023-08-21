@@ -5,7 +5,7 @@ from typing import (
     Optional,
     List,
     Dict,
-    # Tuple,
+    Tuple,
     Any,
 )
 
@@ -20,6 +20,7 @@ from .doParse import do_parse
 from .domain import Domain
 from .parameterContext import ParameterContext
 from .lastWhois import updateLastWhois
+from .dataContext import DataContext
 
 
 class ProcessWhoisDomainRequest:
@@ -27,12 +28,17 @@ class ProcessWhoisDomainRequest:
         self,
         domain: str,
         pc: ParameterContext,
+        dc: DataContext,
     ) -> None:
         self.domain = domain
         self.pc = pc
+        self.dc = dc
         self.tldString: Optional[str] = None
 
-    def setThisTldEntry(self, thisTld: Dict[str, str]) -> None:
+    def setThisTldEntry(
+        self,
+        thisTld: Dict[str, str],
+    ) -> None:
         self.thisTld = thisTld
 
     def _fromDomainStringToTld(
@@ -82,7 +88,7 @@ class ProcessWhoisDomainRequest:
     def _doUnsupportedTldAnyway(
         self,
         dList: List[str],
-    ) -> Optional[Domain]:
+    ) -> Tuple[str, Dict[str, Any]]:
         # we will not hunt for possible valid first level domains as we have no actual feedback
         self.pc.include_raw_whois_text = True
         whoisStr = doWhoisAndReturnString(
@@ -98,11 +104,7 @@ class ProcessWhoisDomainRequest:
         data["domain_name"] = [".".join(dList)]  # note the fields are default all array, except tld
         self.pc.return_raw_text_for_unsupported_tld = True
 
-        return Domain(
-            data=data,
-            pc=self.pc,
-            whoisStr=whoisStr,
-        )
+        return whoisStr, data
 
     def _verifyPrivateRegistry(
         self,
@@ -146,52 +148,62 @@ class ProcessWhoisDomainRequest:
     ) -> Optional[Domain]:
 
         try:
-            whoisStr = doWhoisAndReturnString(
+            self.dc.whoisStr = doWhoisAndReturnString(
                 dList=dList,
                 pc=self.pc,
             )
         except Exception as e:
             if self.pc.simplistic:
+                self.dc.exeptionStr = f"{e}"
+
                 return Domain(
-                    data={},
+                    # data=self.dc.data,
                     pc=self.pc,
-                    whoisStr=None,
-                    exeptionStr=f"{e}",
+                    dc=self.dc,
+                    # whoisStr=self.dc.whoisStr,
+                    # exeptionStr=self.dc.exeptionStr,
                 )
 
             raise e
 
         updateLastWhois(
             dList=dList,
-            whoisStr=whoisStr,
+            whoisStr=self.dc.whoisStr,
             pc=self.pc,
         )
 
         if self.pc.verbose:
             # is not cleaned
-            print(whoisStr, file=sys.stderr)
+            print(self.dc.whoisStr, file=sys.stderr)
 
-        data, whoisStr = do_parse(
-            whoisStr=whoisStr,
+        data, self.dc.whoisStr = do_parse(
+            whoisStr=self.dc.whoisStr,
             tldString=str(self.tldString),
             dList=dList,
             pc=self.pc,
+            dc=self.dc,
         )
 
         if self.pc.verbose:
             # should be cleaned now
-            print(whoisStr, file=sys.stderr)
+            print(self.dc.whoisStr, file=sys.stderr)
 
         if isinstance(data, Domain):
             return data
 
         # do we have a result and does it have a domain name
-        if data and data["domain_name"][0]:
+        if data is None:
+            return None
+
+        self.dc.data = data
+        if self.dc.data["domain_name"][0]:
             return Domain(
-                data=data,
+                # data=self.dc.data,
                 pc=self.pc,
-                whoisStr=whoisStr,
+                dc=self.dc,
+                # whoisStr=self.dc.whoisStr,
             )
+
         return None
 
     def processRequest(self) -> Optional[Domain]:
@@ -202,44 +214,61 @@ class ProcessWhoisDomainRequest:
                 return None
         except Exception as e:
             if self.pc.simplistic:
+                self.dc.exeptionStr = "UnknownTld"
+
                 return Domain(
-                    data={},
+                    # data=self.dc.data,
                     pc=self.pc,
-                    whoisStr=None,
-                    exeptionStr="UnknownTld",
+                    dc=self.dc,
+                    # whoisStr=self.dc.whoisStr,
+                    # exeptionStr=self.dc.exeptionStr,
                 )
             else:
                 raise (e)
 
         # =================================================
-        dList = cast(List[str], dList)
+        self.dc.dList = cast(List[str], dList)
+
+        # =================================================
         if self.tldString not in TLD_RE.keys():
             msg = self.makeMessageForUnsupportedTld()
             if msg is None:
-                return self._doUnsupportedTldAnyway(
-                    dList=dList,
+                self.dc.whoisStr, self.dc.data = self._doUnsupportedTldAnyway(
+                    dList=self.dc.dList,
                 )
-
-            if self.pc.simplistic:
                 return Domain(
-                    data={},
+                    # data=self.dc.data,
                     pc=self.pc,
-                    whoisStr=None,
-                    exeptionStr="UnknownTld",
+                    dc=self.dc,
+                    # whoisStr=self.dc.whoisStr,
                 )
 
-            raise UnknownTld(msg)
+            if self.pc.simplistic is False:
+                raise UnknownTld(msg)
+
+            # self.dc.exeptionStr = "UnknownTld"
+            self.dc.exeptionStr = msg
+            return Domain(
+                # data=self.dc.data,
+                pc=self.pc,
+                dc=self.dc,
+                # whoisStr=self.dc.whoisStr,
+                # exeptionStr=self.dc.exeptionStr,
+            )
 
         # =================================================
         self.setThisTldEntry(cast(Dict[str, Any], TLD_RE.get(self.tldString)))
 
         if self._verifyPrivateRegistry():  # may raise WhoisPrivateRegistry
             msg = "This tld has either no whois server or responds only with minimal information"
+            self.dc.exeptionStr = msg
+
             return Domain(
-                data={},
+                # data=self.dc.data,
                 pc=self.pc,
-                whoisStr=None,
-                exeptionStr=msg,
+                dc=self.dc,
+                # whoisStr=self.dc.whoisStr,
+                # exeptionStr=self.dc.exeptionStr,
             )
 
         # =================================================
@@ -254,15 +283,15 @@ class ProcessWhoisDomainRequest:
         tldLevel = self.tldString.split(".")
         while True:  # loop until we decide we are done
             result = self.doOneLookup(
-                dList=dList,
+                dList=self.dc.dList,
             )
             if result:
                 return result
 
-            if len(dList) > (len(tldLevel) + 1):
-                dList = dList[1:]  # strip one element from the front and try again
+            if len(self.dc.dList) > (len(tldLevel) + 1):
+                self.dc.dList = self.dc.dList[1:]  # strip one element from the front and try again
                 if self.pc.verbose:
-                    print(f"try again with {dList}, {len(dList)}, {len(tldLevel) + 1}", file=sys.stderr)
+                    print(f"try again with {self.dc.dList}, {len(self.dc.dList)}, {len(tldLevel) + 1}", file=sys.stderr)
                 continue
 
             # no result or no domain but we can not reduce any further so we have None

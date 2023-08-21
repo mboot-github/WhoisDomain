@@ -18,6 +18,7 @@ from .exceptions import (
 from .domain import Domain
 from .parameterContext import ParameterContext
 from .whoisParser import WhoisParser
+from .dataContext import DataContext
 
 
 def cleanupWhoisResponse(
@@ -77,6 +78,7 @@ def do_parse(
     tldString: str,
     dList: List[str],
     pc: ParameterContext,
+    dc: DataContext,
 ) -> Tuple[Union[Optional[Dict[str, Any]], Optional[Domain]], str]:  # was Any
 
     wp = WhoisParser(
@@ -84,6 +86,7 @@ def do_parse(
         dList=dList,
         whoisStr=whoisStr,
         pc=pc,
+        dc=dc,
     )
 
     return wp.parse()

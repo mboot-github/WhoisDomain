@@ -10,6 +10,7 @@ from typing import (
 from .parameterContext import ParameterContext
 
 from .handleDateStrings import str_to_date
+from .dataContext import DataContext
 
 
 class Domain:
@@ -121,49 +122,50 @@ class Domain:
 
     def __init__(
         self,
-        data: Dict[str, Any],
+        # data: Dict[str, Any],
         pc: ParameterContext,
-        whoisStr: Optional[str] = None,
-        exeptionStr: Optional[str] = None,
+        dc: DataContext,
+        # whoisStr: Optional[str] = None,
+        # exeptionStr: Optional[str] = None,
     ):
-        if pc.include_raw_whois_text and whoisStr is not None:
-            self.text = whoisStr
+        if pc.include_raw_whois_text and dc.whoisStr is not None:
+            self.text = dc.whoisStr
 
-        if exeptionStr is not None:
-            self._exception = exeptionStr
+        if dc.exeptionStr is not None:
+            self._exception = dc.exeptionStr
             return
 
-        self.name = data["domain_name"][0].strip().lower()
-        self.tld = data["tld"].lower()
+        self.name = dc.data["domain_name"][0].strip().lower()
+        self.tld = dc.data["tld"].lower()
 
         if pc.return_raw_text_for_unsupported_tld is True:
             return
 
         # process mandatory fields that we expect always to be present
         # even if we have None or ''
-        self.registrar = data["registrar"][0].strip()
-        self.registrant_country = data["registrant_country"][0].strip()
+        self.registrar = dc.data["registrar"][0].strip()
+        self.registrant_country = dc.data["registrant_country"][0].strip()
 
         # date time items
         self.creation_date = str_to_date(
-            data["creation_date"][0],
+            dc.data["creation_date"][0],
             self.tld,
             verbose=pc.verbose,
         )
         self.expiration_date = str_to_date(
-            data["expiration_date"][0],
+            dc.data["expiration_date"][0],
             self.tld,
             verbose=pc.verbose,
         )
         self.last_updated = str_to_date(
-            data["updated_date"][0],
+            dc.data["updated_date"][0],
             self.tld,
             verbose=pc.verbose,
         )
 
-        self.dnssec = data["DNSSEC"]
-        self._doStatus(data)
-        self._doNameservers(data)
+        self.dnssec = dc.data["DNSSEC"]
+        self._doStatus(dc.data)
+        self._doNameservers(dc.data)
 
-        # optional fiels
-        self._doOptionalFields(data)
+        # optional fields
+        self._doOptionalFields(dc.data)
