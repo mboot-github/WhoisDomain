@@ -4,7 +4,7 @@ from typing import (
     Any,
     List,
     Dict,
-    Optional,
+    # Optional,
 )
 
 from .parameterContext import ParameterContext
@@ -14,30 +14,30 @@ from .dataContext import DataContext
 
 
 class Domain:
-    # mandatory: fields we expect always to be present (but can be None or '')
-    name: Optional[str] = None
-    tld: Optional[str] = None
-    registrar: Optional[str] = None
-    registrant_country: Optional[str] = None
-
-    creation_date = None
-    expiration_date = None
-    last_updated = None
-
-    status: Optional[str] = None
-    statuses: List[str] = []
-
-    dnssec: bool = False
-    name_servers: List[str] = []
-
-    # optional: fields that may not be present at all, many have no regex
-    owner: Optional[str] = None
-    abuse_contact = None
-    reseller = None
-    registrant = None
-    admin = None
-    emails: List[str] = []
-    _exception: Optional[str] = None
+    #     # mandatory: fields we expect always to be present (but can be None or '')
+    #     name: Optional[str] = None
+    #     tld: Optional[str] = None
+    #     registrar: Optional[str] = None
+    #     registrant_country: Optional[str] = None
+    #
+    #     creation_date = None
+    #     expiration_date = None
+    #     last_updated = None
+    #
+    #     status: Optional[str] = None
+    #     statuses: List[str] = []
+    #
+    #     dnssec: bool = False
+    #     name_servers: List[str] = []
+    #
+    #     # optional: fields that may not be present at all, many have no regex
+    #     owner: Optional[str] = None
+    #     abuse_contact = None
+    #     reseller = None
+    #     registrant = None
+    #     admin = None
+    #     emails: List[str] = []
+    #     _exception: Optional[str] = None
 
     def _cleanupArray(
         self,
@@ -61,7 +61,7 @@ class Domain:
             for y in x:
                 tmp.append(y.strip().lower())
 
-        self.name_servers = []
+        self.name_servers: List[str] = []
         for x in tmp:
             x = x.strip(" .")  # remove any leading or trailing spaces and/or dots
             if x:
@@ -122,11 +122,8 @@ class Domain:
 
     def __init__(
         self,
-        # data: Dict[str, Any],
         pc: ParameterContext,
         dc: DataContext,
-        # whoisStr: Optional[str] = None,
-        # exeptionStr: Optional[str] = None,
     ):
         if pc.include_raw_whois_text and dc.whoisStr is not None:
             self.text = dc.whoisStr
