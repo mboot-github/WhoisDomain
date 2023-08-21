@@ -170,13 +170,14 @@ class ProcessWhoisDomainRequest:
             )
 
         self.dc.whoisStr = str(self.dc.whoisStr)
+        self.dc.lastWhoisStr = self.dc.whoisStr
 
         if self.pc.verbose:
             print("Raw: ", self.dc.whoisStr, file=sys.stderr)
 
         updateLastWhois(
             dList=self.dc.dList,
-            whoisStr=self.dc.whoisStr,
+            whoisStr=self.dc.lastWhoisStr,
             pc=self.pc,
         )
 
