@@ -2081,7 +2081,7 @@ ZZ["com.ph"] = {"extend": "ph"}
 ZZ["org.ph"] = {"extend": "ph"}
 ZZ["net.ph"] = {"extend": "ph"}
 ZZ["zm"] = {"extend": "com"}
-ZZ["sy"] = {"extend": "_privateReg", "_server": "whois.tld.sy"}
+ZZ["sy"] = {"extend": "com", "_server": "whois.tld.sy", "_test": "tld.sy"}
 ZZ["onl"] = {"extend": "com"}
 ZZ["blue"] = {"extend": "com"}
 ZZ["garden"] = {"extend": "com", "_server": "whois.nic.garden"}
@@ -2203,7 +2203,7 @@ ZZ["рус"] = {"extend": "com"}
 ZZ["vig"] = {"extend": "com", "_server": "whois.afilias-srs.net"}
 
 # autodetect via compare_known_tld.py via IANA tld list and https://github.com/jophy/iana_tld_list
-ZZ["aarp"] = {"_server": "whois.nic.aarp", "extend": "com"}
+ZZ["aarp"] = {"_server": "whois.nic.aarp", "extend": "com", "_test": "nic.aarp"}
 ZZ["abbvie"] = {"_server": "whois.nic.abbvie", "extend": "com"}
 ZZ["abc"] = {"_server": "whois.nic.abc", "extend": "com"}
 ZZ["abogado"] = {"_server": "whois.nic.abogado", "extend": "com"}
@@ -3053,7 +3053,7 @@ ZZ["xn--xkc2dl3a5ee0h"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--xhq521b"] = {"_server": "whois.ngtld.cn", "extend": "com"}
 ZZ["xn--kprw13d"] = {"extend": "tw", "_test": "google.xn--kprw13d"}
 ZZ["xn--kpry57d"] = {"extend": "tw", "_test": "google.xn--kpry57d"}
-ZZ["th"] = {"_server": "whois.thnic.co.th", "extend": "co.th"}
+ZZ["th"] = {"_server": "whois.thnic.co.th", "extend": "co.th", "_test": "thnic.co.th"}
 # whois.thnic.co.th ['co.th']
 ZZ["xn--d1alf"] = {"_server": "whois.marnet.mk", "extend": "mk"}
 # whois.marnet.mk ['mk']
@@ -3065,11 +3065,11 @@ ZZ["xn--mix891f"] = {"_server": "whois.monic.mo", "extend": "mo"}
 # whois.monic.mo ['mo']
 ZZ["xn--o3cw4h"] = {"_server": "whois.thnic.co.th", "extend": "co.th"}
 # whois.thnic.co.th ['co.th']
-ZZ["xn--ogbpf8fl"] = {"_server": "whois.tld.sy", "extend": "sy"}
+ZZ["xn--ogbpf8fl"] = {"_server": "whois.tld.sy", "extend": "sy", "_test": "tld.sy"}
 # whois.tld.sy ['sy']
-ZZ["xn--wgbl6a"] = {"_server": "whois.registry.qa", "extend": "qa"}
+ZZ["xn--wgbl6a"] = {"_server": "whois.registry.qa", "extend": "qa", "_test": "registry.qa"}
 # whois.registry.qa ['qa']
-ZZ["xn--j6w193g"] = {"_server": "whois.hkirc.hk", "extend": "hk"}
+ZZ["xn--j6w193g"] = {"_server": "whois.hkirc.hk", "extend": "hk", "_test": "hkirc.hk"}
 # whois.hkirc.hk ['hk']
 ZZ["xn--e1a4c"] = {"_server": "whois.eu", "extend": "eu"}
 # whois.eu ['eu']
@@ -3252,3 +3252,5 @@ ZZ["广东"] = {"_server": "whois.ngtld.cn", "extend": "com"}
 ZZ["இநதய"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["新加坡"] = {"_server": "whois.sgnic.sg", "extend": "sg"}
 ZZ["テスト"] = {"_privateRegistry": True}
+
+ZZ["ye"] = {"extend": "com", "_server": "whois.y.net.ye", "_test": "net.ye"}
