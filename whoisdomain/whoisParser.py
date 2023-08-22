@@ -4,7 +4,7 @@ from typing import (
     Any,
     Dict,
     Optional,
-    Tuple,
+    # Tuple,
     List,
     Union,
     # cast,
@@ -31,12 +31,10 @@ class WhoisParser:
     def __init__(
         self,
         tldString: str,
-        dList: List[str],
         pc: ParameterContext,
         dc: DataContext,
     ) -> None:
         self.tldString = tldString
-        self.dList = dList
         self.pc = pc
         self.dc = dc
         self.dc.whoisStr = str(self.dc.whoisStr)
@@ -49,7 +47,7 @@ class WhoisParser:
 
     def _doExtractPattensIanaFromWhoisString(
         self,
-    ) -> Dict[str, Any]:
+    ) -> None:
         # now handle the actual format if this whois response
         iana = {
             "domain_name": r"domain:\s?([^\n]+)",
@@ -64,14 +62,14 @@ class WhoisParser:
                     print(f"parsing iana data only for tld: {self.tldString}, {zz}", file=sys.stderr)
                 self.resultDict[k] = zz
 
-        return self.resultDict
-
     def _doExtractPattensFromWhoisString(
         self,
-    ) -> Dict[str, Any]:
+    ) -> None:
         # here we apply the regex patterns
-        for k, v in TLD_RE.get(self.tldString, TLD_RE["com"]).items():  # use TLD_RE["com"] as default if a regex is missing
-            if k.startswith("_"):  # skip meta element like: _server or _privateRegistry
+        # use TLD_RE["com"] as default if a regex is missing
+        for k, v in TLD_RE.get(self.tldString, TLD_RE["com"]).items():
+            if k.startswith("_"):
+                # skip meta element like: _server or _privateRegistry
                 continue
 
             # Historical: here we use 'empty string' as default, not None
@@ -80,11 +78,11 @@ class WhoisParser:
             else:
                 self.resultDict[k] = v.findall(self.dc.whoisStr) or [""]
 
-        return self.resultDict
-
     def _doSourceIana(
         self,
-    ) -> Tuple[str, Optional[Dict[str, Any]]]:
+    ) -> Optional[Dict[str, Any]]:
+        self.dc.whoisStr = str(self.dc.whoisStr)
+
         # here we can handle the example.com and example.net permanent IANA domains
         k: str = "source:       IANA"
 
@@ -92,10 +90,12 @@ class WhoisParser:
             msg: str = f"i have seen {k}"
             print(msg, file=sys.stderr)
 
-        whois_splitted: List[str] = str(self.dc.whoisStr).split(k)
+        whois_splitted: List[str] = self.dc.whoisStr.split(k)
         z: int = len(whois_splitted)
         if z > 2:
-            return k.join(whois_splitted[1:]), None
+
+            self.dc.whoisStr = k.join(whois_splitted[1:])
+            return None
 
         if z == 2 and whois_splitted[1].strip() != "":
             # if we see source: IANA and the part after is not only whitespace
@@ -103,27 +103,28 @@ class WhoisParser:
                 msg = f"after: {k} we see not only whitespace: {whois_splitted[1]}"
                 print(msg, file=sys.stderr)
 
-            return whois_splitted[1], None
+            self.dc.whoisStr = whois_splitted[1]
+            return None
 
-        # try to parse this as a IANA domain as after is only whitespace
-        self.resultDict = self._doExtractPattensFromWhoisString()  # self.resultDict,
+        self._doExtractPattensFromWhoisString()  # try to parse this as a IANA domain as after is only whitespace
+        self._doExtractPattensIanaFromWhoisString()  # now handle the actual format if this whois response
 
-        # now handle the actual format if this whois response
-        self.resultDict = self._doExtractPattensIanaFromWhoisString()  # self.resultDict,
-
-        return str(self.dc.whoisStr), self.resultDict
+        return self.resultDict
 
     def _doIfServerNameLookForDomainName(self) -> None:
-        self.dc.whoisStr = str(self.dc.whoisStr)
+        if self.dc.whoisStr is None:
+            return
 
         # not often available anymore
-        if re.findall(r"Server Name:\s?(.+)", str(self.dc.whoisStr), re.IGNORECASE):
-            if self.pc.verbose:
-                msg = "i have seen Server Name:, looking for Domain Name:"
-                print(msg, file=sys.stderr)
+        if not re.findall(r"Server Name:\s?(.+)", self.dc.whoisStr, re.IGNORECASE):
+            return
 
-            # this changes the whoisStr, we may want to keep the original as extra
-            self.dc.whoisStr = self.dc.whoisStr[str(self.dc.whoisStr).find("Domain Name:") :]
+        if self.pc.verbose:
+            msg = "i have seen Server Name:, looking for Domain Name:"
+            print(msg, file=sys.stderr)
+
+        # this changes the whoisStr, we may want to keep the original as extra
+        self.dc.whoisStr = self.dc.whoisStr[self.dc.whoisStr.find("Domain Name:") :]
 
     def _doDnsSec(
         self,
@@ -150,8 +151,7 @@ class WhoisParser:
             return None
 
         if self.pc.verbose:
-            d = ".".join(self.dList)
-            print(f"shortResponse:: {self.tldString} {d} {self.dc.whoisStr}", file=sys.stderr)
+            print(f"shortResponse:: {self.tldString} {self.dc.whoisStr}", file=sys.stderr)
 
         # TODO: some short responses are actually valid:
         # lookfor Domain: and Status but all other fields are missing so the regexec could fail
@@ -235,21 +235,27 @@ class WhoisParser:
 
     def parse(
         self,
-    ) -> Tuple[Union[Optional[Dict[str, Any]], Optional[Domain]], str]:
+    ) -> Union[Optional[Dict[str, Any]], Optional[Domain]]:
+        # ) -> Tuple[Union[Optional[Dict[str, Any]], Optional[Domain]], str]:
         self.dc.whoisStr = str(self.dc.whoisStr)
 
         if self.dc.whoisStr.count("\n") < 5:
-            result = self._handleShortResponse()  # may raise:    FailedParsingWhoisOutput,    WhoisQuotaExceeded,
-            return result, self.dc.whoisStr
+            result1 = self._handleShortResponse()  # may raise: FailedParsingWhoisOutput, WhoisQuotaExceeded,
+            return result1
+            #  return result1, self.dc.whoisStr
 
         if "source:       IANA" in self.dc.whoisStr:
-            # prepare for handling historical IANA domains
-            self.dc.whoisStr, ianaDomain = self._doSourceIana()  # resultDict=self.resultDict
-            if ianaDomain is not None:
-                return ianaDomain, self.dc.whoisStr
+            # historical IANA domains
+            result2 = self._doSourceIana()
+            if result2 is not None:
+                return result2
+                # return result2, self.dc.whoisStr
 
         if "Server Name" in self.dc.whoisStr:
-            # handle old type Server Name (not very common anymore)
+            # old type Server Name (not very common anymore)
             self._doIfServerNameLookForDomainName()
 
-        return self._doExtractPattensFromWhoisString(), self.dc.whoisStr
+        self._doExtractPattensFromWhoisString()
+
+        # return self.resultDict, self.dc.whoisStr
+        return self.resultDict

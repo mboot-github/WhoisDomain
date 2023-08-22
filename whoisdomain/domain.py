@@ -4,7 +4,6 @@ from typing import (
     Any,
     List,
     Dict,
-    # Optional,
 )
 
 from .handleDateStrings import str_to_date
@@ -14,31 +13,6 @@ from .context.dataContext import DataContext
 
 
 class Domain:
-    #     # mandatory: fields we expect always to be present (but can be None or '')
-    #     name: Optional[str] = None
-    #     tld: Optional[str] = None
-    #     registrar: Optional[str] = None
-    #     registrant_country: Optional[str] = None
-    #
-    #     creation_date = None
-    #     expiration_date = None
-    #     last_updated = None
-    #
-    #     status: Optional[str] = None
-    #     statuses: List[str] = []
-    #
-    #     dnssec: bool = False
-    #     name_servers: List[str] = []
-    #
-    #     # optional: fields that may not be present at all, many have no regex
-    #     owner: Optional[str] = None
-    #     abuse_contact = None
-    #     reseller = None
-    #     registrant = None
-    #     admin = None
-    #     emails: List[str] = []
-    #     _exception: Optional[str] = None
-
     def _cleanupArray(
         self,
         data: List[str],
@@ -79,8 +53,12 @@ class Domain:
         data: Dict[str, Any],
     ) -> None:
         self.status = data["status"][0].strip()
-        self.statuses = sorted(  # sorted added to get predictable output during test
-            list(  # list(set(...))) to deduplicate results
+
+        # sorted added to get predictable output during test
+        # list(set(...))) to deduplicate results
+
+        self.statuses = sorted(
+            list(
                 set(
                     [s.strip() for s in data["status"]],
                 ),
@@ -93,7 +71,8 @@ class Domain:
         self,
         data: Dict[str, Any],
     ) -> None:
-        # optional fiels
+        # optional fields
+
         if "owner" in data:
             self.owner = data["owner"][0].strip()
 
@@ -110,8 +89,11 @@ class Domain:
             self.admin = data["admin"][0].strip()
 
         if "emails" in data:
-            self.emails = sorted(  # sorted added to get predictable output during test
-                list(  # list(set(...))) to deduplicate results
+            # sorted added to get predictable output during test
+            # list(set(...))) to deduplicate results
+
+            self.emails = sorted(
+                list(
                     set(
                         [s.strip() for s in data["emails"]],
                     ),

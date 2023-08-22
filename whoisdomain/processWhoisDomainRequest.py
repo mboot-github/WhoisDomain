@@ -5,7 +5,6 @@ from typing import (
     Optional,
     List,
     Dict,
-    # Tuple,
     Any,
 )
 
@@ -34,45 +33,45 @@ class ProcessWhoisDomainRequest:
         self.dc = dc
         self.tldString: Optional[str] = None
 
-    def setThisTldEntry(
+    def _analyzeDomainStringAndReturnTldString(
         self,
-        thisTld: Dict[str, str],
     ) -> None:
-        self.thisTld = thisTld
-
-    def _fromDomainStringToTld(
-        self,
-    ) -> Optional[List[str]]:
         def _internationalizedDomainNameToPunyCode(d: List[str]) -> List[str]:
             return [k.encode("idna").decode() or k for k in d]
 
         # Prep the domain ================
         self.domain = self.domain.lower().strip().rstrip(".")  # Remove the trailing dot to support FQDN.
-        dList: List[str] = self.domain.split(".")
-        if dList[0] == "www":
-            dList = dList[1:]
-        if len(dList) == 1:
-            self.tldString = None
-            return None
+        self.dc.dList = self.domain.split(".")
 
-        if self.pc.verbose:
-            print(f"from domain to list: {self.domain}, {dList}", file=sys.stderr)
+        if len(self.dc.dList) == 0:
+            self.tldString = None
+            self.dc.dList = []
+            return
+
+        if self.dc.dList[0] == "www":
+            self.dc.dList = self.dc.dList[1:]
+
+        if len(self.dc.dList) == 0:
+            self.tldString = None
+            self.dc.dList = []
+            return
+
+        # we currently do not support raw tld's so we cannot lookup 'com' for example
+        if len(self.dc.dList) == 1:
+            self.tldString = None
+            self.dc.dList = []
+            return
 
         # Is it a supported domain =======
         self.tldString = filterTldToSupportedPattern(
             self.domain,
-            dList,
+            self.dc.dList,
             self.pc.verbose,
         )  # may raise UnknownTld
 
-        if self.pc.verbose:
-            print(f"filterTldToSupportedPattern returns tld: {self.tldString}", file=sys.stderr)
-
         # Internationalized domains: Idna translate
         if self.pc.internationalized:
-            dList = _internationalizedDomainNameToPunyCode(dList)
-
-        return dList
+            self.dc.dList = _internationalizedDomainNameToPunyCode(self.dc.dList)
 
     def makeMessageForUnsupportedTld(
         self,
@@ -96,6 +95,7 @@ class ProcessWhoisDomainRequest:
             self.dc.whoisStr = doWhoisAndReturnString(
                 dList=self.dc.dList,
                 pc=self.pc,
+                dc=self.dc,
             )
 
             # we will only return minimal data
@@ -113,17 +113,20 @@ class ProcessWhoisDomainRequest:
     ) -> bool:
         # may raise WhoisPrivateRegistry
         # signal we know the tld but it has no whos or does not respond with any information
-        if self.thisTld.get("_privateRegistry"):
-            if self.pc.simplistic is False:
-                msg = "WhoisPrivateRegistry"
-                raise WhoisPrivateRegistry(msg)
-            return True
-        return False
+        if not self.thisTld.get("_privateRegistry"):
+            return False
+
+        if self.pc.simplistic is False:
+            msg = "WhoisPrivateRegistry"
+            raise WhoisPrivateRegistry(msg)
+
+        return True
 
     def _doServerHintsForThisTld(
         self,
     ) -> None:
-        # note _server hints currently are not passes down when using "extend", that may have been my error during the initial implementation
+        # note _server hints currently are not passes down when using "extend",
+        # that may have been my error during the initial implementation
         # allow server hints using "_server" from the tld_regexpr.py file
         thisTldServer = self.thisTld.get("_server")
         if self.pc.server is None and thisTldServer:
@@ -156,6 +159,7 @@ class ProcessWhoisDomainRequest:
             self.dc.whoisStr = doWhoisAndReturnString(
                 dList=self.dc.dList,
                 pc=self.pc,
+                dc=self.dc,
             )
         except Exception as e:
             if self.pc.simplistic is False:
@@ -181,22 +185,21 @@ class ProcessWhoisDomainRequest:
 
         wp = WhoisParser(
             tldString=str(self.tldString),
-            dList=self.dc.dList,
             pc=self.pc,
             dc=self.dc,
         )
-        data, self.dc.whoisStr = wp.parse()
+        data = wp.parse()
 
         if self.pc.verbose:
             print("Clean:", self.dc.whoisStr, file=sys.stderr)
+
+        if data is None:
+            return None
 
         if isinstance(data, Domain):
             return data
 
         # do we have a result and does it have a domain name
-        if data is None:
-            return None
-
         self.dc.data = data
         if self.dc.data["domain_name"][0]:
             return Domain(
@@ -207,11 +210,9 @@ class ProcessWhoisDomainRequest:
         return None
 
     def processRequest(self) -> Optional[Domain]:
-        dList: Optional[List[str]]
-
-        # =================================================
         try:
-            dList = self._fromDomainStringToTld()  # may raise UnknownTld
+            # self.dc.dList = self._analyzeDomainStringAndReturnTldString()  # may raise UnknownTld
+            self._analyzeDomainStringAndReturnTldString()  # may raise UnknownTld
             if self.tldString is None:
                 return None
         except Exception as e:
@@ -226,7 +227,6 @@ class ProcessWhoisDomainRequest:
 
         # force mypy to process ok
         self.tldString = str(self.tldString)
-        self.dc.dList = dList
         if self.dc.dList is None:
             return None
 
@@ -250,7 +250,8 @@ class ProcessWhoisDomainRequest:
             )
 
         # =================================================
-        self.setThisTldEntry(cast(Dict[str, Any], TLD_RE.get(self.tldString)))
+        # self.setThisTldEntry(cast(Dict[str, Any], TLD_RE.get(self.tldString)))
+        self.thisTld = cast(Dict[str, Any], TLD_RE.get(self.tldString))
 
         if self._verifyPrivateRegistry():  # may raise WhoisPrivateRegistry
             msg = "This tld has either no whois server or responds only with minimal information"
@@ -276,7 +277,8 @@ class ProcessWhoisDomainRequest:
                 return result
 
             if len(self.dc.dList) > (len(tldLevel) + 1):
-                self.dc.dList = self.dc.dList[1:]  # strip one element from the front and try again
+                # strip one element from the front and try again
+                self.dc.dList = self.dc.dList[1:]
                 if self.pc.verbose:
                     msg = f"try again with {self.dc.dList}, {len(self.dc.dList)}, {len(tldLevel) + 1}"
                     print(msg, file=sys.stderr)

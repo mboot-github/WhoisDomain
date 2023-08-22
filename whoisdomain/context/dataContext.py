@@ -21,6 +21,6 @@ class DataContext:
 
         self.data: Dict[str, Any] = {}
         self.lastWhoisStr: str = ""
-        self.whoisStr: Optional[str] = None
+        self.whoisStr: str = ""
         self.exeptionStr: Optional[str] = None
-        self.dList: Optional[List[str]] = None
+        self.dList: List[str] = []
