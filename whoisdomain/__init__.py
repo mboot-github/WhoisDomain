@@ -47,12 +47,12 @@ from .tld_regexpr import ZZ
 from .domain import Domain
 from .parameterContext import ParameterContext
 
-from .simpleCacheBase import SimpleCacheBase
-from .simpleCacheWithFile import SimpleCacheWithFile
-from .dummyCache import DummyCache
-from .dbmCache import DBMCache
+from .cache.simpleCacheBase import SimpleCacheBase
+from .cache.simpleCacheWithFile import SimpleCacheWithFile
+from .cache.dummyCache import DummyCache
+from .cache.dbmCache import DBMCache
 
-# from .redisCache import RedisCache
+# from .cache.redisCache import RedisCache
 
 TLD_LIB_PRESENT: bool = False
 try:

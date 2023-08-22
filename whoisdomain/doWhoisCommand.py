@@ -8,7 +8,7 @@ from typing import (
     Any,
 )
 
-from .simpleCacheWithFile import SimpleCacheWithFile
+from .cache.simpleCacheWithFile import SimpleCacheWithFile
 from .parameterContext import ParameterContext
 from .whoisCliInterface import WhoisCliInterface
 

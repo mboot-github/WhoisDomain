@@ -234,3 +234,5 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * add DummyCache, DBMCache, RedisCache with simple test in testCache.py, testing custom cache options
   * 1.20230811.1 ; replace type hint | with Union for py3.9 compat; switch off experimental redis tools
   * switch off 3.[6-8] minimal is 3.9 we test against
+  * start working on dataContext;
+  * add more \_test items; reorder parts of tld_regexpr;
