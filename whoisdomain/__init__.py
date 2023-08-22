@@ -35,8 +35,8 @@ from ._0_init_tld import (
 from .doQuery import query, q2
 from .lastWhois import get_last_raw_whois_data
 from .doWhoisCommand import setMyCache
-from .noneStrings import NoneStrings, NoneStringsAdd
-from .quotaStrings import QuotaStrings, QuotaStringsAdd
+from .strings.noneStrings import NoneStrings, NoneStringsAdd
+from .strings.quotaStrings import QuotaStrings, QuotaStringsAdd
 
 
 from .doParse import (

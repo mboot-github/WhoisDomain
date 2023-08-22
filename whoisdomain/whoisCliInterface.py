@@ -66,10 +66,8 @@ class WhoisCliInterface:
                 self.pc.cmd = wpath  # note we update cmd if we find one
                 return
 
-        # this should be optional default FALSE,
-        # you dont want the module to install external data normally
-        # TODO
-        self.tryInstallMissingWhoisOnWindows()
+        if self.pc.tryInstallMissingWhoisOnWindows:
+            self.tryInstallMissingWhoisOnWindows()
 
     def makeWhoisCommandToRunWindows(
         self,

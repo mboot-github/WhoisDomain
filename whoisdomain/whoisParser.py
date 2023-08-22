@@ -21,8 +21,8 @@ from .exceptions import (
 from ._0_init_tld import TLD_RE
 from .domain import Domain
 from .parameterContext import ParameterContext
-from .noneStrings import NoneStrings
-from .quotaStrings import QuotaStrings
+from .strings.noneStrings import NoneStrings
+from .strings.quotaStrings import QuotaStrings
 from .dataContext import DataContext
 
 
