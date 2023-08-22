@@ -11,17 +11,15 @@ from typing import (
 
 from .exceptions import WhoisPrivateRegistry
 from .exceptions import UnknownTld
-
 from ._0_init_tld import filterTldToSupportedPattern
 from ._0_init_tld import TLD_RE
-
 from .doWhoisCommand import doWhoisAndReturnString
-
 from .whoisParser import WhoisParser
 from .domain import Domain
-from .parameterContext import ParameterContext
 from .lastWhois import updateLastWhois
-from .dataContext import DataContext
+
+from .context.dataContext import DataContext
+from .context.parameterContext import ParameterContext
 
 
 class ProcessWhoisDomainRequest:

@@ -7,10 +7,10 @@ from typing import (
     # Optional,
 )
 
-from .parameterContext import ParameterContext
-
 from .handleDateStrings import str_to_date
-from .dataContext import DataContext
+
+from .context.parameterContext import ParameterContext
+from .context.dataContext import DataContext
 
 
 class Domain:

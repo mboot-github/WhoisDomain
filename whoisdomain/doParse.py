@@ -1,13 +1,8 @@
 #! /usr/bin/env python3
 
 from typing import (
-    # cast,
-    # Any,
-    # Dict,
     Optional,
-    # Tuple,
     List,
-    # Union,
 )
 
 
@@ -15,11 +10,7 @@ from .exceptions import (
     WhoisQuotaExceeded,
 )
 
-# from .domain import Domain
-from .parameterContext import ParameterContext
-
-# from .whoisParser import WhoisParser
-# from .dataContext import DataContext
+from .context.parameterContext import ParameterContext
 
 
 def cleanupWhoisResponse(
@@ -72,20 +63,3 @@ def cleanupWhoisResponse(
         tmp2.append(line.strip("\r"))
 
     return "\n".join(tmp2)
-
-
-# def do_parse(
-#     tldString: str,
-#     dList: List[str],
-#     pc: ParameterContext,
-#     dc: DataContext,
-# ) -> Tuple[Union[Optional[Dict[str, Any]], Optional[Domain]], str]:  # was Any
-#
-#     wp = WhoisParser(
-#         tldString=tldString,
-#         dList=dList,
-#         pc=pc,
-#         dc=dc,
-#     )
-#
-#     return wp.parse()

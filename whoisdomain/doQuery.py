@@ -6,10 +6,11 @@ from typing import (
 )
 
 from .domain import Domain
-from .parameterContext import ParameterContext
 from .processWhoisDomainRequest import ProcessWhoisDomainRequest
 from .lastWhois import initLastWhois
-from .dataContext import DataContext
+
+from .context.dataContext import DataContext
+from .context.parameterContext import ParameterContext
 
 WHOISDOMAIN: str = ""
 if os.getenv("WHOISDOMAIN"):

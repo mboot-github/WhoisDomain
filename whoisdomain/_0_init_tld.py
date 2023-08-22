@@ -7,7 +7,7 @@ from typing import (
     Any,
 )
 
-from .tld_regexpr import ZZ
+from .tldDb.tld_regexpr import ZZ
 from .exceptions import (
     UnknownTld,
 )

@@ -20,10 +20,11 @@ from .exceptions import (
 
 from ._0_init_tld import TLD_RE
 from .domain import Domain
-from .parameterContext import ParameterContext
+
 from .strings.noneStrings import NoneStrings
 from .strings.quotaStrings import QuotaStrings
-from .dataContext import DataContext
+from .context.parameterContext import ParameterContext
+from .context.dataContext import DataContext
 
 
 class WhoisParser:

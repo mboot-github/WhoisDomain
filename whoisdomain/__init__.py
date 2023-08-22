@@ -35,17 +35,19 @@ from ._0_init_tld import (
 from .doQuery import query, q2
 from .lastWhois import get_last_raw_whois_data
 from .doWhoisCommand import setMyCache
-from .strings.noneStrings import NoneStrings, NoneStringsAdd
-from .strings.quotaStrings import QuotaStrings, QuotaStringsAdd
 
 
 from .doParse import (
     cleanupWhoisResponse,
 )
 
-from .tld_regexpr import ZZ
+from .strings.noneStrings import NoneStrings, NoneStringsAdd
+from .strings.quotaStrings import QuotaStrings, QuotaStringsAdd
+
 from .domain import Domain
-from .parameterContext import ParameterContext
+
+from .tldDb.tld_regexpr import ZZ
+from .context.parameterContext import ParameterContext
 
 from .cache.simpleCacheBase import SimpleCacheBase
 from .cache.simpleCacheWithFile import SimpleCacheWithFile

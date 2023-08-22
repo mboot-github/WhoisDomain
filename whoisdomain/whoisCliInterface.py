@@ -16,7 +16,7 @@ from typing import (
     List,
 )
 
-from .parameterContext import ParameterContext
+from .context.parameterContext import ParameterContext
 
 
 class WhoisCliInterface:

@@ -8,9 +8,10 @@ from typing import (
     Any,
 )
 
-from .cache.simpleCacheWithFile import SimpleCacheWithFile
-from .parameterContext import ParameterContext
 from .whoisCliInterface import WhoisCliInterface
+
+from .cache.simpleCacheWithFile import SimpleCacheWithFile
+from .context.parameterContext import ParameterContext
 
 # actually also whois uses cache, so if you really dont want to use cache
 # you should also pass the --force-lookup flag (on linux)
