@@ -373,6 +373,7 @@ ZZ["fr"] = {
     "domain_name": r"domain:\s?(.+)",
     "registrar": r"registrar:\s*(.+)",
     "registrant": r"contact:\s?(.+)",
+    "registrant_organization": r"type:\s+ORGANIZATION\scontact:\s+(.*)",
     "creation_date": r"created:\s?(.+)",
     "expiration_date": r"Expiry Date:\s?(.+)",
     "updated_date": r"last-update:\s?(.+)",

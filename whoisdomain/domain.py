@@ -83,7 +83,10 @@ class Domain:
             self.reseller = data["reseller"][0].strip()
 
         if "registrant" in data:
-            self.registrant = data["registrant"][0].strip()
+            if "registrant_organization" in data:
+                self.registrant = data["registrant_organization"][0].strip()
+            else:
+                self.registrant = data["registrant"][0].strip()
 
         if "admin" in data:
             self.admin = data["admin"][0].strip()

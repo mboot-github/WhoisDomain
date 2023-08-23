@@ -237,3 +237,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * start working on dataContext;
   * add more \_test items; reorder parts of tld_regexpr;
   * propagate all meta domains servers as they are not inherited, testing , some domains have been retracted mboot; 2023-08-23;
+  * add suggestion from baderdean to parse fr domains with more focus on ORGANISATION
