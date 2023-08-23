@@ -236,3 +236,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * switch off 3.[6-8] minimal is 3.9 we test against
   * start working on dataContext;
   * add more \_test items; reorder parts of tld_regexpr;
+  * propagate all meta domains servers as they are not inherited, testing , some domains have been retracted mboot; 2023-08-23;
