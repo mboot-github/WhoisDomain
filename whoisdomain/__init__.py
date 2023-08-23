@@ -51,6 +51,17 @@ from .cache.simpleCacheWithFile import SimpleCacheWithFile
 from .cache.dummyCache import DummyCache
 from .cache.dbmCache import DBMCache
 
+HAS_REDIS = False
+try:
+    import redis
+
+    HAS_REDIS = True
+except Exception as e:
+    _ = e
+
+if HAS_REDIS:
+    from .cache.redisCache import RedisCache
+
 WHOISDOMAIN: str = ""
 if os.getenv("WHOISDOMAIN"):
     WHOISDOMAIN = str(os.getenv("WHOISDOMAIN"))
@@ -58,7 +69,7 @@ if os.getenv("WHOISDOMAIN"):
 WD = WHOISDOMAIN.upper().split(":")
 
 SIMPLISTIC = False
-if "SIMPISTIC" in WD:
+if "SIMPLISTIC" in WD:
     SIMPLISTIC = True
 
 TLD_LIB_PRESENT: bool = False
