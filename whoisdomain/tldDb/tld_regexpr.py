@@ -379,6 +379,8 @@ ZZ["fr"] = {
     "updated_date": r"last-update:\s?(.+)",
     "name_servers": r"nserver:\s*(.+)",
     "status": r"status:\s?(.+)",
+    "_test": "sfr.fr",
+    "registrant_country": r"Country:\s?(.+)",
 }
 
 # Hong Kong
