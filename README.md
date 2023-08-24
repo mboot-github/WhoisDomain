@@ -238,4 +238,5 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * add more \_test items; reorder parts of tld_regexpr;
   * propagate all meta domains servers as they are not inherited, testing , some domains have been retracted mboot; 2023-08-23;
   * add suggestion from baderdean to parse fr domains with more focus on ORGANISATION
-* 2023-08-24: mboot: more \_test added to tld
+  * 2023-08-24: mboot: more \_test added to tld
+  * verify all \_test on whois.nic.<tld> \_test: nic.<tld> fix where needed; remove some abandoned tld's
