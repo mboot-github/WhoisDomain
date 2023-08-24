@@ -1190,7 +1190,7 @@ ZZ["sm"] = {
 ZZ["tg"] = {
     "_server": "whois.nic.tg",
     "extend": "com",
-    "_test":"nic.tg",
+    "_test": "nic.tg",
     "domain_name": r"domain:\.+\s?(.+)",
     "registrar": r"registrar:\.+\s?(.+)",
     "creation_date": r"Activation:\.+\s?(.+)",
@@ -2099,7 +2099,7 @@ ZZ["properties"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["property"] = {"extend": "_uniregistry", "_server": "whois.uniregistry.net"}
 ZZ["protection"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["pr"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
-ZZ["ps"] = {"_privateRegistry": True} # no host can be contacted only http://www.nic.ps
+ZZ["ps"] = {"_privateRegistry": True}  # no host can be contacted only http://www.nic.ps
 ZZ["pub"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["pwc"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["pyc"] = {"extend": "com"}
@@ -2678,6 +2678,10 @@ ZZ["网站"] = {"_server": "whois.nic.xn--5tzm5g", "extend": "xn--5tzm5g"}
 ZZ["网络"] = {"_server": "whois.ngtld.cn", "extend": "com"}
 ZZ["联通"] = {"_server": "whois.gtld.knet.cn", "extend": "com"}
 ZZ["诺基亚"] = {"_privateRegistry": True}
+ZZ["cy"] = {"_privateRegistry": True}
+ZZ["gh"] = {"_privateRegistry": True}
+ZZ["pa"] = {"_privateRegistry": True}
+
 ZZ["谷歌"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["集团"] = {"_server": "whois.gtld.knet.cn", "extend": "com"}
 ZZ["電訊盈科"] = {"_server": "whois.nic.xn--fzys8d69uvgm", "extend": "xn--fzys8d69uvgm"}
