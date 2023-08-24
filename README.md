@@ -241,3 +241,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * 2023-08-24: mboot: more \_test added to tld
   * verify all \_test on whois.nic.<tld> \_test: nic.<tld> fix where needed; remove some abandoned tld's
   * build: 1.20230824.1 mboot; to combine all new tests and changes, "the galloping Chutzpah release"
+  * build: 1.20230824.2 mboot; fix missing module in whl
