@@ -130,7 +130,7 @@ dockerPush:
 	export VERSION=$(shell cat work/version) && \
 	docker image push \
 		--all-tags $(DOCKER_WHO)/$(WHAT)
-
+	docker run mbootgithub/whoisdomain -d google.com -j | jq -r .
 # ====================================================
 # uploading to pypi an pypiTestUpload
 # build a test-mypi and download the image in a venv ane run a test
