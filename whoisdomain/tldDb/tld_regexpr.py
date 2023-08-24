@@ -1187,6 +1187,18 @@ ZZ["sm"] = {
     "name_servers": r"DNS Servers:\s+(.+)",
 }
 
+ZZ["tg"] = {
+    "_server": "whois.nic.tg",
+    "extend": "com",
+    "_test":"nic.tg",
+    "domain_name": r"domain:\.+\s?(.+)",
+    "registrar": r"registrar:\.+\s?(.+)",
+    "creation_date": r"Activation:\.+\s?(.+)",
+    "expiration_date": r"Expiration:\.+\s?(.+)",
+    "status": r"Status:\.+\s?(.+)",
+    "name_servers": r"Name Server \(DB\):\.+(.+)",
+}
+
 # ======================================
 # ======================================
 # ======================================
@@ -2087,8 +2099,7 @@ ZZ["properties"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["property"] = {"extend": "_uniregistry", "_server": "whois.uniregistry.net"}
 ZZ["protection"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["pr"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
-ZZ["ps"] = {"extend": "com"}
-ZZ["ps"] = {"extend": "com", "registrant": r"Registrant\s+Name:\s?(.+)"}
+ZZ["ps"] = {"_privateRegistry": True} # no host can be contacted only http://www.nic.ps
 ZZ["pub"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["pwc"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["pyc"] = {"extend": "com"}
@@ -2550,9 +2561,9 @@ ZZ["youtube"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["yt"] = {"extend": "re", "_server": "whois.nic.yt"}
 ZZ["yun"] = {"extend": "_teleinfo", "_server": "whois.teleinfo.cn"}
 ZZ["za"] = {"extend": "com"}
-ZZ["zappos"] = {"_server": "whois.nic.zappos", "extend": "com"}
+ZZ["zappos"] = {"_server": "whois.nic.zappos", "extend": "com", "_test": "nic.zappos"}
 ZZ["zara"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
-ZZ["zip"] = {"extend": "com", "_server": "whois.nic.google"}
+ZZ["zip"] = {"extend": "com", "_server": "whois.nic.zip", "_test": "nic.zip"}
 ZZ["zippo"] = {"_privateRegistry": True}
 ZZ["zm"] = {"extend": "com"}
 ZZ["zone"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
