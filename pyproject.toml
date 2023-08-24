@@ -55,8 +55,7 @@
     only-packages = true
 
     include = [
-        "whoisdomain/*.py",
-        "whoisdomain/*/*.py",
+        "whoisdomain/",
     ]
 
     exclude = [
