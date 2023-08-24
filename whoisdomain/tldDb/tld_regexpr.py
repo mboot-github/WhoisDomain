@@ -1233,6 +1233,18 @@ ZZ["md"] = {
     "_test": "nic.md",
 }
 
+ZZ["tg"] = {
+    "_server": "whois.nic.tg",
+    "extend": "com",
+    "_test": "nic.tg",
+    "domain_name": r"domain:\.+\s?(.+)",
+    "registrar": r"registrar:\.+\s?(.+)",
+    "creation_date": r"Activation:\.+\s?(.+)",
+    "expiration_date": r"Expiration:\.+\s?(.+)",
+    "status": r"Status:\.+\s?(.+)",
+    "name_servers": r"Name Server \(DB\):\.+(.+)",
+}
+
 # ======================================
 # ======================================
 # ======================================
@@ -2422,10 +2434,17 @@ ZZ["vlaanderen"] = {"_server": "whois.nic.vlaanderen", "extend": "com", "_test":
 ZZ["vn"] = {"extend": "_privateReg"}
 ZZ["vodka"] = {"_server": "whois.nic.vodka", "extend": "com", "_test": "nic.vodka"}
 ZZ["volkswagen"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
+<<<<<<< HEAD
 ZZ["volvo"] = {"_server": "whois.nic.volvo", "extend": "com", "_test": "nic.volvo"}
 ZZ["vote"] = {"_server": "whois.nic.vote", "extend": "com", "_test": "nic.vote"}
 ZZ["voting"] = {"_server": "whois.nic.voting", "extend": "com", "_test": "nic.voting"}
 ZZ["voto"] = {"_server": "whois.nic.voto", "extend": "com", "_test": "nic.voto"}
+=======
+ZZ["volvo"] = {"_server": "whois.nic.volvo", "extend": "com"}
+ZZ["vote"] = {"_server": "whois.nic.vote", "extend": "com"}
+ZZ["voting"] = {"_server": "whois.nic.voting", "extend": "com"}
+ZZ["voto"] = {"_server": "whois.nic.voto", "extend": "com"}
+>>>>>>> master
 ZZ["vig"] = {"_server": "whois.nic.vig", "extend": "com", "_test": "nic.vig"}
 
 ZZ["voyage"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
