@@ -1507,7 +1507,8 @@ ZZ["construction"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["consulting"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["contact"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["contractors"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
-# ZZ["cookingchannel"] = {"_server": "whois.nic.cookingchannel", "extend": "com", "_test": "nic.cookingchannel"} # Revocation of the .cookingchannel domain (2023-06-14)
+# ZZ["cookingchannel"] = {"_server": "whois.nic.cookingchannel", "extend": "com", "_test": "nic.cookingchannel"}
+# Revocation of the .cookingchannel domain (2023-06-14)
 
 ZZ["cooking"] = {"_server": "whois.nic.cooking", "extend": "com", "_test": "nic.cooking"}
 ZZ["cool"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
