@@ -2390,6 +2390,8 @@ ZZ["volvo"] = {"_server": "whois.nic.volvo", "extend": "com"}
 ZZ["vote"] = {"_server": "whois.nic.vote", "extend": "com"}
 ZZ["voting"] = {"_server": "whois.nic.voting", "extend": "com"}
 ZZ["voto"] = {"_server": "whois.nic.voto", "extend": "com"}
+ZZ["vig"] = {"_server": "whois.nic.vig", "extend": "com", "_test": "nic.vig"}
+
 ZZ["voyage"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["vu"] = {"extend": "_privateReg"}  # all dates 1970 , no furter relevant info
 ZZ["wales"] = {"_server": "whois.nic.wales", "extend": "com"}
@@ -2681,6 +2683,7 @@ ZZ["诺基亚"] = {"_privateRegistry": True}
 ZZ["cy"] = {"_privateRegistry": True}
 ZZ["gh"] = {"_privateRegistry": True}
 ZZ["pa"] = {"_privateRegistry": True}
+ZZ["sv"] = {"_privateRegistry": True}
 
 ZZ["谷歌"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["集团"] = {"_server": "whois.gtld.knet.cn", "extend": "com"}
