@@ -35,6 +35,7 @@ LocalTestWhl: build
 # this step creates or updates the toml file
 build:
 	./bin/build.sh
+	./bin/testLocalWhl.sh
 
 # ==========================================================
 # scan the most recent build and fail if the status fails
