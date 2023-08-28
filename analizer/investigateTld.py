@@ -5,18 +5,19 @@
 from typing import (
     Dict,
     Any,
+    List,
 )
 
 import re
+import sys
+
 import idna as idna2
 
 from ianaDatabase import IanaDatabase
 
-import sys
-
+# the next 2 belong together
 sys.path.append("..")
-
-from whoisdomain import tld_regexpr
+from whoisdomain.tldDb import tld_regexpr
 
 
 def extractServers(aDict: Dict[str, Any]) -> Dict[str, Any]:
@@ -54,10 +55,15 @@ FROM
     IANA_TLD
 """
 
+    allTld: List[str] = []
     rr, cur = iad.selectSql(sql)
     for row in cur:
+        # print(row)
         tld = row[0].replace("'", "")
-        tld2 = "".join(map(lambda s: s and re.sub("[^\w\s]", "", s), row[1]))
+        if tld not in allTld:
+            allTld.append(tld)
+
+        tld2 = "".join(map(lambda s: s and re.sub(r"[^\w\s]", "", s), row[1]))
 
         tld3 = row[1].replace(".", "").replace("'", "").replace("\u200f", "").replace("\u200e", "")
         tld4 = tld3
@@ -111,23 +117,25 @@ FROM
 
             continue
 
-        continue
-        if w != s1:
+        # continue
+
+        if False and w != s1:
             print(tld, s1, w, resolve)
-        continue
+
+        # continue
 
         try:
             tld3 = idna2.encode(tld3).decode() or tld3
         except Exception as e:
-            print(f"## {tld} {tld2} {tld3}")
+            print(f"## {tld} {tld2} {tld3} {e}")
             continue
 
         tld4 = tld4.encode("idna").decode()
         if tld != tld2:
-            if tld2 not in ss:
-                print(tld, tld2, tld3, tld4, tld.encode("idna"))
+            if 0 and tld2 not in ss:
+                print("# idna", tld, tld2, tld3, tld4, tld.encode("idna"))
 
-        continue
+        # continue
 
         if tld != tld3:
             print(f"#SKIP {tld} {tld2} { tld3}")
@@ -193,7 +201,9 @@ FROM
             continue
 
         if reg == "NULL" and w == "NULL":
-            continue  # unclear, we have existing ns records indicating some tld's actually exist but have no whois, lets skip for now
+            continue  # unclear,
+            # we have existing ns records indicating some tld's actually exist
+            # but have no whois, lets skip for now
             # TODO add ns records
             if tld not in tld_regexpr.ZZ:
                 print(f'ZZ["{tld}"] = ' + '{"_privateRegistry": True}')
@@ -204,14 +214,34 @@ FROM
         w = w.replace("'", "")
         if w in ss:
             if tld not in tld_regexpr.ZZ:
-                print(f'ZZ["{tld}"] = ' + '{"_server": "' + w + '", "extend": "' + ss[w][0] + '"}', "# ", w, ss[w])
+                print(
+                    f'ZZ["{tld}"] = ' + '{"_server": "' + w + '", "extend": "' + ss[w][0] + '"}',
+                    "# ",
+                    w,
+                    ss[w],
+                )
 
             if tld2 != tld:
                 if tld2 not in tld_regexpr.ZZ:
-                    print(f'ZZ["{tld2}"] = ' + '{"_server": "' + w + '", "extend": "' + ss[w][0] + '"}', "# ", w, ss[w])
+                    print(
+                        f'ZZ["{tld2}"] = ' + '{"_server": "' + w + '", "extend": "' + ss[w][0] + '"}',
+                        "# ",
+                        w,
+                        ss[w],
+                    )
             continue
 
         print("# MISSING", tld, tld2, tld3, manager.replace("\n", ";"), w, resolve, reg)
+
+    allTld = sorted(allTld)
+    for tld in tld_regexpr.ZZ:
+        if "." in tld:
+            continue
+        if "_" == tld[0]:
+            continue
+
+        if tld not in allTld:
+            print(f"# currently defined in ZZ but missing in iana: {tld}")
 
 
 xMain()

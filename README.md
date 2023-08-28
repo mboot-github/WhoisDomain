@@ -242,3 +242,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * verify all \_test on whois.nic.<tld> \_test: nic.<tld> fix where needed; remove some abandoned tld's
   * build: 1.20230824.1 mboot; to combine all new tests and changes, "the galloping Chutzpah release"
   * build: 1.20230824.5 mboot; fix missing module in whl
+  * restore python 3.6 test as i still use it on one remaining app with python 3.6 (make testP36)

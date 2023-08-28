@@ -15,9 +15,14 @@ SIMPLEDOMAINS = $(shell ls testdata)
 # PHONY targets: make will run its recipe regardless of whether a file with that name exists or what its last modification time is.
 .PHONY: TestSimple TestSimple2 TestAll clean
 
-first: reformat mypy
+first: reformat mypy testP39 testP36
+
+testP39:
 	./test1.py # now tests with python 3.9
-	# ./testCache.py
+
+testP36:
+	docker build -t df36 -f Df-36 .
+	docker run -v .:/context df36 -d google.com
 
 second: first test2
 
@@ -196,3 +201,7 @@ clean:
 cleanDist:
 	rm -rf dist/*
 	# rm -f work/version
+
+zz:
+	docker build -t df36 -f Df-36 .
+	docker run -v .:/context df36 -d google.com

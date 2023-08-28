@@ -157,6 +157,7 @@ class IanaCrawler:
 
         if tldItem[3] == "Not assigned":
             tldItem[3] = None
+            return None
 
         zz = {
             "Whois": "WHOIS Server",
@@ -188,9 +189,13 @@ class IanaCrawler:
         records2 = []
         for tldItem in self.records:
             rr = self.addInfoToOneTld(tldItem)
+            if rr is None:
+                continue
+            records2.append(rr)
+
             if self.verbose:
                 print(len(rr), rr)
-            records2.append(rr)
+
         self.columns.insert(4, "Whois")
         self.columns.insert(5, "RegistrationUrl")
         self.columns.insert(6, "DnsResolve-A")

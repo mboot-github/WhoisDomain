@@ -1,0 +1,9 @@
+FROM python:3.6-alpine
+
+RUN apk update --no-cache
+RUN apk add --no-cache whois
+
+VOLUME /context
+ENTRYPOINT ["/context/test2.py"]
+
+# CMD ["--help"]

@@ -7,7 +7,7 @@
     dynamic = ['version']
 
     authors = [
-      { name="DannyCork"},
+      { name="mboot-github"},
     ]
 
     maintainers = [
@@ -16,7 +16,7 @@
 
     description = "Python package for retrieving WHOIS information of domains."
     readme = "README.md"
-    requires-python = ">=3.9"
+    requires-python = ">=3.6"
 
     license = "MIT"
 
