@@ -243,3 +243,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * build: 1.20230824.1 mboot; to combine all new tests and changes, "the galloping Chutzpah release"
   * build: 1.20230824.5 mboot; fix missing module in whl
   * restore python 3.6 test as i still use it on one remaining app with python 3.6 (make testP36)
+  * finalize verification of all tld's in iana, add test where this can be auto generated from whois.nic.<tld> 2023-08-28; mboot
