@@ -89,8 +89,6 @@ CREATE TABLE IF NOT EXISTS IANA_TLD (
 );
 """
         rr = self.doSql(sql)
-        if self.verbose:
-            print(rr, file=sys.stderr)
 
     def createTablePsl(self) -> None:
         sql = """
@@ -104,8 +102,6 @@ CREATE TABLE IF NOT EXISTS IANA_PSL (
 );
 """
         rr = self.doSql(sql)
-        if self.verbose:
-            print(rr, file=sys.stderr)
 
     def prepData(
         self,
@@ -151,6 +147,12 @@ INSERT OR REPLACE INTO IANA_TLD (
             data,
         )
 
+    def makeDelSqlTld(
+        self,
+        tld: str,
+    ) -> Tuple[str, List[Any]]:
+        return f"DELETE FROM IANA_TLD WHERE Link = '{tld}';"
+
     def makeInsOrUpdSqlPsl(
         self,
         columns: List[str],
@@ -168,3 +170,9 @@ INSERT OR REPLACE INTO IANA_PSL (
 """,
             data,
         )
+
+    def makeDelSqlPsl(
+        self,
+        tld: str,
+    ) -> Tuple[str, List[Any]]:
+        return f"DELETE FROM IANA_PSL WHERE Tld = '{tld}';"

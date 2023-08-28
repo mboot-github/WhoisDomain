@@ -1,10 +1,6 @@
-#
 from typing import (
-    # Optional,
     List,
-    # Dict,
     Any,
-    # Tuple,
 )
 
 import requests_cache

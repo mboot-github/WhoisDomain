@@ -240,7 +240,13 @@ FROM
         if "_" == tld[0]:
             continue
 
-        if tld not in allTld:
+        try:
+            tld2 = idna2.encode(tld).decode() or tld
+        except Exception as e:
+            print(f"{tld} {e} ", file=sys.stderr)
+            tld2 = tld
+
+        if tld not in allTld and tld2 not in allTld:
             print(f"# currently defined in ZZ but missing in iana: {tld}")
 
 
