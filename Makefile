@@ -98,6 +98,9 @@ testdocker:
 		--tag $(WHAT)-$${VERSION}-test \
 		--tag $(WHAT)-test \
 		-f Dockerfile-test .
+	docker image ls
+	docker container ls
+	docker run whoisdomain-test -t
 
 testdockerTestdata:
 	@export VERSION=$(shell cat work/version) && \
@@ -140,7 +143,7 @@ dockerPush:
 # ====================================================
 # uploading to pypi an pypiTestUpload
 # build a test-mypi and download the image in a venv ane run a test
-pypiTest: pypiTestUpload testTestPypi
+pypiTest: pypiTestUpload testTestPypi testdocker testdockerTestdata
 
 # this is only the upload now for pypi builders
 pypiTestUpload:
@@ -171,8 +174,7 @@ test3: reformat mypy
 # ====================================================
 # update the sqlite db with the latest tld info and psl info and suggest missing tld's we can add with a simple fix
 suggest:
-	( cd analizer; ./analizeIanaTld.py )
-	( cd analizer; ./investigateTld.py ) | tee out
+	( cd analizer; make ) | tee out
 
 # black pylama and mypy on the source directory
 format:
