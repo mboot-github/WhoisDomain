@@ -38,9 +38,10 @@ LocalTestWhl: build
 	./bin/testLocalWhl.sh 2>tmp/$@-2 | tee tmp/$@-1
 
 # this step creates or updates the toml file
-build:
+build: testP39 testP36
 	./bin/build.sh
-	./bin/testLocalWhl.sh
+	./bin/testLocalWhl.sh 2>2 | tee 1
+	./bin/test.sh
 
 # ==========================================================
 # scan the most recent build and fail if the status fails

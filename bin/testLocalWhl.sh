@@ -39,7 +39,7 @@ testSimpleIfCorrectVersion()
 testAllIfCorrectVersion()
 {
     [ "$WE_HAVE" == "$VERSION" ] && {
-        $WHAT -a
+        $WHAT -a # run a complete test cycle on all domains
         rm -rf ${ENV}
         exit 0
     }
@@ -51,11 +51,15 @@ main()
         makeVenv
         installFromDistWhl
         getInstalledVersion
-        testAllIfCorrectVersion
+        testSimpleIfCorrectVersion
+
+        [ "$1" == "full" ] && {
+            testAllIfCorrectVersion
+        }
     }
 
     echo "$(basename $0) Failed" >&2
     exit 101
 }
 
-main
+main $@
