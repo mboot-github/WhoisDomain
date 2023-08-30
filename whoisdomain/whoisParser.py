@@ -61,18 +61,24 @@ class WhoisParser:
     def _doExtractPattensFromWhoisString(
         self,
     ) -> None:
-        # here we apply the regex patterns
         # use TLD_RE["com"] as default if a regex is missing
-        for k, v in TLD_RE.get(str(self.dc.tldString), TLD_RE["com"]).items():
+
+        # old: for k, v in TLD_RE.get(str(self.dc.tldString), TLD_RE["com"]).items():
+        if self.dc.thisTld is {}:
+            self.dc.thisTld = TLD_RE["com"]
+
+        # Historical: we use 'empty string' as default, not None
+        empty = [""]
+
+        for k, v in self.dc.thisTld.items():
             if k.startswith("_"):
                 # skip meta element like: _server or _privateRegistry
                 continue
 
-            # Historical: here we use 'empty string' as default, not None
-            if v is None:
-                self.resultDict[k] = [""]
-            else:
-                self.resultDict[k] = v.findall(self.dc.whoisStr) or [""]
+            self.resultDict[k] = empty  # set a default
+            if v:
+                # here we apply the regex patterns
+                self.resultDict[k] = v.findall(self.dc.whoisStr) or empty
 
     def _doSourceIana(
         self,

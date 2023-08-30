@@ -26,3 +26,4 @@ class DataContext:
 
         self.data: Dict[str, Any] = {}
         self.exeptionStr: Optional[str] = None
+        self.thisTld: Dict[str, Any] = {}

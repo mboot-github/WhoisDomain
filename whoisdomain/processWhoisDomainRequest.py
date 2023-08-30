@@ -111,7 +111,7 @@ class ProcessWhoisDomainRequest:
     ) -> bool:
         # may raise WhoisPrivateRegistry
         # signal we know the tld but it has no whos or does not respond with any information
-        if not self.thisTld.get("_privateRegistry"):
+        if not self.dc.thisTld.get("_privateRegistry"):
             return False
 
         if self.pc.simplistic is False:
@@ -126,7 +126,7 @@ class ProcessWhoisDomainRequest:
         # note _server hints currently are not passes down when using "extend",
         # that may have been my error during the initial implementation
         # allow server hints using "_server" from the tld_regexpr.py file
-        thisTldServer = self.thisTld.get("_server")
+        thisTldServer = self.dc.thisTld.get("_server")
         if self.pc.server is None and thisTldServer:
             self.pc.server = thisTldServer
 
@@ -135,7 +135,7 @@ class ProcessWhoisDomainRequest:
     ) -> int:
         self.pc.slow_down = self.pc.slow_down or 0
 
-        slowDown = self.thisTld.get("_slowdown")
+        slowDown = self.dc.thisTld.get("_slowdown")
         if slowDown:
             if self.pc.slow_down == 0 and int(slowDown) > 0:
                 self.pc.slow_down = int(slowDown)
@@ -148,7 +148,10 @@ class ProcessWhoisDomainRequest:
     def doOneLookup(
         self,
     ) -> Optional[Domain]:
-        if self.dc.dList is None:
+        if self.pc.verbose:
+            print(f"DEBUG: ### lookup: tldString: {self.dc.tldString}; dList: {self.dc.dList}", file=sys.stderr)
+
+        if self.dc.dList is None:  # mainly to please mypy
             return None
 
         try:
@@ -169,11 +172,11 @@ class ProcessWhoisDomainRequest:
             )
 
         self.dc.whoisStr = str(self.dc.whoisStr)
-        self.dc.lastWhoisStr = self.dc.whoisStr
 
         if self.pc.verbose:
             print("DEBUG: Raw: ", self.dc.whoisStr, file=sys.stderr)
 
+        self.dc.lastWhoisStr = self.dc.whoisStr  # keep the original whois string for reference
         updateLastWhois(
             dList=self.dc.dList,
             whoisStr=self.dc.lastWhoisStr,
@@ -250,7 +253,7 @@ class ProcessWhoisDomainRequest:
             )
             return result, finished
 
-        self.thisTld = cast(Dict[str, Any], TLD_RE.get(self.dc.tldString))
+        self.dc.thisTld = cast(Dict[str, Any], TLD_RE.get(self.dc.tldString))
         # thisTld is the result of TLD_RE (and ZZ), a dict with regex to match the whoisStr
 
         if self._verifyPrivateRegistry():  # may raise WhoisPrivateRegistry
@@ -262,6 +265,9 @@ class ProcessWhoisDomainRequest:
             )
             return result, finished
 
+        self._doServerHintsForThisTld()
+        self._doSlowdownHintForThisTld()
+
         return None, False
 
     def processRequest(self) -> Optional[Domain]:
@@ -270,31 +276,23 @@ class ProcessWhoisDomainRequest:
         if finished is True:
             return result
 
-        self._doServerHintsForThisTld()
-        self._doSlowdownHintForThisTld()
-
         # if the tld is a multi level we should not move further down than the tld itself
         # we currently allow progressive lookups until we find something:
         # so xxx.yyy.zzz will try both xxx.yyy.zzz and yyy.zzz
         # but if the tld is yyy.zzz we should only try xxx.yyy.zzz
 
-        # dc.tldString is now a supported <tld>
-        # dLIst is the cleaned up query: so aaa.<tld> or perhaps aaa.bbb.<tld>
+        # self.dc.tldString is now a supported <tld> and never changes
+        # self.dc.dList is the cleaned up domain query in list form:
+        # so ".".join(self.dc.dList) would be like: aaa.<tld> or perhaps aaa.bbb.<tld>
+        # and may change if we find no data in cli whois
 
-        tldLevel = str(self.dc.tldString).split(".")
-        while len(self.dc.dList):
-            if self.pc.verbose:
-                print(f"DEBUG: ### lookup: tldString: {self.dc.tldString}; dList: {self.dc.dList}", file=sys.stderr)
+        tldLevel: List[str] = str(self.dc.tldString).split(".")
+        while len(self.dc.dList) > len(tldLevel):
 
             result = self.doOneLookup()
             if result:
                 return result
 
-            if len(self.dc.dList) > (len(tldLevel) + 1):
-                self.dc.dList = self.dc.dList[1:]  # strip one element from the front and try again
-                continue
-
-            # no result or no domain but we can not reduce any further so we have None
-            return None
+            self.dc.dList = self.dc.dList[1:]  # strip one element from the front and try again
 
         return None
