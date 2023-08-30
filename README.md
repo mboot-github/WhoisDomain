@@ -245,3 +245,6 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * restore python 3.6 test as i still use it on one remaining app with python 3.6 (make testP36)
   * finalize verification of all tld's in iana, add test where this can be auto generated from whois.nic.<tld> 2023-08-28; mboot
   * 1.20230829.1 mboot; all \_test now work, using analizer tool to verify that iana tld db web site and tl-regexpr match
+  * add DEBUG to all verbose strings
+  * remove tldString and dList and domain , all go via dc (dataContect) now
+  * run tests and add new TODO
