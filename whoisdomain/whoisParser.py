@@ -61,9 +61,7 @@ class WhoisParser:
     def _doExtractPattensFromWhoisString(
         self,
     ) -> None:
-        # use TLD_RE["com"] as default if a regex is missing
-
-        # old: for k, v in TLD_RE.get(str(self.dc.tldString), TLD_RE["com"]).items():
+        # use TLD_RE["com"] as default if a entry is missing
         if self.dc.thisTld is {}:
             self.dc.thisTld = TLD_RE["com"]
 

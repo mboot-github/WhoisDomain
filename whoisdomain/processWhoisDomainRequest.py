@@ -1,7 +1,7 @@
 import sys
 
 from typing import (
-    cast,
+    # cast,
     Optional,
     List,
     Dict,
@@ -253,8 +253,8 @@ class ProcessWhoisDomainRequest:
             )
             return result, finished
 
-        self.dc.thisTld = cast(Dict[str, Any], TLD_RE.get(self.dc.tldString))
-        # thisTld is the result of TLD_RE (and ZZ), a dict with regex to match the whoisStr
+        # self.dc.thisTld = cast(Dict[str, Any], TLD_RE.get(self.dc.tldString, {}))
+        self.dc.thisTld = TLD_RE.get(self.dc.tldString, {})
 
         if self._verifyPrivateRegistry():  # may raise WhoisPrivateRegistry
             msg = "This tld has either no whois server or responds only with minimal information"
