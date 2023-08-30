@@ -137,11 +137,9 @@ def q2(
     initLastWhois()
 
     dc = DataContext(
-        pc=pc,
         domain=domain,
     )
     pwdr = ProcessWhoisDomainRequest(
-        domain=domain,
         pc=pc,
         dc=dc,
     )
@@ -209,14 +207,11 @@ def getVersion() -> str:
 
 
 def getTestHint(tldString: str) -> Optional[str]:
-    if tldString not in ZZ:
-        return None
-
     k: str = "_test"
-    if k not in ZZ[tldString]:
-        return None
+    if tldString in ZZ and k in ZZ[tldString] and ZZ[tldString][k]:
+        return str(ZZ[tldString][k])
 
-    return str(ZZ[tldString][k])
+    return None
 
 
 def cleanupWhoisResponse(

@@ -31,6 +31,7 @@ class Domain:
             if isinstance(x, str):
                 tmp.append(x.strip().lower())
                 continue
+
             # not a string but an array
             for y in x:
                 tmp.append(y.strip().lower())
@@ -46,6 +47,7 @@ class Domain:
                 x = x.lower()
                 if x not in self.name_servers:
                     self.name_servers.append(x)
+
         self.name_servers = sorted(self.name_servers)
 
     def _doStatus(
@@ -129,21 +131,9 @@ class Domain:
         self.registrant_country = dc.data["registrant_country"][0].strip()
 
         # date time items
-        self.creation_date = str_to_date(
-            dc.data["creation_date"][0],
-            self.tld,
-            verbose=pc.verbose,
-        )
-        self.expiration_date = str_to_date(
-            dc.data["expiration_date"][0],
-            self.tld,
-            verbose=pc.verbose,
-        )
-        self.last_updated = str_to_date(
-            dc.data["updated_date"][0],
-            self.tld,
-            verbose=pc.verbose,
-        )
+        self.creation_date = str_to_date(dc.data["creation_date"][0], self.tld)
+        self.expiration_date = str_to_date(dc.data["expiration_date"][0], self.tld)
+        self.last_updated = str_to_date(dc.data["updated_date"][0], self.tld)
 
         self.dnssec = dc.data["DNSSEC"]
         self._doStatus(dc.data)

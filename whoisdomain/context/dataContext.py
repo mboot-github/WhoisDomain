@@ -7,20 +7,22 @@ from typing import (
     Optional,
 )
 
-from .parameterContext import ParameterContext
+# from .parameterContext import ParameterContext
 
 
 class DataContext:
     def __init__(
         self,
         domain: str,
-        pc: ParameterContext,
     ) -> None:
-        self.pc = pc
-        self.domain = domain
+        self.originalDomain: str = domain
+        self.domain: str = domain
 
-        self.data: Dict[str, Any] = {}
+        self.dList: List[str] = []
+        self.tldString: Optional[str] = None
+
         self.lastWhoisStr: str = ""
         self.whoisStr: str = ""
+
+        self.data: Dict[str, Any] = {}
         self.exeptionStr: Optional[str] = None
-        self.dList: List[str] = []

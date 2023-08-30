@@ -127,16 +127,16 @@ def _initOnImport() -> None:
 
 def filterTldToSupportedPattern(
     domain: str,
-    d: List[str],
+    dList: List[str],
     verbose: bool = False,
 ) -> str:
     # we have max 2 levels so first check if the last 2 are in our list
-    tld = f"{d[-2]}.{d[-1]}"
+    tld = f"{dList[-2]}.{dList[-1]}"
     if tld in ZZ:
         return tld
 
     # if not check if the last item  we have
-    tld = f"{d[-1]}"
+    tld = f"{dList[-1]}"
     if tld in ZZ:
         return tld
 

@@ -29,8 +29,6 @@ def setMyCache(myCache: Any) -> None:
     if myCache:
         CACHE_STUB = myCache
 
-    # print(f"CACHE_STUB {CACHE_STUB}", file=sys.stderr)
-
 
 def _initDefaultCache(
     pc: ParameterContext,
@@ -39,12 +37,12 @@ def _initDefaultCache(
     global CACHE_STUB
 
     if pc.verbose:
-        print(f"CACHE_STUB {CACHE_STUB}", file=sys.stderr)
+        print(f"DEBUG: CACHE_STUB {CACHE_STUB}", file=sys.stderr)
 
     # here you can override caching, if someone else already defined CACHE_STUB by this time, we use their caching
     if CACHE_STUB is None:
         if pc.verbose:
-            print("initializing default cache", file=sys.stderr)
+            print("DEBUG: initializing default cache", file=sys.stderr)
 
         # if no cache defined init the default cache (optional with file storage based on pc)
         CACHE_STUB = SimpleCacheWithFile(
@@ -54,7 +52,7 @@ def _initDefaultCache(
         )
     else:
         if pc.verbose:
-            print("cache already initialized", file=sys.stderr)
+            print("DEBUG: cache already initialized", file=sys.stderr)
 
     return CACHE_STUB
 
@@ -84,7 +82,7 @@ def doWhoisAndReturnString(
     keyString = ".".join(dList)
 
     if pc.verbose:
-        print(f"force: {pc.force}", file=sys.stderr)
+        print(f"DEBUG: force: {pc.force}", file=sys.stderr)
 
     if pc.force is False:
         oldData: Optional[str] = cache.get(keyString)

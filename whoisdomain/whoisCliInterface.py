@@ -46,8 +46,7 @@ class WhoisCliInterface:
         folder = os.getcwd()
         copy_command = r"copy \\live.sysinternals.com\tools\whois.exe " + folder
         if self.pc.verbose:
-            print("downloading dependencies", file=sys.stderr)
-            print(copy_command, file=sys.stderr)
+            print("DEBUG: downloading dependencies: {copy_command}", file=sys.stderr)
 
         subprocess.call(
             copy_command,
@@ -100,7 +99,7 @@ class WhoisCliInterface:
 
     def _postProcessingResult(self) -> str:
         if self.pc.verbose:
-            print(self.rawWhoisResultString, file=sys.stderr)
+            print(f"DEBUG: {self.rawWhoisResultString}", file=sys.stderr)
 
         if self.pc.ignore_returncode is False and self.processHandle.returncode not in [0, 1]:
             if "fgets: Connection reset by peer" in self.rawWhoisResultString:
@@ -130,7 +129,7 @@ class WhoisCliInterface:
         # env={"LANG": "en"} if self.dList[-1] in ".jp" else None,
 
         if self.pc.verbose:
-            print(f"timout: {self.pc.timeout}", file=sys.stderr)
+            print(f"DEBUG: timout: {self.pc.timeout}", file=sys.stderr)
 
         try:
             self.rawWhoisResultString = self.processHandle.communicate(timeout=self.pc.timeout,)[

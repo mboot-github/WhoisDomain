@@ -6,6 +6,7 @@ from typing import (
     List,
     Dict,
     Any,
+    Tuple,
 )
 
 from .exceptions import WhoisPrivateRegistry
@@ -24,27 +25,24 @@ from .context.parameterContext import ParameterContext
 class ProcessWhoisDomainRequest:
     def __init__(
         self,
-        domain: str,
         pc: ParameterContext,
         dc: DataContext,
     ) -> None:
-        self.domain = domain
         self.pc = pc
         self.dc = dc
-        self.tldString: Optional[str] = None
 
-    def _analyzeDomainStringAndReturnTldString(
+    def _analyzeDomainStringAndValidate(
         self,
     ) -> None:
         def _internationalizedDomainNameToPunyCode(d: List[str]) -> List[str]:
             return [k.encode("idna").decode() or k for k in d]
 
         # Prep the domain ================
-        self.domain = self.domain.lower().strip().rstrip(".")  # Remove the trailing dot to support FQDN.
-        self.dc.dList = self.domain.split(".")
+        self.dc.domain = self.dc.domain.lower().strip().rstrip(".")  # Remove the trailing dot to support FQDN.
+        self.dc.dList = self.dc.domain.split(".")
 
         if len(self.dc.dList) == 0:
-            self.tldString = None
+            self.dc.tldString = None
             self.dc.dList = []
             return
 
@@ -52,19 +50,19 @@ class ProcessWhoisDomainRequest:
             self.dc.dList = self.dc.dList[1:]
 
         if len(self.dc.dList) == 0:
-            self.tldString = None
+            self.dc.tldString = None
             self.dc.dList = []
             return
 
         # we currently do not support raw tld's so we cannot lookup 'com' for example
         if len(self.dc.dList) == 1:
-            self.tldString = None
+            self.dc.tldString = None
             self.dc.dList = []
             return
 
         # Is it a supported domain =======
-        self.tldString = filterTldToSupportedPattern(
-            self.domain,
+        self.dc.tldString = filterTldToSupportedPattern(
+            self.dc.domain,
             self.dc.dList,
             self.pc.verbose,
         )  # may raise UnknownTld
@@ -79,7 +77,7 @@ class ProcessWhoisDomainRequest:
         if self.pc.return_raw_text_for_unsupported_tld:
             return None
 
-        a = f"The TLD {self.tldString} is currently not supported by this package."
+        a = f"The TLD {self.dc.tldString} is currently not supported by this package."
         b = "Use validTlds() to see what toplevel domains are supported."
         msg = f"{a} {b}"
         return msg
@@ -100,7 +98,7 @@ class ProcessWhoisDomainRequest:
 
             # we will only return minimal data
             self.dc.data = {
-                "tld": self.tldString,
+                "tld": self.dc.tldString,
                 "domain_name": [],
             }
 
@@ -143,13 +141,12 @@ class ProcessWhoisDomainRequest:
                 self.pc.slow_down = int(slowDown)
 
         if self.pc.verbose and int(self.pc.slow_down):
-            print(f"using _slowdown hint {self.pc.slow_down} for tld: {self.tldString}", file=sys.stderr)
+            print(f"DEBUG: using _slowdown hint {self.pc.slow_down} for tld: {self.dc.tldString}", file=sys.stderr)
 
         return int(self.pc.slow_down)
 
     def doOneLookup(
         self,
-        # dList: List[str],
     ) -> Optional[Domain]:
         if self.dc.dList is None:
             return None
@@ -175,7 +172,7 @@ class ProcessWhoisDomainRequest:
         self.dc.lastWhoisStr = self.dc.whoisStr
 
         if self.pc.verbose:
-            print("Raw: ", self.dc.whoisStr, file=sys.stderr)
+            print("DEBUG: Raw: ", self.dc.whoisStr, file=sys.stderr)
 
         updateLastWhois(
             dList=self.dc.dList,
@@ -184,14 +181,13 @@ class ProcessWhoisDomainRequest:
         )
 
         wp = WhoisParser(
-            tldString=str(self.tldString),
             pc=self.pc,
             dc=self.dc,
         )
         data = wp.parse()
 
         if self.pc.verbose:
-            print("Clean:", self.dc.whoisStr, file=sys.stderr)
+            print("DEBUG: Clean:", self.dc.whoisStr, file=sys.stderr)
 
         if data is None:
             return None
@@ -209,59 +205,71 @@ class ProcessWhoisDomainRequest:
 
         return None
 
-    def processRequest(self) -> Optional[Domain]:
+    def prepRequest(self) -> Tuple[Optional[Domain], bool]:
+        result: Optional[Domain] = None
+        finished: bool = True
+
         try:
-            # self.dc.dList = self._analyzeDomainStringAndReturnTldString()  # may raise UnknownTld
-            self._analyzeDomainStringAndReturnTldString()  # may raise UnknownTld
-            if self.tldString is None:
-                return None
+            self._analyzeDomainStringAndValidate()  # may raise UnknownTld
+            if self.dc.tldString is None:
+                return result, finished
         except Exception as e:
             if self.pc.simplistic is False:
                 raise (e)
 
             self.dc.exeptionStr = "UnknownTld"
-            return Domain(
+            result = Domain(
                 pc=self.pc,
                 dc=self.dc,
             )
+            return result, finished
 
         # force mypy to process ok
-        self.tldString = str(self.tldString)
-        if self.dc.dList is None:
-            return None
+        self.dc.tldString = str(self.dc.tldString)
+        if self.dc.dList is []:
+            return None, True
 
         # =================================================
-        if self.tldString not in TLD_RE.keys():
+        if self.dc.tldString not in TLD_RE.keys():
             msg = self.makeMessageForUnsupportedTld()
             if msg is None:
                 self._doUnsupportedTldAnyway()
-                return Domain(
+                result = Domain(
                     pc=self.pc,
                     dc=self.dc,
                 )
+                return result, finished
 
             if self.pc.simplistic is False:
                 raise UnknownTld(msg)
 
             self.dc.exeptionStr = msg  # was: self.dc.exeptionStr = "UnknownTld"
-            return Domain(
+            result = Domain(
                 pc=self.pc,
                 dc=self.dc,
             )
+            return result, finished
 
-        # =================================================
-        # self.setThisTldEntry(cast(Dict[str, Any], TLD_RE.get(self.tldString)))
-        self.thisTld = cast(Dict[str, Any], TLD_RE.get(self.tldString))
+        self.thisTld = cast(Dict[str, Any], TLD_RE.get(self.dc.tldString))
+        # thisTld is the result of TLD_RE (and ZZ), a dict with regex to match the whoisStr
 
         if self._verifyPrivateRegistry():  # may raise WhoisPrivateRegistry
             msg = "This tld has either no whois server or responds only with minimal information"
             self.dc.exeptionStr = msg
-            return Domain(
+            result = Domain(
                 pc=self.pc,
                 dc=self.dc,
             )
+            return result, finished
 
-        # =================================================
+        return None, False
+
+    def processRequest(self) -> Optional[Domain]:
+
+        result, finished = self.prepRequest()
+        if finished is True:
+            return result
+
         self._doServerHintsForThisTld()
         self._doSlowdownHintForThisTld()
 
@@ -270,18 +278,20 @@ class ProcessWhoisDomainRequest:
         # so xxx.yyy.zzz will try both xxx.yyy.zzz and yyy.zzz
         # but if the tld is yyy.zzz we should only try xxx.yyy.zzz
 
-        tldLevel = self.tldString.split(".")
+        # dc.tldString is now a supported <tld>
+        # dLIst is the cleaned up query: so aaa.<tld> or perhaps aaa.bbb.<tld>
+
+        tldLevel = str(self.dc.tldString).split(".")
         while len(self.dc.dList):
+            if self.pc.verbose:
+                print(f"DEBUG: ### lookup: tldString: {self.dc.tldString}; dList: {self.dc.dList}", file=sys.stderr)
+
             result = self.doOneLookup()
             if result:
                 return result
 
             if len(self.dc.dList) > (len(tldLevel) + 1):
-                # strip one element from the front and try again
-                self.dc.dList = self.dc.dList[1:]
-                if self.pc.verbose:
-                    msg = f"try again with {self.dc.dList}, {len(self.dc.dList)}, {len(tldLevel) + 1}"
-                    print(msg, file=sys.stderr)
+                self.dc.dList = self.dc.dList[1:]  # strip one element from the front and try again
                 continue
 
             # no result or no domain but we can not reduce any further so we have None
