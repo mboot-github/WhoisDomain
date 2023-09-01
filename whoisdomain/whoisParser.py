@@ -77,6 +77,8 @@ class WhoisParser:
             if v:
                 # here we apply the regex patterns
                 self.resultDict[k] = v.findall(self.dc.whoisStr) or empty
+                if self.pc.verbose:
+                    print(f"{k}, {self.resultDict[k]}", file=sys.stderr)
 
     def _doSourceIana(
         self,
@@ -227,7 +229,7 @@ class WhoisParser:
             if line.startswith("Terms of Use:"):  # these lines contibute nothing so ignore
                 continue
 
-            tmp2.append(line.strip("\r"))
+            tmp2.append(line.strip("\r").rstrip())
 
         self.dc.whoisStr = "\n".join(tmp2)
         return self.dc.whoisStr

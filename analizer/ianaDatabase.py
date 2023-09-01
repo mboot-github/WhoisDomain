@@ -89,6 +89,7 @@ CREATE TABLE IF NOT EXISTS IANA_TLD (
 );
 """
         rr = self.doSql(sql)
+        return rr
 
     def createTablePsl(self) -> None:
         sql = """
@@ -102,6 +103,7 @@ CREATE TABLE IF NOT EXISTS IANA_PSL (
 );
 """
         rr = self.doSql(sql)
+        return rr
 
     def prepData(
         self,

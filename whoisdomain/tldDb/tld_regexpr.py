@@ -3,6 +3,8 @@ from typing import (
     Any,
 )
 
+# experiment in progress "sk" 20230831 mboot 761
+
 # NOTE: _server is not inherited down stream, currently
 
 # ======================================
@@ -741,6 +743,7 @@ ZZ["se"] = {
 
 # Singapore - Commercial sub-domain
 ZZ["com.sg"] = {
+    "_server": "whois.sk-nic.sk",
     "domain_name": r"Domain Name:\s?(.+)",
     "registrar": r"Registrar:\s?(.+)",
     "registrant": r"Registrant:\r?\n\r?\n\s*Name:\s*(.+)\r?\n",
@@ -751,6 +754,7 @@ ZZ["com.sg"] = {
     "name_servers": r"Name Servers:(?:\s+(\S+))(?:\s+(\S+))?(?:\s+(\S+))?(?:\s+([\.\w]+)\s+)?",
     "status": r"Domain Status:\s*(.*)\r?\n",
     "emails": r"[\w\.-]+@[\w\.-]+\.[\w]{2,4}",
+    "_test": "sk-nic.sk",
 }
 
 # Slovakia
@@ -761,8 +765,10 @@ ZZ["sk"] = {
     "expiration_date": r"Valid Until:\s?(.+)",
     "updated_date": r"Updated:\s?(.+)",
     "name_servers": r"Nameserver:\s*(\S+)",
-    "registrant": r"Contact:\s?(.+)",
-    "registrant_country": r"Country Code:\s?(.+)\nRegistrar:",
+    # "registrant": r"registrant:([\s\S]+)\n\n",
+    "registrant": r"contact:\s?(.+)",
+    "registrant_country": r"Country Code:\s?(.+)\nRegistrar:",  # this will not work
+    # "registrar": r"registrar:\s*([^\n]+)",
 }
 
 ZZ["tel"] = {
@@ -2600,3 +2606,228 @@ ZZ["香格里拉"] = {"_server": "whois.nic.xn--5su34j936bgsg", "extend": "xn--5
 ZZ["香港"] = {"_server": "whois.hkirc.hk", "extend": "hk", "_test": "hkirc.hk"}
 
 # भारतम् xn--h2breg3eve ; still issues with some utf8 strings 2023-08-28 mboot
+
+ZZ["aaa"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["able"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["accenture"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["ad"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["aetna"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["aig"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["americanexpress"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["amex"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["amica"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["analytics"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["ao"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["aq"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["aramco"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["athleta"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["axa"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["azure"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["banamex"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["bananarepublic"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["baseball"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["bb"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["bh"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["bharti"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["bing"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["bloomberg"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["bm"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["booking"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["bs"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["bt"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["bv"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["calvinklein"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["caravan"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["cbn"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["cbre"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["cg"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["chase"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["cisco"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["citadel"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["citi"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["citic"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["ck"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["coupon"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["cu"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["dell"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["dhl"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["discover"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["dj"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["dupont"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["er"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["farmers"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["ferrero"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["fk"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["flickr"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["flir"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["food"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["ford"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["frontier"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["ftr"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["gap"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["gb"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["gm"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["gn"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["grainger"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["grocery"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["gu"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["guardian"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["gw"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["hbo"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["homegoods"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["homesense"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["hotels"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["hotmail"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["hsbc"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["hyatt"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["ieee"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["intuit"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["ipiranga"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["itau"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["jm"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["jmp"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["jnj"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["jo"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["jpmorgan"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["jprs"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["kh"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["kinder"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["km"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["kp"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["kpmg"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["kpn"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["kw"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["lanxess"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["lifeinsurance"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["lilly"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["lincoln"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["living"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["lr"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["maif"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["marshalls"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["mattel"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["mc"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["merckmsd"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["mh"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["microsoft"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["mil"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["mint"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["mlb"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["moto"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["msd"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["mt"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["mv"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["nba"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["ne"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["netflix"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["neustar"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["nfl"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["ni"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["nike"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["nr"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["ntt"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["office"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["oldnavy"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["open"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["pfizer"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["pg"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["pictet"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["ping"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["pn"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["pramerica"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["praxi"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["pru"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["prudential"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["rocher"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["sakura"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["sas"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["sener"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["sj"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["skype"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["sohu"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["song"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["staples"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["statefarm"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["sz"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["target"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["tj"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["tjmaxx"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["tjx"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["tkmaxx"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["vi"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["vivo"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["weather"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["weatherchannel"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["williamhill"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["windows"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["winners"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xbox"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--1ck2e1b"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--54b7fta0cc"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--bck1b9a5dre4c"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--cck2b3b"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--czr694b"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--eckvdtc9d"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--fct429k"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--fzc2c9e2c"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--g2xx48c"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--gckr3f0f"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--gk3at1e"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--imr513n"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--jvr189m"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--l1acc"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--mgba3a3ejt"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--mgbai9azgqp6j"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--mgbayh7gpa"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--mgbc0a9azcg"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--mgbcpq6gpa1a"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--mgbpl2fh"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--nyqy26a"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--otu796d"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--qxam"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--rhqv96g"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--rovu88b"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--wgbh1c"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--xkc2al3hye2a"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["yahoo"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["yandex"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["zero"] = {"_privateRegistry": True}  # no whois server found in iana
+
+# unknown tld abb, abb, abb, abb, whois.nic.abb,
+# unknown tld arpa, arpa, arpa, arpa, whois.iana.org,
+# unknown tld bn, bn, bn, bn, whois.bnnic.bn,
+# unknown tld bw, bw, bw, bw, whois.nic.net.bw,
+# unknown tld crown, crown, crown, crown, whois.nic.crown,
+# unknown tld crs, crs, crs, crs, whois.nic.crs,
+# unknown tld fj, fj, fj, fj, www.whois.fj,
+# unknown tld gp, gp, gp, gp, whois.nic.gp,
+# unknown tld hm, hm, hm, hm, whois.registry.hm,
+# unknown tld il, il, il, il, whois.isoc.org.il,
+# unknown tld int, int, int, int, whois.iana.org,
+# unknown tld iq, iq, iq, iq, whois.cmc.iq,
+# unknown tld mm, mm, mm, mm, whois.registry.gov.mm,
+# unknown tld mw, mw, mw, mw, whois.nic.mw,
+# unknown tld pf, pf, pf, pf, whois.registry.pf,
+# unknown tld post, post, post, post, whois.dotpostregistry.net,
+# unknown tld realtor, realtor, realtor, realtor, whois.nic.realtor,
+# unknown tld weir, weir, weir, weir, whois.nic.weir,
+# unknown tld xn--4dbrk0ce, ישראל, ישראל, ישראל, whois.isoc.org.il,
+# unknown tld xn--55qw42g, 公益, 公益, 公益, whois.conac.cn,
+# unknown tld xn--80ao21a, қаз, қаз, қаз, whois.nic.kz,
+# unknown tld xn--90a3ac, срб, срб, срб, whois.rnids.rs,
+# unknown tld xn--90ae, бг, бг, бг, whois.imena.bg,
+# unknown tld xn--90ais, бел, бел, бел, whois.cctld.by,
+# unknown tld xn--d1acj3b, дети, дети, дети, whois.nic.xn--d1acj3b,
+# unknown tld xn--j1amh, укр, укр, укр, whois.dotukr.com,
+# unknown tld xn--lgbbat1ad8j, الجزائر, الجزائر, الجزائر, whois.nic.dz,
+# unknown tld xn--mgba3a4f16a, ایران, ایران, ایران, whois.nic.ir,
+# unknown tld xn--mgbaam7a8h, امارات, امارات, امارات, whois.aeda.net.ae,
+# unknown tld xn--mgberp4a5d4ar, السعودية, السعودية, السعودية, whois.nic.net.sa,
+# unknown tld xn--mgbtx2b, عراق, عراق, عراق, whois.cmc.iq,
+# unknown tld xn--mgbx4cd0ab, مليسيا, مليسيا, مليسيا, whois.mynic.my,
+# unknown tld xn--node, გე, გე, გე, whois.itdc.ge,
+# unknown tld xn--pgbs0dh, تونس, تونس, تونس, whois.ati.tn,
+# unknown tld xn--q7ce6a, ລາວ, ລາວ, ລາວ, whois.nic.la,
+# unknown tld xn--y9a3aq, հայ, հայ, հայ, whois.amnic.net,
+# unknown tld xn--ygbi2ammx, فلسطين, فلسطين, فلسطين, whois.pnina.ps,
+# unknown tld xn--zfr164b, 政务, 政务, 政务, whois.conac.cn,

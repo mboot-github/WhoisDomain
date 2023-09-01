@@ -4,9 +4,7 @@
 Analyze all tld's currently in the iana root db
 """
 
-from typing import (
-    Any,
-)
+# from typing import (    Any)
 
 import io
 import re
@@ -15,7 +13,7 @@ from dns.resolver import (
     LRUCache,
 )
 
-import json
+# import json
 
 from ianaCrawler import IanaCrawler
 from pslGrabber import PslGrabber
