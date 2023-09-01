@@ -16,7 +16,7 @@ from .exceptions import (
     WhoisQuotaExceeded,
 )
 
-from ._0_init_tld import TLD_RE
+from .helpers import get_TLD_RE
 from .domain import Domain
 
 from .strings.noneStrings import NoneStrings
@@ -53,32 +53,35 @@ class WhoisParser:
 
         for k, v in iana.items():
             zz = re.findall(v, str(self.dc.whoisStr))
-            if zz:
-                if self.pc.verbose:
-                    print(f"DEBUG: parsing iana data only for tld: {self.dc.tldString}, {zz}", file=sys.stderr)
-                self.resultDict[k] = zz
+            if not zz:
+                continue
+
+            self.resultDict[k] = zz
+            if self.pc.verbose:
+                print(f"DEBUG: parsing iana data only for tld: {self.dc.tldString}, {zz}", file=sys.stderr)
 
     def _doExtractPattensFromWhoisString(
         self,
     ) -> None:
         # use TLD_RE["com"] as default if a entry is missing
         if self.dc.thisTld is {}:
-            self.dc.thisTld = TLD_RE["com"]
+            p = get_TLD_RE()
+            self.dc.thisTld = p["com"]
 
         # Historical: we use 'empty string' as default, not None
         empty = [""]
 
-        for k, v in self.dc.thisTld.items():
-            if k.startswith("_"):
+        for key, compiledRe in self.dc.thisTld.items():
+            if key.startswith("_"):
                 # skip meta element like: _server or _privateRegistry
                 continue
 
-            self.resultDict[k] = empty  # set a default
-            if v:
+            self.resultDict[key] = empty  # set a default
+            if compiledRe:
                 # here we apply the regex patterns
-                self.resultDict[k] = v.findall(self.dc.whoisStr) or empty
+                self.resultDict[key] = compiledRe.findall(self.dc.whoisStr) or empty
                 if self.pc.verbose:
-                    print(f"{k}, {self.resultDict[k]}", file=sys.stderr)
+                    print(f"{key}, {self.resultDict[key]}", file=sys.stderr)
 
     def _doSourceIana(
         self,

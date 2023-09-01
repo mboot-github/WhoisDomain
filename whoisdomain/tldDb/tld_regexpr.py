@@ -492,9 +492,9 @@ ZZ["jp"] = {
 
 ZZ["co.jp"] = {
     "extend": "jp",
-    "creation_date": r"\[Registered Date\]\s?(.+)",
+    "creation_date": r"\[Registered Date\]([^\n]*)\n",  # possibly use Connected date
     "expiration_date": None,
-    "updated_date": r"\[Last Update\]\s?(.+)",
+    "updated_date": r"\[Last Update\]([^\n]*)\n",
     "status": r"\[State\]\s?(.+)",
 }
 
@@ -743,7 +743,6 @@ ZZ["se"] = {
 
 # Singapore - Commercial sub-domain
 ZZ["com.sg"] = {
-    "_server": "whois.sk-nic.sk",
     "domain_name": r"Domain Name:\s?(.+)",
     "registrar": r"Registrar:\s?(.+)",
     "registrant": r"Registrant:\r?\n\r?\n\s*Name:\s*(.+)\r?\n",
@@ -754,12 +753,12 @@ ZZ["com.sg"] = {
     "name_servers": r"Name Servers:(?:\s+(\S+))(?:\s+(\S+))?(?:\s+(\S+))?(?:\s+([\.\w]+)\s+)?",
     "status": r"Domain Status:\s*(.*)\r?\n",
     "emails": r"[\w\.-]+@[\w\.-]+\.[\w]{2,4}",
-    "_test": "sk-nic.sk",
 }
 
 # Slovakia
 ZZ["sk"] = {
     "extend": "com",
+    "_server": "whois.sk-nic.sk",
     "domain_name": r"Domain:\s?(.+)",
     "creation_date": r"Created:\s?(.+)",
     "expiration_date": r"Valid Until:\s?(.+)",
@@ -769,6 +768,7 @@ ZZ["sk"] = {
     "registrant": r"contact:\s?(.+)",
     "registrant_country": r"Country Code:\s?(.+)\nRegistrar:",  # this will not work
     # "registrar": r"registrar:\s*([^\n]+)",
+    "_test": "sk-nic.sk",
 }
 
 ZZ["tel"] = {

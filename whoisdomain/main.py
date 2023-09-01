@@ -421,7 +421,7 @@ def showAllCurrentTld() -> None:
 
 
 def ShowRuleset(tld: str) -> None:
-    rr = whois.TLD_RE
+    rr = whois.get_TLD_RE()
     if tld in rr:
         for key in sorted(rr[tld].keys()):
             rule = f"{rr[tld][key]}"

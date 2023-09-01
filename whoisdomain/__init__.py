@@ -11,11 +11,6 @@ from typing import (
     Callable,
 )
 
-
-from .version import (
-    VERSION,
-)
-
 from .exceptions import (
     UnknownTld,
     FailedParsingWhoisOutput,
@@ -26,21 +21,11 @@ from .exceptions import (
     WhoisCommandTimeout,
 )
 
-from ._0_init_tld import (
-    TLD_RE,
-    validTlds,
-    filterTldToSupportedPattern,
-    mergeExternalDictWithRegex,
-)
-
+from .tldInfo import TldInfo
+from .version import VERSION
 from .processWhoisDomainRequest import ProcessWhoisDomainRequest
-from .lastWhois import (
-    get_last_raw_whois_data,
-    initLastWhois,
-)
 from .doWhoisCommand import setMyCache
 from .domain import Domain
-
 from .strings.noneStrings import NoneStrings, NoneStringsAdd
 from .strings.quotaStrings import QuotaStrings, QuotaStringsAdd
 from .tldDb.tld_regexpr import ZZ
@@ -50,6 +35,19 @@ from .cache.simpleCacheBase import SimpleCacheBase
 from .cache.simpleCacheWithFile import SimpleCacheWithFile
 from .cache.dummyCache import DummyCache
 from .cache.dbmCache import DBMCache
+from .helpers import (
+    filterTldToSupportedPattern,
+    mergeExternalDictWithRegex,
+    validTlds,
+    get_TLD_RE,
+    getVersion,
+    getTestHint,
+    cleanupWhoisResponse,
+)
+from .lastWhois import (
+    get_last_raw_whois_data,
+    initLastWhois,
+)
 
 HAS_REDIS = False
 try:
@@ -91,7 +89,10 @@ __all__ = [
     "WhoisCommandTimeout",
     # from init_tld
     "validTlds",
-    "TLD_RE",
+    "mergeExternalDictWithRegex",
+    "filterTldToSupportedPattern",
+    "get_TLD_RE",
+    # "TLD_RE",
     # from version
     "VERSION",
     # from parameterContext
@@ -200,67 +201,3 @@ def query(
 
 # Add get function to support return result in dictionary form
 get = _result2dict(query)
-
-
-def getVersion() -> str:
-    return VERSION
-
-
-def getTestHint(tldString: str) -> Optional[str]:
-    k: str = "_test"
-    if tldString in ZZ and k in ZZ[tldString] and ZZ[tldString][k]:
-        return str(ZZ[tldString][k])
-
-    return None
-
-
-def cleanupWhoisResponse(
-    whoisStr: str,
-    verbose: bool = False,
-    with_cleanup_results: bool = False,
-    withRedacted: bool = False,
-    pc: Optional[ParameterContext] = None,
-) -> str:
-    tmp2: List[str] = []
-
-    if pc is None:
-        pc = ParameterContext(
-            verbose=verbose,
-            withRedacted=withRedacted,
-            with_cleanup_results=with_cleanup_results,
-        )
-
-    skipFromHere = False
-    tmp: List[str] = whoisStr.split("\n")
-    for line in tmp:
-        if skipFromHere is True:
-            continue
-
-        # some servers respond with: % Quota exceeded in the comment section (lines starting with %)
-        if "quota exceeded" in line.lower():
-            raise WhoisQuotaExceeded(whoisStr)
-
-        if pc.with_cleanup_results is True and line.startswith("%"):  # only remove if requested
-            continue
-
-        if pc.withRedacted is False:
-            if "REDACTED FOR PRIVACY" in line:  # these lines contibute nothing so ignore
-                continue
-
-        if "Please query the RDDS service of the Registrar of Record" in line:  # these lines contibute nothing so ignore
-            continue
-
-        # regular responses may at the end have meta info starting with a line >>> some texte <<<
-        # similar trailing info exists with lines starting with -- but we wil handle them later
-        # unfortunalery we have domains (google.st) that have this early at the top
-        if 0:
-            if line.startswith(">>>"):
-                skipFromHere = True
-                continue
-
-        if line.startswith("Terms of Use:"):  # these lines contibute nothing so ignore
-            continue
-
-        tmp2.append(line.strip("\r"))
-
-    return "\n".join(tmp2)

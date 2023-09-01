@@ -9,6 +9,7 @@ from typing import (
     Optional,
 )
 
+
 # http://docs.python.org/library/datetime.html#strftime-strptime-behavior
 DATE_FORMATS = [
     "%d-%b-%Y",  # 02-jan-2000

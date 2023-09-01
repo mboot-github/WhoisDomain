@@ -11,8 +11,9 @@ from typing import (
 
 from .exceptions import WhoisPrivateRegistry
 from .exceptions import UnknownTld
-from ._0_init_tld import filterTldToSupportedPattern
-from ._0_init_tld import TLD_RE
+
+from .helpers import filterTldToSupportedPattern
+from .helpers import get_TLD_RE
 from .doWhoisCommand import doWhoisAndReturnString
 from .whoisParser import WhoisParser
 from .domain import Domain
@@ -65,7 +66,15 @@ class ProcessWhoisDomainRequest:
             self.dc.domain,
             self.dc.dList,
             self.pc.verbose,
-        )  # may raise UnknownTld
+        )
+
+        if self.dc.tldString is None:
+            # if not fail
+            tld = f"{self.dc.dList[-1]}"
+            a = f"The TLD {tld} is currently not supported by this package."
+            b = "Use validTlds() to see what toplevel domains are supported."
+            msg = f"{a} {b}"
+            raise UnknownTld(msg)
 
         # Internationalized domains: Idna translate
         if self.pc.internationalized:
@@ -233,7 +242,7 @@ class ProcessWhoisDomainRequest:
             return None, True
 
         # =================================================
-        if self.dc.tldString not in TLD_RE.keys():
+        if self.dc.tldString not in get_TLD_RE().keys():
             msg = self.makeMessageForUnsupportedTld()
             if msg is None:
                 self._doUnsupportedTldAnyway()
@@ -254,7 +263,7 @@ class ProcessWhoisDomainRequest:
             return result, finished
 
         # self.dc.thisTld = cast(Dict[str, Any], TLD_RE.get(self.dc.tldString, {}))
-        self.dc.thisTld = TLD_RE.get(self.dc.tldString, {})
+        self.dc.thisTld = get_TLD_RE().get(self.dc.tldString, {})
 
         if self._verifyPrivateRegistry():  # may raise WhoisPrivateRegistry
             msg = "This tld has either no whois server or responds only with minimal information"
