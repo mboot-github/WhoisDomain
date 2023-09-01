@@ -16,7 +16,7 @@ from .exceptions import (
     WhoisQuotaExceeded,
 )
 
-from .helpers import get_TLD_RE
+# from .helpers import get_TLD_RE
 from .domain import Domain
 
 from .strings.noneStrings import NoneStrings
@@ -63,10 +63,12 @@ class WhoisParser:
     def _doExtractPattensFromWhoisString(
         self,
     ) -> None:
-        # use TLD_RE["com"] as default if a entry is missing
-        if self.dc.thisTld is {}:
-            p = get_TLD_RE()
-            self.dc.thisTld = p["com"]
+        #         # i think we can get rud of this, we have no missing tld's any more
+        #         if 0:
+        #             # use TLD_RE["com"] as default if a entry is missing
+        #             if self.dc.thisTld is {}:
+        #                 p = get_TLD_RE()
+        #                 self.dc.thisTld = p["com"]
 
         # Historical: we use 'empty string' as default, not None
         empty = [""]
