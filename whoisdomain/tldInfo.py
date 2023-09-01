@@ -74,14 +74,25 @@ class TldInfo:
 
         # we want now to exclude andy key starting with _ like _server,_test, ...
         # dont recompile each re by themselves, reuse existing compiled re
-        # tld_re = dict((k, self.regexDbByKey[k][v] if (isinstance(v, str) and k[0] != "_") else v) for k, v in tmp.items())
 
         tld_re: Dict[str, Any] = {}
-        for key, compiledRe in tmp.items():
-            if isinstance(compiledRe, str) and key[0] != "_":
-                tld_re[key] = self.regexDbByKey[key][compiledRe]
-            else:
-                tld_re[key] = compiledRe
+        for key, val in tmp.items():
+            # keys starting with _ we just copy,
+            # this means we inhert [ '_server', '_test' ]
+            if key[0] == "_":
+                tld_re[key] = val
+                continue
+
+            if isinstance(val, str):
+                tld_re[key] = self.regexDbByKey[key][val]
+                continue
+
+            # allow for other types
+            if isinstance(val, Dict):
+                pass
+
+            # no other types
+            tld_re[key] = val
 
         # meta domains start with _: examples _centralnic and _donuts
         if tldString[0] != "_":

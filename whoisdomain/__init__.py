@@ -35,6 +35,9 @@ from .cache.simpleCacheBase import SimpleCacheBase
 from .cache.simpleCacheWithFile import SimpleCacheWithFile
 from .cache.dummyCache import DummyCache
 from .cache.dbmCache import DBMCache
+from .whoisParser import WhoisParser
+
+
 from .helpers import (
     filterTldToSupportedPattern,
     mergeExternalDictWithRegex,
@@ -87,23 +90,23 @@ __all__ = [
     "WhoisPrivateRegistry",
     "WhoisQuotaExceeded",
     "WhoisCommandTimeout",
-    # from init_tld
+    # from helpers
     "validTlds",
     "mergeExternalDictWithRegex",
     "filterTldToSupportedPattern",
     "get_TLD_RE",
-    # "TLD_RE",
+    "getVersion",
+    "getTestHint",
+    "cleanupWhoisResponse",  # we will drop this most likely
     # from version
     "VERSION",
     # from parameterContext
     "ParameterContext",
-    # from doQuery
+    # from this file
     "query",
     "q2",
+    # from lastWhois
     "get_last_raw_whois_data",
-    # fromm this file
-    "getVersion",
-    "getTestHint",
     # from doWhoisCommand
     "setMyCache",  # to build your own caching interface
     # from doParse
@@ -111,7 +114,6 @@ __all__ = [
     "NoneStringsAdd",
     "QuotaStrings",
     "QuotaStringsAdd",
-    "cleanupWhoisResponse",  # we will drop this most likely
     # from Cache
     "SimpleCacheBase",
     "SimpleCacheWithFile",
@@ -142,6 +144,10 @@ def q2(
     pwdr = ProcessWhoisDomainRequest(
         pc=pc,
         dc=dc,
+        parser=WhoisParser(  # use dependency inject
+            pc=pc,
+            dc=dc,
+        ),
     )
 
     return pwdr.processRequest()

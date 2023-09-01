@@ -1,26 +1,24 @@
 import sys
 
 from typing import (
-    # cast,
     Optional,
     List,
-    # Dict,
-    # Any,
     Tuple,
 )
 
-from .exceptions import WhoisPrivateRegistry
+# from .exceptions import WhoisPrivateRegistry
 from .exceptions import UnknownTld
+
+from .context.dataContext import DataContext
+from .context.parameterContext import ParameterContext
 
 from .helpers import filterTldToSupportedPattern
 from .helpers import get_TLD_RE
+
 from .doWhoisCommand import doWhoisAndReturnString
 from .whoisParser import WhoisParser
 from .domain import Domain
 from .lastWhois import updateLastWhois
-
-from .context.dataContext import DataContext
-from .context.parameterContext import ParameterContext
 
 
 class ProcessWhoisDomainRequest:
@@ -28,9 +26,11 @@ class ProcessWhoisDomainRequest:
         self,
         pc: ParameterContext,
         dc: DataContext,
+        parser: WhoisParser,
     ) -> None:
         self.pc = pc
         self.dc = dc
+        self.parser: WhoisParser = parser
 
     def _analyzeDomainStringAndValidate(
         self,
@@ -115,45 +115,6 @@ class ProcessWhoisDomainRequest:
             self.dc.data["domain_name"] = [z]  # note the fields are default all array, except tld
             self.pc.return_raw_text_for_unsupported_tld = True
 
-    def _verifyPrivateRegistry(
-        self,
-    ) -> bool:
-        # may raise WhoisPrivateRegistry
-        # signal we know the tld but it has no whos or does not respond with any information
-        if not self.dc.thisTld.get("_privateRegistry"):
-            return False
-
-        if self.pc.simplistic is False:
-            msg = "WhoisPrivateRegistry"
-            raise WhoisPrivateRegistry(msg)
-
-        return True
-
-    def _doServerHintsForThisTld(
-        self,
-    ) -> None:
-        # note _server hints currently are not passes down when using "extend",
-        # that may have been my error during the initial implementation
-        # allow server hints using "_server" from the tld_regexpr.py file
-        thisTldServer = self.dc.thisTld.get("_server")
-        if self.pc.server is None and thisTldServer:
-            self.pc.server = thisTldServer
-
-    def _doSlowdownHintForThisTld(
-        self,
-    ) -> int:
-        self.pc.slow_down = self.pc.slow_down or 0
-
-        slowDown = self.dc.thisTld.get("_slowdown")
-        if slowDown:
-            if self.pc.slow_down == 0 and int(slowDown) > 0:
-                self.pc.slow_down = int(slowDown)
-
-        if self.pc.verbose and int(self.pc.slow_down):
-            print(f"DEBUG: using _slowdown hint {self.pc.slow_down} for tld: {self.dc.tldString}", file=sys.stderr)
-
-        return int(self.pc.slow_down)
-
     def doOneLookup(
         self,
     ) -> Optional[Domain]:
@@ -192,11 +153,8 @@ class ProcessWhoisDomainRequest:
             pc=self.pc,
         )
 
-        wp = WhoisParser(
-            pc=self.pc,
-            dc=self.dc,
-        )
-        data = wp.parse()
+        self.parser.init()
+        data = self.parser.parse()
 
         if self.pc.verbose:
             print("DEBUG: Clean:", self.dc.whoisStr, file=sys.stderr)
@@ -262,10 +220,11 @@ class ProcessWhoisDomainRequest:
             )
             return result, finished
 
-        # self.dc.thisTld = cast(Dict[str, Any], TLD_RE.get(self.dc.tldString, {}))
-        self.dc.thisTld = get_TLD_RE().get(self.dc.tldString, {})
+        # find my compiled info under key: tld and use {} as the default
+        # self.dc.thisTld = get_TLD_RE().get(self.dc.tldString, {})
+        self.parser.getThisTld(self.dc.tldString)
 
-        if self._verifyPrivateRegistry():  # may raise WhoisPrivateRegistry
+        if self.parser.verifyPrivateRegistry():  # may raise WhoisPrivateRegistry
             msg = "This tld has either no whois server or responds only with minimal information"
             self.dc.exeptionStr = msg
             result = Domain(
@@ -274,8 +233,8 @@ class ProcessWhoisDomainRequest:
             )
             return result, finished
 
-        self._doServerHintsForThisTld()
-        self._doSlowdownHintForThisTld()
+        self.parser.doServerHintsForThisTld()
+        self.parser.doSlowdownHintForThisTld()
 
         return None, False
 

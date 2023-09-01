@@ -14,15 +14,15 @@ import sys
 from .exceptions import (
     FailedParsingWhoisOutput,
     WhoisQuotaExceeded,
+    WhoisPrivateRegistry,
 )
 
-# from .helpers import get_TLD_RE
 from .domain import Domain
-
 from .strings.noneStrings import NoneStrings
 from .strings.quotaStrings import QuotaStrings
 from .context.parameterContext import ParameterContext
 from .context.dataContext import DataContext
+from .helpers import get_TLD_RE
 
 
 class WhoisParser:
@@ -34,6 +34,7 @@ class WhoisParser:
         self.pc = pc
         self.dc = dc
 
+    def init(self) -> None:
         self.dc.whoisStr = str(self.dc.whoisStr)
         self.resultDict: Dict[str, Any] = {
             "tld": str(self.dc.tldString),
@@ -63,15 +64,7 @@ class WhoisParser:
     def _doExtractPattensFromWhoisString(
         self,
     ) -> None:
-        #         # i think we can get rud of this, we have no missing tld's any more
-        #         if 0:
-        #             # use TLD_RE["com"] as default if a entry is missing
-        #             if self.dc.thisTld is {}:
-        #                 p = get_TLD_RE()
-        #                 self.dc.thisTld = p["com"]
-
-        # Historical: we use 'empty string' as default, not None
-        empty = [""]
+        empty = [""]  # Historical: we use 'empty string' as default, not None
 
         for key, compiledRe in self.dc.thisTld.items():
             if key.startswith("_"):
@@ -84,6 +77,46 @@ class WhoisParser:
                 self.resultDict[key] = compiledRe.findall(self.dc.whoisStr) or empty
                 if self.pc.verbose:
                     print(f"{key}, {self.resultDict[key]}", file=sys.stderr)
+
+    def verifyPrivateRegistry(
+        self,
+    ) -> bool:
+        # may raise WhoisPrivateRegistry
+        # we know the tld but it has no whois or does not respond with any information
+        if not self.dc.thisTld.get("_privateRegistry"):
+            return False
+
+        if self.pc.simplistic is False:
+            msg = "WhoisPrivateRegistry"
+            raise WhoisPrivateRegistry(msg)
+
+        return True
+
+    def doServerHintsForThisTld(
+        self,
+    ) -> None:
+        # note _server hints currently are not passes down when using "extend",
+        # that may have been my error during the initial implementation
+        # allow server hints using "_server" from the tld_regexpr.py file
+
+        server = self.dc.thisTld.get("_server")
+        if self.pc.server is None and server:
+            self.pc.server = server
+
+    def doSlowdownHintForThisTld(
+        self,
+    ) -> int:
+        self.pc.slow_down = self.pc.slow_down or 0
+
+        slowDown = self.dc.thisTld.get("_slowdown")
+        if slowDown:
+            if self.pc.slow_down == 0 and int(slowDown) > 0:
+                self.pc.slow_down = int(slowDown)
+
+        if self.pc.verbose and int(self.pc.slow_down):
+            print(f"DEBUG: using _slowdown hint {self.pc.slow_down} for tld: {self.dc.tldString}", file=sys.stderr)
+
+        return int(self.pc.slow_down)
 
     def _doSourceIana(
         self,
@@ -238,6 +271,9 @@ class WhoisParser:
 
         self.dc.whoisStr = "\n".join(tmp2)
         return self.dc.whoisStr
+
+    def getThisTld(self, tldString: str) -> None:
+        self.dc.thisTld = get_TLD_RE().get(tldString, {})
 
     def parse(
         self,

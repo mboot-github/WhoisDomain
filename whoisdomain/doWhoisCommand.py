@@ -9,7 +9,6 @@ from typing import (
 )
 
 from .whoisCliInterface import WhoisCliInterface
-
 from .cache.simpleCacheWithFile import SimpleCacheWithFile
 from .context.parameterContext import ParameterContext
 from .context.dataContext import DataContext
