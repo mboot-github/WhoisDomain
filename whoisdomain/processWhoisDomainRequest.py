@@ -6,7 +6,6 @@ from typing import (
     Tuple,
 )
 
-# from .exceptions import WhoisPrivateRegistry
 from .exceptions import UnknownTld
 
 from .context.dataContext import DataContext
@@ -32,8 +31,8 @@ class ProcessWhoisDomainRequest:
     ) -> None:
         self.pc = pc
         self.dc = dc
-        self.parser: WhoisParser = parser
-        self.wci: WhoisCliInterface = wci
+        self.parser = parser
+        self.wci = wci
 
     def _analyzeDomainStringAndValidate(
         self,
@@ -83,7 +82,7 @@ class ProcessWhoisDomainRequest:
         if self.pc.internationalized:
             self.dc.dList = _internationalizedDomainNameToPunyCode(self.dc.dList)
 
-    def makeMessageForUnsupportedTld(
+    def _makeMessageForUnsupportedTld(
         self,
     ) -> Optional[str]:
         if self.pc.return_raw_text_for_unsupported_tld:
@@ -118,7 +117,7 @@ class ProcessWhoisDomainRequest:
             self.dc.data["domain_name"] = [z]  # note the fields are default all array, except tld
             self.pc.return_raw_text_for_unsupported_tld = True
 
-    def doOneLookup(
+    def _doOneLookup(
         self,
     ) -> Optional[Domain]:
         if self.pc.verbose:
@@ -178,7 +177,7 @@ class ProcessWhoisDomainRequest:
 
         return None
 
-    def prepRequest(self) -> Tuple[Optional[Domain], bool]:
+    def _prepRequest(self) -> Tuple[Optional[Domain], bool]:
         result: Optional[Domain] = None
         finished: bool = True
 
@@ -204,7 +203,7 @@ class ProcessWhoisDomainRequest:
 
         # =================================================
         if self.dc.tldString not in get_TLD_RE().keys():
-            msg = self.makeMessageForUnsupportedTld()
+            msg = self._makeMessageForUnsupportedTld()
             if msg is None:
                 self._doUnsupportedTldAnyway()
                 result = Domain(
@@ -241,8 +240,11 @@ class ProcessWhoisDomainRequest:
 
         return None, False
 
+    def init(self) -> None:
+        pass
+
     def processRequest(self) -> Optional[Domain]:
-        result, finished = self.prepRequest()
+        result, finished = self._prepRequest()
         if finished is True:
             return result
 
@@ -258,7 +260,7 @@ class ProcessWhoisDomainRequest:
 
         tldLevel: List[str] = str(self.dc.tldString).split(".")
         while len(self.dc.dList) > len(tldLevel):
-            result = self.doOneLookup()
+            result = self._doOneLookup()
             if result:
                 return result
 

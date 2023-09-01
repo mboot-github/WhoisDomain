@@ -35,10 +35,6 @@ class WhoisCliInterface:
         self.dc = dc
         self.pc = pc
 
-    def init(self) -> None:
-        self.domain: str = ".".join(self.dc.dList)
-        self._specificOnNonWindowsPlatforms()
-
     def _tryInstallMissingWhoisOnWindows(self) -> None:
         """
         Windows 'whois' command wrapper
@@ -158,6 +154,12 @@ class WhoisCliInterface:
                 return f.read().decode(errors="ignore")
 
         raise WhoisCommandFailed("")
+
+    # public
+
+    def init(self) -> None:
+        self.domain: str = ".".join(self.dc.dList)
+        self._specificOnNonWindowsPlatforms()
 
     def executeWhoisQueryOrReturnFileData(self) -> str:
         # if getenv[TEST_WHOIS_PYTON] then

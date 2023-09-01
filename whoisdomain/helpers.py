@@ -97,4 +97,4 @@ VERBOSE: bool = False
 
 # Here we focre load on import the processing of the ZZ database
 tldInfo = TldInfo(ZZ, VERBOSE)
-tldInfo.initOnImport()
+tldInfo.init()  # must run on import

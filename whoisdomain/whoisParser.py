@@ -34,14 +34,6 @@ class WhoisParser:
         self.pc = pc
         self.dc = dc
 
-    def init(self) -> None:
-        self.dc.whoisStr = str(self.dc.whoisStr)
-        self.resultDict: Dict[str, Any] = {
-            "tld": str(self.dc.tldString),
-            "DNSSEC": self._doDnsSec(),
-        }
-        self.cleanupWhoisResponse()
-
     def _doExtractPattensIanaFromWhoisString(
         self,
     ) -> None:
@@ -242,7 +234,7 @@ class WhoisParser:
 
         raise FailedParsingWhoisOutput(self.dc.whoisStr)
 
-    def cleanupWhoisResponse(
+    def _cleanupWhoisResponse(
         self,
     ) -> str:
         tmp2: List[str] = []
@@ -272,8 +264,18 @@ class WhoisParser:
         self.dc.whoisStr = "\n".join(tmp2)
         return self.dc.whoisStr
 
+    # public
+
     def getThisTld(self, tldString: str) -> None:
         self.dc.thisTld = get_TLD_RE().get(tldString, {})
+
+    def init(self) -> None:
+        self.dc.whoisStr = str(self.dc.whoisStr)
+        self.resultDict: Dict[str, Any] = {
+            "tld": str(self.dc.tldString),
+            "DNSSEC": self._doDnsSec(),
+        }
+        self._cleanupWhoisResponse()
 
     def parse(
         self,

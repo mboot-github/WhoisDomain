@@ -50,6 +50,7 @@ from .helpers import (
     getTestHint,
     cleanupWhoisResponse,
 )
+
 from .lastWhois import (
     get_last_raw_whois_data,
     initLastWhois,
@@ -151,7 +152,7 @@ def q2(
             pc=pc,
             dc=dc,
         ),
-        wci=WhoisCliInterface( # use dependency inject
+        wci=WhoisCliInterface(  # use dependency inject
             pc=pc,
             dc=dc,
         ),

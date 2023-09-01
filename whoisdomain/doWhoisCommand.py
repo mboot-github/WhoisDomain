@@ -3,7 +3,6 @@
 import sys
 
 from typing import (
-    # List,
     Optional,
     Any,
 )
@@ -39,20 +38,20 @@ def _initDefaultCache(
         print(f"DEBUG: CACHE_STUB {CACHE_STUB}", file=sys.stderr)
 
     # here you can override caching, if someone else already defined CACHE_STUB by this time, we use their caching
-    if CACHE_STUB is None:
-        if pc.verbose:
-            print("DEBUG: initializing default cache", file=sys.stderr)
-
-        # if no cache defined init the default cache (optional with file storage based on pc)
-        CACHE_STUB = SimpleCacheWithFile(
-            verbose=pc.verbose,
-            cacheFilePath=pc.cache_file,
-            cacheMaxAge=pc.cache_age,
-        )
-    else:
+    if CACHE_STUB:
         if pc.verbose:
             print("DEBUG: cache already initialized", file=sys.stderr)
+        return CACHE_STUB
 
+    # if no cache defined init the default cache (optional with file storage based on pc)
+    CACHE_STUB = SimpleCacheWithFile(
+        verbose=pc.verbose,
+        cacheFilePath=pc.cache_file,
+        cacheMaxAge=pc.cache_age,
+    )
+
+    if pc.verbose:
+        print("DEBUG: initializing default cache", file=sys.stderr)
     return CACHE_STUB
 
 
@@ -70,7 +69,7 @@ def doWhoisAndReturnString(
 
     if pc.force is False:
         oldData: Optional[str] = cache.get(keyString)
-        if oldData is not None:
+        if oldData:
             return str(oldData)
 
     wci.init()

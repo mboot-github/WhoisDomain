@@ -19,7 +19,7 @@ class TldInfo:
         self.regexDbByKey: Dict[str, Any] = {}
         self.zzDictRef = zzDict
 
-    def oneTldOneKey(self, name: str, key: str, reg: Optional[str]) -> None:
+    def _oneTldOneKey(self, name: str, key: str, reg: Optional[str]) -> None:
         if key is None:
             return
 
@@ -127,11 +127,11 @@ class TldInfo:
         for name in self.zzDictRef:  # for each tld
             tldData = self.zzDictRef[name]
             for key in tldData:
-                self.oneTldOneKey(name, key, tldData[key])
+                self._oneTldOneKey(name, key, tldData[key])
 
     # public
 
-    def initOnImport(self) -> None:
+    def init(self) -> None:
         self._buildRegCollection()
         for tld in self.zzDictRef.keys():
             self._initOne(tld, override=False)

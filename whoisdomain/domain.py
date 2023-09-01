@@ -107,24 +107,10 @@ class Domain:
             if "" in self.emails:
                 self.emails = self._cleanupArray(self.emails)
 
-    def __init__(
+    def _parseData(
         self,
-        pc: ParameterContext,
         dc: DataContext,
-    ):
-        if pc.include_raw_whois_text and dc.whoisStr is not None:
-            self.text = dc.whoisStr
-
-        if dc.exeptionStr is not None:
-            self._exception = dc.exeptionStr
-            return
-
-        self.name = dc.data["domain_name"][0].strip().lower()
-        self.tld = dc.data["tld"].lower()
-
-        if pc.return_raw_text_for_unsupported_tld is True:
-            return
-
+    ) -> None:
         # process mandatory fields that we expect always to be present
         # even if we have None or ''
         self.registrar = dc.data["registrar"][0].strip()
@@ -141,3 +127,24 @@ class Domain:
 
         # optional fields
         self._doOptionalFields(dc.data)
+
+    def __init__(
+        self,
+        pc: ParameterContext,
+        dc: DataContext,
+    ) -> None:
+        if pc.include_raw_whois_text and dc.whoisStr is not None:
+            self.text = dc.whoisStr
+
+        if dc.exeptionStr is not None:
+            self._exception = dc.exeptionStr
+            return
+
+        self.name = dc.data["domain_name"][0].strip().lower()
+        self.tld = dc.data["tld"].lower()
+
+        if pc.return_raw_text_for_unsupported_tld is True:
+            return
+
+        self._parseData(dc)
+        return
