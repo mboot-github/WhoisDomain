@@ -280,7 +280,6 @@ class ProcessWhoisDomainRequest:
         return None, False
 
     def processRequest(self) -> Optional[Domain]:
-
         result, finished = self.prepRequest()
         if finished is True:
             return result
@@ -297,7 +296,6 @@ class ProcessWhoisDomainRequest:
 
         tldLevel: List[str] = str(self.dc.tldString).split(".")
         while len(self.dc.dList) > len(tldLevel):
-
             result = self.doOneLookup()
             if result:
                 return result

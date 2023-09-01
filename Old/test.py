@@ -385,7 +385,6 @@ def errorItem(d, e, what="Generic"):
 
 def testDomains(aList):
     for d in aList:
-
         # skip empty lines
         if not d:
             continue

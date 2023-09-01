@@ -134,7 +134,6 @@ def q2(
     domain: str,
     pc: ParameterContext,
 ) -> Optional[Domain]:
-
     initLastWhois()
 
     dc = DataContext(

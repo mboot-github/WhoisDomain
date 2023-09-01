@@ -72,7 +72,6 @@ class IanaCrawler:
         what: str,
         data: List[str],
     ) -> Optional[str]:
-
         for i in [0, 1]:
             try:
                 z: str = f"{what}:"

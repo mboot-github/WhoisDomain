@@ -248,3 +248,5 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * add DEBUG to all verbose strings
   * remove tldString and dList and domain , all go via dc (dataContect) now
   * run tests and add new TODO
+  * moving all TLD_RE activities to tldInfo.py, and all exported helper funcs to helpers.py
+  * thinking about adding more complicated nested regex extractors to target contact info

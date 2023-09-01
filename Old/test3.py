@@ -175,7 +175,6 @@ def xType(x):
 
 
 def doDnsDomainExists(domain):
-
     cmd = ["host", "-t", "ns", domain]
 
     # LANG=en is added to make the ".jp" output consist across all environments
@@ -240,7 +239,6 @@ def errorItem(d, e, what="Generic"):
 
 def testDomains(aList):
     for d in aList:
-
         # skip empty lines
         if not d:
             continue

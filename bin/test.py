@@ -90,7 +90,6 @@ def query(
     domain: str,
     host: Optional[str] = None,
 ) -> None:
-
     print("")
     print("-" * 80)
     print("Domain: {0}, host: {1}".format(domain, host))

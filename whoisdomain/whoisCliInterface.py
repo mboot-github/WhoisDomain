@@ -116,7 +116,6 @@ class WhoisCliInterface:
         return str(self.rawWhoisResultString)
 
     def _runWhoisCliOnThisOs(self) -> str:
-
         # LANG=en is added to make the ".jp" output consisent across all environments
         # STDBUF_OFF_CMD needed to not lose data on kill
 
@@ -132,7 +131,9 @@ class WhoisCliInterface:
             print(f"DEBUG: timout: {self.pc.timeout}", file=sys.stderr)
 
         try:
-            self.rawWhoisResultString = self.processHandle.communicate(timeout=self.pc.timeout,)[
+            self.rawWhoisResultString = self.processHandle.communicate(
+                timeout=self.pc.timeout,
+            )[
                 0
             ].decode(errors="ignore")
         except subprocess.TimeoutExpired:

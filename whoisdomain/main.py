@@ -277,7 +277,6 @@ def errorItem(d: str, e: Any, what: str = "Generic") -> None:
 
 def testDomains(aList: List[str]) -> None:
     for d in aList:
-
         # skip empty lines
         if not d:
             continue
@@ -385,7 +384,6 @@ def makeMetaAllCurrentTld(
     allHaving: Optional[str] = None,
     allRegex: Optional[str] = None,
 ) -> List[str]:
-
     rr: List[str] = []
     for tld in getAllCurrentTld():
         if allRegex is None:
@@ -402,7 +400,6 @@ def makeTestAllCurrentTld(
     allHaving: Optional[str] = None,
     allRegex: Optional[str] = None,
 ) -> List[str]:
-
     rr: List[str] = []
     for tld in getAllCurrentTld():
         if allRegex is None:
@@ -717,5 +714,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-
     main()
