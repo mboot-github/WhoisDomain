@@ -250,3 +250,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * run tests and add new TODO
   * moving all TLD_RE activities to tldInfo.py, and all exported helper funcs to helpers.py
   * thinking about adding more complicated nested regex extractors to target contact info
+  * start with dependency inject: parser is passed as arg

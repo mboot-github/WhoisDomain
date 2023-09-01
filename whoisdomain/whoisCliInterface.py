@@ -35,6 +35,7 @@ class WhoisCliInterface:
         self.dc = dc
         self.pc = pc
 
+    def init(self) -> None:
         self.domain: str = ".".join(self.dc.dList)
         self._specificOnNonWindowsPlatforms()
 
@@ -55,7 +56,7 @@ class WhoisCliInterface:
             shell=True,
         )
 
-    def onWindowsFindWhoisCliAndInstallIfNeeded(self, k: str) -> None:
+    def _onWindowsFindWhoisCliAndInstallIfNeeded(self, k: str) -> None:
         paths = os.environ["path"].split(";")
         for path in paths:
             wpath = os.path.join(path, k)
@@ -75,7 +76,7 @@ class WhoisCliInterface:
             if os.path.exists(k):
                 self.pc.cmd = os.path.join(".", k)
             else:
-                self.onWindowsFindWhoisCliAndInstallIfNeeded(k)
+                self._onWindowsFindWhoisCliAndInstallIfNeeded(k)
 
         whoisCommandList = [self.pc.cmd]
 
@@ -125,7 +126,6 @@ class WhoisCliInterface:
             stderr=subprocess.STDOUT,
             env={"LANG": "en"} if self.domain.endswith(".jp") else None,
         )
-        # env={"LANG": "en"} if self.dList[-1] in ".jp" else None,
 
         if self.pc.verbose:
             print(f"DEBUG: timout: {self.pc.timeout}", file=sys.stderr)

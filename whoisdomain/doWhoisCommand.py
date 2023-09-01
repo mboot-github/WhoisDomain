@@ -3,7 +3,7 @@
 import sys
 
 from typing import (
-    List,
+    # List,
     Optional,
     Any,
 )
@@ -56,46 +56,30 @@ def _initDefaultCache(
     return CACHE_STUB
 
 
-def _getNewDataForKey(
-    dList: List[str],
-    pc: ParameterContext,
-    dc: DataContext,
-) -> str:
-    wci = WhoisCliInterface(
-        pc=pc,
-        dc=dc,
-    )
-    return wci.executeWhoisQueryOrReturnFileData()
-
-
 # TODO: future: can we use decorator for caching?
 def doWhoisAndReturnString(
-    dList: List[str],
     pc: ParameterContext,
     dc: DataContext,
+    wci: WhoisCliInterface,
 ) -> str:
     cache = _initDefaultCache(
         pc=pc,
         dc=dc,
     )
-    keyString = ".".join(dList)
-
-    if pc.verbose:
-        print(f"DEBUG: force: {pc.force}", file=sys.stderr)
+    keyString = ".".join(dc.dList)
 
     if pc.force is False:
         oldData: Optional[str] = cache.get(keyString)
         if oldData is not None:
             return str(oldData)
 
-    newData = _getNewDataForKey(
-        dList=dList,
-        pc=pc,
-        dc=dc,
+    wci.init()
+    return str(
+        cache.put(
+            keyString,
+            wci.executeWhoisQueryOrReturnFileData(),
+        )
     )
-    cache.put(keyString, newData)
-
-    return newData
 
 
 setMyCache(None)

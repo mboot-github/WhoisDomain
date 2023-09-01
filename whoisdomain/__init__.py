@@ -1,6 +1,8 @@
 import sys
 import os
+
 from functools import wraps
+
 from typing import (
     cast,
     Optional,
@@ -36,6 +38,7 @@ from .cache.simpleCacheWithFile import SimpleCacheWithFile
 from .cache.dummyCache import DummyCache
 from .cache.dbmCache import DBMCache
 from .whoisParser import WhoisParser
+from .whoisCliInterface import WhoisCliInterface
 
 
 from .helpers import (
@@ -145,6 +148,10 @@ def q2(
         pc=pc,
         dc=dc,
         parser=WhoisParser(  # use dependency inject
+            pc=pc,
+            dc=dc,
+        ),
+        wci=WhoisCliInterface( # use dependency inject
             pc=pc,
             dc=dc,
         ),

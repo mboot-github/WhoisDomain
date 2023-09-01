@@ -19,6 +19,7 @@ from .doWhoisCommand import doWhoisAndReturnString
 from .whoisParser import WhoisParser
 from .domain import Domain
 from .lastWhois import updateLastWhois
+from .whoisCliInterface import WhoisCliInterface
 
 
 class ProcessWhoisDomainRequest:
@@ -27,10 +28,12 @@ class ProcessWhoisDomainRequest:
         pc: ParameterContext,
         dc: DataContext,
         parser: WhoisParser,
+        wci: WhoisCliInterface,
     ) -> None:
         self.pc = pc
         self.dc = dc
         self.parser: WhoisParser = parser
+        self.wci: WhoisCliInterface = wci
 
     def _analyzeDomainStringAndValidate(
         self,
@@ -100,9 +103,9 @@ class ProcessWhoisDomainRequest:
 
             # now use the cache interface to fetch the whois str from cli whois
             self.dc.whoisStr = doWhoisAndReturnString(
-                dList=self.dc.dList,
                 pc=self.pc,
                 dc=self.dc,
+                wci=self.wci,
             )
 
             # we will only return minimal data
@@ -127,9 +130,9 @@ class ProcessWhoisDomainRequest:
         try:
             # now use the cache interface to fetch the whois str from cli whois
             self.dc.whoisStr = doWhoisAndReturnString(
-                dList=self.dc.dList,
                 pc=self.pc,
                 dc=self.dc,
+                wci=self.wci,
             )
         except Exception as e:
             if self.pc.simplistic is False:

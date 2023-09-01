@@ -15,7 +15,7 @@ SIMPLEDOMAINS = $(shell ls testdata)
 # PHONY targets: make will run its recipe regardless of whether a file with that name exists or what its last modification time is.
 .PHONY: TestSimple TestSimple2 TestAll clean
 
-first: reformat mypy testP39 #  testP36
+first: reformat mypy testP39 testP36
 
 testP39:
 	./test1.py # now tests with python 3.9
