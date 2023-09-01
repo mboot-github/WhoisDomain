@@ -1,4 +1,3 @@
-look at:
 UnknownTld meta.xn--11b4c The TLD xn--11b4c is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
 UnknownTld meta.xn--2scrj The TLD xn--2scrj is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
 UnknownTld meta.xn--31bsy5d The TLD xn--31bsy5d is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
@@ -15,7 +14,7 @@ UnknownTld meta.xn--qwcrj The TLD xn--qwcrj is currently not supported by this p
 UnknownTld meta.xn--s9brj The TLD xn--s9brj is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
 UnknownTld meta.xn--xkc2dl3a The TLD xn--xkc2dl3a is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
 
-look at: kiribati and portugal
+WhoisCommandTimeout meta.bo timeout: query took more then 30.0 seconds
 WhoisCommandTimeout meta.com.au timeout: query took more then 30.0 seconds
 WhoisCommandTimeout meta.eus timeout: query took more then 30.0 seconds
 WhoisCommandTimeout meta.ki timeout: query took more then 30.0 seconds
