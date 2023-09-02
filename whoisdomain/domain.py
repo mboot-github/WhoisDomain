@@ -1,5 +1,7 @@
 #! /usr/bin/env python3
 
+import sys
+
 from typing import (
     Any,
     List,
@@ -133,6 +135,14 @@ class Domain:
         pc: ParameterContext,
         dc: DataContext,
     ) -> None:
+        pass
+        # self.init(pc=pc, dc=dc)
+
+    def init(
+        self,
+        pc: ParameterContext,
+        dc: DataContext,
+    ) -> None:
         if pc.include_raw_whois_text and dc.whoisStr is not None:
             self.text = dc.whoisStr
 
@@ -140,11 +150,21 @@ class Domain:
             self._exception = dc.exeptionStr
             return
 
-        self.name = dc.data["domain_name"][0].strip().lower()
-        self.tld = dc.data["tld"].lower()
+        if dc.data == {}:
+            return
+
+        if pc.verbose:
+            print(dc.data, file=sys.stderr)
+
+        k = "domain_name"
+        if k in dc.data:
+            self.name = dc.data["domain_name"][0].strip().lower()
+
+        k = "tld"
+        if k in dc.data:
+            self.tld = dc.data[k].lower()
 
         if pc.return_raw_text_for_unsupported_tld is True:
             return
 
         self._parseData(dc)
-        return

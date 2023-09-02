@@ -32,6 +32,10 @@ def xStr(what: str, times: int = 1, firstMandatory: bool = True) -> str:
         return what * times
 
 
+def R(x: str) -> str:
+    return x
+
+
 # =================================================================
 # The database
 # When we finally apply the regexes we use IGNORE CASE allways on all matches
@@ -51,7 +55,7 @@ ZZ["_uniregistry"] = {"extend": "com", "_server": "whois.uniregistry.net"}  # up
 ZZ["_donuts"] = {
     "extend": "com",
     "_server": "whois.donuts.co",
-    "registrant": r"Registrant Organization:\s?(.+)",
+    "registrant": R(r"Registrant Organization:\s?(.+)"),
     "status": r"Domain Status:\s?(.+)",
 }  # updated all downstream
 
@@ -77,16 +81,16 @@ ZZ["_gtldKnet"] = {
 # start of regular entries, simple domains are at the end
 
 ZZ["com"] = {
-    "domain_name": r"Domain Name\s*:\s*(.+)",
-    "registrar": r"Registrar:\s?(.+)",
-    "registrant": r"Registrant\s*Organi(?:s|z)ation:([^\n]*)",
-    "registrant_country": r"Registrant Country:\s?(.+)",
-    "creation_date": r"Creation Date:[ \t]*([^\n]*)",
-    "expiration_date": r"(?:Expiry|Expiration) Date:[ \t]*([^\n]*)",
-    "updated_date": r"Updated Date:[\t ]*([^\n]*)",
-    "name_servers": r"Name Server:\s*(.+)\s*",
-    "status": r"Status:\s?(.+)",
-    "emails": r"([\w\.-]+@[\w\.-]+\.[\w]{2,4})",
+    "domain_name": R(r"Domain Name\s*:\s*(.+)"),
+    "registrar": R(r"Registrar:\s?(.+)"),
+    "registrant": R(r"Registrant\s*Organi(?:s|z)ation:([^\n]*)"),
+    "registrant_country": R(r"Registrant Country:\s?(.+)"),
+    "creation_date": R(r"Creation Date:[ \t]*([^\n]*)"),
+    "expiration_date": R(r"(?:Expiry|Expiration) Date:[ \t]*([^\n]*)"),
+    "updated_date": R(r"Updated Date:[\t ]*([^\n]*)"),
+    "name_servers": R(r"Name Server:\s*(.+)\s*"),
+    "status": R(r"Status:\s?(.+)"),
+    "emails": R(r"([\w\.-]+@[\w\.-]+\.[\w]{2,4})"),
     "_test": "google.com",
 }
 

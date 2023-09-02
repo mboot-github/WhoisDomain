@@ -28,11 +28,13 @@ class ProcessWhoisDomainRequest:
         dc: DataContext,
         parser: WhoisParser,
         wci: WhoisCliInterface,
+        dom: Domain,
     ) -> None:
         self.pc = pc
         self.dc = dc
         self.parser = parser
         self.wci = wci
+        self.dom: Optional[Domain] = dom
 
     def _analyzeDomainStringAndValidate(
         self,
@@ -119,12 +121,13 @@ class ProcessWhoisDomainRequest:
 
     def _doOneLookup(
         self,
-    ) -> Optional[Domain]:
+    ) -> Tuple[Optional[Domain], bool]:
         if self.pc.verbose:
             print(f"DEBUG: ### lookup: tldString: {self.dc.tldString}; dList: {self.dc.dList}", file=sys.stderr)
 
         if self.dc.dList is None:  # mainly to please mypy
-            return None
+            self.dom = None
+            return self.dom, True
 
         try:
             # now use the cache interface to fetch the whois str from cli whois
@@ -138,17 +141,19 @@ class ProcessWhoisDomainRequest:
                 raise e
 
             self.dc.exeptionStr = f"{e}"
-            return Domain(
+            assert self.dom is not None
+            self.dom.init(
                 pc=self.pc,
                 dc=self.dc,
             )
+            return self.dom, True
 
         self.dc.whoisStr = str(self.dc.whoisStr)
 
         if self.pc.verbose:
             print("DEBUG: Raw: ", self.dc.whoisStr, file=sys.stderr)
 
-        self.dc.lastWhoisStr = self.dc.whoisStr  # keep the original whois string for reference
+        self.dc.lastWhoisStr = self.dc.whoisStr  # keep the original whois string for reference before we clean
         updateLastWhois(
             dList=self.dc.dList,
             whoisStr=self.dc.lastWhoisStr,
@@ -156,71 +161,64 @@ class ProcessWhoisDomainRequest:
         )
 
         self.parser.init()
-        data = self.parser.parse()
+        # init also calls cleanup on the text string whois cli response
 
-        if self.pc.verbose:
-            print("DEBUG: Clean:", self.dc.whoisStr, file=sys.stderr)
+        assert self.dom is not None
+        data, finished = self.parser.parse(
+            dom=self.dom,
+        )
 
-        if data is None:
-            return None
+        self.dom = data
+        return data, finished
 
-        if isinstance(data, Domain):
-            return data
-
-        # do we have a result and does it have a domain name
-        self.dc.data = data
-        if self.dc.data["domain_name"][0]:
-            return Domain(
-                pc=self.pc,
-                dc=self.dc,
-            )
-
-        return None
-
-    def _prepRequest(self) -> Tuple[Optional[Domain], bool]:
-        result: Optional[Domain] = None
-        finished: bool = True
-
+    def _prepRequest(self) -> bool:
         try:
             self._analyzeDomainStringAndValidate()  # may raise UnknownTld
             if self.dc.tldString is None:
-                return result, finished
+                self.dom = None
+                return True
         except Exception as e:
             if self.pc.simplistic is False:
                 raise (e)
 
             self.dc.exeptionStr = "UnknownTld"
-            result = Domain(
+
+            assert self.dom is not None
+            self.dom.init(
                 pc=self.pc,
                 dc=self.dc,
             )
-            return result, finished
+            return True
 
         # force mypy to process ok
         self.dc.tldString = str(self.dc.tldString)
         if self.dc.dList is []:
-            return None, True
+            self.dom = None
+            return True
 
         # =================================================
         if self.dc.tldString not in get_TLD_RE().keys():
             msg = self._makeMessageForUnsupportedTld()
             if msg is None:
                 self._doUnsupportedTldAnyway()
-                result = Domain(
+
+                assert self.dom is not None
+                self.dom.init(
                     pc=self.pc,
                     dc=self.dc,
                 )
-                return result, finished
+                return True
 
             if self.pc.simplistic is False:
                 raise UnknownTld(msg)
 
             self.dc.exeptionStr = msg  # was: self.dc.exeptionStr = "UnknownTld"
-            result = Domain(
+            assert self.dom is not None
+            self.dom.init(
                 pc=self.pc,
                 dc=self.dc,
             )
-            return result, finished
+            return True
 
         # find my compiled info under key: tld and use {} as the default
         # self.dc.thisTld = get_TLD_RE().get(self.dc.tldString, {})
@@ -229,24 +227,25 @@ class ProcessWhoisDomainRequest:
         if self.parser.verifyPrivateRegistry():  # may raise WhoisPrivateRegistry
             msg = "This tld has either no whois server or responds only with minimal information"
             self.dc.exeptionStr = msg
-            result = Domain(
+            assert self.dom is not None
+            self.dom.init(
                 pc=self.pc,
                 dc=self.dc,
             )
-            return result, finished
+            return True
 
         self.parser.doServerHintsForThisTld()
         self.parser.doSlowdownHintForThisTld()
 
-        return None, False
+        return False
 
     def init(self) -> None:
         pass
 
     def processRequest(self) -> Optional[Domain]:
-        result, finished = self._prepRequest()
+        finished = self._prepRequest()
         if finished is True:
-            return result
+            return self.dom
 
         # if the tld is a multi level we should not move further down than the tld itself
         # we currently allow progressive lookups until we find something:
@@ -260,10 +259,11 @@ class ProcessWhoisDomainRequest:
 
         tldLevel: List[str] = str(self.dc.tldString).split(".")
         while len(self.dc.dList) > len(tldLevel):
-            result = self._doOneLookup()
-            if result:
-                return result
+            self.dom, finished = self._doOneLookup()
+            if finished:
+                return self.dom
 
             self.dc.dList = self.dc.dList[1:]  # strip one element from the front and try again
 
-        return None
+        self.dom = None
+        return self.dom

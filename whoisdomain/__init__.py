@@ -145,20 +145,33 @@ def q2(
     dc = DataContext(
         domain=domain,
     )
+
+    dom = Domain(
+        pc=pc,
+        dc=dc,
+    )
+
+    parser = WhoisParser(
+        pc=pc,
+        dc=dc,
+    )
+
+    wci = WhoisCliInterface(
+        pc=pc,
+        dc=dc,
+    )
+
     pwdr = ProcessWhoisDomainRequest(
         pc=pc,
         dc=dc,
-        parser=WhoisParser(  # use dependency inject
-            pc=pc,
-            dc=dc,
-        ),
-        wci=WhoisCliInterface(  # use dependency inject
-            pc=pc,
-            dc=dc,
-        ),
+        parser=parser,
+        wci=wci,
+        dom=dom,
     )
 
-    return pwdr.processRequest()
+    result = pwdr.processRequest()
+
+    return result
 
 
 def query(
