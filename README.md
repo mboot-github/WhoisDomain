@@ -253,3 +253,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * start with dependency inject: parser is passed as arg
   * add cli interface to dependency inject, rightsize after test
   * finish dependency inject move Domain create outside
+  * prep for other types or regex; all simple regex strings in tld_regexpr.py now need R() around them
