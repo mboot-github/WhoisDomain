@@ -84,6 +84,9 @@ class WhoisParser:
                 continue
 
             self.resultDict[key] = empty  # set a default
+            if val is None:
+                continue
+
             if callable(val):
                 self.resultDict[key] = val(self.dc.whoisStr) or empty
                 if self.pc.verbose:
