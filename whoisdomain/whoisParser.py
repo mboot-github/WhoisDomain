@@ -88,12 +88,14 @@ class WhoisParser:
                 continue
 
             if callable(val):
-                self.resultDict[key] = val(self.dc.whoisStr) or empty
+                # vcall the curry function we created in tld_regexpr.py
+                self.resultDict[key] = val(self.dc.whoisStr, self.pc.verbose) or empty
                 if self.pc.verbose:
                     print(f"DEBUG: _doExtractPattensFromWhoisString: call indirect {val} {key}, {self.resultDict[key]}", file=sys.stderr)
                 continue
 
             if isinstance(val, str):
+                # we still support plain strings also
                 self.resultDict[key] = re.findall(val, self.dc.whoisStr, flags=re.IGNORECASE) or empty
                 if self.pc.verbose:
                     print(f"DEBUG _doExtractPattensFromWhoisStringstr: {key}, {self.resultDict[key]}", file=sys.stderr)

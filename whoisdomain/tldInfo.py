@@ -1,4 +1,4 @@
-import re
+# import re
 
 from typing import (
     Dict,
@@ -16,28 +16,28 @@ class TldInfo:
     ) -> None:
         self.verbose = verbose
         self.tldRegexDb: Dict[str, Dict[str, Any]] = {}
-        self.regexDbByKey: Dict[str, Any] = {}
+        # self.regexDbByKey: Dict[str, Any] = {}
         self.zzDictRef = zzDict
 
-    def _oneTldOneKey(self, name: str, key: str, reg: Optional[str]) -> None:
-        if reg is None:
-            return
-
-        if key is None:
-            return
-
-        if key.startswith("_"):  # skip meta keys, they are not regexes
-            return
-
-        if key in ["extend"]:  # this actually should have been a meta key: "_extend"
-            return
-
-        if reg in self.regexDbByKey:
-            return
-
-        self.regexDbByKey[reg] = None
-        if isinstance(reg, str):
-            self.regexDbByKey[reg] = re.compile(reg, flags=re.IGNORECASE)
+    #     def _oneTldOneKey(self, name: str, key: str, reg: Optional[str]) -> None:
+    #         if reg is None:
+    #             return
+    #
+    #         if key is None:
+    #             return
+    #
+    #         if key.startswith("_"):  # skip meta keys, they are not regexes
+    #             return
+    #
+    #         if key in ["extend"]:  # this actually should have been a meta key: "_extend"
+    #             return
+    #
+    #         if reg in self.regexDbByKey:
+    #             return
+    #
+    #         self.regexDbByKey[reg] = None
+    #         if isinstance(reg, str):
+    #             self.regexDbByKey[reg] = re.compile(reg, flags=re.IGNORECASE)
 
     def _get_tld_re(
         self,
@@ -73,23 +73,7 @@ class TldInfo:
         tld_re: Dict[str, Any] = {}
         for key, val in tmp.items():
             # keys starting with _ we just copy,
-            # this means we inhert [ '_server', '_test' ]
-            if key[0] == "_":
-                tld_re[key] = val
-                continue
-
-            if isinstance(val, str):
-                # tld_re[key] = self.regexDbByKey[key][val]
-                # tld_re[key] = self.regexDbByKey[val]
-                tld_re[key] = val
-                continue
-
-            # allow for other types
-            if isinstance(val, Dict):
-                tld_re[key] = val
-                pass
-
-            # no other types
+            # this means we inhert [ '_server', '_test',  '_privateREgistry' ]
             tld_re[key] = val
 
         # meta domains start with _: examples _centralnic and _donuts

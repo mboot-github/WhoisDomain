@@ -8,9 +8,8 @@ from typing import (
     Callable,
 )
 
-# experiment in progress "sk" 20230831 mboot 761
-
-# NOTE: _server is not inherited down stream, currently
+# 2023-09-03 mboot, all _items are inherited, confirmed
+# only _<domains> as meta domains do net end up in the database
 
 # ======================================
 # Interesting for future enhancements:
@@ -18,16 +17,16 @@ from typing import (
 # https://github.com/rfc1036/whois/blob/next/new_gtlds_list
 # seems the most up to date and maintained
 
-# =================================================================
-# Often we want to repeat regex patterns,
-#   ( typically with nameservers or status fields )
-#   that becomes unreadable very fast.
-# Allow for a simplification that expands on usage and
-#   allow forcing the first to be mandatory as default,
-#   but overridable when needed
-
 
 def xStr(what: str, times: int = 1, firstMandatory: bool = True) -> str:
+    # =================================================================
+    # Often we want to repeat regex patterns,
+    #   ( typically with nameservers or status fields )
+    #   that becomes unreadable very fast.
+    # Allow for a simplification that expands on usage and
+    #   allow forcing the first to be mandatory as default,
+    #   but overridable when needed
+
     if times < 1:
         return ""
 
@@ -41,14 +40,19 @@ def R(
     reStr: str,
     ignoreCase: bool = True,
 ) -> Callable[[str], List[str]]:
-    def reFindAllIgnoreCase(textStr: str) -> List[str]:
+    # regular simple regex strings are converter with currying to functins to be called later
+    def reFindAll(
+        textStr: str,
+        verbose: bool = False,
+    ) -> List[str]:
         flags = re.IGNORECASE if ignoreCase else re.NOFLAG
         return re.findall(reStr, textStr, flags=flags)
 
-    return reFindAllIgnoreCase
+    return reFindAll
 
 
 def R2(reString: str) -> str:
+    # you could still only use strings, untested
     return reString
 
 
@@ -59,13 +63,18 @@ def findFromToAndLookFor(
     ignoreCase: bool = True,
     verbose: bool = False,
 ) -> Callable[[str], List[str]]:
-    def f(textStr: str) -> List[str]:
-        verbose = True
-        print("DEBUG2", textStr, file=sys.stderr)
-
+    # look for a particular string like R()
+    # but limit the context we look in
+    # to a specific sub section of the whois cli response
+    # use currying to create a func that will be called later
+    def xFindFromToAndLookFor(
+        textStr: str,
+        verbose: bool = False,
+    ) -> List[str]:
         flags = re.IGNORECASE if ignoreCase else re.NOFLAG
         s1 = re.search(fromStr, textStr, flags=flags)
-        print(f"DEBUG s1 {s1}, {fromStr}", file=sys.stderr)
+        if verbose:
+            print(f"DEBUG s1 {s1}, {fromStr}", file=sys.stderr)
 
         if s1 is None:
             return []
@@ -86,7 +95,7 @@ def findFromToAndLookFor(
 
         return re.findall(lookForStr, t3, flags=flags)
 
-    return f
+    return xFindFromToAndLookFor
 
 
 r"""
@@ -117,6 +126,65 @@ Updated:                      2019-06-07
     )
 test with: ./test2.py -v -d google.sk 2>2
 """
+
+
+def findFromToAndLookForWithFindFirst(
+    findFirst: str,
+    fromStr: str,  # we will replace {} in fromStr with the result from findFirst
+    toStr: str,
+    lookForStr: str,
+    ignoreCase: bool = True,
+    verbose: bool = False,
+) -> Callable[[str], List[str]]:
+    # look for a particular string like R() with find first
+    #   then build a from ,to context using the result from findFirst (google.fr is a example)
+    #     but limit the context we look in
+    #       to a specific sub section of the whois cli response
+    # use currying to create a func that will be called later
+    def xFindFromToAndLookForWithFindFirst(
+        textStr: str,
+        verbose: bool = False,
+    ) -> List[str]:
+        flags = re.IGNORECASE if ignoreCase else re.NOFLAG
+
+        ff = re.findall(findFirst, textStr, flags=flags)
+        if ff is None:
+            return []
+
+        ff2: str = str(ff[0].strip())  # only use the first element and clean it
+        if ff2 == "":
+            return []
+
+        if verbose:
+            print(f"DEBUG: we found: {ff2}, now combine with {fromStr}", file=sys.stderr)
+
+        fromStr2 = fromStr.replace(r"{}", ff2)
+        s1 = re.search(fromStr2, textStr, flags=flags)
+
+        if verbose:
+            print(f"DEBUG s1 {s1}, {fromStr}", file=sys.stderr)
+
+        if s1 is None:
+            return []
+
+        start = s1.start()
+        t2 = textStr[start:]
+        if verbose:
+            print(f"DEBUG: fromStr {t2}", file=sys.stderr)
+
+        s2 = re.search(toStr, t2, flags=flags)
+        if s2 is None:
+            return re.findall(lookForStr, t2, flags=flags)
+
+        end = s2.end()
+        t3 = t2[:end]
+        if verbose:
+            print(f"DEBUG: toStr {t3}", file=sys.stderr)
+
+        return re.findall(lookForStr, t3, flags=flags)
+
+    return xFindFromToAndLookForWithFindFirst
+
 
 # =================================================================
 # The database
@@ -474,15 +542,27 @@ ZZ["fr"] = {
     "extend": "com",
     "domain_name": R(r"domain:\s?(.+)"),
     "registrar": R(r"registrar:\s*(.+)"),
-    "registrant": R(r"contact:\s?(.+)"),
-    "registrant_organization": R(r"type:\s+ORGANIZATION\scontact:\s+(.*)"),
+    # "registrant": R(r"contact:\s?(.+)"),
+    # "registrant_organization": R(r"type:\s+ORGANIZATION\scontact:\s+(.*)"),
     "creation_date": R(r"created:\s?(.+)"),
     "expiration_date": R(r"Expiry Date:\s?(.+)"),
     "updated_date": R(r"last-update:\s?(.+)"),
     "name_servers": R(r"nserver:\s*(.+)"),
     "status": R(r"status:\s?(.+)"),
-    "registrant_country": R(r"Country:\s?(.+)"),
+    # "registrant_country": R(r"Country:\s?(.+)"),
     "_test": "sfr.fr",
+    "registrant": findFromToAndLookForWithFindFirst(
+        findFirst=r"holder-c:\s*([^\n]*)\n",
+        fromStr=r"nic-hdl:\s*{}\n",
+        toStr=r"\n\n",
+        lookForStr=r"contact:\s*([^\n]*)\n",
+    ),
+    "registrant_country": findFromToAndLookForWithFindFirst(
+        findFirst=r"holder-c:\s*([^\n]*)\n",
+        fromStr=r"nic-hdl:\s*{}\n",
+        toStr=r"\n\n",
+        lookForStr=r"country:\s*([^\n]*)\n",
+    ),
 }
 
 # Hong Kong
