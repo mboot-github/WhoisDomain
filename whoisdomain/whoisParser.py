@@ -56,7 +56,7 @@ class WhoisParser:
             if self.pc.verbose:
                 print(f"DEBUG: parsing iana data only for tld: {self.dc.tldString}, {result}", file=sys.stderr)
 
-    def _doExtractPattensFromWhoisString(
+    def _doExtractPattensFromWhoisString_old(
         self,
     ) -> None:
         empty = [""]  # Historical: we use 'empty string' as default, not None
@@ -72,6 +72,32 @@ class WhoisParser:
                 self.resultDict[key] = compiledRe.findall(self.dc.whoisStr) or empty
                 if self.pc.verbose:
                     print(f"{key}, {self.resultDict[key]}", file=sys.stderr)
+
+    def _doExtractPattensFromWhoisString(
+        self,
+    ) -> None:
+        empty = [""]  # Historical: we use 'empty string' as default, not None , or []
+
+        for key, val in self.dc.thisTld.items():
+            if key.startswith("_"):
+                # skip meta element like: _server or _privateRegistry
+                continue
+
+            self.resultDict[key] = empty  # set a default
+            if callable(val):
+                self.resultDict[key] = val(self.dc.whoisStr) or empty
+                if self.pc.verbose:
+                    print(f"DEBUG: _doExtractPattensFromWhoisString: call indirect {val} {key}, {self.resultDict[key]}", file=sys.stderr)
+                continue
+
+            if isinstance(val, str):
+                self.resultDict[key] = re.findall(val, self.dc.whoisStr, flags=re.IGNORECASE) or empty
+                if self.pc.verbose:
+                    print(f"DEBUG _doExtractPattensFromWhoisStringstr: {key}, {self.resultDict[key]}", file=sys.stderr)
+                continue
+
+            if self.pc.verbose:
+                print(f"DEBUG: UNKNOWN: _doExtractPattensFromWhoisString {key}, {val}", file=sys.stderr)
 
     def _doSourceIana(
         self,

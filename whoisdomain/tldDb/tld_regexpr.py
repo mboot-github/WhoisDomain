@@ -1,7 +1,6 @@
-from typing import (
-    Dict,
-    Any,
-)
+import re
+
+from typing import Dict, Any, List, Callable
 
 # experiment in progress "sk" 20230831 mboot 761
 
@@ -32,8 +31,15 @@ def xStr(what: str, times: int = 1, firstMandatory: bool = True) -> str:
         return what * times
 
 
-def R(x: str) -> str:
-    return x
+def R(reString: str) -> Callable[[str], List[str]]:
+    def reFindAllIgnoreCase(textString: str) -> List[str]:
+        return re.findall(reString, textString, flags=re.IGNORECASE)
+
+    return reFindAllIgnoreCase
+
+
+def R2(reString: str) -> str:
+    return reString
 
 
 # =================================================================

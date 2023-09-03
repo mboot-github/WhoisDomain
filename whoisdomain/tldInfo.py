@@ -20,10 +20,10 @@ class TldInfo:
         self.zzDictRef = zzDict
 
     def _oneTldOneKey(self, name: str, key: str, reg: Optional[str]) -> None:
-        if key is None:
+        if reg is None:
             return
 
-        if reg is None:
+        if key is None:
             return
 
         if key.startswith("_"):  # skip meta keys, they are not regexes
@@ -32,17 +32,24 @@ class TldInfo:
         if key in ["extend"]:  # this actually should have been a meta key: "_extend"
             return
 
-        # from here the key is valid, start a new dict if needed
-        if key not in self.regexDbByKey:
-            self.regexDbByKey[key] = {}
+        if 0:
+            # from here the key is valid, start a new dict if needed
+            if key not in self.regexDbByKey:
+                self.regexDbByKey[key] = {}
 
-        if reg in self.regexDbByKey[key] and self.regexDbByKey[key][reg] is not None:
-            # we already have a compiled regex, no need to do it again
+            if reg in self.regexDbByKey[key] and self.regexDbByKey[key][reg] is not None:
+                # we already have a compiled regex, no need to do it again
+                return
+            self.regexDbByKey[key][reg] = None
+            if isinstance(reg, str):
+                self.regexDbByKey[key][reg] = re.compile(reg, flags=re.IGNORECASE)
+
+        if reg in self.regexDbByKey:
             return
 
-        self.regexDbByKey[key][reg] = None
+        self.regexDbByKey[reg] = None
         if isinstance(reg, str):
-            self.regexDbByKey[key][reg] = re.compile(reg, flags=re.IGNORECASE)
+            self.regexDbByKey[reg] = re.compile(reg, flags=re.IGNORECASE)
 
     def _get_tld_re(
         self,
@@ -84,11 +91,14 @@ class TldInfo:
                 continue
 
             if isinstance(val, str):
-                tld_re[key] = self.regexDbByKey[key][val]
+                # tld_re[key] = self.regexDbByKey[key][val]
+                # tld_re[key] = self.regexDbByKey[val]
+                tld_re[key] = val
                 continue
 
             # allow for other types
             if isinstance(val, Dict):
+                tld_re[key] = val
                 pass
 
             # no other types
@@ -132,7 +142,9 @@ class TldInfo:
     # public
 
     def init(self) -> None:
-        self._buildRegCollection()
+        # self._buildRegCollection()
+
+        # build the database of all tld
         for tld in self.zzDictRef.keys():
             self._initOne(tld, override=False)
 

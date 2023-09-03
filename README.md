@@ -254,3 +254,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * add cli interface to dependency inject, rightsize after test
   * finish dependency inject move Domain create outside
   * prep for other types or regex; all simple regex strings in tld_regexpr.py now need R() around them
+  * use currying to make all regex strings into function cal in whoisParser.py; all regexes in tld_regexpr.py are now converted on import to function calls via R()
