@@ -1,6 +1,12 @@
 import re
+import sys
 
-from typing import Dict, Any, List, Callable
+from typing import (
+    Dict,
+    Any,
+    List,
+    Callable,
+)
 
 # experiment in progress "sk" 20230831 mboot 761
 
@@ -31,9 +37,13 @@ def xStr(what: str, times: int = 1, firstMandatory: bool = True) -> str:
         return what * times
 
 
-def R(reString: str) -> Callable[[str], List[str]]:
-    def reFindAllIgnoreCase(textString: str) -> List[str]:
-        return re.findall(reString, textString, flags=re.IGNORECASE)
+def R(
+    reStr: str,
+    ignoreCase: bool = True,
+) -> Callable[[str], List[str]]:
+    def reFindAllIgnoreCase(textStr: str) -> List[str]:
+        flags = re.IGNORECASE if ignoreCase else re.NOFLAG
+        return re.findall(reStr, textStr, flags=flags)
 
     return reFindAllIgnoreCase
 
@@ -41,6 +51,72 @@ def R(reString: str) -> Callable[[str], List[str]]:
 def R2(reString: str) -> str:
     return reString
 
+
+def findFromToAndLookFor(
+    fromStr: str,
+    toStr: str,
+    lookForStr: str,
+    ignoreCase: bool = True,
+    verbose: bool = False,
+) -> Callable[[str], List[str]]:
+    def f(textStr: str) -> List[str]:
+        verbose = True
+        print("DEBUG2", textStr, file=sys.stderr)
+
+        flags = re.IGNORECASE if ignoreCase else re.NOFLAG
+        s1 = re.search(fromStr, textStr, flags=flags)
+        print(f"DEBUG s1 {s1}, {fromStr}", file=sys.stderr)
+
+        if s1 is None:
+            return []
+
+        start = s1.start()
+        t2 = textStr[start:]
+        if verbose:
+            print(f"DEBUG: fromStr {t2}", file=sys.stderr)
+
+        s2 = re.search(toStr, t2, flags=flags)
+        if s2 is None:
+            return re.findall(lookForStr, t2, flags=flags)
+
+        end = s2.end()
+        t3 = t2[:end]
+        if verbose:
+            print(f"DEBUG: toStr {t3}", file=sys.stderr)
+
+        return re.findall(lookForStr, t3, flags=flags)
+
+    return f
+
+
+r"""
+example look for in context: google.sk
+look for Organization:\s*([^\n]*)\n
+but limit that search (as Organization occurs multiple times) to the section between:
+r"Domain registrant:" and "\n\n"
+
+Domain registrant:            mmr-170347
+Name:                         Domain Administrator
+Organization:                 Google Ireland Holdings Unlimited Company
+Organization ID:              369511
+Phone:                        +353.14361000
+Email:                        dns-admin@google.com
+Street:                       70 Sir John Rogerson's Quay
+City:                         Dublin
+Postal Code:                  2
+Country Code:                 IE
+Authorised Registrar:         MARK-0292
+Created:                      2019-06-07
+Updated:                      2019-06-07
+
+
+    findFromToAndLookFor(
+        fromStr=r"Domain registrant:",
+        toStr=r"\n\n",
+        lookForStr=r"Organization:\s*([^\n]*)\n"
+    )
+test with: ./test2.py -v -d google.sk 2>2
+"""
 
 # =================================================================
 # The database
@@ -775,11 +851,25 @@ ZZ["sk"] = {
     "expiration_date": R(r"Valid Until:\s?(.+)"),
     "updated_date": R(r"Updated:\s?(.+)"),
     "name_servers": R(r"Nameserver:\s*(\S+)"),
-    # "registrant": R(r"registrant:([\s\S]+)\n\n"),
-    "registrant": R(r"contact:\s?(.+)"),
-    "registrant_country": R(r"Country Code:\s?(.+)\nRegistrar:"),  # this will not work
-    # "registrar": R(r"registrar:\s*([^\n]+)"),
     "_test": "sk-nic.sk",
+    # look for Organiztion but in the proper section
+    "registrant": findFromToAndLookFor(
+        fromStr=r"Domain registrant:",
+        toStr=r"\n\n",
+        lookForStr=r"Organization:\s*([^\n]*)\n",
+    ),
+    # Country Code:
+    "registrant_country": findFromToAndLookFor(
+        fromStr=r"Domain registrant:",
+        toStr=r"\n\n",
+        lookForStr=r"Country Code:\s*([^\n]*)\n",
+    ),
+    "registrar": findFromToAndLookFor(
+        fromStr=r"\nRegistrar:",
+        toStr=r"\n\n",
+        lookForStr=r"Organization:\s*([^\n]*)\n",
+        verbose=True,
+    ),
 }
 
 ZZ["tel"] = {

@@ -32,18 +32,6 @@ class TldInfo:
         if key in ["extend"]:  # this actually should have been a meta key: "_extend"
             return
 
-        if 0:
-            # from here the key is valid, start a new dict if needed
-            if key not in self.regexDbByKey:
-                self.regexDbByKey[key] = {}
-
-            if reg in self.regexDbByKey[key] and self.regexDbByKey[key][reg] is not None:
-                # we already have a compiled regex, no need to do it again
-                return
-            self.regexDbByKey[key][reg] = None
-            if isinstance(reg, str):
-                self.regexDbByKey[key][reg] = re.compile(reg, flags=re.IGNORECASE)
-
         if reg in self.regexDbByKey:
             return
 
@@ -130,20 +118,9 @@ class TldInfo:
 
         self.tldRegexDb[tld2] = what
 
-    def _buildRegCollection(
-        self,
-    ) -> None:
-        self.regexDbByKey = {}  # start with empty
-        for name in self.zzDictRef:  # for each tld
-            tldData = self.zzDictRef[name]
-            for key in tldData:
-                self._oneTldOneKey(name, key, tldData[key])
-
     # public
 
     def init(self) -> None:
-        # self._buildRegCollection()
-
         # build the database of all tld
         for tld in self.zzDictRef.keys():
             self._initOne(tld, override=False)
