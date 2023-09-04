@@ -64,16 +64,14 @@ target/
 .idea
 
 whois.exe
-out
-2
-reformat-code.sh
-t1.py
-typescript
-test.out
-diff.out
-tmp/
 1
+2
+typescript
+tmp/
 rlsecure/
 *_cache/
 *.sqlite
 *.dbm
+*.tmp
+*.out
+out
