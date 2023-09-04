@@ -151,9 +151,7 @@ class IanaCrawler:
             tldItem.append(None)
             return
 
-        ll = self._resolveWhois(
-            server
-        )  # try to resolve the whois server, does it actually exist
+        ll = self._resolveWhois(server)  # try to resolve the whois server, does it actually exist
         tldItem.append(ll)
 
     def _addInfoToOneTld(
@@ -222,9 +220,7 @@ class IanaCrawler:
         self.columns[3] = self.columns[3].replace(" ", "_")
         self.columns.insert(4, "Whois")  # is there a whois server defined
         self.columns.insert(5, "RegistrationUrl")  # is there a registration url defined
-        self.columns.insert(
-            6, "DnsResolve-A"
-        )  # if we have a whois server does it actually resolve to sometething real
+        self.columns.insert(6, "DnsResolve-A")  # if we have a whois server does it actually resolve to sometething real
 
         for tldItem in self.records:  # tldItem is a list
             rr = self._addInfoToOneTld(tldItem)

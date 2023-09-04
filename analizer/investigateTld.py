@@ -58,13 +58,7 @@ def normalizeRow(row: Any) -> Tuple[str, str, str, str, str, str, str, str]:
 
     tld2 = "".join(map(lambda s: s and re.sub(r"[^\w\s]", "", s), row[1]))
 
-    tld3 = (
-        row[1]
-        .replace(".", "")
-        .replace("'", "")
-        .replace("\u200f", "")
-        .replace("\u200e", "")
-    )
+    tld3 = row[1].replace(".", "").replace("'", "").replace("\u200f", "").replace("\u200e", "")
     tld4 = tld3
 
     manager = row[3]
@@ -73,6 +67,39 @@ def normalizeRow(row: Any) -> Tuple[str, str, str, str, str, str, str, str]:
     reg = row[6]
 
     return tld, tld2, tld3, tld4, manager, w, resolve, reg
+
+
+def doCentralNic(tld: str, s1: str, w: str, TLD: Dict[str, Any]) -> bool:
+    return True
+
+    kk = "_centralnic"
+    if s1 == w and "extend" in TLD and TLD["extend"] in [kk, "com"]:
+        return True
+
+    s = f"ZZ['{tld}']" + ' = {"extend": ' + f"{kk}, " + '"_server":' + f'"{w}"' + "} # < suggest ### "
+
+    if "extend" in TLD:
+        print(s, "# current > ", s1, w, TLD["extend"], TLD)
+    else:
+        print(s, "# current > ", s1, w, "_no_extend_", TLD)
+
+    return True
+
+
+def doDonuts(tld: str, s1: str, w: str, TLD: Dict[str, Any]) -> bool:
+    return True
+    kk = "_donuts"
+    if s1 == w and "extend" in TLD and TLD["extend"] in [kk, "com"]:
+        return True
+
+    s = f"ZZ['{tld}']" + ' = {"extend": ' + f"{kk}, " + '"_server":' + f'"{w}"' + "} # suggest ### "
+
+    if "extend" in TLD:
+        print(s, "# current ", s1, w, TLD["extend"], TLD)
+    else:
+        print(s, "# current ", s1, w, "_no_extend_", TLD)
+
+    return True
 
 
 def doOneRow(
@@ -93,15 +120,13 @@ def doOneRow(
     if not w or w == "NULL":
         # we can create a privateRegistry when there is no whois server
         if tld not in tld_regexpr.ZZ:
-            print(
-                f'ZZ["{tld}"] = '
-                + '{"_privateRegistry": True} # no whois server found in iana'
-            )
+            print(f'ZZ["{tld}"] = ' + '{"_privateRegistry": True} # no whois server found in iana')
         return
 
     if tld not in tld_regexpr.ZZ:
         print(f"# unknown tld {tld}, {tld2}, {tld3}, {tld4}, {w},")
         return
+
     k = "_server"
     s1 = ""
 
@@ -109,49 +134,10 @@ def doOneRow(
     if k in TLD:
         s1 = TLD[k]
 
-    if "whois.centralnicregistry.com." in resolve:
+    if "whois.centralnicregistry.com." in resolve and doCentralNic(tld, s1, w, TLD):
         return
 
-        kk = "_centralnic"
-        if s1 == w and "extend" in TLD and TLD["extend"] in [kk, "com"]:
-            return
-
-        s = (
-            f"ZZ['{tld}']"
-            + ' = {"extend": '
-            + f"{kk}, "
-            + '"_server":'
-            + f'"{w}"'
-            + "} # < suggest ### "
-        )
-
-        if "extend" in TLD:
-            print(s, "# current > ", s1, w, TLD["extend"], TLD)
-        else:
-            print(s, "# current > ", s1, w, "_no_extend_", TLD)
-
-        return
-
-    if "whois.donuts.co" in resolve:
-        return
-        kk = "_donuts"
-        if s1 == w and "extend" in TLD and TLD["extend"] in [kk, "com"]:
-            return
-
-        s = (
-            f"ZZ['{tld}']"
-            + ' = {"extend": '
-            + f"{kk}, "
-            + '"_server":'
-            + f'"{w}"'
-            + "} # suggest ### "
-        )
-
-        if "extend" in TLD:
-            print(s, "# current ", s1, w, TLD["extend"], TLD)
-        else:
-            print(s, "# current ", s1, w, "_no_extend_", TLD)
-
+    if "whois.donuts.co" in resolve and doCentralNic(tld, s1, w, TLD):
         return
 
     try:
@@ -214,24 +200,10 @@ def doOneRow(
         for n in value:
             if n in resolve:
                 if tld not in tld_regexpr.ZZ:
-                    print(
-                        f'ZZ["{tld}"] = '
-                        + '{"_server": "'
-                        + n
-                        + '", "extend": "'
-                        + key
-                        + '"}'
-                    )
+                    print(f'ZZ["{tld}"] = ' + '{"_server": "' + n + '", "extend": "' + key + '"}')
                 if tld2 != tld:
                     if tld2 not in tld_regexpr.ZZ:
-                        print(
-                            f'ZZ["{tld2}"] = '
-                            + '{"_server": "'
-                            + n
-                            + '", "extend": "'
-                            + key
-                            + '"}'
-                        )
+                        print(f'ZZ["{tld2}"] = ' + '{"_server": "' + n + '", "extend": "' + key + '"}')
                 found = True
 
             if found:
@@ -257,12 +229,7 @@ def doOneRow(
     if w in ss:
         if tld not in tld_regexpr.ZZ:
             print(
-                f'ZZ["{tld}"] = '
-                + '{"_server": "'
-                + w
-                + '", "extend": "'
-                + ss[w][0]
-                + '"}',
+                f'ZZ["{tld}"] = ' + '{"_server": "' + w + '", "extend": "' + ss[w][0] + '"}',
                 "# ",
                 w,
                 ss[w],
@@ -271,12 +238,7 @@ def doOneRow(
         if tld2 != tld:
             if tld2 not in tld_regexpr.ZZ:
                 print(
-                    f'ZZ["{tld2}"] = '
-                    + '{"_server": "'
-                    + w
-                    + '", "extend": "'
-                    + ss[w][0]
-                    + '"}',
+                    f'ZZ["{tld2}"] = ' + '{"_server": "' + w + '", "extend": "' + ss[w][0] + '"}',
                     "# ",
                     w,
                     ss[w],

@@ -3,8 +3,7 @@
 doIt()
 {
     black --line-length 160 .
-
-    pylama *.py bin/*.py whoisdomain/ |
+    pylama --max-line-length 160 *.py bin/*.py whoisdomain/ |
     awk '
     /__init__/ && / W0611/ { next }
 #    / W0401 / { next }

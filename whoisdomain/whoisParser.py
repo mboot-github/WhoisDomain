@@ -298,10 +298,7 @@ class WhoisParser:
     def doServerHintsForThisTld(
         self,
     ) -> None:
-        # note _server hints currently are not passes down when using "extend",
-        # that may have been my error during the initial implementation
-        # allow server hints using "_server" from the tld_regexpr.py file
-
+        # note _server are currently passed down when using "extend", 2023-09-04 mboot
         server = self.dc.thisTld.get("_server")
         if self.pc.server is None and server:
             self.pc.server = server
@@ -330,6 +327,7 @@ class WhoisParser:
         self,
     ) -> None:
         self.dc.whoisStr = str(self.dc.whoisStr)
+
         self.resultDict: Dict[str, Any] = {
             "tld": str(self.dc.tldString),
             "DNSSEC": self._doDnsSec(),
