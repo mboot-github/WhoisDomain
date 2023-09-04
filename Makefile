@@ -29,6 +29,9 @@ second: first test2
 test:
 	./test2.py -v -t 2>2 | tee 1
 
+test-all:
+	./test2.py -v -a 2>2 | tee 1
+
 # ==========================================================
 # run a test sequence local only, no docker ,no upload to pypi
 LocalTestSimple: reformat mypy test2

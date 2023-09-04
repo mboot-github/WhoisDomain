@@ -396,6 +396,7 @@ ZZ["by"] = {
 # Brittany (French Territory)
 ZZ["bzh"] = {
     "extend": "fr",
+    "_server": "whois.nic.bzh",
     "domain_name": R(r"Domain Name:\s*(.+)"),
     "registrar": R(r"Registrar:\s*(.+)"),
     "registrant": R(r"Registrant Organization:\s*(.+)"),
@@ -405,6 +406,7 @@ ZZ["bzh"] = {
     "updated_date": R(r"Updated Date:\s*(.*)"),
     "name_servers": R(r"Name Server:\s*(.*)"),
     "status": R(r"Domain Status:\s*(.*)"),
+    "_test":"pik.bzh",
 }
 
 ZZ["cc"] = {
