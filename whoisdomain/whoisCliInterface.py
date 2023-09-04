@@ -127,9 +127,7 @@ class WhoisCliInterface:
             print(f"DEBUG: timout: {self.pc.timeout}", file=sys.stderr)
 
         try:
-            self.rawWhoisResultString = self.processHandle.communicate(
-                timeout=self.pc.timeout,
-            )[
+            self.rawWhoisResultString = self.processHandle.communicate(timeout=self.pc.timeout,)[
                 0
             ].decode(errors="ignore")
         except subprocess.TimeoutExpired:
