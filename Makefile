@@ -174,7 +174,7 @@ test3: reformat mypy
 # ====================================================
 # update the sqlite db with the latest tld info and psl info and suggest missing tld's we can add with a simple fix
 suggest:
-	( cd analizer; make ) | tee out
+	( cd analizer; make ) | tee suggest.out
 
 # black pylama and mypy on the source directory
 format:
