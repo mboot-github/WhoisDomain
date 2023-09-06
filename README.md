@@ -28,7 +28,7 @@ Pypi releases can be installed with:
   * `pip install whoisdomain`
 
 ## Features
-  * See: [Features](Features.md)
+  * See: [Features](docs/Features.md)
 
 ## Dependencies
   * please install also the command line "whois" of your distribution as this library parses the output of the "whois" cli command of your operating system
@@ -38,13 +38,13 @@ Pypi releases can be installed with:
   * using a brew install whois will give in general better results.
 
 ## Docker release
-  * See [Docker](Docker.md)
+  * See [Docker](docs/Docker.md)
 
 ## Usage example
-  * See [Usage](Usage.md)
+  * See [Usage](docs/Usage.md)
 
 ## whoisdomain
-  * the cli `whoisdomain` is  documented in [whoisdomain-cli](whoisdomain-cli.md)
+  * the cli `whoisdomain` is  documented in [whoisdomain-cli](docs/whoisdomain-cli.md)
 
 ## ccTLD & TLD support
 
@@ -60,10 +60,10 @@ and `make suggest`.
  * Python 2.x IS NOT supported.
 
 ## Author's
-  * See: [Authors](Authors.md)
+  * See: [Authors](docs/Authors.md)
 
 ## Updates
-  * see [Updates](Updates.md) for a full history of changes.
+  * see [Updates](docs/Updates.md) for a full history of changes.
   * Only the latest update is mentioned here
 
 ### 1.20230906.1
