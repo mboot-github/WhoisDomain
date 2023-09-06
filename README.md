@@ -40,9 +40,13 @@ Pypi releases can be installed with:
   * See [Usage](Usage.mf)
 
 ## whoisdomain
-  * the cli whois domain is  documented in [whoisdomain-cli](whoisdomain-cli.md)
+  * the cli `whoisdomain` is  documented in [whoisdomain-cli](whoisdomain-cli.md)
 
 ## ccTLD & TLD support
+
+Most `tld's` are now autodetected via IANA root db, see the Analizer directory
+and `make suggest`.
+
   * see the file: [tld_regexpr](./whoisdomain/tldDb/tld_regexpr.py)
   * for python use:  `whoisdomain.validTlds()`
   * for cli use `whoisdomain -S`
@@ -55,5 +59,8 @@ Pypi releases can be installed with:
   * See: [Authors](Authors.md)
 
 ## Updates
-  * see Updates.md only the latest update is mentioned here
-  * 1.20230906.1: introduce parsing based on functions, allow contextual search in splitted data and plain data, allow contextual search based on earlier result; fix a few tld to return the proper registrant string (not nic handle)
+  * see [Updates](Updates.md) for a full history of changes.
+  * Only the latest update is mentioned here
+
+### 1.20230906.1
+  * introduce parsing based on functions, allow contextual search in splitted data and plain data, allow contextual search based on earlier result; fix a few tld to return the proper registrant string (not nic handle)
