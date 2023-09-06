@@ -177,32 +177,29 @@ def findFromToAndLookForWithFindFirst(
     return xFindFromToAndLookForWithFindFirst
 
 
-# google.at
-# find me a section starting with personname, ending with \n\n having \nnic-hdl:\s*{} where {} is findFirst(r"registrant:\s*([^\n]*)\n")
+# example google.at
+# find me registrant aand with that data
+# find me a section that has nic-hdl:\s*<registrant>
+# from that section extract organization:
 
-"""
-def findFromToAndLookForHavingWithFindFirst(
+
+def findInSplitedLookForHavingFindFirst(
     findFirst: str,
-    fromStr: str,  # we will replace {} in fromStr with the result from findFirst
-    toStr: str,
     lookForStr: str,
+    extract: str,
     ignoreCase: bool = True,
     verbose: bool = False,
-) -> Callable[[str], List[str]]:
-    # look for a particular string like R() with find first
-    #   then build a from ,to context using the result from findFirst (google.fr is a example)
-    #     but limit the context we look in
-    #       to a specific sub section of the whois cli response
-    # use currying to create a func that will be called later
+) -> Callable[[str, List[str], bool], List[str]]:
 
-    def xfindFromToAndLookForHavingWithFindFirst(
+    # requires splitted data
+    def xfindInSplitedLookForHavingFindFirst(
         textStr: str,
         sData: List[str],
         verbose: bool = False,
     ) -> List[str]:
         flags = re.IGNORECASE if ignoreCase else re.NOFLAG
 
-        ff = re.findall(findFirst, textStr, flags=flags)  # can be changed to search as we never use anything other then [0]
+        ff = re.findall(findFirst, textStr, flags=flags)
         if ff is None:
             return []
 
@@ -210,36 +207,11 @@ def findFromToAndLookForHavingWithFindFirst(
         if ff2 == "":
             return []
 
-        if verbose:
-            print(f"DEBUG: we found: {ff2}, now combine with {fromStr}", file=sys.stderr)
+        lookForStr2 = lookForStr.replace(r"{}", ff2)
+        for section in sData:
+            s1 = re.findall(lookForStr2, section, flags=flags)
+            if s1:
+                return re.findall(extract, section, flags=flags)
+        return []
 
-        if 0:
-            fromStr2 = fromStr.replace(r"{}", ff2)
-            s1 = re.search(fromStr2, textStr, flags=flags)
-
-            if verbose:
-                print(f"DEBUG s1 {s1}, {fromStr}", file=sys.stderr)
-
-            if s1 is None:
-                return []
-
-        # loop:
-        if 0:
-            start = s1.start()
-            t2 = textStr[start:]
-            if verbose:
-                print(f"DEBUG: fromStr {t2}", file=sys.stderr)
-
-            s2 = re.search(toStr, t2, flags=flags)
-            if s2 is None:
-                return re.findall(lookForStr, t2, flags=flags)
-
-            end = s2.end()
-            t3 = t2[:end]
-            if verbose:
-                print(f"DEBUG: toStr {t3}", file=sys.stderr)
-
-        return re.findall(lookForStr, t3, flags=flags)
-
-    return xfindFromToAndLookForHavingWithFindFirst
-"""
+    return xfindInSplitedLookForHavingFindFirst

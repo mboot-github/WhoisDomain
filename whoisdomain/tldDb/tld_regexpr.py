@@ -1,9 +1,4 @@
-from .finders import (
-    newLineSplit,
-    R,
-    findFromToAndLookFor,
-    findFromToAndLookForWithFindFirst,
-)
+from .finders import newLineSplit, R, findFromToAndLookFor, findFromToAndLookForWithFindFirst, findInSplitedLookForHavingFindFirst
 
 from typing import (
     Dict,
@@ -173,7 +168,17 @@ ZZ["at"] = {
     "updated_date": R(r"changed:\s?(.+)"),
     "name_servers": R(r"nserver:\s*(.+)"),
     "registrar": R(r"registrar:\s?(.+)"),
-    "registrant": R(r"registrant:\s?(.+)"),
+    # "registrant": R(r"registrant:\s?(.+)"),
+    "registrant": findInSplitedLookForHavingFindFirst(
+        findFirst=r"registrant:\s?(.+)",
+        lookForStr=r"nic-hdl:\s*{}\n",
+        extract=r"organization:\s*([^\n]*)\n",
+    ),
+    "registrant_country": findInSplitedLookForHavingFindFirst(
+        findFirst=r"registrant:\s?(.+)",
+        lookForStr=r"nic-hdl:\s*{}\n",
+        extract=r"country:\s*([^\n]*)\n",
+    ),
     "_test": "nic.at",
     "_split": newLineSplit(),
 }
