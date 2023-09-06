@@ -32,6 +32,9 @@ test:
 test-all:
 	./test2.py -v -a 2>2 | tee 1
 
+t4:
+	./t4.py 2>22 | tee out
+
 # ==========================================================
 # run a test sequence local only, no docker ,no upload to pypi
 LocalTestSimple: reformat mypy test2

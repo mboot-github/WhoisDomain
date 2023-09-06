@@ -1,0 +1,17 @@
+Ideas for the future, worth looking in to:
+
+
+From: Badreddine Lejmi
+date: 2023-09-06
+
+I think than in the long-term approach, an approched based on JSWhois approach is the most interesting: https://github.com/jschauma/jswhois/blob/main/src/jswhois.go / https://www.netmeister.org/blog/whois.html i.e:
+
+1 define a common nomenclature, flat AND tree based (for multiple entities) loosely inspired from RDAP but much simpler
+2 categorize TLD by their NIC Whois format type
+3 do some custom parsing capabilities for some TLDs that have a derived version of format
+4 add RDAP support to this library for some TLD like .be who dropped Whois
+5 add unit tests for every TLD - at least 3 different would be better
+6: (Nice to have: 6. detect "privacy" comments)
+
+mboot: interesting the JSWhois can be used for parsing hints just like rfc1036 can be used for whois server hints
+they should be make independent on their own repo so hey can be use dby others also
