@@ -67,4 +67,7 @@ and `make suggest`.
   * Only the latest update is mentioned here
 
 ### 1.20230906.1
-  * introduce parsing based on functions, allow contextual search in splitted data and plain data, allow contextual search based on earlier result; fix a few tld to return the proper registrant string (not nic handle)
+  * introduce parsing based on functions
+  * allow contextual search in splitted data and plain data
+  * allow contextual search based on earlier result
+  * fix a few tld to return the proper registrant string (not nic handle)
