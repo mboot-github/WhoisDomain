@@ -258,3 +258,4 @@ or call lib:whoisdomain.validTlds() or cli:whoisdomain -S
   * update tld: sk to use contextual extract, test with google.sk
   * add findFromToAndLookForWithFindFirst contextual search based on a previous findFirst, used in "fr" tld, example google.fr, {} is used to add to fromStr
   * test: 1.20230904.1, only on pypi-test
+  * 1.20230906.1: introduce parsing based on functions, allow contextual search in splitted data and plain data, allow contextual search based on earlier result; fix a few tld to return the proper registrant string (not nic handle)
