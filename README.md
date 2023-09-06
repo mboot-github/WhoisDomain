@@ -2,6 +2,7 @@
 
   * A Python package for retrieving WHOIS information of DOMAIN'S ONLY.
   * Python 2.x IS NOT supported.
+  * Currently no additional python packages need to be installed.
 
 ## Notes
 
