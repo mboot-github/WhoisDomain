@@ -139,7 +139,7 @@ def findFromToAndLookForWithFindFirst(
         flags = re.IGNORECASE if ignoreCase else re.NOFLAG
 
         ff = re.findall(findFirst, textStr, flags=flags)
-        if ff is None:
+        if ff is None or ff == []:
             return []
 
         ff2: str = str(ff[0].strip())  # only use the first element and clean it
@@ -200,7 +200,7 @@ def findInSplitedLookForHavingFindFirst(
         flags = re.IGNORECASE if ignoreCase else re.NOFLAG
 
         ff = re.findall(findFirst, textStr, flags=flags)
-        if ff is None:
+        if ff is None or ff == []:
             return []
 
         ff2: str = str(ff[0].strip())  # only use the first element and clean it
