@@ -8,14 +8,14 @@
 
   * This package will not support querying ip CIDR ranges or AS information
   * This was a copy of the original DanyCork 'whois'.
-  * Significantly refactored in 2023.
-  * The output is still compatible with DanyCork 'whois'
+      * Significantly refactored in 2023.
+      * The output is still compatible with DanyCork 'whois'
 
 ## Releases
 I will start versioning at 1.x.x where the second item will be YYYYMMDD,
 the third item will start from 1 and be only used if more than one update will have to be done in one day.
 
-Vesions `1.x.x` will keep the output compatible with Danny Cork until 2024-02-03 (February 2023)
+Versions `1.x.x` will keep the output compatible with Danny Cork until 2024-02-03 (February 2023)
 
   * Releases are avalable at: [Pypi](https://pypi.org/project/whoisdomain/)
 
