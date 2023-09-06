@@ -322,17 +322,24 @@ ZZ["co.il"] = {
     "status": R(r"status:\s*(.+)"),
 }
 
+ZZ["co.cz"] = {"extend": "cz"}
 ZZ["cz"] = {
     "extend": "com",
     "domain_name": R(r"domain:\s?(.+)"),
     "registrar": R(r"registrar:\s?(.+)"),
-    "registrant": R(r"registrant:\s?(.+)"),
+    # "registrant": R(r"registrant:\s?(.+)"),
     "registrant_country": None,
     "creation_date": R(r"registered:\s?(.+)"),
     "expiration_date": R(r"expire:\s?(.+)"),
     "updated_date": R(r"changed:\s?(.+)"),
     "name_servers": R(r"nserver:\s+(\S+)"),
     "status": R(r"status:\s*(.+)"),
+    "registrant": findInSplitedLookForHavingFindFirst(
+        findFirst=r"registrant:\s?(.+)",
+        lookForStr=r"contact:\s*{}\n",
+        extract=r"org:\s*([^\n]*)\n",
+    ),
+    "_split": newLineSplit(),
 }
 
 ZZ["de"] = {
@@ -477,15 +484,23 @@ ZZ["ir"] = {
 
 ZZ["is"] = {
     "extend": "com",
+    "_server": "whois.isnic.is",
     "domain_name": R(r"domain:\s?(.+)"),
     "registrar": None,
-    "registrant": R(r"registrant:\s?(.+)"),
+    # "registrant": R(r"registrant:\s?(.+)"),
     "registrant_country": None,
     "creation_date": R(r"created:\s?(.+)"),
     "expiration_date": R(r"expires:\s?(.+)"),
     "updated_date": None,
     "name_servers": R(r"nserver:\s?(.+)"),
     "status": None,
+    "registrant": findInSplitedLookForHavingFindFirst(
+        findFirst=r"registrant:\s?(.+)",
+        lookForStr=r"nic-hdl:\s*{}\n",
+        extract=r"role:\s*([^\n]*)\n",
+    ),
+    "_split": newLineSplit(),
+    "_test": "isnic.is",
 }
 
 ZZ["it"] = {
@@ -675,6 +690,8 @@ ZZ["nz"] = {
     "status": R(r"query_status:\s?(.+)"),
     "emails": R(r"([\w\.-]+@[\w\.-]+\.[\w]{2,4})"),
 }
+
+ZZ["co.nz"] = {"extend": "com"}
 
 ZZ["org"] = {
     "extend": "com",
@@ -1158,7 +1175,7 @@ ZZ["mk"] = {
     "_server": "whois.marnet.mk",
     "domain_name": R(r"domain:\s?(.+)"),
     "registrar": R(r"registrar:\s?(.+)"),
-    "registrant": R(r"registrant:\s?(.+)"),
+    # "registrant": R(r"registrant:\s?(.+)"),
     "registrant_country": R(r"Registrant Country:\s?(.+)"),
     "creation_date": R(r"registered:\s?(.+)"),
     "expiration_date": R(r"expire:\s?(.+)"),
@@ -1167,6 +1184,13 @@ ZZ["mk"] = {
     "status": R(r"Status:\s?(.+)"),
     "emails": R(r"[\w\.-]+@[\w\.-]+\.[\w]{2,4}"),
     "_test": "marnet.mk",
+    "registrant": findInSplitedLookForHavingFindFirst(
+        findFirst=r"registrant:\s?(.+)",
+        lookForStr=r"contact:\s*{}\n",
+        extract=r"org:\s*([^\n]*)\n",
+    ),
+    "_split": newLineSplit(),
+
 }
 
 ZZ["si"] = {
@@ -1234,12 +1258,18 @@ ZZ["ve"] = {
     "_server": "whois.nic.ve",
     "domain_name": R(r"domain\s*:\s?(.+)"),
     "registrar": R(r"registrar:\s?(.+)"),
-    "registrant": R(r"registrant:\s?(.+)"),
+    # "registrant": R(r"registrant:\s?(.+)"),
     "creation_date": R(r"created:\s?(.+)"),
     "expiration_date": R(r"expire:\s?(.+)"),
     "updated_date": R(r"changed\s*:\s?(.+)"),
     "name_servers": R(r"nserver:\s*(.+)\s*"),
     "_test": "nic.ve",
+    "registrant": findInSplitedLookForHavingFindFirst(
+        findFirst=r"registrant:\s?(.+)",
+        lookForStr=r"contact:\s*{}\n",
+        extract=r"org:\s*([^\n]*)\n",
+    ),
+    "_split": newLineSplit(),
 }
 
 ZZ["lu"] = {
@@ -1556,7 +1586,10 @@ ZZ["cpa"] = {"_server": "whois.nic.cpa", "extend": "com", "_test": "nic.cpa"}
 ZZ["creditcard"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["credit"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["creditunion"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
+
 ZZ["cr"] = {"extend": "cz"}
+ZZ["co.cr"] = {"extend": "cr"}
+
 ZZ["cricket"] = {"extend": "com", "_server": "whois.nic.cricket", "_test": "nic.cricket"}
 ZZ["cruise"] = {"_server": "whois.nic.cruise", "extend": "com", "_test": "nic.cruise"}
 ZZ["cruises"] = {"extend": "_donuts", "_server": "whois.donuts.co"}

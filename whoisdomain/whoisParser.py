@@ -268,6 +268,9 @@ class WhoisParser:
             if "quota exceeded" in line.lower():
                 raise WhoisQuotaExceeded(self.dc.whoisStr)
 
+            if ":101: no entries found" in line.lower():  # google.co.cz has a response longer than 5 but no data
+                break
+
             if self.pc.with_cleanup_results is True and line.startswith("%"):  # only remove if requested
                 continue
 
