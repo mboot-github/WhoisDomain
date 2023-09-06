@@ -41,7 +41,7 @@ Pypi releases can be installed with:
   * See [Docker](Docker.md)
 
 ## Usage example
-  * See [Usage](Usage.mf)
+  * See [Usage](Usage.md)
 
 ## whoisdomain
   * the cli `whoisdomain` is  documented in [whoisdomain-cli](whoisdomain-cli.md)
