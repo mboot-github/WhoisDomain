@@ -162,6 +162,8 @@ class ProcessWhoisDomainRequest:
 
         self.parser.init()
         # init also calls cleanup on the text string whois cli response
+        if self.pc.verbose:
+            print("DEBUG: Clean: ", self.dc.whoisStr, file=sys.stderr)
 
         assert self.dom is not None
         data, finished = self.parser.parse(

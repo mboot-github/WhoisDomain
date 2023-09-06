@@ -78,6 +78,14 @@ class WhoisParser:
     ) -> None:
         empty = [""]  # Historical: we use 'empty string' as default, not None , or []
 
+        sData: List[str] = []
+        splitter = self.dc.thisTld.get("_split")
+        if splitter:
+            sData = splitter(self.dc.whoisStr, self.pc.verbose)
+            if self.pc.verbose and sData != []:
+                for item in sData:
+                    print("DEBUG: split data", item, file=sys.stderr)
+
         for key, val in self.dc.thisTld.items():
             if key.startswith("_"):
                 # skip meta element like: _server or _privateRegistry
@@ -89,7 +97,7 @@ class WhoisParser:
 
             if callable(val):
                 # vcall the curry function we created in tld_regexpr.py
-                self.resultDict[key] = val(self.dc.whoisStr, self.pc.verbose) or empty
+                self.resultDict[key] = val(self.dc.whoisStr, sData, self.pc.verbose) or empty
                 if self.pc.verbose:
                     print(f"DEBUG: _doExtractPattensFromWhoisString: call indirect {val} {key}, {self.resultDict[key]}", file=sys.stderr)
                 continue

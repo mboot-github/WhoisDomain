@@ -1,11 +1,14 @@
-import re
-import sys
+from .finders import (
+    newLineSplit,
+    R,
+    findFromToAndLookFor,
+    findFromToAndLookForWithFindFirst,
+)
 
 from typing import (
     Dict,
     Any,
-    List,
-    Callable,
+    # Callable,
 )
 
 # 2023-09-03 mboot, all _items are inherited, confirmed
@@ -34,156 +37,6 @@ def xStr(what: str, times: int = 1, firstMandatory: bool = True) -> str:
         return what[:-1] + (what * (times - 1))
     else:
         return what * times
-
-
-def R(
-    reStr: str,
-    ignoreCase: bool = True,
-) -> Callable[[str], List[str]]:
-    # regular simple regex strings are converter with currying to functins to be called later
-    def reFindAll(
-        textStr: str,
-        verbose: bool = False,
-    ) -> List[str]:
-        flags = re.IGNORECASE if ignoreCase else re.NOFLAG
-        return re.findall(reStr, textStr, flags=flags)
-
-    return reFindAll
-
-
-def R2(reString: str) -> str:
-    # you could still only use strings, untested
-    return reString
-
-
-def findFromToAndLookFor(
-    fromStr: str,
-    toStr: str,
-    lookForStr: str,
-    ignoreCase: bool = True,
-    verbose: bool = False,
-) -> Callable[[str], List[str]]:
-    # look for a particular string like R()
-    # but limit the context we look in
-    # to a specific sub section of the whois cli response
-    # use currying to create a func that will be called later
-    def xFindFromToAndLookFor(
-        textStr: str,
-        verbose: bool = False,
-    ) -> List[str]:
-        flags = re.IGNORECASE if ignoreCase else re.NOFLAG
-        s1 = re.search(fromStr, textStr, flags=flags)
-        if verbose:
-            print(f"DEBUG s1 {s1}, {fromStr}", file=sys.stderr)
-
-        if s1 is None:
-            return []
-
-        start = s1.start()
-        t2 = textStr[start:]
-        if verbose:
-            print(f"DEBUG: fromStr {t2}", file=sys.stderr)
-
-        s2 = re.search(toStr, t2, flags=flags)
-        if s2 is None:
-            return re.findall(lookForStr, t2, flags=flags)
-
-        end = s2.end()
-        t3 = t2[:end]
-        if verbose:
-            print(f"DEBUG: toStr {t3}", file=sys.stderr)
-
-        return re.findall(lookForStr, t3, flags=flags)
-
-    return xFindFromToAndLookFor
-
-
-r"""
-example look for in context: google.sk
-look for Organization:\s*([^\n]*)\n
-but limit that search (as Organization occurs multiple times) to the section between:
-r"Domain registrant:" and "\n\n"
-
-Domain registrant:            mmr-170347
-Name:                         Domain Administrator
-Organization:                 Google Ireland Holdings Unlimited Company
-Organization ID:              369511
-Phone:                        +353.14361000
-Email:                        dns-admin@google.com
-Street:                       70 Sir John Rogerson's Quay
-City:                         Dublin
-Postal Code:                  2
-Country Code:                 IE
-Authorised Registrar:         MARK-0292
-Created:                      2019-06-07
-Updated:                      2019-06-07
-
-
-    findFromToAndLookFor(
-        fromStr=r"Domain registrant:",
-        toStr=r"\n\n",
-        lookForStr=r"Organization:\s*([^\n]*)\n"
-    )
-test with: ./test2.py -v -d google.sk 2>2
-"""
-
-
-def findFromToAndLookForWithFindFirst(
-    findFirst: str,
-    fromStr: str,  # we will replace {} in fromStr with the result from findFirst
-    toStr: str,
-    lookForStr: str,
-    ignoreCase: bool = True,
-    verbose: bool = False,
-) -> Callable[[str], List[str]]:
-    # look for a particular string like R() with find first
-    #   then build a from ,to context using the result from findFirst (google.fr is a example)
-    #     but limit the context we look in
-    #       to a specific sub section of the whois cli response
-    # use currying to create a func that will be called later
-    def xFindFromToAndLookForWithFindFirst(
-        textStr: str,
-        verbose: bool = False,
-    ) -> List[str]:
-        flags = re.IGNORECASE if ignoreCase else re.NOFLAG
-
-        ff = re.findall(findFirst, textStr, flags=flags)
-        if ff is None:
-            return []
-
-        ff2: str = str(ff[0].strip())  # only use the first element and clean it
-        if ff2 == "":
-            return []
-
-        if verbose:
-            print(f"DEBUG: we found: {ff2}, now combine with {fromStr}", file=sys.stderr)
-
-        fromStr2 = fromStr.replace(r"{}", ff2)
-        s1 = re.search(fromStr2, textStr, flags=flags)
-
-        if verbose:
-            print(f"DEBUG s1 {s1}, {fromStr}", file=sys.stderr)
-
-        if s1 is None:
-            return []
-
-        start = s1.start()
-        t2 = textStr[start:]
-        if verbose:
-            print(f"DEBUG: fromStr {t2}", file=sys.stderr)
-
-        s2 = re.search(toStr, t2, flags=flags)
-        if s2 is None:
-            return re.findall(lookForStr, t2, flags=flags)
-
-        end = s2.end()
-        t3 = t2[:end]
-        if verbose:
-            print(f"DEBUG: toStr {t3}", file=sys.stderr)
-
-        return re.findall(lookForStr, t3, flags=flags)
-
-    return xFindFromToAndLookForWithFindFirst
 
 
 # =================================================================
@@ -322,6 +175,7 @@ ZZ["at"] = {
     "registrar": R(r"registrar:\s?(.+)"),
     "registrant": R(r"registrant:\s?(.+)"),
     "_test": "nic.at",
+    "_split": newLineSplit(),
 }
 
 ZZ["ax"] = {
@@ -406,7 +260,7 @@ ZZ["bzh"] = {
     "updated_date": R(r"Updated Date:\s*(.*)"),
     "name_servers": R(r"Name Server:\s*(.*)"),
     "status": R(r"Domain Status:\s*(.*)"),
-    "_test":"pik.bzh",
+    "_test": "pik.bzh",
 }
 
 ZZ["cc"] = {
