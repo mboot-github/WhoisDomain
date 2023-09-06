@@ -1190,7 +1190,6 @@ ZZ["mk"] = {
         extract=r"org:\s*([^\n]*)\n",
     ),
     "_split": newLineSplit(),
-
 }
 
 ZZ["si"] = {
