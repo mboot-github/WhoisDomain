@@ -404,6 +404,8 @@ ZZ["fi"] = {
     "updated_date": R(r"modified\.+:\s?(.+)"),
     "name_servers": R(r"nserver\.+:\s*(.+)"),
     "status": R(r"status\.+:\s?(.+)"),
+    "registrant": R(r"Holder\s*\n\s*name\.*:\s*([^\n]*)\n"),
+    "registrant_country": R(r"\ncountry\.*:\s*([^\n]*)\n"),
 }
 
 ZZ["fr"] = {
@@ -953,6 +955,7 @@ ZZ["ac"] = {
     "updated_date": R(r"Updated Date:\s+(.+)"),
     "creation_date": R(r"Creation Date:\s+(.+)"),
     "expiration_date": R(r"Registry Expiry Date:\s+(.+)"),
+    "registrant": R(r"Registrant Organization:\s*([^\n]*)\n"),
 }
 
 ZZ["ae"] = {
@@ -1114,6 +1117,7 @@ ZZ["bo"] = {
     "status": None,
     "name_servers": None,  # bo has no nameservers, use host -t ns <domain>
     "updated_date": None,
+    "registrant": R(r"CONTACTO ADMINISTRATIVO\nRazón social:\s*([^\n]*)\n"),
 }
 
 ZZ["hr"] = {
@@ -1122,9 +1126,11 @@ ZZ["hr"] = {
     "creation_date": R(r"Creation Date:\s+(.+)"),
     "updated_date": R(r"Updated Date:\s+(.+)"),
     "status": None,
-    "registrar": None,
+    "registrar": R(r"Registrar:\s*([^\n]*)\n"),
     "expiration_date": R(r"Registrar Registration Expiration Date:\s+(.+)"),
-    "registrant_country": None,
+    "registrant_country": R(r"Registrant State/Province:\s*([^\n]*)\n"),
+    "registrant": R(r"Registrant Name:\s*([^\n]*)\n"),
+    "_test": "google.hr",
 }
 
 ZZ["gg"] = {
@@ -1136,6 +1142,7 @@ ZZ["gg"] = {
     "expiration_date": None,
     "updated_date": None,
     "registrant_country": None,
+    "registrant": R(r"\nregistrant:\s*\n\s*([^\n]*)\n"),
 }
 
 ZZ["sn"] = {
@@ -1354,11 +1361,14 @@ ZZ["adult"] = {"_server": "whois.nic.adult", "extend": "com", "_test": "nic.adul
 ZZ["aeg"] = {"_server": "whois.nic.aeg", "extend": "com", "_test": "nic.aeg"}
 ZZ["aero"] = {"extend": "ac", "_server": "whois.aero", "registrant_country": R(r"Registrant\s+Country:\s+(.+)")}
 ZZ["af"] = {"extend": "ac"}
+ZZ["com.af"] = {"extend": "af"}
 ZZ["afl"] = {"_server": "whois.nic.afl", "extend": "com", "_test": "nic.afl"}
 ZZ["africa"] = {"extend": "com", "_server": "whois.nic.africa", "_test": "nic.africa"}
 ZZ["agakhan"] = {"_server": "whois.nic.agakhan", "extend": "com", "_test": "nic.agakhan"}
 ZZ["agency"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["ag"] = {"extend": "ac"}
+ZZ["com.ag"] = {"extend": "ac"}
+
 ZZ["ai"] = {"extend": "com", "_server": "whois.nic.ai"}  # Anguill, "_test": "nic.ai"}
 ZZ["airbus"] = {"_server": "whois.nic.airbus", "extend": "com", "_test": "nic.airbus"}
 ZZ["airforce"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
@@ -1749,7 +1759,7 @@ ZZ["gent"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["genting"] = {"_server": "whois.nic.genting", "extend": "com", "_test": "nic.genting"}
 ZZ["geo.jp"] = {"extend": "co.jp"}
 ZZ["george"] = {"_server": "whois.nic.george", "extend": "com", "_test": "nic.george"}
-ZZ["ge"] = {"_server": "whois.nic.ge", "extend": "ac", "updated_date": None, "_test": "nic.ge"}
+ZZ["ge"] = {"_server": "whois.nic.ge", "extend": "ac", "updated_date": None, "_test": "nic.ge", "registrant": R(r"Registrant:\s*([^\n]*)\n")}
 ZZ["gf"] = {"extend": "si", "_server": "whois.mediaserv.net"}
 ZZ["ggee"] = {"_server": "whois.nic.ggee", "extend": "com", "_test": "nic.ggee"}
 ZZ["gh"] = {"_privateRegistry": True}
