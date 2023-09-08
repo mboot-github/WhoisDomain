@@ -469,6 +469,7 @@ ZZ["im"] = {
     "expiration_date": R(r"Expiry Date:\s?(.+)"),
     "updated_date": None,
     "name_servers": R(r"Name Server:(.+)"),
+    "registrant": R(r"Domain Owners / Registrant\s*\n\s*Name:\s*([^\n]*)\n"),
 }
 
 ZZ["ir"] = {
@@ -552,6 +553,7 @@ ZZ["kg"] = {
     "updated_date": R(r"Record last updated on:\s+(.+)"),
     "name_servers": R(r"Name servers in the listed order:\n\n(?:(\S+)[ \t]*\S*\n)(?:(\S+)[ \t]*\S*\n)?(?:(\S+)[ \t]*\S*\n)?\n"),
     "status": R(r"Domain\s+\S+\s+\((\S+)\)"),
+    "registrant": R(r"Administrative\sContact:\n.*\n\s+Name:\s(.+)\n"),
 }
 
 ZZ["kr"] = {
@@ -576,6 +578,7 @@ ZZ["kz"] = {
     "updated_date": R(r"Last modified :\s(.+)"),
     "name_servers": R(r"ary server\.+:\s+(\S+)"),
     "status": R(r"Domain status :(?:\s+([^\n]+)\n)"),
+    "registrant": R(r"Organization Using Domain Name\s*\n.*\n\s*Organization Name\.*:\s*([^\n]*)\n"),
 }
 
 ZZ["lt"] = {
@@ -626,9 +629,11 @@ ZZ["mx"] = {
     "updated_date": R(r"Last Updated On:\s?(.+)"),
     "registrar": R(r"Registrar:\s?(.+)"),
     "name_servers": R(r"\sDNS:\s*(.+)"),
-    "registrant_country": None,
+    "registrant_country": R(r"\n\s*Country:\s*([^\n]*)\n"),
     "status": None,
+    "registrant": R(r"\nRegistrant:\s*\n\s*Name:\s([^\n]*)\n"),
 }
+ZZ["com.mx"] = { "extend": "mx"}
 
 # New-Caledonia (French Territory)
 ZZ["nc"] = {
@@ -786,6 +791,7 @@ ZZ["se"] = {
     "updated_date": R(r"modified:\s+(\d{4}-\d{2}-\d{2})"),
     "name_servers": R(r"nserver:\s*(.+)"),
     "status": R(r"status:\s?(.+)"),
+    "registrant": R(r"holder:\s*([^\n]*)\n"),
 }
 
 # Singapore - Commercial sub-domain
@@ -1043,6 +1049,7 @@ ZZ["rs"] = {
     "updated_date": R(r"Modification date:\s+(.+)"),
     "name_servers": R(r"DNS:\s+(.+)"),
     "registrant_country": None,
+    "registrant": R(r"Registrant:\s*([^\n]*)\n"),
 }
 
 # Singapore
@@ -1071,6 +1078,7 @@ ZZ["tw"] = {
     "registrant_country": None,
     "name_servers": R(r"Domain servers in listed order:%s" % xStr(r"(?:\s+(\S+)[ \t]*\r?\n)?", 4)),
     "_test": "net.tw",
+    "registrant": R(r"\n\s*Registrant:[\s\n]*([^\n]*)\n*"),
 }
 
 ZZ["ug"] = {
@@ -1083,6 +1091,7 @@ ZZ["ug"] = {
     "registrant_country": R(r"Registrant Country:\s+(.+)"),
     "updated_date": R(r"Renewed On:\s+(.+)"),
     "registrar": None,
+    "registrant": R(r"Registrant Organization:\s*([^\n]*)\n"),
     "_test": "nic.co.ug",
 }
 
@@ -1156,6 +1165,16 @@ ZZ["sn"] = {
     "updated_date": R(r"Dernière modification:\s+(.+)"),
     "registrant_country": None,
     "_test": "nic.sn",
+    "registrant": findFromToAndLookFor(
+        fromStr=r"\n\[HOLDER\]",
+        toStr=r"\n\n",
+        lookForStr=r"Nom:\s*([^\n]*)\n",
+    ),
+    "registrant_country": findFromToAndLookFor(
+        fromStr=r"\n\[HOLDER\]",
+        toStr=r"\n\n",
+        lookForStr=r"Pays:\s*([^\n]*)\n",
+    ),
 }
 
 ZZ["si"] = {
@@ -1683,6 +1702,7 @@ ZZ["es"] = {"extend": "_privateReg"}
 ZZ["esq"] = {"extend": "com", "_server": "whois.nic.google"}
 ZZ["estate"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["et"] = {"extend": "com", "_server": "whois.ethiotelecom.et"}
+ZZ["com.et"] = {"extend": "et", "_test": "google.com.et"}
 ZZ["etisalat"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["eurovision"] = {"_server": "whois.nic.eurovision", "extend": "com", "_test": "nic.eurovision"}
 ZZ["eus"] = {"extend": "ac"}

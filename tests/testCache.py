@@ -14,20 +14,7 @@ pc = whoisdomain.ParameterContext(verbose=verbose)
 
 # demo alternative caching
 whoisdomain.setMyCache(whoisdomain.DummyCache(verbose=verbose))
-# whoisdomain.setMyCache(whoisdomain.DBMCache(dbmFile="testfile.dbm", verbose=verbose))
-
-HAVE_REDIS: bool = False
-try:
-    import redis
-
-    HAVE_REDIS = True
-except Exception as e:
-    _ = e
-    pass
-
-if HAVE_REDIS:
-    whoisdomain.setMyCache(whoisdomain.RedisCache(verbose=verbose))
-
+whoisdomain.setMyCache(whoisdomain.DBMCache(dbmFile="testfile.dbm", verbose=verbose))
 
 def lookup(what: str) -> None:
     # do a lookup
@@ -42,4 +29,4 @@ def lookup(what: str) -> None:
 
 what: str = "google.com"
 lookup(what)
-# lookup(what)
+lookup(what)
