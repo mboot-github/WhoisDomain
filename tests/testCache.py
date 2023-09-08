@@ -16,6 +16,7 @@ pc = whoisdomain.ParameterContext(verbose=verbose)
 whoisdomain.setMyCache(whoisdomain.DummyCache(verbose=verbose))
 whoisdomain.setMyCache(whoisdomain.DBMCache(dbmFile="testfile.dbm", verbose=verbose))
 
+
 def lookup(what: str) -> None:
     # do a lookup
     d = whoisdomain.q2(

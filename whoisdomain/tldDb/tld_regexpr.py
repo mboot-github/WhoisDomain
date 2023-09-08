@@ -398,7 +398,6 @@ ZZ["eu"] = {
 ZZ["fi"] = {
     "domain_name": R(r"domain\.+:\s?(.+)"),
     "registrar": R(r"registrar\.+:\s?(.+)"),
-    "registrant_country": None,
     "creation_date": R(r"created\.+:\s?(.+)"),
     "expiration_date": R(r"expires\.+:\s?(.+)"),
     "updated_date": R(r"modified\.+:\s?(.+)"),
@@ -633,7 +632,7 @@ ZZ["mx"] = {
     "status": None,
     "registrant": R(r"\nRegistrant:\s*\n\s*Name:\s([^\n]*)\n"),
 }
-ZZ["com.mx"] = { "extend": "mx"}
+ZZ["com.mx"] = {"extend": "mx"}
 
 # New-Caledonia (French Territory)
 ZZ["nc"] = {
@@ -1163,7 +1162,6 @@ ZZ["sn"] = {
     "creation_date": R(r"Date de création:\s+(.+)"),
     "expiration_date": R(r"Date d'expiration:\s+(.+)"),
     "updated_date": R(r"Dernière modification:\s+(.+)"),
-    "registrant_country": None,
     "_test": "nic.sn",
     "registrant": findFromToAndLookFor(
         fromStr=r"\n\[HOLDER\]",
@@ -1178,6 +1176,7 @@ ZZ["sn"] = {
 }
 
 ZZ["si"] = {
+    "_server": "whois.register.si",
     "domain_name": R(r"domain:\s+(.+)"),
     "status": R(r"status:\s+(.+)"),
     "registrar": R(r"registrar:\s+(.+)"),
@@ -1186,6 +1185,7 @@ ZZ["si"] = {
     "expiration_date": R(r"expire:\s+(.+)"),
     "updated_date": None,
     "registrant_country": None,
+    "_test": "register.si",
 }
 
 ZZ["st"] = {

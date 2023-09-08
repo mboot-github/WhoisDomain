@@ -1,6 +1,7 @@
 #! /usr/bin/env python3.9
 
 import sys
+
 sys.path.append("..")
 import whoisdomain
 
