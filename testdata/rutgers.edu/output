@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< rutgers.edu >>>>>>>>>>>>>>>>>>>>
+name               str               'rutgers.edu'
+tld                str               'edu'
+registrar          str               ''
+registrant_country str               ''
+creation_date      datetime.datetime 1985-04-25 00:00:00
+expiration_date    datetime.datetime 2026-07-31 00:00:00
+last_updated       datetime.datetime 2023-06-01 00:00:00
+dnssec             bool              False
+status             str               ''
+statuses           list              []
+name_servers       list              ['dns2.rutgers.edu', 'ns1.rutgers.edu', 'ns5.dnsmadeeasy.com', 'ns6.dnsmadeeasy.com', 'ns7.dnsmadeeasy.com', 'ru-ufl.rutgers.edu']
+registrant         str               'Rutgers, The State University of New Jersey'
+emails             list              ['netmanager@rutgers.edu']

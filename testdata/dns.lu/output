@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< dns.lu >>>>>>>>>>>>>>>>>>>>
+name               str               'dns.lu'
+tld                str               'lu'
+registrar          str               'Fondation Restena'
+registrant_country str               'LU'
+creation_date      NoneType          None
+expiration_date    NoneType          None
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               'ACTIVE'
+statuses           list              ['ACTIVE']
+name_servers       list              ['g.dns.lu', 'i.dns.lu', 'k.dns.lu', 'ns1.dns.lu', 'p.dns.lu']
+registrant         str               ''
+emails             list              ['info@my.lu']

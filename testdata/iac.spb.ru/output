@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< iac.spb.ru >>>>>>>>>>>>>>>>>>>>
+name               str               'iac.spb.ru'
+tld                str               'spb.ru'
+registrar          str               'RU-CENTER'
+registrant_country str               ''
+creation_date      datetime.datetime 2010-04-24 00:00:00
+expiration_date    datetime.datetime 2024-06-26 00:00:00
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               'REGISTERED, DELEGATED'
+statuses           list              ['REGISTERED, DELEGATED']
+name_servers       list              ['ns.iac.spb.ru', 'ns.peterstar.ru', 'ns2.iac.spb.ru', 'ns2.peterstar.ru']
+registrant         str               ''
+emails             list              []

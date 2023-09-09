@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< anadolu.edu.tr >>>>>>>>>>>>>>>>>>>>
+name               str               'anadolu.edu.tr'
+tld                str               'edu.tr'
+registrar          str               'TRABİS KK'
+registrant_country str               ''
+creation_date      datetime.datetime 2000-09-18 00:00:00
+expiration_date    datetime.datetime 2023-09-17 00:00:00
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               ''
+statuses           list              []
+name_servers       list              ['dc1.porsuk.anadolu.edu.tr', 'ns.anadolu.edu.tr', 'ns1.anadolu.edu.tr', 'ns2.anadolu.edu.tr']
+registrant         str               'Anadolu Üniversitesi'
+emails             list              []

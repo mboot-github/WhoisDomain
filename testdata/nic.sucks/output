@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.sucks >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.sucks'
+tld                str               'sucks'
+registrar          str               'Vox Populi Registry Inc'
+registrant_country str               'ky'
+creation_date      datetime.datetime 2014-11-09 02:20:45
+expiration_date    datetime.datetime 2023-11-09 02:20:45
+last_updated       datetime.datetime 2022-12-24 02:20:45
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['a.nic.sucks', 'b.nic.sucks', 'c.nic.sucks', 'd.nic.sucks']
+registrant         str               'Vox Populi Registry Inc.'
+emails             list              []

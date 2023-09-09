@@ -1,0 +1,13 @@
+
+test domain: <<<<<<<<<< nic.yt >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.yt'
+tld                str               'yt'
+registrar          str               'Registry Operations'
+registrant_country str               ''
+creation_date      datetime.datetime 1995-01-01 00:00:00
+expiration_date    datetime.datetime 2029-12-31 23:00:00
+last_updated       datetime.datetime 2020-07-06 08:00:04
+dnssec             bool              False
+status             str               'ACTIVE'
+statuses           list              ['ACTIVE', 'active', 'associated', 'not identified', 'ok', 'serverDeleteProhibited', 'serverTransferProhibited']
+name_servers       list              ['ns1.nic.fr', 'ns2.nic.fr', 'ns3.nic.fr']

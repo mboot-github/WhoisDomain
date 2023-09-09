@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.voto >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.voto'
+tld                str               'voto'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'US'
+creation_date      datetime.datetime 2015-01-06 19:53:07
+expiration_date    datetime.datetime 2024-01-06 19:53:07
+last_updated       datetime.datetime 2023-02-20 19:53:25
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['a0.nic.voto', 'a2.nic.voto', 'b0.nic.voto', 'c0.nic.voto']
+registrant         str               'Identity Digital Inc.'
+emails             list              []

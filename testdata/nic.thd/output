@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.thd >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.thd'
+tld                str               'thd'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'US'
+creation_date      datetime.datetime 2018-01-31 16:09:42
+expiration_date    datetime.datetime 2024-01-31 16:09:42
+last_updated       datetime.datetime 2023-01-31 22:23:11
+dnssec             bool              True
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['a0.nic.thd', 'a2.nic.thd', 'b0.nic.thd', 'c0.nic.thd']
+registrant         str               'Home Depot Product Authority, LLC'
+emails             list              []

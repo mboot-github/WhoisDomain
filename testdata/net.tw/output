@@ -1,0 +1,14 @@
+
+test domain: <<<<<<<<<< net.tw >>>>>>>>>>>>>>>>>>>>
+name               str               'net.tw'
+tld                str               'tw'
+registrar          str               ''
+registrant_country str               ''
+creation_date      NoneType          None
+expiration_date    NoneType          None
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               ''
+statuses           list              []
+name_servers       list              []
+registrant         str               ''

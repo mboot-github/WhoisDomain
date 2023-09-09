@@ -1,0 +1,12 @@
+
+test domain: <<<<<<<<<< pik.bzh >>>>>>>>>>>>>>>>>>>>
+Domain: pik.bzh; Exception: FailedParsingWhoisOutput; Error: [Querying whois-bzh.nic.fr]
+[whois-bzh.nic.fr: Name or service not known]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput pik.bzh [Querying whois-bzh.nic.fr]
+[whois-bzh.nic.fr: Name or service not known]
+[Unable to connect to remote host]
+

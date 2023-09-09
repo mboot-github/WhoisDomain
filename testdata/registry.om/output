@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< registry.om >>>>>>>>>>>>>>>>>>>>
+name               str               'registry.om'
+tld                str               'om'
+registrar          str               ''
+registrant_country str               ''
+creation_date      NoneType          None
+expiration_date    NoneType          None
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               'serverUpdateProhibited (Registry Domain Name)'
+statuses           list              ['serverDeleteProhibited (Registry Domain Name)', 'serverRenewProhibited (Registry Domain Name)', 'serverTransferProhibited (Registry Domain Name)', 'serverUpdateProhibited (Registry Domain Name)']
+name_servers       list              ['ns1.registry.om', 'ns2.registry.om']
+registrant         str               ''
+emails             list              ['registry@tra.gov.om']

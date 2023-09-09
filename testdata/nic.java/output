@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.java >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.java'
+tld                str               'java'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'CA'
+creation_date      datetime.datetime 2014-11-03 19:37:38
+expiration_date    datetime.datetime 2024-11-03 19:37:38
+last_updated       datetime.datetime 2023-03-28 13:30:46
+dnssec             bool              True
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['a0.nic.java', 'a2.nic.java', 'b0.nic.java', 'c0.nic.java']
+registrant         str               'None'
+emails             list              []

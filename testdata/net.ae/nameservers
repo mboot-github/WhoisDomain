@@ -1,0 +1,4 @@
+net.ae name server ns1.aedns.ae.
+net.ae name server ns4.apnic.net.
+net.ae name server ns2.aedns.ae.
+net.ae name server nsext-pch.aedns.ae.

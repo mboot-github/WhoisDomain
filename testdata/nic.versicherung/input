@@ -1,0 +1,85 @@
+[Querying whois.nic.versicherung]
+[whois.nic.versicherung]
+Domain Name: nic.versicherung
+Registry Domain ID: D0000000007-VERS
+Registrar WHOIS Server: whois.nic.versicherung
+Registrar URL: http://www.nic.versicherung/
+Updated Date: 2017-06-07T06:39:57Z
+Creation Date: 2014-04-29T14:08:54Z
+Registry Expiry Date: 2024-04-29T14:08:54Z
+Registrar: tldbox GmbH
+Registrar IANA ID: 9999
+Registrar Abuse Contact Email: service@tld-box.at
+Registrar Abuse Contact Phone: +43.6624669
+Domain Status: clientDeleteProhibited https://icann.org/epp#clientDeleteProhibited
+Domain Status: clientTransferProhibited https://icann.org/epp#clientTransferProhibited
+Domain Status: clientUpdateProhibited https://icann.org/epp#clientUpdateProhibited
+Domain Status: serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited
+Domain Status: serverTransferProhibited https://icann.org/epp#serverTransferProhibited
+Domain Status: serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited
+Registry Registrant ID: C0000013489-VERS
+Registrant Name: tldbox GmbH
+Registrant Organization: 
+Registrant Street: Jakob-Haringer-Strasse 8/V
+Registrant City: Salzburg
+Registrant State/Province: 
+Registrant Postal Code: 5020
+Registrant Country: AT
+Registrant Phone: 
+Registrant Phone Ext: 
+Registrant Fax: 
+Registrant Fax Ext: 
+Registrant Email: service@tld-box.at
+Registry Admin ID: C0000013489-VERS
+Admin Name: tldbox GmbH
+Admin Organization: 
+Admin Street: Jakob-Haringer-Strasse 8/V
+Admin City: Salzburg
+Admin State/Province: 
+Admin Postal Code: 5020
+Admin Country: AT
+Admin Phone: 
+Admin Phone Ext: 
+Admin Fax: 
+Admin Fax Ext: 
+Admin Email: service@tld-box.at
+Registry Tech ID: C0000000002-VERS
+Tech Name: TLDBOX
+Tech Organization: tldbox GmbH
+Tech Street: Jakob-Haringer-Strasse 8/V
+Tech City: Salzburg
+Tech State/Province: Salzburg
+Tech Postal Code: 5020
+Tech Country: AT
+Tech Phone: +43.662234548
+Tech Phone Ext: 730
+Tech Fax: +43.662234548
+Tech Fax Ext: 19
+Tech Email: iana@tld-box.at
+Name Server: sec1.rcode0.net
+Name Server: sec2.rcode0.net
+DNSSEC: signedDelegation
+URL of the ICANN Whois Inaccuracy Complaint Form: https://www.icann.org/wicf/
+>>> Last update of Whois database: 2023-09-09T11:01:10Z <<<
+For more information on Whois status codes, please visit https://icann.org/epp
+
+% Copyright (c) 2023 by tldbox GmbH (1)
+%
+% Except for agreed Internet operational purposes, no part of this
+% information may be reproduced, stored in a retrieval system, or
+% transmitted, in any form or by any means, electronic, mechanical,
+% recording, or otherwise, without prior permission of tldbox GmbH
+% on behalf of itself and/or the copyright holders. Any use of this
+% material to target advertising or similar activities is explicitly
+% forbidden and can be prosecuted.
+%
+% Furthermore, it is strictly forbidden to use the Whois database in
+% such a way that jeopardizes or could jeopardize the stability of
+% the technical systems of tldbox GmbH under any circumstances. In
+% particular, this includes any misuse of the Whois database and any
+% use of the Whois database which disturbs its operation.
+%
+% Should the user violate these points, tldbox GmbH reserves the right
+% to deactivate the Whois database entirely or partly for the user.
+% Moreover, the user shall be held liable for any and all damage arising
+% from a violation of these points.

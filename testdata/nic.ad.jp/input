@@ -1,0 +1,27 @@
+[Querying whois.jprs.jp]
+[whois.jprs.jp]
+[ JPRS database provides information on network administration. Its use is    ]
+[ restricted to network administration purposes. For further information,     ]
+[ use 'whois -h whois.jprs.jp help'. To suppress Japanese output, add'/e'     ]
+[ at the end of command, e.g. 'whois -h whois.jprs.jp xxx/e'.                 ]
+
+Domain Information:
+a. [Domain Name]                NIC.AD.JP
+g. [Organization]               Japan Network Information Center
+l. [Organization Type]          Organization of Network Administration
+m. [Administrative Contact]     SS54384JP
+n. [Technical Contact]          HK8068JP
+n. [Technical Contact]          KE2134JP
+n. [Technical Contact]          YK11438JP
+n. [Technical Contact]          NH27225JP
+n. [Technical Contact]          KG13714JP
+p. [Name Server]                ns3.nic.ad.jp
+p. [Name Server]                ns5.nic.ad.jp
+s. [Signing Key]                60829 8 2 (
+                                F659D4D88B149E6278A5F8515A7C6E23
+                                AED338F0DCC251F38ADF93C58D4B3976 )
+[State]                         Connected (2024/03/31)
+[Registered Date]                
+[Connected Date]                2015/04/07
+[Last Update]                   2023/06/20 15:10:17 (JST)
+

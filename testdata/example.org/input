@@ -4,9 +4,9 @@ Domain Name: example.org
 Registry Domain ID: 13a1800564ae4cf589c9f5723a630958-LROR
 Registrar WHOIS Server: 
 Registrar URL: 
-Updated Date: 2023-05-23T17:10:38Z
+Updated Date: 2023-08-30T04:00:39Z
 Creation Date: 1995-08-31T04:00:00Z
-Registry Expiry Date: 2023-08-30T04:00:00Z
+Registry Expiry Date: 2024-08-30T04:00:00Z
 Registrar: ICANN
 Registrar IANA ID: 376
 Registrar Abuse Contact Email: 
@@ -15,6 +15,7 @@ Domain Status: serverDeleteProhibited https://icann.org/epp#serverDeleteProhibit
 Domain Status: serverRenewProhibited https://icann.org/epp#serverRenewProhibited
 Domain Status: serverTransferProhibited https://icann.org/epp#serverTransferProhibited
 Domain Status: serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited
+Domain Status: autoRenewPeriod https://icann.org/epp#autoRenewPeriod
 Registry Registrant ID: REDACTED FOR PRIVACY
 Registrant Name: REDACTED FOR PRIVACY
 Registrant Organization: ICANN
@@ -58,7 +59,7 @@ Name Server: a.iana-servers.net
 Name Server: b.iana-servers.net
 DNSSEC: signedDelegation
 URL of the ICANN Whois Inaccuracy Complaint Form: https://www.icann.org/wicf/
->>> Last update of WHOIS database: 2023-07-20T13:07:45Z <<<
+>>> Last update of WHOIS database: 2023-09-09T10:45:10Z <<<
 
 For more information on Whois status codes, please visit https://icann.org/epp
 

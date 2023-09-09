@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.med >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.med'
+tld                str               'med'
+registrar          str               'Medistry LLC'
+registrant_country str               'GB'
+creation_date      datetime.datetime 2021-06-03 09:53:13
+expiration_date    datetime.datetime 2030-06-03 09:53:13
+last_updated       datetime.datetime 2021-07-29 10:17:38
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['dns1.nic.med', 'dns2.nic.med', 'dns3.nic.med', 'dns4.nic.med', 'dnsa.nic.med', 'dnsb.nic.med', 'dnsc.nic.med', 'dnsd.nic.med']
+registrant         str               ''
+emails             list              ['abuse@nominet.uk']

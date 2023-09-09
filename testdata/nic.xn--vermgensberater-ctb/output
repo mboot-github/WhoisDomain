@@ -1,0 +1,10 @@
+
+test domain: <<<<<<<<<< nic.xn--vermgensberater-ctb >>>>>>>>>>>>>>>>>>>>
+Domain: nic.xn--vermgensberater-ctb; Exception: FailedParsingWhoisOutput; Error: [Querying whois.ksregistry.net]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.xn--vermgensberater-ctb [Querying whois.ksregistry.net]
+[Unable to connect to remote host]
+

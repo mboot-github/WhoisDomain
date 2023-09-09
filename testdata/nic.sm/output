@@ -1,0 +1,14 @@
+
+test domain: <<<<<<<<<< nic.sm >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.sm'
+tld                str               'sm'
+registrar          str               ''
+registrant_country str               ''
+creation_date      datetime.datetime 2000-03-07 00:00:00
+expiration_date    NoneType          None
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               'Active'
+statuses           list              ['Active']
+name_servers       list              ['dns.omniway.sm']
+registrant         str               ''

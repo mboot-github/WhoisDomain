@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.insurance >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.insurance'
+tld                str               'insurance'
+registrar          str               'fTLD Registry Services, LLC'
+registrant_country str               'US'
+creation_date      datetime.datetime 2019-09-16 23:09:07
+expiration_date    datetime.datetime 2023-09-16 23:09:07
+last_updated       datetime.datetime 2023-05-20 00:52:09
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverRenewProhibited https://icann.org/epp#serverRenewProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['d.nic.insurance', 'e.nic.insurance', 'f.nic.insurance', 'w.nic.insurance', 'x.nic.insurance', 'y.nic.insurance']
+registrant         str               'fTLD Registry Services LLC'
+emails             list              ['abuse@fTLD.com', 'fTLD@fTLD.com']

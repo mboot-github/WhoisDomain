@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< chula.ac.th >>>>>>>>>>>>>>>>>>>>
+name               str               'chula.ac.th'
+tld                str               'ac.th'
+registrar          str               'THNIC'
+registrant_country str               'TH'
+creation_date      datetime.datetime 1999-01-17 00:00:00
+expiration_date    datetime.datetime 2025-01-16 00:00:00
+last_updated       datetime.datetime 2015-01-15 00:00:00
+dnssec             bool              True
+status             str               'ACTIVE'
+statuses           list              ['ACTIVE']
+name_servers       list              ['explorer.netserv.chula.ac.th', 'ns.netserv.chula.ac.th', 'ns.thnic.net']
+registrant         str               'Chulalongkorn University ( จุฬาลงกรณ์มหาวิทยาลัย )'
+emails             list              ['staff@thnic.co.th']

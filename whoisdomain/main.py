@@ -397,7 +397,6 @@ def makeMetaAllCurrentTld(
 
 
 def makeTestAllCurrentTld(
-    allHaving: Optional[str] = None,
     allRegex: Optional[str] = None,
 ) -> List[str]:
     rr: List[str] = []
@@ -618,12 +617,12 @@ def main() -> None:
             PrintJson = True
 
         if opt in ("-T", "--Testing"):
-            whois.setMyCache(
-                whois.DBMCache(
-                    dbmFile="testfile.dbm",
-                    verbose=Verbose,
-                ),
-            )
+            # print out all names of tld where we have _test
+            TestAllTld = True
+            rr = makeTestAllCurrentTld(None)
+            for item in sorted(rr):
+                print(item)
+            exit(0)
 
         if opt in ("-t", "--test"):
             # collect all _test entries defined and only run those,
@@ -681,7 +680,7 @@ def main() -> None:
         if TestRunOnly is False:
             testDomains(makeMetaAllCurrentTld(allHaving, allRegex))
         else:
-            testDomains(makeTestAllCurrentTld(allHaving, allRegex))
+            testDomains(makeTestAllCurrentTld(allRegex))
 
         showFailures()
         sys.exit(0)

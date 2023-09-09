@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.mn >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.mn'
+tld                str               'mn'
+registrar          str               'Datacom Co., Ltd.'
+registrant_country str               'MN'
+creation_date      datetime.datetime 2000-04-10 00:00:00
+expiration_date    datetime.datetime 2026-12-31 00:00:00
+last_updated       datetime.datetime 2022-05-05 04:00:36
+dnssec             bool              False
+status             str               'clientTransferProhibited https://icann.org/epp#clientTransferProhibited'
+statuses           list              ['clientTransferProhibited https://icann.org/epp#clientTransferProhibited']
+name_servers       list              ['ns1.magic.mn', 'ns3.magic.mn']
+registrant         str               'CEO'
+emails             list              ['abuse@datacom.mn']

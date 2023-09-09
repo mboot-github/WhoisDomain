@@ -1,0 +1,14 @@
+
+test domain: <<<<<<<<<< nic.ly >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.ly'
+tld                str               'ly'
+registrar          str               'LTT local (loc)'
+registrant_country str               'LY'
+creation_date      datetime.datetime 2006-11-12 22:00:00
+expiration_date    datetime.datetime 2025-11-12 22:00:00
+last_updated       datetime.datetime 2020-10-29 18:46:52.712000
+dnssec             bool              False
+status             str               'clientTransferProhibited https://icann.org/epp#clientTransferProhibited'
+statuses           list              ['clientTransferProhibited https://icann.org/epp#clientTransferProhibited', 'clientUpdateProhibited https://icann.org/epp#clientUpdateProhibited']
+name_servers       list              ['dns.lttnet.net', 'dns1.lttnet.net']
+registrant         str               'Libya Telecom and Technology'

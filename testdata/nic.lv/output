@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.lv >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.lv'
+tld                str               'lv'
+registrar          str               ''
+registrant_country str               ''
+creation_date      NoneType          None
+expiration_date    NoneType          None
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               'active'
+statuses           list              ['active']
+name_servers       list              ['-']
+registrant         str               ''
+emails             list              []

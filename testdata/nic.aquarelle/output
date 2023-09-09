@@ -1,0 +1,12 @@
+
+test domain: <<<<<<<<<< nic.aquarelle >>>>>>>>>>>>>>>>>>>>
+Domain: nic.aquarelle; Exception: FailedParsingWhoisOutput; Error: [Querying whois-aquarelle.nic.fr]
+[whois-aquarelle.nic.fr: Name or service not known]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.aquarelle [Querying whois-aquarelle.nic.fr]
+[whois-aquarelle.nic.fr: Name or service not known]
+[Unable to connect to remote host]
+

@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.mz >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.mz'
+tld                str               'mz'
+registrar          str               'CIUEM Registrar'
+registrant_country str               'MZ'
+creation_date      datetime.datetime 2014-08-19 22:00:00
+expiration_date    datetime.datetime 2030-02-28 00:00:00
+last_updated       datetime.datetime 2020-08-25 09:07:44.400000
+dnssec             bool              False
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['ns1.ciuem.mz', 'ns2.ciuem.mz']
+registrant         str               'CIUEM'
+emails             list              ['antonio@uem.mz', 'david@uem.mz']

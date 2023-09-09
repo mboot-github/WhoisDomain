@@ -1,0 +1,10 @@
+
+test domain: <<<<<<<<<< nic.pohl >>>>>>>>>>>>>>>>>>>>
+Domain: nic.pohl; Exception: FailedParsingWhoisOutput; Error: [Querying whois.ksregistry.net]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.pohl [Querying whois.ksregistry.net]
+[Unable to connect to remote host]
+

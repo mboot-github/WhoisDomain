@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.bbc >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.bbc'
+tld                str               'bbc'
+registrar          str               'Nominet Internal Registrar'
+registrant_country str               'GB'
+creation_date      datetime.datetime 2015-03-05 15:18:58
+expiration_date    datetime.datetime 2031-03-04 18:41:26
+last_updated       datetime.datetime 2022-02-22 12:02:19
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['dns1.nic.bbc', 'dns2.nic.bbc', 'dns3.nic.bbc', 'dns4.nic.bbc', 'dnsa.nic.bbc', 'dnsb.nic.bbc', 'dnsc.nic.bbc', 'dnsd.nic.bbc']
+registrant         str               'BBC'
+emails             list              ['abuse@nominet.uk', 'hostmaster@bbc.co.uk']

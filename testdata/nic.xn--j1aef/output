@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.xn--j1aef >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.xn--j1aef'
+tld                str               'xn--j1aef'
+registrar          str               'Registry Operator Reserved Non-Billable'
+registrant_country str               'US'
+creation_date      datetime.datetime 2015-04-07 17:56:21
+expiration_date    datetime.datetime 2025-04-07 17:56:21
+last_updated       datetime.datetime 2020-04-23 17:00:50
+dnssec             bool              False
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['av1.nstld.com', 'av2.nstld.com', 'av3.nstld.com', 'av4.nstld.com']
+registrant         str               'Verisign, Inc.'
+emails             list              ['info@verisign-grs.com']

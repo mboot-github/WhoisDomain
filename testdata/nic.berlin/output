@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.berlin >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.berlin'
+tld                str               'berlin'
+registrar          str               'dotBERLIN GmbH u. Co. KG'
+registrant_country str               ''
+creation_date      datetime.datetime 2013-12-12 10:02:52
+expiration_date    datetime.datetime 2023-12-12 10:02:52
+last_updated       datetime.datetime 2017-06-22 05:58:24
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited']
+name_servers       list              ['sec1.rcode0.net', 'sec2.rcode0.net']
+registrant         str               ''
+emails             list              ['abuse@dot.berl', 'iana@tld-box.at']

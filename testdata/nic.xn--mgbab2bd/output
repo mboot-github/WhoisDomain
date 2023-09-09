@@ -1,0 +1,12 @@
+
+test domain: <<<<<<<<<< nic.xn--mgbab2bd >>>>>>>>>>>>>>>>>>>>
+Domain: nic.xn--mgbab2bd; Exception: FailedParsingWhoisOutput; Error: [Querying whois.bazaar.coreregistry.net]
+[whois.bazaar.coreregistry.net: Name or service not known]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.xn--mgbab2bd [Querying whois.bazaar.coreregistry.net]
+[whois.bazaar.coreregistry.net: Name or service not known]
+[Unable to connect to remote host]
+

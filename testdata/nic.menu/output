@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.menu >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.menu'
+tld                str               'menu'
+registrar          str               'Wedding TLD2'
+registrant_country str               'us'
+creation_date      datetime.datetime 2013-12-03 07:52:20
+expiration_date    datetime.datetime 2023-12-03 07:52:20
+last_updated       datetime.datetime 2022-08-09 00:39:27
+dnssec             bool              True
+status             str               'serverTransferProhibited https://icann.org/epp#serverTransferProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['a.nic.menu', 'b.nic.menu', 'c.nic.menu', 'd.nic.menu']
+registrant         str               ''
+emails             list              []

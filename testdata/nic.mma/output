@@ -1,0 +1,12 @@
+
+test domain: <<<<<<<<<< nic.mma >>>>>>>>>>>>>>>>>>>>
+Domain: nic.mma; Exception: FailedParsingWhoisOutput; Error: [Querying whois-mma.nic.fr]
+[whois-mma.nic.fr: Name or service not known]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.mma [Querying whois-mma.nic.fr]
+[whois-mma.nic.fr: Name or service not known]
+[Unable to connect to remote host]
+

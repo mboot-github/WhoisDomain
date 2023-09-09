@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< ngtld.cn >>>>>>>>>>>>>>>>>>>>
+name               str               'ngtld.cn'
+tld                str               'cn'
+registrar          str               '北京新网数码信息技术有限公司'
+registrant_country str               ''
+creation_date      datetime.datetime 2013-05-17 15:50:04
+expiration_date    datetime.datetime 2024-05-17 15:50:04
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               'serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited', 'serverTransferProhibited', 'serverUpdateProhibited']
+name_servers       list              ['a.ngtld.cn', 'b.ngtld.cn', 'c.ngtld.cn', 'd.ngtld.cn', 'e.ngtld.cn']
+registrant         str               '中国互联网络信息中心'
+emails             list              ['servicei@cnnic.cn']

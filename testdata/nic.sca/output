@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.sca >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.sca'
+tld                str               'sca'
+registrar          str               'Registry Operator Reserved Non-Billable'
+registrant_country str               'SE'
+creation_date      datetime.datetime 2014-05-12 12:36:36
+expiration_date    datetime.datetime 2024-05-12 12:36:36
+last_updated       datetime.datetime 2020-04-21 18:07:36
+dnssec             bool              False
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['av1.nstld.com', 'av2.nstld.com', 'av3.nstld.com', 'av4.nstld.com']
+registrant         str               ''
+emails             list              []

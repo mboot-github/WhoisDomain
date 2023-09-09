@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< amnic.net >>>>>>>>>>>>>>>>>>>>
+name               str               'amnic.net'
+tld                str               'net'
+registrar          str               'GANDI SAS'
+registrant_country str               'AM'
+creation_date      datetime.datetime 1994-02-27 23:00:00
+expiration_date    datetime.datetime 2024-03-01 05:00:00
+last_updated       datetime.datetime 2023-01-06 09:57:56
+dnssec             bool              True
+status             str               'clientTransferProhibited http://www.icann.org/epp#clientTransferProhibited'
+statuses           list              ['Domain Status:', 'clientTransferProhibited http://www.icann.org/epp#clientTransferProhibited']
+name_servers       list              ['dnssec:', 'name', 'ns-cdn.amnic.net', 'ns-pch.amnic.net', 'ns-pri.amnic.net']
+registrant         str               'Internet Society Public Organization'
+emails             list              ['abuse@support.gandi.net', 'misak@amnic.net', 'noc@amnic.net']

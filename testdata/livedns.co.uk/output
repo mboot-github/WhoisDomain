@@ -1,0 +1,16 @@
+
+test domain: <<<<<<<<<< livedns.co.uk >>>>>>>>>>>>>>>>>>>>
+name               str               'livedns.co.uk'
+tld                str               'co.uk'
+registrar          str               'Fasthosts Internet Ltd [Tag = LIVEDOMAINS]'
+registrant_country str               ''
+creation_date      datetime.datetime 1999-12-28 00:00:00
+expiration_date    datetime.datetime 2031-12-28 00:00:00
+last_updated       datetime.datetime 2023-04-13 00:00:00
+dnssec             bool              False
+status             str               'No longer required'
+statuses           list              ['No longer required']
+name_servers       list              ['ns1.livedns.co.uk', 'ns2.livedns.co.uk', 'ns3.livedns.co.uk']
+owner              str               ''
+registrant         str               ''
+emails             list              []

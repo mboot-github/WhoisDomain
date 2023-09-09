@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.verisign >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.verisign'
+tld                str               'verisign'
+registrar          str               'Registry Operator Reserved Non-Billable'
+registrant_country str               'US'
+creation_date      datetime.datetime 2013-05-31 14:19:28
+expiration_date    datetime.datetime 2024-05-31 14:19:28
+last_updated       datetime.datetime 2023-06-01 07:04:59
+dnssec             bool              False
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['av1.nstld.com', 'av2.nstld.com', 'av3.nstld.com', 'av4.nstld.com']
+registrant         str               ''
+emails             list              ['info@verisign-grs.com']

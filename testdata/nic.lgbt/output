@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.lgbt >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.lgbt'
+tld                str               'lgbt'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'US'
+creation_date      datetime.datetime 2014-12-02 15:29:58
+expiration_date    datetime.datetime 2023-12-02 15:29:58
+last_updated       datetime.datetime 2023-01-16 15:30:03
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['a0.nic.lgbt', 'a2.nic.lgbt', 'b0.nic.lgbt', 'c0.nic.lgbt']
+registrant         str               'Identity Digital Inc.'
+emails             list              []

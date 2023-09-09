@@ -1,0 +1,5 @@
+
+test domain: <<<<<<<<<< mining.com.ru >>>>>>>>>>>>>>>>>>>>
+None
+
+ {'Try': [{'Domain': 'mining.com.ru', 'rawData': '[Querying whois.tcinet.ru]\n[whois.tcinet.ru]\n% TCI Whois Service. Terms of use:\n% https://tcinet.ru/documents/whois_ru_rf.pdf (in Russian)\n% https://tcinet.ru/documents/whois_su.pdf (in Russian)\n\nNo entries found for the selected source(s).\n\nLast updated on 2023-09-09T10:46:32Z\n\n', 'server': 'whois.nic.ru'}]}

@@ -1,0 +1,10 @@
+
+test domain: <<<<<<<<<< nic.archi >>>>>>>>>>>>>>>>>>>>
+Domain: nic.archi; Exception: FailedParsingWhoisOutput; Error: [Querying whois.ksregistry.net]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.archi [Querying whois.ksregistry.net]
+[Unable to connect to remote host]
+

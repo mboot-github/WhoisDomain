@@ -1,0 +1,84 @@
+[Querying whois.nic.scb]
+[whois.nic.scb]
+Domain Name: NIC.SCB
+Domain ID: DOMAIN_1011-SCB
+WHOIS Server: whois.nic.scb
+Referral URL: http://www.nic.scb
+Updated Date: 2018-07-31T03:58:11Z
+Creation Date: 2014-05-01T00:00:00Z
+Registry Expiry Date: 2023-05-01T00:00:00Z
+Sponsoring Registrar: THAI NAME SERVER CO., LTD.
+Sponsoring Registrar IANA ID: 9999
+Domain Status: clientDeleteProhibited (https://www.icann.org/epp#clientDeleteProhibited)
+Domain Status: clientRenewProhibited (https://www.icann.org/epp#clientRenewProhibited)
+Domain Status: clientTransferProhibited (https://www.icann.org/epp#clientTransferProhibited)
+Domain Status: clientUpdateProhibited (https://www.icann.org/epp#clientUpdateProhibited)
+Domain Status: serverDeleteProhibited (https://www.icann.org/epp#serverDeleteProhibited)
+Domain Status: serverTransferProhibited (https://www.icann.org/epp#serverTransferProhibited)
+Domain Status: serverUpdateProhibited (https://www.icann.org/epp#serverUpdateProhibited)
+Registrant Name: Redacted for Data Protection
+Registrant Organization: Thai Name Server Co., Ltd.
+Registrant Street: Redacted for Data Protection
+Registrant City: Redacted for Data Protection
+Registrant State/Province: Bangkok
+Registrant Postal Code: Redacted for Data Protection
+Registrant Country: TH
+Registrant Phone: Redacted for Data Protection
+Registrant Phone Ext: 
+Registrant Fax: Redacted for Data Protection
+Registrant Fax Ext: 
+Registrant Email: Please query the RDDS service of the Registrar for information on how to contact the Registrant
+Admin Name: Redacted for Data Protection
+Admin Organization: Redacted for Data Protection
+Admin Street: Redacted for Data Protection
+Admin City: Redacted for Data Protection
+Admin State/Province: Redacted for Data Protection
+Admin Postal Code: Redacted for Data Protection
+Admin Country: TH
+Admin Phone: Redacted for Data Protection
+Admin Phone Ext: 
+Admin Fax: Redacted for Data Protection
+Admin Fax Ext: 
+Admin Email: Please query the RDDS service of the Registrar for information on how to contact the Admin contact
+Tech Name: Redacted for Data Protection
+Tech Organization: Redacted for Data Protection
+Tech Street: Redacted for Data Protection
+Tech City: Redacted for Data Protection
+Tech State/Province: Redacted for Data Protection
+Tech Postal Code: Redacted for Data Protection
+Tech Country: TH
+Tech Phone: Redacted for Data Protection
+Tech Phone Ext: 
+Tech Fax: Redacted for Data Protection
+Tech Fax Ext: 
+Tech Email: Please query the RDDS service of the Registrar for information on how to contact the Tech contact
+Name Server: NS1.NIC.SCB
+Name Server: NS2.NIC.SCB
+Name Server: NS3.NIC.SCB
+DNSSEC: signedDelegation
+DS Created: 2014-07-07T00:00:00Z
+DS Key Tag: 40346
+Algorithm: 8
+Digest Type: 2
+Digest: B50CC4617B46D40B074190DC16450239858D4CE2737D50FBE38477292ADB7320
+DS Created: 2017-01-16T06:11:40Z
+DS Key Tag: 47891
+Algorithm: 8
+Digest Type: 2
+Digest: 972A2D55F292F9BBFFB14540ECFB69A35D2168BCE375D0FBF8F56406F8B6ABF4
+DS Created: 2018-07-31T03:57:51Z
+DS Key Tag: 44764
+Algorithm: 8
+Digest Type: 2
+Digest: 6067C1226CF55B548F40DD9EF4ED47D9830C7F1F504661F55790AA0732B7EDFE
+>>> Last update of WHOIS database: 2023-09-09T10:29:14Z <<<
+
+If certain contact information is not shown for a Registrant, Administrative, or Technical contact, and you wish to send a message to these contacts, please send your message to whoisrelay@nic.scb and specify the domain name in the subject line. We will forward that message to the underlying contact. 
+
+If you have a legitimate interest in viewing the non-public WHOIS details, send your request and the reasons for your request to abusecomplaints@nic.scb and specify the domain name in the subject line. We will review that request and may ask for supporting documentation and explanation. 
+
+LEGAL STATEMENT AND TERMS OF USE: Access to Thai Name Server WHOIS information is provided to assist persons in determining the contents of a domain name registration record in the Thai Name Server registry database. The data in this record is provided by Thai Name Server for informational purposes only, and Thai Name Server does not guarantee its accuracy. This service is intended only for query-based access. You agree that you will use this data only for lawful purposes and that, under no circumstances will you use this data to (a) allow, enable, or otherwise support the transmission by e-mail, telephone, or facsimile of mass unsolicited, commercial advertising or solicitations to entities other than the data recipient's own existing customers; or (b) enable high volume, automated, electronic processes that send queries or data to the systems of Registry Operator, a Registrar, or Afilias except as reasonably necessary to register domain names or modify existing registrations. All rights reserved. Thai Name Server reserves the right to modify these terms at any time. By submitting this query, you agree to abide by this policy.
+
+For more information on Whois status codes, please visit
+https://www.icann.org/resources/pages/epp-status-codes-2014-06-16-en.
+

@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.lotto >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.lotto'
+tld                str               'lotto'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'US'
+creation_date      datetime.datetime 2015-07-21 21:19:06
+expiration_date    datetime.datetime 2024-07-21 21:19:06
+last_updated       datetime.datetime 2023-09-04 21:19:46
+dnssec             bool              True
+status             str               'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited'
+statuses           list              ['serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['a0.nic.lotto', 'a2.nic.lotto', 'b0.nic.lotto', 'c0.nic.lotto']
+registrant         str               'Identity Digital Inc.'
+emails             list              []

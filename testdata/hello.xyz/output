@@ -6,7 +6,7 @@ registrar          str               'Namecheap'
 registrant_country str               'IS'
 creation_date      datetime.datetime 2014-03-20 15:01:22
 expiration_date    datetime.datetime 2024-03-20 23:59:59
-last_updated       datetime.datetime 2023-03-14 09:24:32
+last_updated       datetime.datetime 2023-08-31 16:50:02
 dnssec             bool              False
 status             str               'clientTransferProhibited https://icann.org/epp#clientTransferProhibited'
 statuses           list              ['clientTransferProhibited https://icann.org/epp#clientTransferProhibited']

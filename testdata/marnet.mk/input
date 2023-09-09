@@ -1,0 +1,50 @@
+[Querying whois.marnet.mk]
+[whois.marnet.mk]
+% Domain Information over Whois protocol
+% 
+% Whoisd Server Version: 3.9.0
+% Timestamp: Sat Sep 09 12:49:21 2023
+
+domain:       marnet.mk
+registrant:   MARNET-R08502
+admin-c:      MARNET-C18591
+nsset:        MARNET-NS15031
+registrar:    MARNET-REG
+registered:   22.05.2008 14:00:00
+changed:      13.08.2023 16:38:49
+expire:       22.05.2027
+
+contact:      MARNET-R08502
+org:          Македонска академска истражувачка мрежа Скопје
+name:         МАРнет
+address:      Ул. БУЛЕВАР ПАРТИЗАНСКИ ОДРЕДИ Бр.17 СКОПЈЕ
+address:      Скопје
+address:      1000
+address:      Р. Македонија
+address:      MK
+phone:        +389.23256561
+e-mail:       info@marnet.mk
+registrar:    MARNET-REG
+created:      01.01.2013 03:41:14
+changed:      28.12.2020 21:23:21
+
+contact:      MARNET-C18591
+name:         Александар Поповски
+address:      -
+address:      -
+address:      -
+address:      MK
+phone:        +389.23256561
+e-mail:       info@marnet.mk
+registrar:    MARNET-REG
+created:      13.08.2023 16:36:27
+
+nsset:        MARNET-NS15031
+nserver:      dns.marnet.mk (185.162.192.33)
+nserver:      ns1.io.mk 
+nserver:      ns2.io.mk 
+tech-c:       MARNET-C18591
+registrar:    MARNET-REG
+created:      13.08.2023 16:37:55
+
+

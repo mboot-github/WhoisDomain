@@ -1,0 +1,12 @@
+
+test domain: <<<<<<<<<< hkirc.hk >>>>>>>>>>>>>>>>>>>>
+Domain: hkirc.hk; Exception: FailedParsingWhoisOutput; Error: [Querying whois.hkirc.hk]
+[whois.hkirc.hk]
+Please maintain at least 10-second time before starting another enquiry.
+
+
+# ========================
+FailedParsingWhoisOutput hkirc.hk [Querying whois.hkirc.hk]
+[whois.hkirc.hk]
+Please maintain at least 10-second time before starting another enquiry.
+

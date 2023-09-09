@@ -1,0 +1,10 @@
+
+test domain: <<<<<<<<<< nic.allfinanz >>>>>>>>>>>>>>>>>>>>
+Domain: nic.allfinanz; Exception: FailedParsingWhoisOutput; Error: [Querying whois.ksregistry.net]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.allfinanz [Querying whois.ksregistry.net]
+[Unable to connect to remote host]
+

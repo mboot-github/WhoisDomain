@@ -1,0 +1,14 @@
+
+test domain: <<<<<<<<<< google.xn--kprw13d >>>>>>>>>>>>>>>>>>>>
+name               str               'google.台灣'
+tld                str               'xn--kprw13d'
+registrar          str               'Markmonitor, Inc.'
+registrant_country str               ''
+creation_date      datetime.datetime 2020-01-14 23:59:05
+expiration_date    datetime.datetime 2024-01-14 23:59:05
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               'clientUpdateProhibited,clientTransferProhibited,clientDeleteProhibited'
+statuses           list              ['clientUpdateProhibited,clientTransferProhibited,clientDeleteProhibited']
+name_servers       list              ['ns1.googledomains.com', 'ns2.googledomains.com', 'ns3.googledomains.com', 'ns4.googledomains.com']
+registrant         str               'Google LLC'

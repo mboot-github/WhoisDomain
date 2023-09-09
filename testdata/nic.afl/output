@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.afl >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.afl'
+tld                str               'afl'
+registrar          str               'Australian Football League'
+registrant_country str               'au'
+creation_date      datetime.datetime 2015-02-17 01:03:27
+expiration_date    datetime.datetime 2024-02-17 01:03:27
+last_updated       datetime.datetime 2023-04-03 01:03:28
+dnssec             bool              True
+status             str               'serverTransferProhibited https://icann.org/epp#serverTransferProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['a.nic.afl', 'b.nic.afl', 'c.nic.afl', 'd.nic.afl']
+registrant         str               ''
+emails             list              ['dnsadmin@afl.com.au']

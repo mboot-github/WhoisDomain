@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.eurovision >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.eurovision'
+tld                str               'eurovision'
+registrar          str               'European Broadcasting Union'
+registrant_country str               'CH'
+creation_date      datetime.datetime 2014-07-22 13:43:01.190000
+expiration_date    datetime.datetime 2024-07-22 13:43:01.190000
+last_updated       datetime.datetime 2023-09-05 14:01:33.556000
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited']
+name_servers       list              ['anycast1.irondns.net', 'anycast2.irondns.net']
+registrant         str               ''
+emails             list              ['directionGeneralTlds@ebu.ch']

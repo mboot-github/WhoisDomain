@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.toyota >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.toyota'
+tld                str               'toyota'
+registrar          str               'Toyota Registry-Registrar'
+registrant_country str               'JP'
+creation_date      datetime.datetime 2015-02-17 02:21:56
+expiration_date    datetime.datetime 2024-02-17 23:59:59
+last_updated       datetime.datetime 2023-05-02 05:28:59
+dnssec             bool              False
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['ns1.gmointernet.com', 'ns1.gmointernet.jp']
+registrant         str               'TOYOTA MOTOR CORPORATION'
+emails             list              ['domain.master@brights.jp']

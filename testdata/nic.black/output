@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.black >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.black'
+tld                str               'black'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'US'
+creation_date      datetime.datetime 2014-07-17 15:05:21
+expiration_date    datetime.datetime 2024-07-17 15:05:21
+last_updated       datetime.datetime 2023-08-31 15:05:38
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['a0.nic.black', 'a2.nic.black', 'b0.nic.black', 'c0.nic.black']
+registrant         str               'Identity Digital Inc.'
+emails             list              []

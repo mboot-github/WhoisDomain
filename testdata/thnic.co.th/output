@@ -1,0 +1,5 @@
+
+test domain: <<<<<<<<<< thnic.co.th >>>>>>>>>>>>>>>>>>>>
+None
+
+ {'Try': [{'Domain': 'thnic.co.th', 'rawData': '[Querying whois.thnic.co.th]\n[whois.thnic.co.th]\n\r\nWhois Server Version 2.1.7\r\n\r\n% Too may requests.\r\n', 'server': 'whois.thnic.co.th'}]}

@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.moscow >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.moscow'
+tld                str               'moscow'
+registrar          str               'Foundation for Assistance for Internet Technologies and Infrastructure Development'
+registrant_country str               'RU'
+creation_date      datetime.datetime 2014-03-20 14:19:00
+expiration_date    datetime.datetime 2029-03-20 15:19:00
+last_updated       datetime.datetime 2020-04-07 11:03:14
+dnssec             bool              True
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['ans1-moscow.nic.ru', 'ns1-cloud.nic.ru', 'ns2-cloud.nic.ru', 'ns3-geo.nic.ru', 'ns4-geo.nic.ru', 'ns8-geo.nic.ru']
+registrant         str               'Personal data, can not be publicly disclosed according to applicable laws.'
+emails             list              ['info@faitid.org']

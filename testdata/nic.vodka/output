@@ -1,0 +1,12 @@
+
+test domain: <<<<<<<<<< nic.vodka >>>>>>>>>>>>>>>>>>>>
+Domain: nic.vodka; Exception: FailedParsingWhoisOutput; Error: [Querying whois-dub.mm-registry.com]
+[whois-dub.mm-registry.com: Name or service not known]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.vodka [Querying whois-dub.mm-registry.com]
+[whois-dub.mm-registry.com: Name or service not known]
+[Unable to connect to remote host]
+

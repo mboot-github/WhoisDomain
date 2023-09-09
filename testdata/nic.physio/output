@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.physio >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.physio'
+tld                str               'physio'
+registrar          str               'Phys Biz Pty Ltd'
+registrant_country str               'au'
+creation_date      datetime.datetime 2014-06-04 02:32:22
+expiration_date    datetime.datetime 2024-06-04 02:32:22
+last_updated       datetime.datetime 2023-07-19 02:32:22
+dnssec             bool              True
+status             str               'serverTransferProhibited https://icann.org/epp#serverTransferProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['a.nic.physio', 'b.nic.physio', 'c.nic.physio', 'd.nic.physio']
+registrant         str               ''
+emails             list              []

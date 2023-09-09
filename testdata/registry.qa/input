@@ -1,0 +1,11 @@
+[Querying whois.registry.qa]
+[whois.registry.qa]
+Domain Name:                     registry.qa
+Last Modified:                   31-Jul-2023 06:20:22 UTC
+Registrar Name:                  Qatar Domains Registry - Registrar
+Status:                          ok
+
+Name Server:                     ns1.registry.qa
+Name Server IP:                  178.23.16.104
+Name Server:                     ns2.registry.qa
+Name Server IP:                  178.23.17.104

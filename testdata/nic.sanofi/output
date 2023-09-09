@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.sanofi >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.sanofi'
+tld                str               'sanofi'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'CA'
+creation_date      datetime.datetime 2015-05-08 12:20:56
+expiration_date    datetime.datetime 2025-05-08 12:20:56
+last_updated       datetime.datetime 2015-05-08 12:20:56
+dnssec             bool              False
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['a0.nic.sanofi', 'a2.nic.sanofi', 'b0.nic.sanofi', 'c0.nic.sanofi']
+registrant         str               'None'
+emails             list              []

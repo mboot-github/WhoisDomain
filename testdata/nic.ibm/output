@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.ibm >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.ibm'
+tld                str               'ibm'
+registrar          str               'International Business Machines Corporation'
+registrant_country str               'us'
+creation_date      datetime.datetime 2014-09-23 01:11:18
+expiration_date    datetime.datetime 2023-09-23 01:11:18
+last_updated       datetime.datetime 2022-11-07 01:11:19
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['a.nic.ibm', 'b.nic.ibm', 'c.nic.ibm', 'd.nic.ibm']
+registrant         str               ''
+emails             list              ['dnsadm@us.ibm.com']

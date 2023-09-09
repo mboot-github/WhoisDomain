@@ -1,0 +1,38 @@
+[Querying whois.nic.lv]
+[whois.nic.lv]
+[Domain]
+Domain: nic.lv
+Status: active
+
+[Holder]
+    Type: Legal person
+    Name: Latvijas Universitates Matematikas un informatikas instituts
+    Address: Raina b. 29, Riga, LV-1050, Latvija
+    RegNr: 90002111761
+Visit: https://www.nic.lv/whois/contact/nic.lv to contact.
+
+[Tech]
+Type: Natural person
+Visit: https://www.nic.lv/whois/contact/nic.lv to contact.
+
+[Nservers]
+Nserver: -
+
+[Whois]
+Updated: 2023-09-09T05:12:47.669740+00:00
+
+[Disclaimer]
+% The WHOIS service is provided solely for informational purposes.
+%
+% It is permitted to use the WHOIS service only for technical or administrative
+% needs associated with the operation of the Internet or in order to contact
+% the domain name holder over legal problems.
+%
+% Requestor will not use information obtained using WHOIS:
+% * To allow, enable or in any other way to support sending of unsolicited mails (spam)
+% * for any kind of advertising
+% * to disrupt Internet stability and security
+%
+% It is not permitted to obtain (including copying) or re-use in any form or
+% by any means all or quantitatively or qualitatively significant part
+% of the WHOIS without NIC's express permission.

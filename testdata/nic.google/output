@@ -1,0 +1,12 @@
+
+test domain: <<<<<<<<<< nic.google >>>>>>>>>>>>>>>>>>>>
+Domain: nic.google; Exception: FailedParsingWhoisOutput; Error: [Querying domain-registry-whois.l.google.com]
+[domain-registry-whois.l.google.com: Name or service not known]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.google [Querying domain-registry-whois.l.google.com]
+[domain-registry-whois.l.google.com: Name or service not known]
+[Unable to connect to remote host]
+

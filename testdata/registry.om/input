@@ -1,0 +1,28 @@
+[Querying whois.registry.om]
+[whois.registry.om]
+Domain Name:                     registry.om
+Last Modified:                   24-Mar-2020 06:02:26 UTC
+Registrar Name:                  Oman Telecommunication Company (Omantel)
+Status:                          serverUpdateProhibited (Registry Domain Name)
+Status:                          serverTransferProhibited (Registry Domain Name)
+Status:                          serverDeleteProhibited (Registry Domain Name)
+Status:                          serverRenewProhibited (Registry Domain Name)
+
+Registrant Contact Name:         Telecommunications Regulatory Authority (TRA-OMAN)
+Registrant Contact Email:        registry@tra.gov.om
+Registrant Contact Organisation: Telecommunications Regulatory Authority (TRA-OMAN)
+Registrant Contact City:         Muscat
+Registrant Contact Country:      om
+
+Tech Contact Name:               Telecommunications Regulatory Authority (TRA-OMAN)
+Tech Contact Email:              registry@tra.gov.om
+Tech Contact Organisation:       Telecommunications Regulatory Authority (TRA-OMAN)
+Tech Contact City:               Muscat
+Tech Contact Country:            om
+
+Name Server:                     ns2.registry.om
+Name Server IP:                  185.27.89.50
+Name Server IP:                  2a00:9120:2:0:0:0:0:50
+Name Server:                     ns1.registry.om
+Name Server IP:                  185.27.88.50
+Name Server IP:                  2a00:9120:1:0:0:0:0:50

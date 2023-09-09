@@ -1,0 +1,12 @@
+
+test domain: <<<<<<<<<< nic.voting >>>>>>>>>>>>>>>>>>>>
+Domain: nic.voting; Exception: FailedParsingWhoisOutput; Error: [Querying whois.voting.tld-box.at]
+[whois.voting.tld-box.at: Name or service not known]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.voting [Querying whois.voting.tld-box.at]
+[whois.voting.tld-box.at: Name or service not known]
+[Unable to connect to remote host]
+

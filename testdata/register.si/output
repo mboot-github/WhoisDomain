@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< register.si >>>>>>>>>>>>>>>>>>>>
+name               str               'register.si'
+tld                str               'si'
+registrar          str               'Arnes'
+registrant_country str               ''
+creation_date      datetime.datetime 2008-10-28 00:00:00
+expiration_date    datetime.datetime 2025-10-28 00:00:00
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               'server_delete_prohibited, server_transfer_prohibited, server_update_prohibited'
+statuses           list              ['server_delete_prohibited, server_transfer_prohibited, server_update_prohibited']
+name_servers       list              ['d-zone1.register.si', 'd-zone2.register.si', 'kanin.arnes.si', 'nanos.arnes.si', 'netnod.register.si', 'rc0.register.si']
+registrant         str               'G31071'
+emails             list              []

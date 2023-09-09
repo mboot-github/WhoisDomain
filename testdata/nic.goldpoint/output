@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.goldpoint >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.goldpoint'
+tld                str               'goldpoint'
+registrar          str               'YODOBASHI CAMERA CO.,LTD.'
+registrant_country str               'JP'
+creation_date      datetime.datetime 2015-01-14 04:32:13
+expiration_date    datetime.datetime 2024-01-14 23:59:59
+last_updated       datetime.datetime 2023-01-15 00:09:53
+dnssec             bool              False
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['ns1.gmointernet.com', 'ns1.gmointernet.jp']
+registrant         str               ''
+emails             list              []

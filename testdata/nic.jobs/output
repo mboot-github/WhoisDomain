@@ -1,0 +1,12 @@
+
+test domain: <<<<<<<<<< nic.jobs >>>>>>>>>>>>>>>>>>>>
+Domain: nic.jobs; Exception: FailedParsingWhoisOutput; Error: [Querying jobswhois.verisign-grs.com]
+[jobswhois.verisign-grs.com: Name or service not known]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.jobs [Querying jobswhois.verisign-grs.com]
+[jobswhois.verisign-grs.com: Name or service not known]
+[Unable to connect to remote host]
+

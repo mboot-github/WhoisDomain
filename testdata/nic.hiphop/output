@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.hiphop >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.hiphop'
+tld                str               'hiphop'
+registrar          str               ''
+registrant_country str               ''
+creation_date      NoneType          None
+expiration_date    NoneType          None
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               ''
+statuses           list              []
+name_servers       list              []
+registrant         str               ''
+emails             list              []

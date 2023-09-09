@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.xn--ngbe9e0a >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.xn--ngbe9e0a'
+tld                str               'xn--ngbe9e0a'
+registrar          str               'CentralNic Ltd'
+registrant_country str               'GB'
+creation_date      datetime.datetime 2013-09-11 11:56:58
+expiration_date    datetime.datetime 2024-09-11 23:59:59
+last_updated       datetime.datetime 2023-09-05 00:05:10
+dnssec             bool              False
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['a.nic.xn--ngbe9e0a', 'b.nic.xn--ngbe9e0a', 'c.nic.xn--ngbe9e0a', 'd.nic.xn--ngbe9e0a']
+registrant         str               'CentralNic Ltd'
+emails             list              ['domains@centralnic.com', 'ops@centralnic.com']

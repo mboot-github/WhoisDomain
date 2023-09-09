@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.virgin >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.virgin'
+tld                str               'virgin'
+registrar          str               'Virgin Enterprises Limited'
+registrant_country str               'GB'
+creation_date      datetime.datetime 2015-02-17 02:22:46
+expiration_date    datetime.datetime 2032-02-17 02:22:46
+last_updated       datetime.datetime 2022-02-22 12:11:26
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['dns1.nic.virgin', 'dns2.nic.virgin', 'dns3.nic.virgin', 'dns4.nic.virgin', 'dnsa.nic.virgin', 'dnsb.nic.virgin', 'dnsc.nic.virgin', 'dnsd.nic.virgin']
+registrant         str               'Virgin Enterprises Limited'
+emails             list              ['abuse@nominet.uk']

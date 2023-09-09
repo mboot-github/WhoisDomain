@@ -1,0 +1,10 @@
+
+test domain: <<<<<<<<<< nic.cat >>>>>>>>>>>>>>>>>>>>
+Domain: nic.cat; Exception: FailedParsingWhoisOutput; Error: [Querying whois.cat]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.cat [Querying whois.cat]
+[Unable to connect to remote host]
+

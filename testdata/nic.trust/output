@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.trust >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.trust'
+tld                str               'trust'
+registrar          str               'Tucows Registry'
+registrant_country str               'KY'
+creation_date      datetime.datetime 2021-01-25 20:12:27.707000
+expiration_date    datetime.datetime 2031-01-25 20:12:27.707000
+last_updated       datetime.datetime 2022-07-26 19:17:15.467000
+dnssec             bool              True
+status             str               'serverTransferProhibited https://icann.org/epp#serverTransferProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['e.ns.uniregistry.info', 'f.ns.uniregistry.net']
+registrant         str               'Uniregistry, Corp'
+emails             list              ['abuse@unr.com']

@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.mtr >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.mtr'
+tld                str               'mtr'
+registrar          str               'MTR'
+registrant_country str               'HK'
+creation_date      datetime.datetime 2015-08-25 15:52:38
+expiration_date    datetime.datetime 2025-08-25 15:52:39
+last_updated       datetime.datetime 2015-09-10 12:03:36
+dnssec             bool              True
+status             str               'OK (https://www.icann.org/epp#OK)'
+statuses           list              ['OK (https://www.icann.org/epp#OK)']
+name_servers       list              ['ns7.nic.mtr', 'ns8.nic.mtr']
+registrant         str               'MTR CORPORATION LIMITED'
+emails             list              ['enquiry@hkdnr.hk']

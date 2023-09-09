@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.tatar >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.tatar'
+tld                str               'tatar'
+registrar          str               'Coordination Center of Regional Domain of Tatarstan Republic [CCTR-TATAR]'
+registrant_country str               'RU'
+creation_date      datetime.datetime 2014-05-23 16:53:20
+expiration_date    datetime.datetime 2024-05-23 17:53:20
+last_updated       datetime.datetime 2021-02-04 17:00:25
+dnssec             bool              True
+status             str               'OK https://icann.org/epp#OK'
+statuses           list              ['OK https://icann.org/epp#OK']
+name_servers       list              ['int2.ix.ru', 'int3.ix.ru', 'ns.msk-ix.ru']
+registrant         str               'CCTR'
+emails             list              []

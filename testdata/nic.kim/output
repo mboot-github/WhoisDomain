@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.kim >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.kim'
+tld                str               'kim'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'US'
+creation_date      datetime.datetime 2014-03-14 18:56:31
+expiration_date    datetime.datetime 2024-03-14 18:56:31
+last_updated       datetime.datetime 2023-04-28 18:56:55
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['a0.nic.kim', 'a2.nic.kim', 'b0.nic.kim', 'c0.nic.kim']
+registrant         str               'Identity Digital Inc.'
+emails             list              []

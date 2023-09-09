@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.vlaanderen >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.vlaanderen'
+tld                str               'vlaanderen'
+registrar          str               'DNS Belgium vzw/asbl'
+registrant_country str               'BE'
+creation_date      datetime.datetime 2014-03-26 12:11:56
+expiration_date    datetime.datetime 2024-03-26 12:11:56
+last_updated       datetime.datetime 2023-05-10 12:15:40
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited']
+name_servers       list              ['ns1.nic.vlaanderen', 'ns2.nic.vlaanderen', 'ns3.nic.vlaanderen', 'ns4.nic.vlaanderen']
+registrant         str               'DNS Belgium vzw/asbl'
+emails             list              ['admin@dnsbelgium.be']

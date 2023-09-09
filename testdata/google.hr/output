@@ -1,0 +1,14 @@
+
+test domain: <<<<<<<<<< google.hr >>>>>>>>>>>>>>>>>>>>
+name               str               'google.hr'
+tld                str               'hr'
+registrar          str               'Sayber d.o.o.'
+registrant_country str               'HR'
+creation_date      datetime.datetime 2011-09-20 22:00:00
+expiration_date    datetime.datetime 2024-09-20 22:00:00
+last_updated       datetime.datetime 2021-11-18 23:00:00
+dnssec             bool              False
+status             str               ''
+statuses           list              []
+name_servers       list              ['ns1.google.com', 'ns2.google.com']
+registrant         str               'Google Hrvatska d.o.o.'

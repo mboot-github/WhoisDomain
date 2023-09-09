@@ -1,0 +1,16 @@
+
+test domain: <<<<<<<<<< nic.wang >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.wang'
+tld                str               'wang'
+registrar          str               'Zodiac Registry Limited'
+registrant_country str               'CN'
+creation_date      datetime.datetime 2014-01-17 11:55:04
+expiration_date    datetime.datetime 2024-01-17 11:55:04
+last_updated       datetime.datetime 2017-09-12 08:57:32
+dnssec             bool              False
+status             str               'clientTransferProhibited https://icann.org/epp#clientTransferProhibited'
+statuses           list              ['clientDeleteProhibited https://icann.org/epp#clientDeleteProhibited', 'clientTransferProhibited https://icann.org/epp#clientTransferProhibited']
+name_servers       list              ['cns1.zdnscloud.net', 'dns1.zdnscloud.info', 'ins1.zdnscloud.com', 'vns1.zdnscloud.biz']
+registrant         str               '北京卓越通达科技有限公司'
+admin              str               ''
+emails             list              ['complaint@nic.wang']

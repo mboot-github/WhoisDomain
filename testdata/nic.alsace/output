@@ -1,0 +1,12 @@
+
+test domain: <<<<<<<<<< nic.alsace >>>>>>>>>>>>>>>>>>>>
+Domain: nic.alsace; Exception: FailedParsingWhoisOutput; Error: [Querying whois-alsace.nic.fr]
+[whois-alsace.nic.fr: Name or service not known]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.alsace [Querying whois-alsace.nic.fr]
+[whois-alsace.nic.fr: Name or service not known]
+[Unable to connect to remote host]
+

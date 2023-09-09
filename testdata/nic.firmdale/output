@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.firmdale >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.firmdale'
+tld                str               'firmdale'
+registrar          str               'FIRMDALE HOLDINGS LIMITED'
+registrant_country str               'UK'
+creation_date      NoneType          None
+expiration_date    datetime.datetime 2022-11-01 14:38:50
+last_updated       datetime.datetime 2018-11-03 01:37:14
+dnssec             bool              False
+status             str               'ok https://www.icann.org/epp#ok'
+statuses           list              ['ok https://www.icann.org/epp#ok']
+name_servers       list              ['ns3.nic.firmdale', 'ns4.nic.firmdale']
+registrant         str               'FIRMDALE HOLDINGS LIMITED'
+emails             list              []

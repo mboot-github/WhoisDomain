@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.poker >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.poker'
+tld                str               'poker'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'US'
+creation_date      datetime.datetime 2015-02-04 22:30:37
+expiration_date    datetime.datetime 2024-02-04 22:30:37
+last_updated       datetime.datetime 2023-03-21 22:31:07
+dnssec             bool              True
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['a0.nic.poker', 'a2.nic.poker', 'b0.nic.poker', 'c0.nic.poker']
+registrant         str               'Identity Digital Inc.'
+emails             list              []

@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.nowruz >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.nowruz'
+tld                str               'nowruz'
+registrar          str               'Asia Green IT System Bilgisayar San. ve Tic. Ltd. Sti.'
+registrant_country str               'TR'
+creation_date      datetime.datetime 2015-01-24 21:14:35.204000
+expiration_date    datetime.datetime 2024-12-30 14:30:00
+last_updated       datetime.datetime 2023-04-04 19:35:49.634000
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverRenewProhibited https://icann.org/epp#serverRenewProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited']
+name_servers       list              ['desec1.nic.nowruz', 'desec2.nic.nowruz']
+registrant         str               'Asia Green IT System Bilgisayar San. ve Tic. Ltd. Sti.'
+emails             list              ['registry@agitsys.com']

@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.one >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.one'
+tld                str               'one'
+registrar          str               'One.com A/S - ONE'
+registrant_country str               'dk'
+creation_date      datetime.datetime 2015-01-02 00:20:44
+expiration_date    datetime.datetime 2024-01-02 00:20:44
+last_updated       datetime.datetime 2023-02-16 00:20:45
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['a.nic.one', 'b.nic.one', 'c.nic.one', 'd.nic.one']
+registrant         str               'One.com'
+emails             list              []

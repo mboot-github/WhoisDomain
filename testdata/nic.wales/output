@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.wales >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.wales'
+tld                str               'wales'
+registrar          str               'Nominet Internal Registrar'
+registrant_country str               'GB'
+creation_date      datetime.datetime 2014-08-07 08:44:38
+expiration_date    datetime.datetime 2030-08-07 08:44:38
+last_updated       datetime.datetime 2021-04-26 10:21:03
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['dns1.nic.wales', 'dns2.nic.wales', 'dns3.nic.wales', 'dns4.nic.wales', 'dnsa.nic.wales', 'dnsb.nic.wales', 'dnsc.nic.wales', 'dnsd.nic.wales']
+registrant         str               ''
+emails             list              ['abuse@nominet.uk']

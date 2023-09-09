@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.md >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.md'
+tld                str               'md'
+registrar          str               'IP Serviciul Tehnologia Informatiei si Securitate Cibernetica'
+registrant_country str               ''
+creation_date      datetime.datetime 1998-09-05 00:00:00
+expiration_date    datetime.datetime 2029-09-05 00:00:00
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               'OK, Delegated'
+statuses           list              ['OK, Delegated']
+name_servers       list              ['ns.dns.md', 'ns.gov.md', 'ns.itsec.md']
+registrant         str               ''
+emails             list              []

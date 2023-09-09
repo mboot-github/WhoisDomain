@@ -1,0 +1,6 @@
+nic.select name server c.nic.select.
+nic.select name server a.nic.select.
+nic.select name server z.nic.select.
+nic.select name server y.nic.select.
+nic.select name server b.nic.select.
+nic.select name server x.nic.select.

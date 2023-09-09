@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.gs >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.gs'
+tld                str               'gs'
+registrar          str               'Atlantis North Ltd'
+registrant_country str               'GB'
+creation_date      datetime.datetime 1998-09-02 12:00:00
+expiration_date    datetime.datetime 2050-09-02 00:00:00
+last_updated       datetime.datetime 2022-08-06 04:14:19.255000
+dnssec             bool              True
+status             str               'clientRenewProhibited https://icann.org/epp#clientRenewProhibited'
+statuses           list              ['clientDeleteProhibited https://icann.org/epp#clientDeleteProhibited', 'clientRenewProhibited https://icann.org/epp#clientRenewProhibited', 'clientTransferProhibited https://icann.org/epp#clientTransferProhibited', 'clientUpdateProhibited https://icann.org/epp#clientUpdateProhibited']
+name_servers       list              ['a.nic.gs', 'b.nic.gs']
+registrant         str               'Atlantis North Ltd'
+emails             list              ['support@coccaregistry.org']

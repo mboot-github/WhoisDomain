@@ -1,0 +1,4 @@
+nic.vote name server a2.nic.vote.
+nic.vote name server c0.nic.vote.
+nic.vote name server a0.nic.vote.
+nic.vote name server b0.nic.vote.

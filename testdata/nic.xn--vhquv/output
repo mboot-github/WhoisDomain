@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.xn--vhquv >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.xn--vhquv'
+tld                str               'xn--vhquv'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'US'
+creation_date      datetime.datetime 2013-09-11 10:28:11
+expiration_date    datetime.datetime 2023-09-11 10:28:11
+last_updated       datetime.datetime 2022-10-26 10:29:04
+dnssec             bool              False
+status             str               'serverTransferProhibited https://icann.org/epp#serverTransferProhibited'
+statuses           list              ['serverTransferProhibited https://icann.org/epp#serverTransferProhibited']
+name_servers       list              ['v0n0.nic.xn--vhquv', 'v0n1.nic.xn--vhquv', 'v0n2.nic.xn--vhquv', 'v0n3.nic.xn--vhquv', 'v2n0.nic.xn--vhquv', 'v2n1.nic.xn--vhquv']
+registrant         str               'Identity Digital Inc.'
+emails             list              []

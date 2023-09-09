@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.vg >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.vg'
+tld                str               'vg'
+registrar          str               'KSregistry GmbH'
+registrant_country str               ''
+creation_date      datetime.datetime 2014-07-09 12:04:26
+expiration_date    datetime.datetime 2024-07-09 23:59:59
+last_updated       datetime.datetime 2023-08-31 16:51:20
+dnssec             bool              False
+status             str               'serverTransferProhibited https://icann.org/epp#serverTransferProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverRenewProhibited https://icann.org/epp#serverRenewProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['a.nic.vg', 'b.nic.vg', 'c.nic.vg', 'd.nic.vg']
+registrant         str               ''
+emails             list              ['support@ksregistry.com']

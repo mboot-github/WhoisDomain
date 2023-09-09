@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.swiss >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.swiss'
+tld                str               'swiss'
+registrar          str               '.swiss internal registrar'
+registrant_country str               'CH'
+creation_date      datetime.datetime 2015-01-09 16:22:00.376000
+expiration_date    datetime.datetime 2024-01-09 16:22:00.376000
+last_updated       datetime.datetime 2023-07-28 12:23:32.364000
+dnssec             bool              True
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['anycast1.irondns.net', 'anycast2.irondns.net']
+registrant         str               'Bundesamt fuer Kommunikation (BAKOM)'
+emails             list              ['domainnames@bakom.admin.ch']

@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.toray >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.toray'
+tld                str               'toray'
+registrar          str               'Toray Registry Registrar'
+registrant_country str               'JP'
+creation_date      datetime.datetime 2015-02-17 02:21:32
+expiration_date    datetime.datetime 2024-02-17 23:59:59
+last_updated       datetime.datetime 2023-05-02 05:29:32
+dnssec             bool              False
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['ns1.gmointernet.com', 'ns1.gmointernet.jp']
+registrant         str               'Toray Industries, Inc.'
+emails             list              ['domain.master@brights.jp']

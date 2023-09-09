@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< tld.sy >>>>>>>>>>>>>>>>>>>>
+name               str               'tld.sy'
+tld                str               'sy'
+registrar          str               'National Agency for Network Services'
+registrant_country str               ''
+creation_date      datetime.datetime 2010-12-02 16:01:27.664000
+expiration_date    datetime.datetime 2030-12-01 22:00:00
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               'ok'
+statuses           list              ['ok']
+name_servers       list              ['ns3.tld.sy', 'ns4.tld.sy']
+registrant         str               ''
+emails             list              ['domain@tld.sy']

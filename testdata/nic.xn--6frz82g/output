@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.xn--6frz82g >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.xn--6frz82g'
+tld                str               'xn--6frz82g'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'US'
+creation_date      datetime.datetime 2014-03-13 21:35:01
+expiration_date    datetime.datetime 2024-03-13 21:35:01
+last_updated       datetime.datetime 2023-04-27 21:35:28
+dnssec             bool              True
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['a0.nic.xn--6frz82g', 'a2.nic.xn--6frz82g', 'b0.nic.xn--6frz82g', 'c0.nic.xn--6frz82g']
+registrant         str               'Identity Digital Inc.'
+emails             list              []

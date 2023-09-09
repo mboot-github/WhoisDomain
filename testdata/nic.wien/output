@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.wien >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.wien'
+tld                str               'wien'
+registrar          str               'punkt.wien GmbH'
+registrant_country str               'AT'
+creation_date      datetime.datetime 2013-12-12 11:02:52
+expiration_date    datetime.datetime 2023-12-12 11:02:52
+last_updated       datetime.datetime 2022-12-12 11:15:06
+dnssec             bool              False
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited']
+name_servers       list              ['ns1.dns.business', 'ns1.ryce-rsp.com']
+registrant         str               'punkt.wien GmbH'
+emails             list              ['abuse@nic.wien']

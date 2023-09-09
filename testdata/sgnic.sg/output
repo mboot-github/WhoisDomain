@@ -1,0 +1,13 @@
+
+test domain: <<<<<<<<<< sgnic.sg >>>>>>>>>>>>>>>>>>>>
+name               str               'sgnic.sg'
+tld                str               'sg'
+registrar          str               'SINGAPORE NETWORK INFORMATION CENTRE PTE LTD'
+registrant_country str               ''
+creation_date      datetime.datetime 2005-01-18 14:38:04
+expiration_date    datetime.datetime 2025-01-18 14:38:04
+last_updated       datetime.datetime 2023-06-28 21:34:39
+dnssec             bool              False
+status             str               'OK'
+statuses           list              ['OK', 'VerifiedID@SG-Not Required']
+name_servers       list              ['dsany.sgnic.sg', 'dsany2.sgnic.sg', 'dsany3.sgnic.sg']

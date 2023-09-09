@@ -1,0 +1,22 @@
+[Querying whois.tcinet.ru]
+[whois.tcinet.ru]
+% TCI Whois Service. Terms of use:
+% https://tcinet.ru/documents/whois_ru_rf.pdf (in Russian)
+% https://tcinet.ru/documents/whois_su.pdf (in Russian)
+
+domain:        TCINET.RU
+nserver:       int2.ix.ru.
+nserver:       int3.ix.ru.
+nserver:       ns.msk-ix.ru.
+state:         REGISTERED, DELEGATED, VERIFIED
+org:           "The Technical center of Internet" Limited Liability Company
+taxpayer-id:   7714417530
+registrar:     RU-CENTER-RU
+admin-contact: https://www.nic.ru/whois
+created:       2009-07-06T20:00:00Z
+paid-till:     2024-07-06T21:00:00Z
+free-date:     2024-08-07
+source:        TCI
+
+Last updated on 2023-09-09T11:01:31Z
+

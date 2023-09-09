@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.racing >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.racing'
+tld                str               'racing'
+registrar          str               'Exclusive Registry Limited'
+registrant_country str               'US'
+creation_date      datetime.datetime 2013-08-10 00:12:42
+expiration_date    datetime.datetime 2024-08-09 23:59:59
+last_updated       datetime.datetime 2022-08-09 01:11:36
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['ns1.dns.nic.racing', 'ns2.dns.nic.racing', 'ns3.dns.nic.racing', 'ns4.dns.nic.racing', 'ns5.dns.nic.racing', 'ns6.dns.nic.racing']
+registrant         str               ''
+emails             list              []

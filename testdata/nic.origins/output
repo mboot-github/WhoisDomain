@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.origins >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.origins'
+tld                str               'origins'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'US'
+creation_date      datetime.datetime 2016-01-23 00:42:42
+expiration_date    datetime.datetime 2024-01-23 00:42:42
+last_updated       datetime.datetime 2023-01-23 22:23:51
+dnssec             bool              True
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['a0.nic.origins', 'a2.nic.origins', 'b0.nic.origins', 'c0.nic.origins']
+registrant         str               'The Estee Lauder Companies Inc.'
+emails             list              []

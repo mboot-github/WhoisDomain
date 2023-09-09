@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.seat >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.seat'
+tld                str               'seat'
+registrar          str               'Seat, S.A.'
+registrant_country str               'ES'
+creation_date      datetime.datetime 2014-08-14 10:21:22.433000
+expiration_date    datetime.datetime 2023-08-14 10:21:22.433000
+last_updated       datetime.datetime 2023-07-28 12:21:42.200000
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['autoRenewPeriod https://icann.org/epp#autoRenewPeriod', 'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['anycast1.irondns.net', 'anycast2.irondns.net']
+registrant         str               ''
+emails             list              ['notifications.seat@seat.es', 'ssll.eco@seat.es']

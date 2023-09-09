@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.xn--mxtq1m >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.政府'
+tld                str               'xn--mxtq1m'
+registrar          str               'Taiwan Network Information Center'
+registrant_country str               'TW'
+creation_date      datetime.datetime 2014-04-24 00:00:00
+expiration_date    datetime.datetime 2025-04-04 00:00:00
+last_updated       datetime.datetime 2017-02-07 00:00:00
+dnssec             bool              False
+status             str               'serverDeleteProhibited -- http://www.icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited -- http://www.icann.org/epp#serverDeleteProhibited']
+name_servers       list              ['dns.nic.xn--mxtq1m', 'dns2.nic.xn--mxtq1m']
+registrant         str               'twnic'
+emails             list              ['tech@twnic.net.tw', 'test2@twnic.net.tw']

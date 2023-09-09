@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.barcelona >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.barcelona'
+tld                str               'barcelona'
+registrar          str               '.barcelona Internal Registrar'
+registrant_country str               'ES'
+creation_date      datetime.datetime 2015-04-20 14:09:34.692000
+expiration_date    datetime.datetime 2024-04-20 14:09:34.692000
+last_updated       datetime.datetime 2023-07-28 11:49:57.570000
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['anycast1.irondns.net', 'anycast2.irondns.net']
+registrant         str               'Ajuntament de Barcelona'
+emails             list              ['newgtlds@domini.cat', 'suport@domini.barc']

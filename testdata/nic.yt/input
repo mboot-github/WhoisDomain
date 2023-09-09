@@ -1,0 +1,96 @@
+[Querying whois.nic.yt]
+[whois.nic.yt]
+%%
+%% This is the AFNIC Whois server.
+%%
+%% complete date format: YYYY-MM-DDThh:mm:ssZ
+%%
+%% Rights restricted by copyright.
+%% See https://www.afnic.fr/en/domain-names-and-support/everything-there-is-to-know-about-domain-names/find-a-domain-name-or-a-holder-using-whois/
+%%
+%%
+
+domain:                        nic.yt
+status:                        ACTIVE
+eppstatus:                     serverTransferProhibited
+eppstatus:                     serverDeleteProhibited
+hold:                          NO
+holder-c:                      NF100-FRNIC
+admin-c:                       NF100-FRNIC
+tech-c:                        VL-FRNIC
+registrar:                     Registry Operations
+Expiry Date:                   2029-12-31T23:00:00Z
+created:                       1995-01-01T00:00:00Z
+last-update:                   2020-07-06T08:00:04Z
+source:                        FRNIC
+
+nserver:                       ns1.nic.fr
+nserver:                       ns2.nic.fr
+nserver:                       ns3.nic.fr
+source:                        FRNIC
+
+key1-tag:                      53080
+key1-algo:                     13 [ECDSAP256SHA256]
+key1-dgst-t:                   2 [SHA256]
+key1-dgst:                     8F243F1F94BB5849C81BA534714654C82C556471D2D552D60D38A7033A1AC825
+source:                        FRNIC
+
+registrar:                     Registry Operations
+address:                       AFNIC
+address:                       immeuble le Stephenson
+address:                       1, rue Stephenson
+address:                       78180 Montigny-Le-Bretonneux
+country:                       FR
+phone:                         +33.139308300
+fax-no:                        +33.139308301
+e-mail:                        support@afnic.fr
+website:                       https://www.afnic.fr
+anonymous:                     No
+registered:                    2014-07-29T15:35:33Z
+source:                        FRNIC
+
+nic-hdl:                       NF100-FRNIC
+type:                          ORGANIZATION
+contact:                       Nic yt
+address:                       Afnic Backend Registry Operator
+address:                       immeuble le Stephenson
+address:                       1, rue Stephenson
+address:                       78180 Montigny le Bretonneux
+country:                       FR
+phone:                         +33.139308300
+fax-no:                        +33.139308301
+e-mail:                        support+fr@nic.fr
+registrar:                     Registry Operations
+anonymous:                     NO
+obsoleted:                     NO
+eppstatus:                     associated
+eppstatus:                     active
+eligstatus:                    ok
+eligdate:                      2014-12-11T00:00:00Z
+reachstatus:                   ok
+reachmedia:                    email
+source:                        FRNIC
+
+nic-hdl:                       VL-FRNIC
+type:                          PERSON
+contact:                       Vincent Levigneron
+address:                       AFNIC
+address:                       Immeuble Le Stephenson
+address:                       1, rue Stephenson
+address:                       78180 Montigny-le-Bretonneux
+country:                       FR
+phone:                         +33.139308300
+fax-no:                        +33.139308301
+e-mail:                        vincent.levigneron@afnic.fr
+registrar:                     Registry Operations
+changed:                       2019-01-28T16:11:55Z
+anonymous:                     NO
+obsoleted:                     NO
+eppstatus:                     associated
+eppstatus:                     active
+eligstatus:                    not identified
+reachstatus:                   not identified
+source:                        FRNIC
+
+>>> WHOIS request date: 2023-09-09T11:05:32.808436Z <<<
+

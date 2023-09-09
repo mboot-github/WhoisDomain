@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.xn--nqv7f >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.xn--nqv7f'
+tld                str               'xn--nqv7f'
+registrar          str               'PIR Internal (9999)'
+registrant_country str               'US'
+creation_date      datetime.datetime 2014-04-21 19:57:06
+expiration_date    datetime.datetime 2024-04-21 19:57:06
+last_updated       datetime.datetime 2023-06-05 19:57:15
+dnssec             bool              True
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['a0.nic.xn--nqv7f', 'a2.nic.xn--nqv7f', 'b0.nic.xn--nqv7f', 'c0.nic.xn--nqv7f']
+registrant         str               'Public Interest Registry'
+emails             list              []

@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.ad.jp >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.ad.jp'
+tld                str               'ad.jp'
+registrar          str               'JPRS'
+registrant_country str               ''
+creation_date      NoneType          None
+expiration_date    NoneType          None
+last_updated       datetime.datetime 2023-06-20 08:10:17
+dnssec             bool              False
+status             str               'Connected (2024/03/31)'
+statuses           list              ['Connected (2024/03/31)']
+name_servers       list              ['ns3.nic.ad.jp', 'ns5.nic.ad.jp']
+registrant         str               ''
+emails             list              []

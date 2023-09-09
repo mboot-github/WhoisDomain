@@ -1,0 +1,21 @@
+[Querying whois.jprs.jp]
+[whois.jprs.jp]
+[ JPRS database provides information on network administration. Its use is    ]
+[ restricted to network administration purposes. For further information,     ]
+[ use 'whois -h whois.jprs.jp help'. To suppress Japanese output, add'/e'     ]
+[ at the end of command, e.g. 'whois -h whois.jprs.jp xxx/e'.                 ]
+
+Domain Information:
+a. [Domain Name]                ICU.AC.JP
+g. [Organization]               International Christian University
+l. [Organization Type]          University
+m. [Administrative Contact]     TH45460JP
+n. [Technical Contact]          MK56619JP
+p. [Name Server]                ns-730.awsdns-27.net
+p. [Name Server]                ns-290.awsdns-36.com
+s. [Signing Key]                
+[State]                         Connected (2024/03/31)
+[Registered Date]                
+[Connected Date]                1993/06/07
+[Last Update]                   2023/04/01 01:01:38 (JST)
+

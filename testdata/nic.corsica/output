@@ -1,0 +1,12 @@
+
+test domain: <<<<<<<<<< nic.corsica >>>>>>>>>>>>>>>>>>>>
+Domain: nic.corsica; Exception: FailedParsingWhoisOutput; Error: [Querying whois-corsica.nic.fr]
+[whois-corsica.nic.fr: Name or service not known]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.corsica [Querying whois-corsica.nic.fr]
+[whois-corsica.nic.fr: Name or service not known]
+[Unable to connect to remote host]
+

@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.barclaycard >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.barclaycard'
+tld                str               'barclaycard'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'GB'
+creation_date      datetime.datetime 2015-01-12 12:48:49
+expiration_date    datetime.datetime 2024-01-12 12:48:49
+last_updated       datetime.datetime 2023-08-01 11:41:45
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['a0.nic.barclaycard', 'a2.nic.barclaycard', 'b0.nic.barclaycard', 'c0.nic.barclaycard']
+registrant         str               'Barclays Bank PLC'
+emails             list              []

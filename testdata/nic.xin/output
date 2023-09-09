@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.xin >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.xin'
+tld                str               'xin'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'CN'
+creation_date      datetime.datetime 2015-07-29 21:44:07
+expiration_date    datetime.datetime 2024-07-29 21:44:07
+last_updated       datetime.datetime 2023-07-29 22:23:33
+dnssec             bool              True
+status             str               'autoRenewPeriod https://icann.org/epp#autoRenewPeriod'
+statuses           list              ['autoRenewPeriod https://icann.org/epp#autoRenewPeriod']
+name_servers       list              ['a0.nic.xin', 'a2.nic.xin', 'b0.nic.xin', 'c0.nic.xin']
+registrant         str               'Elegant Leader Limited'
+emails             list              []

@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.bms >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.bms'
+tld                str               'bms'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'CA'
+creation_date      datetime.datetime 2015-07-14 21:13:24
+expiration_date    datetime.datetime 2025-07-14 21:13:24
+last_updated       datetime.datetime 2015-07-14 21:13:24
+dnssec             bool              False
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['a0.nic.bms', 'a2.nic.bms', 'b0.nic.bms', 'c0.nic.bms']
+registrant         str               'None'
+emails             list              []

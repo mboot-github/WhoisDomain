@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< net.ae >>>>>>>>>>>>>>>>>>>>
+name               str               'net.ae'
+tld                str               'ae'
+registrar          str               'aeDA Registry'
+registrant_country str               ''
+creation_date      NoneType          None
+expiration_date    NoneType          None
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               'ok'
+statuses           list              ['ok']
+name_servers       list              ['ns1.aedns.ae', 'ns2.aedns.ae']
+registrant         str               ''
+emails             list              []

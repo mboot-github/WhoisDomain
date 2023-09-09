@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.walter >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.walter'
+tld                str               'walter'
+registrar          str               'Sandvik AB'
+registrant_country str               'se'
+creation_date      datetime.datetime 2015-04-13 07:47:37
+expiration_date    datetime.datetime 2024-04-13 07:47:37
+last_updated       datetime.datetime 2023-05-28 07:47:37
+dnssec             bool              True
+status             str               'serverTransferProhibited https://icann.org/epp#serverTransferProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['a.nic.walter', 'b.nic.walter', 'c.nic.walter', 'd.nic.walter']
+registrant         str               'Sandvik AB'
+emails             list              ['domains.registry@sandvik.com']

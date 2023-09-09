@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< sfr.fr >>>>>>>>>>>>>>>>>>>>
+name               str               'sfr.fr'
+tld                str               'fr'
+registrar          str               'Société Française du Radiotéléphone - SFR'
+registrant_country str               'FR'
+creation_date      datetime.datetime 1996-07-22 22:00:00
+expiration_date    datetime.datetime 2023-11-18 14:52:21
+last_updated       datetime.datetime 2022-12-31 23:06:32.958815
+dnssec             bool              False
+status             str               'ACTIVE'
+statuses           list              ['ACTIVE', 'active', 'associated', 'not identified']
+name_servers       list              ['ns1pub.sfr.fr', 'ns2pub.sfr.fr']
+registrant         str               'SOCIETE FRANCAISE DU RADIOTELEPHONE - SFR'
+emails             list              ['domaine@sfr.com']

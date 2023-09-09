@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< trt.net.tr >>>>>>>>>>>>>>>>>>>>
+name               str               'trt.net.tr'
+tld                str               'net.tr'
+registrar          str               'Turkticaret.Net Yazılım Hizmetleri Sanayi Ticaret A.Ş.'
+registrant_country str               ''
+creation_date      datetime.datetime 1998-09-21 00:00:00
+expiration_date    datetime.datetime 2024-09-20 00:00:00
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               ''
+statuses           list              []
+name_servers       list              ['ns1-06.azure-dns.com', 'ns2-06.azure-dns.net', 'ns3-06.azure-dns.org', 'ns4-06.azure-dns.info']
+registrant         str               'Türkiye Radyo Televizyon Kurumu'
+emails             list              []

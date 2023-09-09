@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.mtn >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.mtn'
+tld                str               'mtn'
+registrar          str               'MTN Dubai Limited'
+registrant_country str               'AE'
+creation_date      datetime.datetime 2013-08-09 21:04:07
+expiration_date    datetime.datetime 2032-01-11 12:26:00
+last_updated       datetime.datetime 2022-02-22 12:10:24
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['dns1.nic.mtn', 'dns2.nic.mtn', 'dns3.nic.mtn', 'dns4.nic.mtn', 'dnsa.nic.mtn', 'dnsb.nic.mtn', 'dnsc.nic.mtn', 'dnsd.nic.mtn']
+registrant         str               'MTN'
+emails             list              ['abuse@nominet.uk']

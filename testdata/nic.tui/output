@@ -1,0 +1,10 @@
+
+test domain: <<<<<<<<<< nic.tui >>>>>>>>>>>>>>>>>>>>
+Domain: nic.tui; Exception: FailedParsingWhoisOutput; Error: [Querying whois.ksregistry.net]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.tui [Querying whois.ksregistry.net]
+[Unable to connect to remote host]
+

@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.firestone >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.firestone'
+tld                str               'firestone'
+registrar          str               'Bridgestone Corporation - FIRESTONE'
+registrant_country str               'JP'
+creation_date      datetime.datetime 2015-02-17 01:14:56
+expiration_date    datetime.datetime 2024-02-17 23:59:59
+last_updated       datetime.datetime 2023-05-02 05:29:02
+dnssec             bool              False
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['ns1.gmointernet.com', 'ns1.gmointernet.jp']
+registrant         str               ''
+emails             list              []

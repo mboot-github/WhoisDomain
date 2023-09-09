@@ -1,0 +1,12 @@
+
+test domain: <<<<<<<<<< nic.epson >>>>>>>>>>>>>>>>>>>>
+Domain: nic.epson; Exception: FailedParsingWhoisOutput; Error: [Querying whois.aridnrs.net.au]
+[whois.aridnrs.net.au: Name or service not known]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.epson [Querying whois.aridnrs.net.au]
+[whois.aridnrs.net.au: Name or service not known]
+[Unable to connect to remote host]
+

@@ -1,0 +1,12 @@
+
+test domain: <<<<<<<<<< nic.bostik >>>>>>>>>>>>>>>>>>>>
+Domain: nic.bostik; Exception: FailedParsingWhoisOutput; Error: [Querying whois-bostik.nic.fr]
+[whois-bostik.nic.fr: Name or service not known]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.bostik [Querying whois-bostik.nic.fr]
+[whois-bostik.nic.fr: Name or service not known]
+[Unable to connect to remote host]
+

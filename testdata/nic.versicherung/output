@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.versicherung >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.versicherung'
+tld                str               'versicherung'
+registrar          str               'tldbox GmbH'
+registrant_country str               'AT'
+creation_date      datetime.datetime 2014-04-29 14:08:54
+expiration_date    datetime.datetime 2024-04-29 14:08:54
+last_updated       datetime.datetime 2017-06-07 06:39:57
+dnssec             bool              True
+status             str               'clientDeleteProhibited https://icann.org/epp#clientDeleteProhibited'
+statuses           list              ['clientDeleteProhibited https://icann.org/epp#clientDeleteProhibited', 'clientTransferProhibited https://icann.org/epp#clientTransferProhibited', 'clientUpdateProhibited https://icann.org/epp#clientUpdateProhibited', 'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['sec1.rcode0.net', 'sec2.rcode0.net']
+registrant         str               ''
+emails             list              ['iana@tld-box.at', 'service@tld-box.at']

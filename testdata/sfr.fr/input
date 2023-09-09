@@ -1,0 +1,80 @@
+[Querying whois.nic.fr]
+[whois.nic.fr]
+%%
+%% This is the AFNIC Whois server.
+%%
+%% complete date format: YYYY-MM-DDThh:mm:ssZ
+%%
+%% Rights restricted by copyright.
+%% See https://www.afnic.fr/en/domain-names-and-support/everything-there-is-to-know-about-domain-names/find-a-domain-name-or-a-holder-using-whois/
+%%
+%%
+
+domain:                        sfr.fr
+status:                        ACTIVE
+eppstatus:                     active
+hold:                          NO
+holder-c:                      SFDR13-FRNIC
+admin-c:                       CC63442-FRNIC
+tech-c:                        SFDR13-FRNIC
+registrar:                     Société Française du Radiotéléphone - SFR
+Expiry Date:                   2023-11-18T14:52:21Z
+created:                       1996-07-22T22:00:00Z
+last-update:                   2022-12-31T23:06:32.958815Z
+source:                        FRNIC
+
+nserver:                       ns1pub.sfr.fr
+nserver:                       ns2pub.sfr.fr
+source:                        FRNIC
+
+registrar:                     Société Française du Radiotéléphone - SFR
+address:                       16 rue du Général Alain de Boissieu
+address:                       75015 PARIS
+country:                       FR
+phone:                         +33.187260030
+e-mail:                        domaine@sfr.com
+website:                       http://www.sfrbusiness.fr
+anonymous:                     No
+registered:                    2010-08-02T00:00:00Z
+source:                        FRNIC
+
+nic-hdl:                       SFDR13-FRNIC
+type:                          ORGANIZATION
+contact:                       SOCIETE FRANCAISE DU RADIOTELEPHONE - SFR
+address:                       SOCIETE FRANCAISE DU RADIOTELEPHONE - SFR
+address:                       16 rue du Général Alain de Boissieu
+address:                       75015 Paris
+country:                       FR
+phone:                         +33.187260030
+e-mail:                        domaine@sfr.com
+registrar:                     Société Française du Radiotéléphone - SFR
+changed:                       2023-06-19T08:31:14.714912Z
+anonymous:                     NO
+obsoleted:                     NO
+eppstatus:                     associated
+eppstatus:                     active
+eligstatus:                    not identified
+reachstatus:                   not identified
+source:                        FRNIC
+
+nic-hdl:                       CC63442-FRNIC
+type:                          PERSON
+contact:                       Claire CHAMARD
+address:                       SOCIETE FRANCAISE DU RADIOTELEPHONE - SFR
+address:                       16 rue du Général Alain de Boissieu
+address:                       75015 Paris
+country:                       FR
+phone:                         +33.187260030
+e-mail:                        domaine@sfr.com
+registrar:                     Société Française du Radiotéléphone - SFR
+changed:                       2020-04-03T09:04:08Z
+anonymous:                     NO
+obsoleted:                     NO
+eppstatus:                     associated
+eppstatus:                     active
+eligstatus:                    not identified
+reachstatus:                   not identified
+source:                        FRNIC
+
+>>> WHOIS request date: 2023-09-09T11:05:39.45977Z <<<
+

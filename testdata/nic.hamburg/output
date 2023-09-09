@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.hamburg >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.hamburg'
+tld                str               'hamburg'
+registrar          str               'Hamburg Top-Level-Domain GmbH'
+registrant_country str               ''
+creation_date      datetime.datetime 2014-04-16 10:23:25
+expiration_date    datetime.datetime 2024-04-16 10:23:25
+last_updated       datetime.datetime 2020-03-11 14:22:48
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited']
+name_servers       list              ['sec1.rcode0.net', 'sec2.rcode0.net']
+registrant         str               ''
+emails             list              ['iana@tld-box.at', 'support@nic.hamb']

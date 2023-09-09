@@ -1,0 +1,112 @@
+[Querying whois.nic.brussels]
+[whois.nic.brussels]
+Domain Name: nic.brussels
+Registry Domain ID: D0000000007-BRUSSELS
+Registrar WHOIS Server:
+Registrar URL: http://www.nic.brussels/
+Updated Date: 2023-05-10T12:10:40Z
+Creation Date: 2014-03-26T12:09:34Z
+Registry Expiry Date: 2024-03-26T12:09:34Z
+Registrar Registration Expiration Date: 2024-03-26T12:09:34Z
+Registrar: DNS Belgium vzw/asbl
+Registrar IANA ID: 9999
+Registrar Abuse Contact Email: admin@dnsbelgium.be
+Registrar Abuse Contact Phone: +32.16284970
+Reseller:
+Domain Status: serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited
+Domain Status: serverTransferProhibited https://icann.org/epp#serverTransferProhibited
+Registry Registrant ID: REDACTED FOR PRIVACY
+Registrant Name: REDACTED FOR PRIVACY
+Registrant Organization: DNS Belgium vzw/asbl
+Registrant Street: REDACTED FOR PRIVACY
+Registrant City: REDACTED FOR PRIVACY
+Registrant State/Province: Leuven
+Registrant Postal Code: REDACTED FOR PRIVACY
+Registrant Country: BE
+Registrant Phone: REDACTED FOR PRIVACY
+Registrant Phone Ext: REDACTED FOR PRIVACY
+Registrant Fax: REDACTED FOR PRIVACY
+Registrant Fax Ext: REDACTED FOR PRIVACY
+Registrant Email: Please query the RDDS service of the Registrar of Record identified in this output for information on how to contact the Registrant contact of the queried domain name.
+Registry Admin ID: REDACTED FOR PRIVACY
+Admin Name: REDACTED FOR PRIVACY
+Admin Organization: REDACTED FOR PRIVACY
+Admin Street: REDACTED FOR PRIVACY
+Admin City: REDACTED FOR PRIVACY
+Admin State/Province: REDACTED FOR PRIVACY
+Admin Postal Code: REDACTED FOR PRIVACY
+Admin Country: REDACTED FOR PRIVACY
+Admin Phone: REDACTED FOR PRIVACY
+Admin Phone Ext: REDACTED FOR PRIVACY
+Admin Fax: REDACTED FOR PRIVACY
+Admin Fax Ext: REDACTED FOR PRIVACY
+Admin Email: Please query the RDDS service of the Registrar of Record identified in this output for information on how to contact the Admin contact of the queried domain name.
+Registry Tech ID: REDACTED FOR PRIVACY
+Tech Name: REDACTED FOR PRIVACY
+Tech Organization: REDACTED FOR PRIVACY
+Tech Street: REDACTED FOR PRIVACY
+Tech City: REDACTED FOR PRIVACY
+Tech State/Province: REDACTED FOR PRIVACY
+Tech Postal Code: REDACTED FOR PRIVACY
+Tech Country: REDACTED FOR PRIVACY
+Tech Phone: REDACTED FOR PRIVACY
+Tech Phone Ext: REDACTED FOR PRIVACY
+Tech Fax: REDACTED FOR PRIVACY
+Tech Fax Ext: REDACTED FOR PRIVACY
+Tech Email: Please query the RDDS service of the Registrar of Record identified in this output for information on how to contact the Tech contact of the queried domain name.
+Name Server: ns1.nic.brussels
+IP Address: 52.213.12.197
+IP Address: 2a05:d018:48e:3d06::10
+Name Server: ns3.nic.brussels
+IP Address: 192.174.68.100
+IP Address: 2001:67c:1bc::100
+Name Server: ns2.nic.brussels
+IP Address: 18.195.220.217
+IP Address: 2a05:d014:15b:7f06::10
+Name Server: ns4.nic.brussels
+IP Address: 176.97.158.100
+IP Address: 2001:67c:10b8::100
+DNSSEC: signedDelegation
+URL of the ICANN Whois Inaccuracy Complaint Form: https://www.icann.org/wicf/
+>>> Last update of WHOIS database: 2023-09-09T10:52:17Z <<<
+
+For more information on Whois status codes, please visit https://icann.org/epp
+
+% The WHOIS service offered by DNS Belgium and the
+% access to the records in the DNS Belgium WHOIS
+% database are provided for information purposes only.
+% It allows persons to check whether a specific domain
+% name is still available or not and to obtain
+% information related to the registration records of
+% existing domain names. DNS Belgium cannot, under any
+% circumstances, be held liable in case the stored
+% information would prove to be wrong, incomplete or
+% not accurate in any sense.
+% By submitting a query you agree not to use the
+% information made available to:
+% * allow, enable or otherwise support the transmission
+%   of unsolicited, commercial advertising or other
+%   solicitations whether via email or otherwise;
+% * target advertising in any possible way;
+% * to cause nuisance in any possible way to the
+%   registrants by sending (whether by automated,
+%   electronic processes capable of enabling high
+%   volumes or other possible means) messages to them.
+%
+% Without prejudice to the above, it is explicitly
+% forbidden to extract, copy and/or use or reutilise in
+% any form and by any means (electronically or not) the
+% whole or a quantitatively or qualitatively substantial
+% part of the contents of the WHOIS database without
+% prior and explicit permission by DNS Belgium, nor in
+% any attempt hereof, to apply automated, electronic
+% processes to DNS Belgium (or its systems). You agree
+% that any reproduction and/or transmission of data for
+% commercial purposes will always be considered as the
+% extraction of a substantial part of the content of
+% the WHOIS database.
+% By submitting the query you agree to abide by this
+% policy and accept that DNS Belgium can take measures
+% to limit the use of its WHOIS services in order to
+% protect the privacy of its registrants or the
+% integrity of the database.

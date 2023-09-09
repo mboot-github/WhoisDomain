@@ -1,0 +1,13 @@
+
+test domain: <<<<<<<<<< register.bg >>>>>>>>>>>>>>>>>>>>
+name               str               'register.bg (register.bg)'
+tld                str               'bg'
+registrar          str               ''
+registrant_country str               ''
+creation_date      NoneType          None
+expiration_date    NoneType          None
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               'busy, active'
+statuses           list              ['busy, active']
+name_servers       list              ['ns.digsys.bg', 'ns.register.bg', 'ns2.digsys.bg', 'ns2.register.bg']

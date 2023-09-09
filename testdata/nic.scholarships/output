@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.scholarships >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.scholarships'
+tld                str               'scholarships'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'US'
+creation_date      datetime.datetime 2019-06-17 13:27:40
+expiration_date    datetime.datetime 2024-06-17 13:27:40
+last_updated       datetime.datetime 2020-10-29 18:47:08
+dnssec             bool              True
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['a0.nic.scholarships', 'a2.nic.scholarships', 'b0.nic.scholarships', 'c0.nic.scholarships']
+registrant         str               'Scholarships.com LLC'
+emails             list              []

@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.cricket >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.cricket'
+tld                str               'cricket'
+registrar          str               'Exclusive Registry Limited'
+registrant_country str               'US'
+creation_date      datetime.datetime 2013-08-09 23:34:55
+expiration_date    datetime.datetime 2024-08-08 23:59:59
+last_updated       datetime.datetime 2022-08-04 06:06:02
+dnssec             bool              True
+status             str               'serverTransferProhibited https://icann.org/epp#serverTransferProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['ns1.dns.nic.cricket', 'ns2.dns.nic.cricket', 'ns3.dns.nic.cricket', 'ns4.dns.nic.cricket', 'ns5.dns.nic.cricket', 'ns6.dns.nic.cricket']
+registrant         str               ''
+emails             list              []

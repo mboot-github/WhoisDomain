@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.jaguar >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.jaguar'
+tld                str               'jaguar'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'GB'
+creation_date      datetime.datetime 2015-09-14 16:34:48
+expiration_date    datetime.datetime 2025-09-14 16:34:48
+last_updated       datetime.datetime 2015-09-14 16:34:48
+dnssec             bool              False
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['a0.nic.jaguar', 'a2.nic.jaguar', 'b0.nic.jaguar', 'c0.nic.jaguar']
+registrant         str               ''
+emails             list              []

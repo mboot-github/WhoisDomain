@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.wtc >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.wtc'
+tld                str               'wtc'
+registrar          str               'World Trade Centers Association Inc.'
+registrant_country str               'us'
+creation_date      datetime.datetime 2014-03-25 04:53:31
+expiration_date    datetime.datetime 2024-03-25 04:53:31
+last_updated       datetime.datetime 2022-08-10 01:21:07
+dnssec             bool              True
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['a.nic.wtc', 'b.nic.wtc', 'c.nic.wtc', 'd.nic.wtc']
+registrant         str               'World Trade Centers Association, Inc.'
+emails             list              []

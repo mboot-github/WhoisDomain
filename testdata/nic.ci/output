@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.ci >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.ci'
+tld                str               'ci'
+registrar          str               'ARTCI Reserved'
+registrant_country str               'CI'
+creation_date      datetime.datetime 2016-06-17 04:00:00
+expiration_date    datetime.datetime 2027-06-17 00:00:00
+last_updated       datetime.datetime 2022-06-14 16:15:41.703000
+dnssec             bool              False
+status             str               'serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited'
+statuses           list              ['serverDeleteProhibited https://icann.org/epp#serverDeleteProhibited', 'serverRenewProhibited https://icann.org/epp#serverRenewProhibited', 'serverTransferProhibited https://icann.org/epp#serverTransferProhibited', 'serverUpdateProhibited https://icann.org/epp#serverUpdateProhibited']
+name_servers       list              ['ns1.desec.io', 'ns2.desec.org']
+registrant         str               ''
+emails             list              ['registrant@nic.ci']

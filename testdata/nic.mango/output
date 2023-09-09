@@ -1,0 +1,12 @@
+
+test domain: <<<<<<<<<< nic.mango >>>>>>>>>>>>>>>>>>>>
+Domain: nic.mango; Exception: FailedParsingWhoisOutput; Error: [Querying whois.mango.coreregistry.net]
+[whois.mango.coreregistry.net: Name or service not known]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.mango [Querying whois.mango.coreregistry.net]
+[whois.mango.coreregistry.net: Name or service not known]
+[Unable to connect to remote host]
+

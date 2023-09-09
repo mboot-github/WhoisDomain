@@ -1,0 +1,16 @@
+
+test domain: <<<<<<<<<< registro.br >>>>>>>>>>>>>>>>>>>>
+name               str               'registro.br'
+tld                str               'br'
+registrar          str               'Nic.br'
+registrant_country str               ''
+creation_date      datetime.datetime 1999-02-21 00:00:00
+expiration_date    NoneType          None
+last_updated       datetime.datetime 2018-04-02 00:00:00
+dnssec             bool              False
+status             str               '20230909 DSOK'
+statuses           list              ['20230909 DSOK', 'published']
+name_servers       list              ['a.dns.br', 'b.dns.br', 'c.dns.br', 'd.dns.br', 'e.dns.br']
+owner              str               'Núcleo de Inf. e Coord. do Ponto BR - NIC.BR'
+registrant         str               ''
+emails             list              ['cert@cert.br', 'mail-abuse@cert.br']

@@ -1,0 +1,10 @@
+
+test domain: <<<<<<<<<< nic.mini >>>>>>>>>>>>>>>>>>>>
+Domain: nic.mini; Exception: FailedParsingWhoisOutput; Error: [Querying whois.ksregistry.net]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.mini [Querying whois.ksregistry.net]
+[Unable to connect to remote host]
+

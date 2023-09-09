@@ -1,0 +1,4 @@
+nic.lds name server a0.nic.lds.
+nic.lds name server a2.nic.lds.
+nic.lds name server b0.nic.lds.
+nic.lds name server c0.nic.lds.

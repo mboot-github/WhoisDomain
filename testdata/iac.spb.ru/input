@@ -1,0 +1,19 @@
+[Querying whois.nic.ru]
+[whois.nic.ru]
+domain:       IAC.SPB.RU
+nserver:      ns.iac.spb.ru. 217.195.78.199
+nserver:      ns2.iac.spb.ru. 217.195.78.209
+nserver:      ns.peterstar.ru.
+nserver:      ns2.peterstar.ru.
+state:        REGISTERED, DELEGATED
+admin-contact:https://www.nic.ru/whois/send-message/?domain=iac.spb.ru
+org:          SPb Information and Analytical Center
+descr:        Informational and Analitycs CentrE of Saint-Petersburg
+descr:        59, Chernyakhovskogo Str.
+descr:        Saint-Petersburg, Russia
+registrar:    RU-CENTER
+created:      2010.04.24
+paid-till:    2024.06.26
+source:       RU-CENTER
+
+>>> Last update of WHOIS database: 2023.09.09T13:46:24Z <<<

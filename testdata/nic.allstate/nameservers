@@ -1,0 +1,4 @@
+nic.allstate name server a0.nic.allstate.
+nic.allstate name server b0.nic.allstate.
+nic.allstate name server c0.nic.allstate.
+nic.allstate name server a2.nic.allstate.

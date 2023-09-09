@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< registry.qa >>>>>>>>>>>>>>>>>>>>
+name               str               'registry.qa'
+tld                str               'qa'
+registrar          str               ''
+registrant_country str               ''
+creation_date      NoneType          None
+expiration_date    NoneType          None
+last_updated       NoneType          None
+dnssec             bool              False
+status             str               'ok'
+statuses           list              ['ok']
+name_servers       list              ['ns1.registry.qa', 'ns2.registry.qa']
+registrant         str               ''
+emails             list              []

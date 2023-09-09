@@ -1,0 +1,12 @@
+
+test domain: <<<<<<<<<< nic.sncf >>>>>>>>>>>>>>>>>>>>
+Domain: nic.sncf; Exception: FailedParsingWhoisOutput; Error: [Querying whois-sncf.nic.fr]
+[whois-sncf.nic.fr: Name or service not known]
+[Unable to connect to remote host]
+
+
+# ========================
+FailedParsingWhoisOutput nic.sncf [Querying whois-sncf.nic.fr]
+[whois-sncf.nic.fr: Name or service not known]
+[Unable to connect to remote host]
+

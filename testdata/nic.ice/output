@@ -1,0 +1,15 @@
+
+test domain: <<<<<<<<<< nic.ice >>>>>>>>>>>>>>>>>>>>
+name               str               'nic.ice'
+tld                str               'ice'
+registrar          str               'Donuts Internal (9999)'
+registrant_country str               'CA'
+creation_date      datetime.datetime 2015-02-06 16:49:33
+expiration_date    datetime.datetime 2025-02-06 16:49:33
+last_updated       datetime.datetime 2015-02-06 16:49:33
+dnssec             bool              False
+status             str               'ok https://icann.org/epp#ok'
+statuses           list              ['ok https://icann.org/epp#ok']
+name_servers       list              ['a0.nic.ice', 'a2.nic.ice', 'b0.nic.ice', 'c0.nic.ice']
+registrant         str               'None'
+emails             list              []
