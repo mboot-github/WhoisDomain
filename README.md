@@ -4,6 +4,8 @@
   * Python 2.x IS NOT supported.
   * Currently no additional python packages need to be installed.
 
+---
+
 ## Notes
 
   * This package will not support querying ip CIDR ranges or AS information
@@ -55,12 +57,16 @@ and `make suggest`.
   * for python use:  `whoisdomain.validTlds()`
   * for cli use `whoisdomain -S`
 
+---
+
 ## Support
  * Python 3.x is supported for x >= 9
  * Python 2.x IS NOT supported.
 
 ## Author's
   * See: [Authors](docs/Authors.md)
+
+---
 
 ## Updates
   * see [Updates](docs/Updates.md) for a full history of changes.

@@ -68,7 +68,19 @@
   * use currying to make all regex strings into function cal in whoisParser.py; all regexes in tld_regexpr.py are now converted on import to function calls via R()
   * update tld: sk to use contextual extract, test with google.sk
   * add findFromToAndLookForWithFindFirst contextual search based on a previous findFirst, used in "fr" tld, example google.fr, {} is used to add to fromStr
+
 ## 1.20230904.1
   * only on pypi-test
+
+---
+
 ## 1.20230906.1
+  * introduce parsing based on functions
+  * allow contextual search in splitted data and plain data
+  * allow contextual search based on earlier result
+  * fix a few tld to return the proper registrant string (not nic handle)
   * introduce parsing based on functions, allow contextual search in splitted data and plain data, allow contextual search based on earlier result; fix a few tld to return the proper registrant string (not nic handle)
+
+---
+
+  * add ignore strings, add generic exception, start on publicSuffix (if import 'tld' works)
