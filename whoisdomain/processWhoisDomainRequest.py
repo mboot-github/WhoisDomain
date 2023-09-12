@@ -54,16 +54,15 @@ class ProcessWhoisDomainRequest:
         self.dc.domain = self.dc.domain.lower().strip().rstrip(".")  # Remove the trailing dot to support FQDN.
         self.dc.dList = self.dc.domain.split(".")
 
-        if self.dc.hasLibTld:
+        if self.dc.hasLibTld and self.pc.withPublicSuffix:
             res = libTld.get_tld(
                 self.dc.domain,
                 fail_silently=True,
                 fix_protocol=True,
             )
             if res:
-
                 self.dc.publicSuffixStr = str(res)
-                self.dc.hasPublicSuffix
+                self.dc.hasPublicSuffix = True
                 if self.pc.verbose:
                     print(f"publicSuffixStr: {self.dc.publicSuffixStr}", file=sys.stderr)
 
