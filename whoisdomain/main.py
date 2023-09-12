@@ -223,7 +223,7 @@ def testItem(
         include_raw_whois_text=PrintGetRawWhoisResult,
         simplistic=SIMPLISTIC,
         withRedacted=WithRedacted,
-        withPublicSuffix=True, # temp
+        withPublicSuffix=True,  # temp
     )
 
     # use the new query (can also simply use q2()

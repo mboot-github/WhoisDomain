@@ -165,8 +165,7 @@ class Domain:
             self.tld = dc.data[k].lower()
 
         if pc.withPublicSuffix and dc.hasPublicSuffix:
-            self.public_suffix: str = dc.publicSuffixStr
-
+            self.public_suffix: str = str(dc.publicSuffixStr)
 
         if pc.return_raw_text_for_unsupported_tld is True:
             return
