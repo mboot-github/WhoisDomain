@@ -54,6 +54,7 @@ class ProcessWhoisDomainRequest:
         self.dc.domain = self.dc.domain.lower().strip().rstrip(".")  # Remove the trailing dot to support FQDN.
         self.dc.dList = self.dc.domain.split(".")
 
+        # test with: www.dublin.airport.aero
         if self.dc.hasLibTld and self.pc.withPublicSuffix:
             res = libTld.get_tld(
                 self.dc.domain,
@@ -279,7 +280,12 @@ class ProcessWhoisDomainRequest:
         # so ".".join(self.dc.dList) would be like: aaa.<tld> or perhaps aaa.bbb.<tld>
         # and may change if we find no data in cli whois
 
-        tldLevel: List[str] = str(self.dc.tldString).split(".")
+        tldLevel: List[str] = []
+        if self.dc.hasPublicSuffix:
+            tldLevel = str(self.dc.publicSuffixStr).split(".")
+        else:
+            tldLevel = str(self.dc.tldString).split(".")
+
         while len(self.dc.dList) > len(tldLevel):
             self.dom, finished = self._doOneLookup()
             if finished:
