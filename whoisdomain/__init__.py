@@ -144,6 +144,7 @@ def q2(
 
     dc = DataContext(
         domain=domain,
+        hasLibTld=TLD_LIB_PRESENT,
     )
 
     dom = Domain(
@@ -164,13 +165,12 @@ def q2(
     pwdr = ProcessWhoisDomainRequest(
         pc=pc,
         dc=dc,
-        parser=parser,
-        wci=wci,
         dom=dom,
+        wci=wci,
+        parser=parser,
     )
 
     result = pwdr.processRequest()
-
     return result
 
 

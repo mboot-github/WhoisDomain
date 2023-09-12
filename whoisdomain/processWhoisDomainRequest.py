@@ -20,21 +20,29 @@ from .domain import Domain
 from .lastWhois import updateLastWhois
 from .whoisCliInterface import WhoisCliInterface
 
+TLD_LIB_PRESENT: bool = False
+try:
+    import tld as libTld
+
+    TLD_LIB_PRESENT = True
+except Exception as e:
+    _ = e  # ignore any error
+
 
 class ProcessWhoisDomainRequest:
     def __init__(
         self,
         pc: ParameterContext,
         dc: DataContext,
-        parser: WhoisParser,
-        wci: WhoisCliInterface,
         dom: Domain,
+        wci: WhoisCliInterface,
+        parser: WhoisParser,
     ) -> None:
         self.pc = pc
         self.dc = dc
-        self.parser = parser
-        self.wci = wci
         self.dom: Optional[Domain] = dom
+        self.wci = wci
+        self.parser = parser
 
     def _analyzeDomainStringAndValidate(
         self,
@@ -45,6 +53,19 @@ class ProcessWhoisDomainRequest:
         # Prep the domain ================
         self.dc.domain = self.dc.domain.lower().strip().rstrip(".")  # Remove the trailing dot to support FQDN.
         self.dc.dList = self.dc.domain.split(".")
+
+        if self.dc.hasLibTld:
+            res = libTld.get_tld(
+                self.dc.domain,
+                fail_silently=True,
+                fix_protocol=True,
+            )
+            if res:
+
+                self.dc.publicSuffixStr = str(res)
+                self.dc.hasPublicSuffix
+                if self.pc.verbose:
+                    print(f"publicSuffixStr: {self.dc.publicSuffixStr}", file=sys.stderr)
 
         if len(self.dc.dList) == 0:
             self.dc.tldString = None
@@ -153,10 +174,10 @@ class ProcessWhoisDomainRequest:
         if self.pc.verbose:
             print("DEBUG: Raw: ", self.dc.whoisStr, file=sys.stderr)
 
-        self.dc.lastWhoisStr = self.dc.whoisStr  # keep the original whois string for reference before we clean
+        self.dc.rawWhoisStr = self.dc.whoisStr  # keep the original whois string for reference before we clean
         updateLastWhois(
             dList=self.dc.dList,
-            whoisStr=self.dc.lastWhoisStr,
+            whoisStr=self.dc.rawWhoisStr,
             pc=self.pc,
         )
 

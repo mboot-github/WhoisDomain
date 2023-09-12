@@ -12,16 +12,21 @@ class DataContext:
     def __init__(
         self,
         domain: str,
+        hasLibTld: bool = False,
     ) -> None:
         self.originalDomain: str = domain  # the requested domain before cleanup
-        self.domain: str = domain  # the working domain , may change after cleanup (e.g.www)
+        self.hasLibTld = hasLibTld
 
         # the working domain splitted on '.' ,
         # may change as we try to find a one that gets a response from whois
         self.dList: List[str] = []
-        self.tldString: Optional[str] = None  # the detected toplevel 'aaa' or 'aaa.bbb'
+        self.domain: str = domain  # the working domain , may change after cleanup (e.g.www)
 
-        self.lastWhoisStr: str = ""  # the result string from whois cli before clean
+        self.tldString: Optional[str] = None  # the detected toplevel 'aaa' or 'aaa.bbb'
+        self.publicSuffixStr: Optional[str] = None  # the detected public Suffix if we can import tld
+        self.hasPublicSuffix: bool = False
+
+        self.rawWhoisStr: str = ""  # the result string from whois cli before clean
         self.whoisStr: str = ""  # the result string from whois cli after clean
 
         self.data: Dict[str, Any] = {}  # the data we need to build the domain object
