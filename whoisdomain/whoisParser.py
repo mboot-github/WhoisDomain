@@ -22,6 +22,8 @@ from .exceptions import (
 from .domain import Domain
 from .strings.noneStrings import NoneStrings
 from .strings.quotaStrings import QuotaStrings
+from .strings.ignoreStrings import IgnoreStrings
+
 from .context.parameterContext import ParameterContext
 from .context.dataContext import DataContext
 from .helpers import get_TLD_RE
@@ -275,6 +277,10 @@ class WhoisParser:
                 continue
 
             if self.pc.withRedacted is False:
+                for item in IgnoreStrings():
+                    if item in line:  # note we do not use ignorecase currently here
+                        continue
+
                 if "REDACTED FOR PRIVACY" in line:  # these lines contibute nothing so ignore
                     continue
 
