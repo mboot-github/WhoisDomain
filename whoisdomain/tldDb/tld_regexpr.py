@@ -1,10 +1,17 @@
-from .finders import newLineSplit, R, findFromToAndLookFor, findFromToAndLookForWithFindFirst, findInSplitedLookForHavingFindFirst
-
 from typing import (
     Dict,
     Any,
     # Callable,
 )
+
+from .finders import (
+    newLineSplit,
+    R,
+    findFromToAndLookFor,
+    findFromToAndLookForWithFindFirst,
+    findInSplitedLookForHavingFindFirst,
+)
+
 
 # 2023-09-03 mboot, all _items are inherited, confirmed
 # only _<domains> as meta domains do net end up in the database
@@ -30,8 +37,8 @@ def xStr(what: str, times: int = 1, firstMandatory: bool = True) -> str:
 
     if firstMandatory and what[-1] == "?":
         return what[:-1] + (what * (times - 1))
-    else:
-        return what * times
+
+    return what * times
 
 
 # =================================================================
@@ -1017,7 +1024,6 @@ ZZ["cf"] = {
 
 ZZ["re"] = {
     "extend": "ac",
-    "registrant_country": None,
     "domain_name": R(r"domain:\s+(.+)"),
     "registrar": R(r"registrar:\s+(.+)"),
     "name_servers": R(r"nserver:\s+(.+)"),
@@ -2622,7 +2628,7 @@ ZZ["рф"] = {"extend": "ru"}
 ZZ["сайт"] = {"_server": "whois.nic.xn--80aswg", "extend": "xn--80aswg"}
 ZZ["קום"] = {"_server": "whois.nic.xn--9dbq2a", "extend": "xn--9dbq2a"}
 ZZ["ابوظبي"] = {"_server": "whois.nic.xn--mgbca7dzdo", "extend": "xn--mgbca7dzdo"}
-ZZ["اتصالات"] = {"_server": "whois.centralnic.com", "extend": "_centralnic", "_server": "whois.centralnic.com"}
+ZZ["اتصالات"] = {"_server": "whois.centralnic.com", "extend": "_centralnic"}
 ZZ["العليان"] = {"_server": "whois.nic.xn--mgba7c0bbn0a", "extend": "xn--mgba7c0bbn0a"}
 ZZ["بارت"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["بازار"] = {"_server": "whois.nic.xn--mgbab2bd", "extend": "xn--mgbab2bd"}

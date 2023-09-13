@@ -116,31 +116,32 @@ class WhoisCliInterface:
         # LANG=en is added to make the ".jp" output consisent across all environments
         # STDBUF_OFF_CMD needed to not lose data on kill
 
-        self.processHandle = subprocess.Popen(
+        with subprocess.Popen(
             self.STDBUF_OFF_CMD + self._makeWhoisCommandToRun(),
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             env={"LANG": "en"} if self.domain.endswith(".jp") else None,
-        )
+        ) as self.processHandle:
 
-        if self.pc.verbose:
-            print(f"DEBUG: timout: {self.pc.timeout}", file=sys.stderr)
+            if self.pc.verbose:
+                print(f"DEBUG: timout: {self.pc.timeout}", file=sys.stderr)
 
-        try:
-            self.rawWhoisResultString = self.processHandle.communicate(timeout=self.pc.timeout,)[
-                0
-            ].decode(errors="ignore")
-        except subprocess.TimeoutExpired:
-            # Kill the child process & flush any output buffers
-            self.processHandle.kill()
-            self.rawWhoisResultString = self.processHandle.communicate()[0].decode(errors="ignore")
-            # In most cases whois servers returns partial domain data really fast
-            # after that delay occurs (probably intentional) before returning contact data.
-            # Add this option to cover those cases
-            if not self.pc.parse_partial_response or not self.rawWhoisResultString:
-                raise WhoisCommandTimeout(f"timeout: query took more then {self.pc.timeout} seconds")
+            try:
+                self.rawWhoisResultString = self.processHandle.communicate(timeout=self.pc.timeout,)[
+                    0
+                ].decode(errors="ignore")
+            except subprocess.TimeoutExpired:
+                # Kill the child process & flush any output buffers
+                self.processHandle.kill()
+                self.rawWhoisResultString = self.processHandle.communicate()[0].decode(errors="ignore")
+                # In most cases whois servers returns partial domain data really fast
+                # after that delay occurs (probably intentional) before returning contact data.
+                # Add this option to cover those cases
+                if not self.pc.parse_partial_response or not self.rawWhoisResultString:
+                    msg = f"timeout: query took more then {self.pc.timeout} seconds"
+                    raise WhoisCommandTimeout(msg)
 
-        return self._postProcessingResult()
+            return self._postProcessingResult()
 
     def _returnWhoisPythonFromStaticTestData(self) -> str:
         testDir = os.getenv("TEST_WHOIS_PYTHON")

@@ -25,8 +25,8 @@ try:
     import tld as libTld
 
     TLD_LIB_PRESENT = True
-except Exception as e:
-    _ = e  # ignore any error
+except Exception as ee:
+    _ = ee  # ignore any error
 
 
 class ProcessWhoisDomainRequest:
@@ -197,12 +197,9 @@ class ProcessWhoisDomainRequest:
     def _prepRequest(self) -> bool:
         try:
             self._analyzeDomainStringAndValidate()  # may raise UnknownTld
-            if self.dc.tldString is None:
-                self.dom = None
-                return True
         except Exception as e:
             if self.pc.simplistic is False:
-                raise (e)
+                raise e
 
             self.dc.exeptionStr = "UnknownTld"
 
@@ -213,9 +210,13 @@ class ProcessWhoisDomainRequest:
             )
             return True
 
+        if self.dc.tldString is None:
+            self.dom = None
+            return True
+
         # force mypy to process ok
         self.dc.tldString = str(self.dc.tldString)
-        if self.dc.dList is []:
+        if self.dc.dList == []:
             self.dom = None
             return True
 

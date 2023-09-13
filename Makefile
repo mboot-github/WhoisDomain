@@ -205,7 +205,9 @@ clean:
 	rm -rf tmp/*
 	rm -f ./rl-secure-list-*.txt
 	rm -f ./rl-secure-status-*.txt
+	docker container prune -f
 	docker image prune --all --force
+	docker image ls -a
 
 cleanDist:
 	rm -rf dist/*
