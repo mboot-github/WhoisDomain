@@ -32,7 +32,10 @@ def getOneRegistrant(
 ) -> None:
     try:
         print(f"\n### ===: try: {domain}")
-        w = whoisdomain.query(domain)
+        w = whoisdomain.query(
+            domain,
+            withPublicSuffix=True,
+        )
     except Exception as e:
         print(domain, e, file=sys.stderr)
         print(whoisdomain.get_last_raw_whois_data())
@@ -67,7 +70,11 @@ def xMain() -> None:
     registrants: Dict[str | None, List[str]] = {}
 
     for domain in domains:
-        getOneRegistrant(domain, registrants, verbose)
+        getOneRegistrant(
+            domain,
+            registrants,
+            verbose,
+        )
 
     ll = cast(List[str], registrants.keys())
     for k in sorted(ll):

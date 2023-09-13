@@ -193,6 +193,9 @@ def query(
     simplistic: bool = False,
     withRedacted: bool = False,
     pc: Optional[ParameterContext] = None,
+    tryInstallMissingWhoisOnWindows: bool = False,
+    shortResponseLen: int = 5,
+    withPublicSuffix: bool = False,
     # if you use pc as argument all above params (except domain are ignored)
 ) -> Optional[Domain]:
     # see documentation about paramaters in parameterContext.py
@@ -217,6 +220,9 @@ def query(
             cmd=cmd,
             simplistic=simplistic,
             withRedacted=withRedacted,
+            withPublicSuffix=withPublicSuffix,
+            shortResponseLen=shortResponseLen,
+            tryInstallMissingWhoisOnWindows=tryInstallMissingWhoisOnWindows,
         )
 
     if verbose:

@@ -77,3 +77,8 @@ and `make suggest`.
   * allow contextual search in splitted data and plain data
   * allow contextual search based on earlier result
   * fix a few tld to return the proper registrant string (not nic handle)
+
+### 1.20230913.1
+  * if you have installed `tld` (pip install tld) you can enable withPublicSuffix=True to process untill you reach the pseudo tld.
+  * the public_suffix info is added if available (and if requested)
+  * example case is: ./test2.py -d www.dublin.airport.aero --withPublicSuffix

@@ -54,7 +54,7 @@ class ProcessWhoisDomainRequest:
         self.dc.domain = self.dc.domain.lower().strip().rstrip(".")  # Remove the trailing dot to support FQDN.
         self.dc.dList = self.dc.domain.split(".")
 
-        # test with: www.dublin.airport.aero
+        # test with: www.dublin.airport.aero see make withPublicSuffix
         if self.dc.hasLibTld and self.pc.withPublicSuffix:
             res = libTld.get_tld(
                 self.dc.domain,

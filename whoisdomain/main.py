@@ -29,6 +29,7 @@ Failures: Dict[str, Any] = {}
 IgnoreReturncode: bool = False
 TestAllTld: bool = False
 TestRunOnly: bool = False
+WithPublicSuffix: bool = False
 
 
 class ResponseCleaner:
@@ -215,6 +216,7 @@ def testItem(
 
     global TestAllTld
     global TestRunOnly
+    global WithPublicSuffix
 
     pc = whois.ParameterContext(
         ignore_returncode=IgnoreReturncode,
@@ -223,7 +225,7 @@ def testItem(
         include_raw_whois_text=PrintGetRawWhoisResult,
         simplistic=SIMPLISTIC,
         withRedacted=WithRedacted,
-        withPublicSuffix=True,  # temp
+        withPublicSuffix=WithPublicSuffix,
     )
 
     # use the new query (can also simply use q2()
@@ -530,6 +532,8 @@ def main() -> None:
     global WithRedacted
     global TestAllTld
     global TestRunOnly
+    global WithPublicSuffix
+
     name: str = os.path.basename(sys.argv[0])
     if name == "test2.py":
         SIMPLISTIC = False
@@ -558,6 +562,7 @@ def main() -> None:
                 "having=",
                 "Cleanup=",
                 "withRedacted",
+                "withPublicSuffix",
             ],
         )
     except getopt.GetoptError:
@@ -596,6 +601,9 @@ def main() -> None:
 
         if opt in ("--withRedacted"):
             WithRedacted = True
+
+        if opt in ("--withPublicSuffix"):
+            WithPublicSuffix = True
 
         if opt in ("-a", "--all"):
             TestAllTld = True

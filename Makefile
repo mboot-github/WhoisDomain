@@ -214,3 +214,6 @@ cleanDist:
 zz:
 	docker build -t df36 -f Df-36 .
 	docker run -v .:/context df36 -d google.com
+
+withPublicSuffix:
+	./test2.py -d  www.dublin.airport.aero --withPublicSuffix
