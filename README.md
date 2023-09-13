@@ -82,5 +82,6 @@ and `make suggest`.
   * if you have installed `tld` (pip install tld) you can enable withPublicSuffix=True to process untill you reach the pseudo tld.
   * the public_suffix info is added if available (and if requested)
   * example case is: ./test2.py -d www.dublin.airport.aero --withPublicSuffix
-### 1.20230913.2
+
+### 1.20230913.3
   * fix re.NOFLAGS, it is not compatible with 3.9, it appears in 3.11
