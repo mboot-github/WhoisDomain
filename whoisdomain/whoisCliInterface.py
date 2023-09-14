@@ -9,13 +9,13 @@ import platform
 import shutil
 import logging
 
+from typing import (
+    List,
+)
+
 from .exceptions import (
     WhoisCommandFailed,
     WhoisCommandTimeout,
-)
-
-from typing import (
-    List,
 )
 
 from .context.parameterContext import ParameterContext
@@ -135,7 +135,7 @@ class WhoisCliInterface:
                 self.rawWhoisResultString = self.processHandle.communicate(timeout=self.pc.timeout,)[
                     0
                 ].decode(errors="ignore")
-            except subprocess.TimeoutExpired:
+            except subprocess.TimeoutExpired as ex:
                 # Kill the child process & flush any output buffers
                 self.processHandle.kill()
                 self.rawWhoisResultString = self.processHandle.communicate()[0].decode(errors="ignore")
@@ -144,7 +144,7 @@ class WhoisCliInterface:
                 # Add this option to cover those cases
                 if not self.pc.parse_partial_response or not self.rawWhoisResultString:
                     msg = f"timeout: query took more then {self.pc.timeout} seconds"
-                    raise WhoisCommandTimeout(msg)
+                    raise WhoisCommandTimeout(msg) from ex
 
             return self._postProcessingResult()
 

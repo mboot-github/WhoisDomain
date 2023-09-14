@@ -142,16 +142,14 @@ class ResponseCleaner:
                     self.rDict["Preamble"].append(line)
                     line = "PRE;" + line
                     continue
-                else:
-                    preambleSeen = True
+                preambleSeen = True
 
             if preambleSeen is True and percentSeen is False:
                 if line.startswith("%"):
                     self.rDict["Percent"].append(line)
                     line = "PERCENT;" + line
                     continue
-                else:
-                    percentSeen = True
+                percentSeen = True
 
             if postambleSeen is False:
                 if line.startswith("-- ") or line.startswith(">>> ") or line.startswith("Copyright notice"):
@@ -186,7 +184,7 @@ class ResponseCleaner:
                 print(k, cr, tab, lines)
 
         k = "Body"
-        if len(self.rDict[k]):
+        if self.rDict[k]:
             n = 0
             for lines in self.rDict[k]:
                 ws = " [WHITESPACE AT END] " if re.search(r"[ \t]+\r?\n", lines) else ""
@@ -331,7 +329,7 @@ def getTestFileOne(fPath: str, fileData: Dict[str, Any]) -> None:
     fileData[bName] = []
     xx = fileData[bName]
 
-    with open(fPath) as f:
+    with open(fPath, encoding="utf-8") as f:
         for index, line in enumerate(f):
             line = line.strip()
             if len(line) == 0 or line.startswith("#"):
@@ -636,7 +634,7 @@ def main() -> None:
             rr = makeTestAllCurrentTld(None)
             for item in sorted(rr):
                 print(item)
-            exit(0)
+            sys.exit(0)
 
         if opt in ("-t", "--test"):
             # collect all _test entries defined and only run those,
@@ -685,7 +683,7 @@ def main() -> None:
     msg = f"{name} SIMPLISTIC: {SIMPLISTIC}"
     log.debug(msg)
 
-    if Ruleset is True and len(domains):
+    if Ruleset is True and domains:
         for domain in domains:
             ShowRuleset(domain)
         sys.exit(0)
@@ -699,25 +697,25 @@ def main() -> None:
         showFailures()
         sys.exit(0)
 
-    if len(dirs):
+    if dirs:
         fileData = {}
         for dName in dirs:
             getTestFilesAll(dName, fileData)
-        for testFile in fileData:
-            testDomains(fileData[testFile])
+        for testFile, x in fileData.items():
+            testDomains(x)
         showFailures()
         sys.exit(0)
 
-    if len(files):
+    if files:
         fileData = {}
         for testFile in files:
             getTestFileOne(testFile, fileData)
-        for testFile in fileData:
-            testDomains(fileData[testFile])
+        for testFile, x in fileData.items():
+            testDomains(x)
         showFailures()
         sys.exit(0)
 
-    if len(domains):
+    if domains:
         testDomains(domains)
         showFailures()
         sys.exit(0)

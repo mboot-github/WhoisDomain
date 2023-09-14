@@ -118,8 +118,14 @@ class TldInfo:
 
     def mergeExternalDictWithRegex(
         self,
-        aDict: Dict[str, Any] = {},
+        aDict: Optional[Dict[str, Any]] = None,
     ) -> None:
+        if aDict is None:
+            return
+
+        if len(aDict) == 0:
+            return
+
         # merge in ZZ, this extends ZZ with new tld's and overrides existing tld's
         for tld in aDict.keys():
             self.zzDictRef[tld] = aDict[tld]

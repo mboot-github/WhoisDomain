@@ -64,13 +64,10 @@ class Domain:
 
         # sorted added to get predictable output during test
         # list(set(...))) to deduplicate results
+        # set([s.strip() for s in data["status"]]) # use set comprehension
 
         self.statuses = sorted(
-            list(
-                set(
-                    [s.strip() for s in data["status"]],
-                ),
-            ),
+            list({s.strip() for s in data["status"]}),
         )
         if "" in self.statuses:
             self.statuses = self._cleanupArray(self.statuses)
@@ -104,11 +101,7 @@ class Domain:
             # list(set(...))) to deduplicate results
 
             self.emails = sorted(
-                list(
-                    set(
-                        [s.strip() for s in data["emails"]],
-                    ),
-                ),
+                list({s.strip() for s in data["emails"]}),
             )
             if "" in self.emails:
                 self.emails = self._cleanupArray(self.emails)

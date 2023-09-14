@@ -1,3 +1,5 @@
+# pylint: disable=duplicate-code
+
 import sys
 import os
 import logging
@@ -65,7 +67,7 @@ try:
     import redis
 
     HAS_REDIS = True
-except Exception as e:
+except ImportError as e:
     _ = e
 
 if HAS_REDIS:
@@ -86,7 +88,7 @@ try:
     import tld as libTld
 
     TLD_LIB_PRESENT = True
-except Exception as e:
+except ImportError as e:
     _ = e  # ignore any error
 
 __all__ = [

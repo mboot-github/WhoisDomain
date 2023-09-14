@@ -15,7 +15,7 @@ SIMPLEDOMAINS = $(shell ls testdata)
 # PHONY targets: make will run its recipe regardless of whether a file with that name exists or what its last modification time is.
 .PHONY: TestSimple TestSimple2 TestAll clean
 
-first: reformat mypy testP39 testP36
+first: reformat mypy pylint testP39 testP36
 
 testP39:
 	./test1.py # now tests with python 3.9
@@ -195,11 +195,7 @@ mypy:
 	mypy --strict *.py bin/*.py $(WHAT)
 
 pylint:
-	python -m pylint --max-line-length=160 whoisdomain/ | \
-	awk '/missing/ && /docstring/ { next } \
-	/C0103/ { next } \
-	/too-many-lines/ { next } \
-	{ print}'
+	python -m pylint --recursive=y whoisdomain/ >pylint.txt
 
 clean:
 	rm -rf tmp/*

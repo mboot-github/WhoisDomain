@@ -1,4 +1,5 @@
 #! /usr/bin/env python3
+# pylint: disable=duplicate-code
 
 from typing import (
     Any,
@@ -45,6 +46,7 @@ class WhoisParser:
         self.pc = pc
         self.dc = dc
         self.dom: Optional[Domain] = None
+        self.resultDict: Dict[str, Any] = {}
         if self.pc.verbose:
             logging.basicConfig(level="DEBUG")
 
@@ -352,7 +354,7 @@ class WhoisParser:
     ) -> None:
         self.dc.whoisStr = str(self.dc.whoisStr)
 
-        self.resultDict: Dict[str, Any] = {
+        self.resultDict = {
             "tld": str(self.dc.tldString),
             "DNSSEC": self._doDnsSec(),
         }

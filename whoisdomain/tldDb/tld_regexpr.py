@@ -1,3 +1,4 @@
+# pylint: disable=C0302
 import os
 import logging
 

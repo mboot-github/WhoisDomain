@@ -1,7 +1,8 @@
-# import sys
 import os
 import re
 import logging
+
+# pylint: disable=unused-argument
 
 from typing import (
     # Dict,
@@ -93,6 +94,7 @@ def findFromToAndLookFor(
     return xFindFromToAndLookFor
 
 
+# pylint disable=pointless-string-statement
 r"""
 example look for in context: google.sk
 look for Organization:\s*([^\n]*)\n
@@ -120,7 +122,7 @@ Updated:                      2019-06-07
         lookForStr=r"Organization:\s*([^\n]*)\n"
     )
 test with: ./test2.py -v -d google.sk 2>2
-"""
+"""  # pylint disable=pointless-string-statement
 
 
 def findFromToAndLookForWithFindFirst(

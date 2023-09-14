@@ -1,6 +1,7 @@
 #! /usr/bin/env python3
+# pylint: disable=duplicate-code
+# pylint disable=broad-exception-caught
 
-# import sys
 import os
 import logging
 
@@ -16,7 +17,7 @@ try:
     import redis
 
     HAS_REDIS = True
-except Exception as e:
+except ImportError as e:
     _ = e
 
 if HAS_REDIS:

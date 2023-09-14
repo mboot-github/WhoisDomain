@@ -30,7 +30,7 @@ try:
     import tld as libTld
 
     TLD_LIB_PRESENT = True
-except Exception as ee:
+except ImportError as ee:
     _ = ee  # ignore any error
 
 
@@ -204,7 +204,7 @@ class ProcessWhoisDomainRequest:
     def _prepRequest(self) -> bool:
         try:
             self._analyzeDomainStringAndValidate()  # may raise UnknownTld
-        except Exception as e:
+        except UnknownTld as e:
             if self.pc.simplistic is False:
                 raise e
 
@@ -228,7 +228,11 @@ class ProcessWhoisDomainRequest:
             return True
 
         # =================================================
-        if self.dc.tldString not in get_TLD_RE().keys():
+        myKeys: List[str] = []
+        for item in get_TLD_RE():
+            myKeys.append(item)
+
+        if self.dc.tldString not in myKeys:
             msg = self._makeMessageForUnsupportedTld()
             if msg is None:
                 self._doUnsupportedTldAnyway()

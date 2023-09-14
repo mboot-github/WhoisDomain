@@ -185,7 +185,7 @@ class ParameterContext:
     ) -> None:
         if len(mandatory) != 0:
             msg = f"missing mandatory parametrs: {sorted(mandatory)}"
-            raise Exception(msg)
+            raise ValueError(msg)
 
     def __init__(
         self,

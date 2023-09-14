@@ -1,13 +1,11 @@
 #! /usr/bin/env python3
 
-# import sys
 import os
 import json
 import logging
 
 from typing import (
     Optional,
-    # Tuple,
 )
 
 from .simpleCacheBase import (
@@ -39,10 +37,10 @@ class SimpleCacheWithFile(SimpleCacheBase):
         if not os.path.isfile(self.cacheFilePath):
             return
 
-        with open(self.cacheFilePath, "r") as f:
+        with open(self.cacheFilePath, "r", encoding="utf-8") as f:
             try:
                 self.memCache = json.load(f)
-            except Exception as e:
+            except ValueError as e:
                 msg = f"ignore json load err: {e}"
                 log.error(msg)
 
@@ -52,7 +50,7 @@ class SimpleCacheWithFile(SimpleCacheBase):
         if self.cacheFilePath is None:
             return
 
-        with open(self.cacheFilePath, "w") as f:
+        with open(self.cacheFilePath, "w", encoding="utf-8") as f:
             json.dump(self.memCache, f)
 
     def put(

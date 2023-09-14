@@ -23,7 +23,7 @@ COM_LIST: List[str] = [
 ]
 
 
-def groupFromList(list: List[str]) -> Callable[[str], Dict[str, str]]:
+def groupFromList(aList: List[str]) -> Callable[[str], Dict[str, str]]:
     def xgroupFromList(
         whoisStr: str,
         verbose: bool = False,

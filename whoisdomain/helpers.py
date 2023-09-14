@@ -29,9 +29,14 @@ def filterTldToSupportedPattern(
 
 
 def mergeExternalDictWithRegex(
-    aDict: Dict[str, Any] = {},
+    aDict: Optional[Dict[str, Any]] = None,
 ) -> None:
     global tldInfo
+    if aDict is None:
+        return
+    if len(aDict) == 0:
+        return
+
     tldInfo.mergeExternalDictWithRegex(aDict)
 
 
