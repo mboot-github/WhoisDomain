@@ -76,3 +76,5 @@ rlsecure/
 *.out
 out
 22
+lint.txt
+pylint.txt
