@@ -81,6 +81,26 @@
   * fix a few tld to return the proper registrant string (not nic handle)
   * introduce parsing based on functions, allow contextual search in splitted data and plain data, allow contextual search based on earlier result; fix a few tld to return the proper registrant string (not nic handle)
 
+### 1.20230906.1
+  * introduce parsing based on functions
+  * allow contextual search in splitted data and plain data
+  * allow contextual search based on earlier result
+  * fix a few tld to return the proper registrant string (not nic handle)
+
+### 1.20230913.1
+  * if you have installed `tld` (pip install tld) you can enable withPublicSuffix=True to process untill you reach the pseudo tld.
+  * the public_suffix info is added if available (and if requested)
+  * example case is: ./test2.py -d www.dublin.airport.aero --withPublicSuffix
+
+### 1.20230913.3
+  * fix re.NOFLAGS, it is not compatible with 3.9, it appears in 3.11
+
 ---
 
-  * add ignore strings, add generic exception, start on publicSuffix (if import 'tld' works)
+## in progress
+
+  * prepare work on pylint
+  * switch to logging: all verbose is currently log.debug(); to show set LOGLEVEL=DEBUG before calling, see Makefile: make test
+
+
+
