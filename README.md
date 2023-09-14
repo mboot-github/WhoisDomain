@@ -85,3 +85,10 @@ and `make suggest`.
 
 ### 1.20230913.3
   * fix re.NOFLAGS, it is not compatible with 3.9, it appears in 3.11
+
+---
+
+## in progress
+
+  * prepare work on pylint
+  * switch to logging: all verbose is currently log.debug(); to show set LOGLEVEL=DEBUG before calling, see Makefile: make test
