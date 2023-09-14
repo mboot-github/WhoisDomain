@@ -1,11 +1,17 @@
 #! /usr/bin/env python3
 
+import os
+import logging
+
 from typing import (
     List,
     Dict,
     Any,
     Optional,
 )
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 class DataContext:

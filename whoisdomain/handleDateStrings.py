@@ -1,11 +1,16 @@
 #! /usr/bin/env python3
 import re
-
+import os
+import logging
 import datetime
-from .exceptions import UnknownDateFormat
 
 from typing import Optional
 
+from .exceptions import UnknownDateFormat
+
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 # http://docs.python.org/library/datetime.html#strftime-strptime-behavior
 DATE_FORMATS = [

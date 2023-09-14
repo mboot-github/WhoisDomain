@@ -5,6 +5,7 @@ import re
 import getopt
 import sys
 import json
+import logging
 
 from typing import (
     Optional,
@@ -15,6 +16,9 @@ from typing import (
 )
 
 import whoisdomain as whois  # to be compatible with dannycork
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 # if we are not running as test2.py run in a simplistic way
 SIMPLISTIC: bool = False
@@ -618,6 +622,7 @@ def main() -> None:
 
         if opt in ("-v", "--verbose"):
             Verbose = True
+            logging.basicConfig(level="DEBUG")
 
         if opt in ("-p", "--print"):
             PrintGetRawWhoisResult = True
@@ -677,8 +682,8 @@ def main() -> None:
             if domain not in domains:
                 domains.append(domain)
 
-    if Verbose:
-        print(f"{name} SIMPLISTIC: {SIMPLISTIC}", file=sys.stderr)
+    msg = f"{name} SIMPLISTIC: {SIMPLISTIC}"
+    log.debug(msg)
 
     if Ruleset is True and len(domains):
         for domain in domains:

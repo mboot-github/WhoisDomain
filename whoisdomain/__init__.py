@@ -1,5 +1,6 @@
 import sys
 import os
+import logging
 
 from functools import wraps
 
@@ -55,6 +56,9 @@ from .lastWhois import (
     get_last_raw_whois_data,
     initLastWhois,
 )
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 HAS_REDIS = False
 try:
@@ -225,8 +229,8 @@ def query(
             tryInstallMissingWhoisOnWindows=tryInstallMissingWhoisOnWindows,
         )
 
-    if verbose:
-        print(pc, file=sys.stderr)
+    msg = f"{pc}"
+    log.debug(msg)
 
     return q2(domain=domain, pc=pc)
 

@@ -55,6 +55,7 @@ main()
         local z=$(basename $line)
         testOneDomain $z
     done
+    exit 0
 }
 
 main $*

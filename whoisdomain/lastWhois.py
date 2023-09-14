@@ -1,3 +1,6 @@
+import os
+import logging
+
 from typing import (
     List,
     Dict,
@@ -5,6 +8,9 @@ from typing import (
 )
 
 from .context.parameterContext import ParameterContext
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 LastWhois: Dict[str, Any] = {}
 

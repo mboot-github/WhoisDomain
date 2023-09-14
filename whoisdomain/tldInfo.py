@@ -1,4 +1,6 @@
 # import re
+import os
+import logging
 
 from typing import (
     Dict,
@@ -6,6 +8,9 @@ from typing import (
     Any,
     Optional,
 )
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 class TldInfo:
@@ -15,6 +20,8 @@ class TldInfo:
         verbose: bool = False,
     ) -> None:
         self.verbose = verbose
+        if verbose:
+            logging.basicConfig(level="DEBUG")
 
         # a reference to the external ZZ database of all TLD info
         self.zzDictRef = zzDict

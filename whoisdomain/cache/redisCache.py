@@ -1,9 +1,15 @@
 #! /usr/bin/env python3
 
-import sys
+# import sys
+import os
+import logging
+
 from typing import (
     Optional,
 )
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 HAS_REDIS = False
 try:
@@ -28,21 +34,14 @@ if HAS_REDIS:
                 connection_pool=self.pool,
             )
 
-            if self.verbose:
-                print(f"{type(self).__name__} verbose: {self.verbose}", file=sys.stderr)
-
         def get(
             self,
             keyString: str,
         ) -> Optional[str]:
-            if self.verbose:
-                print(f"{type(self).__name__} get: {keyString}", file=sys.stderr)
 
             data = self.redis.get(keyString)
             if data:
                 sdata: str = data.decode("utf-8")
-                if self.verbose:
-                    print(sdata, file=sys.stderr)
                 return sdata
             return None
 
@@ -51,8 +50,6 @@ if HAS_REDIS:
             keyString: str,
             data: str,
         ) -> str:
-            if self.verbose:
-                print(f"{type(self).__name__} put: {keyString}", file=sys.stderr)
 
             self.redis.set(
                 keyString,

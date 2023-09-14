@@ -1,3 +1,6 @@
+import os
+import logging
+
 from typing import (
     Dict,
     Any,
@@ -11,6 +14,9 @@ from .finders import (
     findFromToAndLookForWithFindFirst,
     findInSplitedLookForHavingFindFirst,
 )
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 # 2023-09-03 mboot, all _items are inherited, confirmed

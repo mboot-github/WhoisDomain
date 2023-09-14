@@ -1,11 +1,17 @@
-import re
-import sys
+# import re
+# import sys
+import os
+import logging
 
 from typing import (
     Dict,
     List,
     Callable,
 )
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
 
 COM_LIST: List[str] = [
     r"\nRegistrar",
@@ -28,7 +34,7 @@ def groupFromList(list: List[str]) -> Callable[[str], Dict[str, str]]:
         #       create a empty list
         #       store the list under key
         #       see if there is a match ans append matched lines to the list
-        what = r"\n\n"
+        # what = r"\n\n"
         return result
 
     return xgroupFromList

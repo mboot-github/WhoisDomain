@@ -1,5 +1,7 @@
 #! /usr/bin/env python3
 
+import os
+import logging
 import json
 
 from typing import (
@@ -7,6 +9,9 @@ from typing import (
     Dict,
     Any,
 )
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 ParamsStringJson: str = """
 {

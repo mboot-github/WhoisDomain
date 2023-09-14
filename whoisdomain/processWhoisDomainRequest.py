@@ -1,4 +1,6 @@
-import sys
+# import sys
+import os
+import logging
 
 from typing import (
     Optional,
@@ -19,6 +21,9 @@ from .whoisParser import WhoisParser
 from .domain import Domain
 from .lastWhois import updateLastWhois
 from .whoisCliInterface import WhoisCliInterface
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 TLD_LIB_PRESENT: bool = False
 try:
@@ -43,6 +48,8 @@ class ProcessWhoisDomainRequest:
         self.dom: Optional[Domain] = dom
         self.wci = wci
         self.parser = parser
+        if self.pc.verbose:
+            logging.basicConfig(level="DEBUG")
 
     def _analyzeDomainStringAndValidate(
         self,
@@ -64,8 +71,8 @@ class ProcessWhoisDomainRequest:
             if res:
                 self.dc.publicSuffixStr = str(res)
                 self.dc.hasPublicSuffix = True
-                if self.pc.verbose:
-                    print(f"publicSuffixStr: {self.dc.publicSuffixStr}", file=sys.stderr)
+                msg = f"publicSuffixStr: {self.dc.publicSuffixStr}"
+                log.debug(msg)
 
         if len(self.dc.dList) == 0:
             self.dc.tldString = None
@@ -143,8 +150,8 @@ class ProcessWhoisDomainRequest:
     def _doOneLookup(
         self,
     ) -> Tuple[Optional[Domain], bool]:
-        if self.pc.verbose:
-            print(f"DEBUG: ### lookup: tldString: {self.dc.tldString}; dList: {self.dc.dList}", file=sys.stderr)
+        msg = f"### lookup: tldString: {self.dc.tldString}; dList: {self.dc.dList}"
+        log.debug(msg)
 
         if self.dc.dList is None:  # mainly to please mypy
             self.dom = None
@@ -171,8 +178,8 @@ class ProcessWhoisDomainRequest:
 
         self.dc.whoisStr = str(self.dc.whoisStr)
 
-        if self.pc.verbose:
-            print("DEBUG: Raw: ", self.dc.whoisStr, file=sys.stderr)
+        msg = f"Raw: {self.dc.whoisStr}"
+        log.debug(msg)
 
         self.dc.rawWhoisStr = self.dc.whoisStr  # keep the original whois string for reference before we clean
         updateLastWhois(
@@ -183,8 +190,8 @@ class ProcessWhoisDomainRequest:
 
         self.parser.init()
         # init also calls cleanup on the text string whois cli response
-        if self.pc.verbose:
-            print("DEBUG: Clean: ", self.dc.whoisStr, file=sys.stderr)
+        msg = f"Clean: {self.dc.whoisStr}"
+        log.debug(msg)
 
         assert self.dom is not None
         data, finished = self.parser.parse(

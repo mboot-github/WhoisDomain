@@ -1,5 +1,7 @@
+# import sys
+import os
 import re
-import sys
+import logging
 
 from typing import (
     # Dict,
@@ -7,6 +9,9 @@ from typing import (
     List,
     Callable,
 )
+
+log = logging.getLogger(__name__)
+logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 def newLineSplit(
@@ -62,16 +67,17 @@ def findFromToAndLookFor(
     ) -> List[str]:
         flags = re.IGNORECASE if ignoreCase else 0  # NOFLAG is 3.11
         s1 = re.search(fromStr, textStr, flags=flags)
-        if verbose:
-            print(f"DEBUG s1 {s1}, {fromStr}", file=sys.stderr)
+
+        msg = f"s1 {s1}, {fromStr}"
+        log.debug(msg)
 
         if s1 is None:
             return []
 
         start = s1.start()
         t2 = textStr[start:]
-        if verbose:
-            print(f"DEBUG: fromStr {t2}", file=sys.stderr)
+        msg = f"fromStr {t2}"
+        log.debug(msg)
 
         s2 = re.search(toStr, t2, flags=flags)
         if s2 is None:
@@ -79,8 +85,8 @@ def findFromToAndLookFor(
 
         end = s2.end()
         t3 = t2[:end]
-        if verbose:
-            print(f"DEBUG: toStr {t3}", file=sys.stderr)
+        msg = f"toStr {t3}"
+        log.debug(msg)
 
         return re.findall(lookForStr, t3, flags=flags)
 
@@ -146,22 +152,22 @@ def findFromToAndLookForWithFindFirst(
         if ff2 == "":
             return []
 
-        if verbose:
-            print(f"DEBUG: we found: {ff2}, now combine with {fromStr}", file=sys.stderr)
+        msg = f"we found: {ff2}, now combine with {fromStr}"
+        log.debug(msg)
 
         fromStr2 = fromStr.replace(r"{}", ff2)
         s1 = re.search(fromStr2, textStr, flags=flags)
 
-        if verbose:
-            print(f"DEBUG s1 {s1}, {fromStr}", file=sys.stderr)
+        msg = f"s1 {s1}, {fromStr}"
+        log.debug(msg)
 
         if s1 is None:
             return []
 
         start = s1.start()
         t2 = textStr[start:]
-        if verbose:
-            print(f"DEBUG: fromStr {t2}", file=sys.stderr)
+        msg = f"fromStr {t2}"
+        log.debug(msg)
 
         s2 = re.search(toStr, t2, flags=flags)
         if s2 is None:
@@ -169,8 +175,8 @@ def findFromToAndLookForWithFindFirst(
 
         end = s2.end()
         t3 = t2[:end]
-        if verbose:
-            print(f"DEBUG: toStr {t3}", file=sys.stderr)
+        msg = f"toStr {t3}"
+        log.debug(msg)
 
         return re.findall(lookForStr, t3, flags=flags)
 
