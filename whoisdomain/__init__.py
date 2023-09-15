@@ -1,4 +1,13 @@
 # pylint: disable=duplicate-code
+"""
+Module providing all public accessible functions and data for the whoisdomain package
+
+## optional modules supported:
+
+- if the tld library is installed you can use the `withPublicSuffix:bool` option
+
+All public data is vizible via the __all__ List
+"""
 
 import sys
 import os
@@ -202,6 +211,7 @@ def query(
     tryInstallMissingWhoisOnWindows: bool = False,
     shortResponseLen: int = 5,
     withPublicSuffix: bool = False,
+    extractServers: bool = False,
     # if you use pc as argument all above params (except domain are ignored)
 ) -> Optional[Domain]:
     # see documentation about paramaters in parameterContext.py
@@ -229,6 +239,7 @@ def query(
             withPublicSuffix=withPublicSuffix,
             shortResponseLen=shortResponseLen,
             tryInstallMissingWhoisOnWindows=tryInstallMissingWhoisOnWindows,
+            extractServers=extractServers,
         )
 
     msg = f"{pc}"

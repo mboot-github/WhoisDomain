@@ -1,22 +1,23 @@
-UnknownTld meta.xn--11b4c The TLD xn--11b4c is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
-UnknownTld meta.xn--2scrj The TLD xn--2scrj is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
-UnknownTld meta.xn--31bsy5d The TLD xn--31bsy5d is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
-UnknownTld meta.xn--3hcrj The TLD xn--3hcrj is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
-UnknownTld meta.xn--45br5r The TLD xn--45br5r is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
-UnknownTld meta.xn--45brj The TLD xn--45brj is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
-UnknownTld meta.xn--c2br The TLD xn--c2br is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
-UnknownTld meta.xn--clchc0ea0b The TLD xn--clchc0ea0b is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
-UnknownTld meta.xn--fpcrj The TLD xn--fpcrj is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
-UnknownTld meta.xn--gecrj The TLD xn--gecrj is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
-UnknownTld meta.xn--h2breg The TLD xn--h2breg is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
-UnknownTld meta.xn--h2brj The TLD xn--h2brj is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
-UnknownTld meta.xn--qwcrj The TLD xn--qwcrj is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
-UnknownTld meta.xn--s9brj The TLD xn--s9brj is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
-UnknownTld meta.xn--xkc2dl3a The TLD xn--xkc2dl3a is currently not supported by this package. Use validTlds() to see what toplevel domains are supported.
+whois version https://github.com/jonasob/jwhois
+get server info: Fedora
 
-WhoisCommandTimeout meta.bo timeout: query took more then 30.0 seconds
-WhoisCommandTimeout meta.com.au timeout: query took more then 30.0 seconds
-WhoisCommandTimeout meta.eus timeout: query took more then 30.0 seconds
-WhoisCommandTimeout meta.ki timeout: query took more then 30.0 seconds
-WhoisCommandTimeout meta.ml timeout: query took more then 30.0 seconds
-WhoisCommandTimeout meta.pt timeout: query took more then 30.0 seconds
+this group is always on the first line
+[Querying whois.verisign-grs.com]
+[Redirected to whois.markmonitor.com]
+[Querying whois.markmonitor.com]
+[whois.markmonitor.com]
+
+generic re: r"^\[Querying\s+([^\]*])\]"
+generic re: r"^\[Redirected\s+to\s+([^\]*])\]"
+generic final server:  r"\[([^\]]*)\]"
+
+whois version https://github.com/rfc1036/whois
+Ubu 20,22 must use --verbose to get
+Centos 7
+
+Using server whois.verisign-grs.com.
+Using server whois.markmonitor.com.
+
+generic query: r"^Using\s+server\s+()$" , strip trailing .
+
+extractServers: True

@@ -215,3 +215,6 @@ zz:
 
 withPublicSuffix:
 	./test2.py -d  www.dublin.airport.aero --withPublicSuffix
+
+withExtractServers:
+	LOGLEVEL=DEBUG ./test2.py -d google.com --extractServers -v

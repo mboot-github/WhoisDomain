@@ -36,7 +36,7 @@ setupVersionNumberToday()
     mkdir -p ./work/
     # keep track of the latest version string
     echo "${V}" >"./${VERSION_FILE}"
-    echo "VERSION = \"${V}\"" >whoisdomain/version.py
+    echo "'''This module only makes the version available for dynamic versioning'''\nVERSION = '${V}'" >whoisdomain/version.py
 }
 
 buildDist()

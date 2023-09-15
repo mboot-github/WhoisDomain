@@ -19,6 +19,37 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 class Domain:
+    # The docstrings for classes should summarize its behavior
+    # and list the public methods and instance variables.
+    """
+    A class to represent a standarized result of a whois lookup
+
+    # Attributes
+    * Attributes are created dynamically,
+    not all domains have currently the same amount.
+
+    - name: str, the domain name
+    - tld: str, the detected top level domain
+    - name_servers: List, a list of detected name servers
+    - DNSSEC: boolean
+
+    - status: List
+    - registrar: str
+    - registrant: str
+    - registrant_country:
+    - emails: List
+
+    - updated_date: datetime
+    - expiration_date: datetime
+    - creation_date: datetime
+
+    Methods
+    -------
+    def init(pc: ParameterContext,dc: DataContext) -> None:
+        initialize the object with the current data from dc.data: Dict[str, Any]
+        the init is separated from creating an instance as we want to use dependency injection as much as possible.
+    """
+
     def _cleanupArray(
         self,
         data: List[str],
@@ -133,7 +164,6 @@ class Domain:
         dc: DataContext,
     ) -> None:
         pass
-        # self.init(pc=pc, dc=dc)
 
     def init(
         self,
@@ -163,6 +193,9 @@ class Domain:
 
         if pc.withPublicSuffix and dc.hasPublicSuffix:
             self.public_suffix: str = str(dc.publicSuffixStr)
+
+        if pc.extractServers:
+            self.servers = dc.servers
 
         if pc.return_raw_text_for_unsupported_tld is True:
             return

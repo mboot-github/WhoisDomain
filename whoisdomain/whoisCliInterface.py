@@ -95,8 +95,12 @@ class WhoisCliInterface:
                 whoisCommandList=whoisCommandList,
             )
 
+        if self.pc.extractServers:
+            whoisCommandList = whoisCommandList + ["--verbose"]
+
         if self.pc.server:
-            return whoisCommandList + [self.domain, "-h", self.pc.server]
+            whoisCommandList = whoisCommandList + ["-h", self.pc.server]
+
         return whoisCommandList + [self.domain]
 
     def _postProcessingResult(self) -> str:

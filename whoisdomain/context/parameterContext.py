@@ -128,6 +128,12 @@ ParamsStringJson: str = """
     "default": false,
     "optional": true,
     "help": "if lib 'tld' is installed add tld info based on get_tld(); fake the tld if needed"
+  },
+  "extractServers": {
+    "type": "bool",
+    "default": false,
+    "optional": true,
+    "help": "try to extract the whois servers from the whois output (uses --verbose)"
   }
 }
 """

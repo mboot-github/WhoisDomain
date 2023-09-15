@@ -266,6 +266,17 @@ class WhoisParser:
 
         raise FailedParsingWhoisOutput(self.dc.whoisStr)
 
+    def _extractWhoisServer(self) -> List[str]:
+        result = re.findall(r"^Using\s+server\s+([^\n]*)\n", str(self.dc.whoisStr), flags=re.IGNORECASE)
+        if result:
+            return result
+
+        result = re.findall(r"\[([^\]]*)\]\r?\n", str(self.dc.whoisStr), flags=re.IGNORECASE)
+        if result:
+            return result
+
+        return []
+
     def _cleanupWhoisResponse(
         self,
     ) -> str:
@@ -358,6 +369,7 @@ class WhoisParser:
             "tld": str(self.dc.tldString),
             "DNSSEC": self._doDnsSec(),
         }
+        self.dc.servers = self._extractWhoisServer()
         self._cleanupWhoisResponse()
 
     def parse(

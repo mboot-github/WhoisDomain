@@ -434,9 +434,7 @@ disable=raw-checker-failed,
         unused-variable,
         global-variable-not-assigned,
         attribute-defined-outside-init,
-        missing-module-docstring,
         missing-function-docstring,
-        missing-class-docstring
 #        deprecated-pragma,
 
 # Enable the message, report, category or checker with the given id(s). You can

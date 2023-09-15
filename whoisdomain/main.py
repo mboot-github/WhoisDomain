@@ -34,6 +34,7 @@ IgnoreReturncode: bool = False
 TestAllTld: bool = False
 TestRunOnly: bool = False
 WithPublicSuffix: bool = False
+WithExtractServers: bool = False
 
 
 class ResponseCleaner:
@@ -213,12 +214,14 @@ def testItem(
     global IgnoreReturncode
     global Verbose
     global PrintGetRawWhoisResult
-    global SIMPLISTIC
-    global WithRedacted
 
+    global SIMPLISTIC
     global TestAllTld
     global TestRunOnly
+
+    global WithRedacted
     global WithPublicSuffix
+    global WithExtractServers
 
     pc = whois.ParameterContext(
         ignore_returncode=IgnoreReturncode,
@@ -228,6 +231,7 @@ def testItem(
         simplistic=SIMPLISTIC,
         withRedacted=WithRedacted,
         withPublicSuffix=WithPublicSuffix,
+        extractServers=WithExtractServers,
     )
 
     # use the new query (can also simply use q2()
@@ -535,6 +539,7 @@ def main() -> None:
     global TestAllTld
     global TestRunOnly
     global WithPublicSuffix
+    global WithExtractServers
 
     name: str = os.path.basename(sys.argv[0])
     if name == "test2.py":
@@ -565,6 +570,7 @@ def main() -> None:
                 "Cleanup=",
                 "withRedacted",
                 "withPublicSuffix",
+                "extractServers",
             ],
         )
     except getopt.GetoptError:
@@ -679,6 +685,9 @@ def main() -> None:
             domain = arg
             if domain not in domains:
                 domains.append(domain)
+
+        if opt in ("--extractServers"):
+            WithExtractServers = True
 
     msg = f"{name} SIMPLISTIC: {SIMPLISTIC}"
     log.debug(msg)

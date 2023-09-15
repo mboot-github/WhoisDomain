@@ -1,3 +1,12 @@
+"""
+This module keeps track of the original whois string for the last query request
+
+it should be rewritten to use a static class or singleton
+it is re-initialized on each new request
+
+public access is only needed fow: get_last_raw_whois_data()
+
+"""
 import os
 import logging
 

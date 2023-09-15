@@ -92,3 +92,4 @@ and `make suggest`.
 
   * prepare work on pylint
   * switch to logging: all verbose is currently log.debug(); to show set LOGLEVEL=DEBUG before calling, see Makefile: make test
+  * experimental: add extractServers: bool default False; when true we will try to extract the "redirect info chain" on rcf1036/whois and jwhois linux/darwin
