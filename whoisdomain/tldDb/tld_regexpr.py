@@ -1365,6 +1365,12 @@ ZZ["tg"] = {
     "status": R(r"Status:\.+\s?(.+)"),
     "name_servers": R(r"Name Server \(DB\):\.+(.+)"),
 }
+ZZ["au"] = {
+    "extend": "com",
+    "registrar": R(r"Registrar Name:\s?(.+)"),
+    "updated_date": R(r"Last Modified:([^\n]*)"),
+    "registrant": r"Registrant:\s*([^\n]*)\n",
+}
 
 # ======================================
 # ======================================
@@ -1439,7 +1445,6 @@ ZZ["auction"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["audible"] = {"_server": "whois.nic.audible", "extend": "com", "_test": "nic.audible"}
 ZZ["audio"] = {"extend": "_uniregistry", "_server": "whois.uniregistry.net"}
 ZZ["audi"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
-ZZ["au"] = {"extend": "com", "registrar": R(r"Registrar Name:\s?(.+)"), "updated_date": R(r"Last Modified:([^\n]*)")}
 ZZ["auspost"] = {"_server": "whois.nic.auspost", "extend": "com", "_test": "nic.auspost"}
 ZZ["author"] = {"_server": "whois.nic.author", "extend": "com", "_test": "nic.author"}
 ZZ["auto"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}

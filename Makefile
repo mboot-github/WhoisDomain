@@ -12,6 +12,7 @@ DOCKER_WHO	:= mbootgithub
 
 SIMPLEDOMAINS = $(shell ls testdata)
 
+TEST_OPTIONS_ALL = --withPublicSuffix --extractServers --stripHttpStatus
 # PHONY targets: make will run its recipe regardless of whether a file with that name exists or what its last modification time is.
 .PHONY: TestSimple TestSimple2 TestAll clean
 
@@ -27,10 +28,10 @@ testP36:
 second: first test2
 
 test:
-	LOGLEVEL=DEBUG ./test2.py --withPublicSuffix --extractServers -t 2>2 | tee 1
+	LOGLEVEL=DEBUG ./test2.py $(TEST_OPTIONS_ALL) -t 2>2 | tee 1
 
 test-all:
-	LOGLEVEL=DEBUG ./test2.py --withPublicSuffix --extractServers --stripHttpStatus -a 2>2 | tee 1
+	LOGLEVEL=DEBUG ./test2.py $(TEST_OPTIONS_ALL) -a 2>2 | tee 1
 
 t4:
 	./t4.py 2>22 | tee out
@@ -213,8 +214,16 @@ zz:
 	docker build -t df36 -f Df-36 .
 	docker run -v .:/context df36 -d google.com
 
+with: withPublicSuffix withExtractServers stripHttpStatus
+
 withPublicSuffix:
 	./test2.py -d  www.dublin.airport.aero --withPublicSuffix
 
 withExtractServers:
-	LOGLEVEL=DEBUG ./test2.py -d google.com --extractServers -v
+	./test2.py -d google.com --extractServers
+
+stripHttpStatus:
+	./test2.py -d nic.aarp --stripHttpStatus
+	./test2.py -d nic.abudhabi --stripHttpStatus
+	./test2.py -d META.AU --stripHttpStatus
+	./test2.py -d google.AU --stripHttpStatus

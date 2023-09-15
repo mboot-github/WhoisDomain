@@ -91,9 +91,15 @@ class Domain:
 
     def cleanStatus(self, item: str) -> str:
         if "icann.org/epp#" in item:
-            res = re.split(r"\s*https?://(www\.)?icann\.org/epp#\s*", item)
+            res = re.split(r"\s*\(?https?://(www\.)?icann\.org/epp#\s*", item)
             if res and res[0]:
                 return res[0].strip()
+
+        if "identitydigital.au/get-au/whois-status-codes#" in item:
+            res = re.split(r"\s*https://identitydigital\.au/get-au/whois-status-codes#\s*", item)
+            if res and res[0]:
+                return res[0].strip()
+
         return item
 
     def _doStatus(
