@@ -267,11 +267,12 @@ class WhoisParser:
         raise FailedParsingWhoisOutput(self.dc.whoisStr)
 
     def _extractWhoisServer(self) -> List[str]:
+        # jp starts comments with [\s
         result = re.findall(r"^Using\s+server\s+([^\n]*)\n", str(self.dc.whoisStr), flags=re.IGNORECASE)
         if result:
             return result
 
-        result = re.findall(r"\[([^\]]*)\]\r?\n", str(self.dc.whoisStr), flags=re.IGNORECASE)
+        result = re.findall(r"\[(?=[^\s])([^\]]*)\]\r?\n", str(self.dc.whoisStr), flags=re.IGNORECASE)
         if result:
             return result
 

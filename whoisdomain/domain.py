@@ -196,6 +196,9 @@ class Domain:
 
         if pc.extractServers:
             self.servers = dc.servers
+            self.server = ""
+            if self.servers:
+                self.server = self.servers[-1]
 
         if pc.return_raw_text_for_unsupported_tld is True:
             return

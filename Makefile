@@ -27,10 +27,10 @@ testP36:
 second: first test2
 
 test:
-	LOGLEVEL=DEBUG ./test2.py -t 2>2 | tee 1
+	LOGLEVEL=DEBUG ./test2.py --withPublicSuffix --extractServers -t 2>2 | tee 1
 
 test-all:
-	LOGLEVEL=DEBUG ./test2.py -a 2>2 | tee 1
+	LOGLEVEL=DEBUG ./test2.py --withPublicSuffix --extractServers -a 2>2 | tee 1
 
 t4:
 	./t4.py 2>22 | tee out
