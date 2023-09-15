@@ -1,23 +1,27 @@
-whois version https://github.com/jonasob/jwhois
-get server info: Fedora
-
-this group is always on the first line
-[Querying whois.verisign-grs.com]
-[Redirected to whois.markmonitor.com]
-[Querying whois.markmonitor.com]
-[whois.markmonitor.com]
-
-generic re: r"^\[Querying\s+([^\]*])\]"
-generic re: r"^\[Redirected\s+to\s+([^\]*])\]"
-generic final server:  r"\[([^\]]*)\]"
-
-whois version https://github.com/rfc1036/whois
-Ubu 20,22 must use --verbose to get
-Centos 7
-
-Using server whois.verisign-grs.com.
-Using server whois.markmonitor.com.
-
-generic query: r"^Using\s+server\s+()$" , strip trailing .
-
 extractServers: True
+
+    whois version https://github.com/jonasob/jwhois
+    get server info: Fedora
+
+    this group is always on the first line
+    [Querying whois.verisign-grs.com]
+    [Redirected to whois.markmonitor.com]
+    [Querying whois.markmonitor.com]
+    [whois.markmonitor.com]
+
+    generic re: r"^\[Querying\s+([^\]*])\]"
+    generic re: r"^\[Redirected\s+to\s+([^\]*])\]"
+    generic final server:  r"\[([^\]]*)\]"
+
+    whois version https://github.com/rfc1036/whois
+    Ubu 20,22 must use --verbose to get
+    Centos 7
+
+    Using server whois.verisign-grs.com.
+    Using server whois.markmonitor.com.
+
+    generic query: r"^Using\s+server\s+()$" , strip trailing .
+
+
+stripHttpStatus: bool default False
+    remove r"https://icann.org/epp#\S+" from status strings
