@@ -33,8 +33,10 @@ Failures: Dict[str, Any] = {}
 IgnoreReturncode: bool = False
 TestAllTld: bool = False
 TestRunOnly: bool = False
+
 WithPublicSuffix: bool = False
 WithExtractServers: bool = False
+WithStripHttpStatus: bool = False
 
 
 class ResponseCleaner:
@@ -222,6 +224,7 @@ def testItem(
     global WithRedacted
     global WithPublicSuffix
     global WithExtractServers
+    global WithStripHttpStatus
 
     pc = whois.ParameterContext(
         ignore_returncode=IgnoreReturncode,
@@ -232,6 +235,7 @@ def testItem(
         withRedacted=WithRedacted,
         withPublicSuffix=WithPublicSuffix,
         extractServers=WithExtractServers,
+        stripHttpStatus=WithStripHttpStatus,
     )
 
     # use the new query (can also simply use q2()
@@ -540,6 +544,7 @@ def main() -> None:
     global TestRunOnly
     global WithPublicSuffix
     global WithExtractServers
+    global WithStripHttpStatus
 
     name: str = os.path.basename(sys.argv[0])
     if name == "test2.py":
@@ -571,6 +576,7 @@ def main() -> None:
                 "withRedacted",
                 "withPublicSuffix",
                 "extractServers",
+                "stripHttpStatus",
             ],
         )
     except getopt.GetoptError:
@@ -606,12 +612,6 @@ def main() -> None:
         if opt == "-h":
             usage()
             sys.exit(0)
-
-        if opt in ("--withRedacted"):
-            WithRedacted = True
-
-        if opt in ("--withPublicSuffix"):
-            WithPublicSuffix = True
 
         if opt in ("-a", "--all"):
             TestAllTld = True
@@ -688,6 +688,15 @@ def main() -> None:
 
         if opt in ("--extractServers"):
             WithExtractServers = True
+
+        if opt in ("--stripHttpStatus"):
+            WithStripHttpStatus = True
+
+        if opt in ("--withRedacted"):
+            WithRedacted = True
+
+        if opt in ("--withPublicSuffix"):
+            WithPublicSuffix = True
 
     msg = f"{name} SIMPLISTIC: {SIMPLISTIC}"
     log.debug(msg)

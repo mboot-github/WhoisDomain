@@ -134,6 +134,12 @@ ParamsStringJson: str = """
     "default": false,
     "optional": true,
     "help": "try to extract the whois servers from the whois output (uses --verbose)"
+  },
+  "stripHttpStatus": {
+    "type": "bool",
+    "default": false,
+    "optional": true,
+    "help": "strip https://icann.org/epp# from status response"
   }
 }
 """

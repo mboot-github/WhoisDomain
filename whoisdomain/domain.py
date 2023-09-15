@@ -2,6 +2,7 @@
 
 # import sys
 import os
+import re
 import logging
 
 from typing import (
@@ -61,10 +62,11 @@ class Domain:
 
     def _doNameservers(
         self,
-        data: Dict[str, Any],
+        pc: ParameterContext,
+        dc: DataContext,
     ) -> None:
         tmp: List[str] = []
-        for x in data["name_servers"]:
+        for x in dc.data["name_servers"]:
             if isinstance(x, str):
                 tmp.append(x.strip().lower())
                 continue
@@ -87,21 +89,38 @@ class Domain:
 
         self.name_servers = sorted(self.name_servers)
 
+    def cleanStatus(self, item: str) -> str:
+        if "icann.org/epp#" in item:
+            res = re.split(r"\s*https?://(www\.)?icann\.org/epp#\s*", item)
+            if res and res[0]:
+                return res[0].strip()
+        return item
+
     def _doStatus(
         self,
-        data: Dict[str, Any],
+        pc: ParameterContext,
+        dc: DataContext,
     ) -> None:
-        self.status = data["status"][0].strip()
+        self.status = dc.data["status"][0].strip()
+
+        if pc.stripHttpStatus:
+            self.status = self.cleanStatus(self.status)
 
         # sorted added to get predictable output during test
-        # list(set(...))) to deduplicate results
-        # set([s.strip() for s in data["status"]]) # use set comprehension
+        # deduplicate results with set comprehension {}
 
         self.statuses = sorted(
-            list({s.strip() for s in data["status"]}),
+            list({s.strip() for s in dc.data["status"]}),
         )
         if "" in self.statuses:
             self.statuses = self._cleanupArray(self.statuses)
+
+        if pc.stripHttpStatus:
+            z = []
+            for item in self.statuses:
+                item = self.cleanStatus(item)
+                z.append(item)
+            self.statuses = z
 
     def _doOptionalFields(
         self,
@@ -139,6 +158,7 @@ class Domain:
 
     def _parseData(
         self,
+        pc: ParameterContext,
         dc: DataContext,
     ) -> None:
         # process mandatory fields that we expect always to be present
@@ -152,8 +172,8 @@ class Domain:
         self.last_updated = str_to_date(dc.data["updated_date"][0], self.tld)
 
         self.dnssec = dc.data["DNSSEC"]
-        self._doStatus(dc.data)
-        self._doNameservers(dc.data)
+        self._doStatus(pc, dc)
+        self._doNameservers(pc, dc)
 
         # optional fields
         self._doOptionalFields(dc.data)
@@ -203,4 +223,4 @@ class Domain:
         if pc.return_raw_text_for_unsupported_tld is True:
             return
 
-        self._parseData(dc)
+        self._parseData(pc, dc)

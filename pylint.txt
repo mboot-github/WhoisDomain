@@ -22,15 +22,15 @@ whoisdomain/processWhoisDomainRequest.py:167:15: W0718: Catching too general exc
 ************* Module whoisdomain.whoisCliInterface
 whoisdomain/whoisCliInterface.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 whoisdomain/whoisCliInterface.py:28:0: C0115: Missing class docstring (missing-class-docstring)
-************* Module whoisdomain.main
-whoisdomain/main.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/main.py:40:0: C0115: Missing class docstring (missing-class-docstring)
-************* Module whoisdomain.domain
-whoisdomain/domain.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/domain.py:21:0: R0902: Too many instance attributes (21/20) (too-many-instance-attributes)
 ************* Module whoisdomain.whoisParser
 whoisdomain/whoisParser.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 whoisdomain/whoisParser.py:40:0: C0115: Missing class docstring (missing-class-docstring)
+************* Module whoisdomain.main
+whoisdomain/main.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+whoisdomain/main.py:42:0: C0115: Missing class docstring (missing-class-docstring)
+************* Module whoisdomain.domain
+whoisdomain/domain.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+whoisdomain/domain.py:22:0: R0902: Too many instance attributes (22/20) (too-many-instance-attributes)
 ************* Module whoisdomain.cache.dbmCache
 whoisdomain/cache/dbmCache.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 whoisdomain/cache/dbmCache.py:14:0: C0115: Missing class docstring (missing-class-docstring)
@@ -63,8 +63,8 @@ whoisdomain/context/dataContext.py:1:0: C0114: Missing module docstring (missing
 whoisdomain/context/dataContext.py:17:0: C0115: Missing class docstring (missing-class-docstring)
 ************* Module whoisdomain.context.parameterContext
 whoisdomain/context/parameterContext.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/context/parameterContext.py:142:0: C0115: Missing class docstring (missing-class-docstring)
+whoisdomain/context/parameterContext.py:148:0: C0115: Missing class docstring (missing-class-docstring)
 
 ------------------------------------------------------------------
-Your code has been rated at 9.87/10 (previous run: 9.87/10, -0.00)
+Your code has been rated at 9.87/10 (previous run: 9.87/10, +0.00)
 
