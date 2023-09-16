@@ -198,7 +198,9 @@ class ProcessWhoisDomainRequest:
             dom=self.dom,
         )
 
-        self.dom = data
+        if finished:
+            self.dom = data
+
         return data, finished
 
     def _prepRequest(self) -> bool:
@@ -299,8 +301,11 @@ class ProcessWhoisDomainRequest:
             tldLevel = str(self.dc.tldString).split(".")
 
         while len(self.dc.dList) > len(tldLevel):
-            self.dom, finished = self._doOneLookup()
+            log.debug(f"{self.dc.dList}")
+            z, finished = self._doOneLookup()
+
             if finished:
+                self.dom = z
                 return self.dom
 
             self.dc.dList = self.dc.dList[1:]  # strip one element from the front and try again
