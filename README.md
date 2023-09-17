@@ -86,10 +86,12 @@ and `make suggest`.
 ### 1.20230913.3
   * fix re.NOFLAGS, it is not compatible with 3.9, it appears in 3.11
 
+## 1.20230917.1
+  * prepare work on pylint
+  * switch to logging: all verbose is currently log.debug(); to show set LOGLEVEL=DEBUG before calling, see Makefile: make test
+  * experimental: add extractServers: bool default False; when true we will try to extract the "redirect info chain" on rcf1036/whois and jwhois for linux/darwin
+  * add missing option to query(), test in production environment done
+
 ---
 
 ## in progress
-
-  * prepare work on pylint
-  * switch to logging: all verbose is currently log.debug(); to show set LOGLEVEL=DEBUG before calling, see Makefile: make test
-  * experimental: add extractServers: bool default False; when true we will try to extract the "redirect info chain" on rcf1036/whois and jwhois linux/darwin
