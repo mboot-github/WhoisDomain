@@ -15,10 +15,6 @@ whoisdomain/tldInfo.py:1:0: C0114: Missing module docstring (missing-module-docs
 whoisdomain/tldInfo.py:16:0: C0115: Missing class docstring (missing-class-docstring)
 ************* Module whoisdomain.helpers
 whoisdomain/helpers.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module whoisdomain.processWhoisDomainRequest
-whoisdomain/processWhoisDomainRequest.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/processWhoisDomainRequest.py:37:0: C0115: Missing class docstring (missing-class-docstring)
-whoisdomain/processWhoisDomainRequest.py:167:15: W0718: Catching too general exception Exception (broad-exception-caught)
 ************* Module whoisdomain.whoisCliInterface
 whoisdomain/whoisCliInterface.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 whoisdomain/whoisCliInterface.py:28:0: C0115: Missing class docstring (missing-class-docstring)
@@ -31,6 +27,11 @@ whoisdomain/main.py:42:0: C0115: Missing class docstring (missing-class-docstrin
 ************* Module whoisdomain.domain
 whoisdomain/domain.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 whoisdomain/domain.py:22:0: R0902: Too many instance attributes (22/20) (too-many-instance-attributes)
+************* Module whoisdomain.processWhoisDomainRequest
+whoisdomain/processWhoisDomainRequest.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+whoisdomain/processWhoisDomainRequest.py:37:0: C0115: Missing class docstring (missing-class-docstring)
+whoisdomain/processWhoisDomainRequest.py:167:15: W0718: Catching too general exception Exception (broad-exception-caught)
+whoisdomain/processWhoisDomainRequest.py:304:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
 ************* Module whoisdomain.cache.dbmCache
 whoisdomain/cache/dbmCache.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 whoisdomain/cache/dbmCache.py:14:0: C0115: Missing class docstring (missing-class-docstring)
@@ -66,5 +67,5 @@ whoisdomain/context/parameterContext.py:1:0: C0114: Missing module docstring (mi
 whoisdomain/context/parameterContext.py:148:0: C0115: Missing class docstring (missing-class-docstring)
 
 ------------------------------------------------------------------
-Your code has been rated at 9.87/10 (previous run: 9.87/10, +0.00)
+Your code has been rated at 9.87/10 (previous run: 9.87/10, -0.00)
 

@@ -212,6 +212,7 @@ def query(
     shortResponseLen: int = 5,
     withPublicSuffix: bool = False,
     extractServers: bool = False,
+    stripHttpStatus: bool = False,
     # if you use pc as argument all above params (except domain are ignored)
 ) -> Optional[Domain]:
     # see documentation about paramaters in parameterContext.py
@@ -240,6 +241,7 @@ def query(
             shortResponseLen=shortResponseLen,
             tryInstallMissingWhoisOnWindows=tryInstallMissingWhoisOnWindows,
             extractServers=extractServers,
+            stripHttpStatus=stripHttpStatus,
         )
 
     msg = f"{pc}"
