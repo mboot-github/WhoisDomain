@@ -13,6 +13,7 @@ DOCKER_WHO	:= mbootgithub
 SIMPLEDOMAINS = $(shell ls testdata)
 
 TEST_OPTIONS_ALL = --withPublicSuffix --extractServers --stripHttpStatus
+
 # PHONY targets: make will run its recipe regardless of whether a file with that name exists or what its last modification time is.
 .PHONY: TestSimple TestSimple2 TestAll clean
 
@@ -107,14 +108,14 @@ testdocker:
 		-f Dockerfile-test .
 	docker image ls
 	docker container ls
-	docker run whoisdomain-test -t
+	docker run whoisdomain-test -t $(TEST_OPTIONS_ALL)
 
 testdockerTestdata:
 	@export VERSION=$(shell cat work/version) && \
 	docker run \
 		-v ./testdata:/testdata \
 		$(WHAT)-$${VERSION}-test \
-		-f /testdata/DOMAINS.txt 2>tmp/$@-2 | \
+		-f /testdata/DOMAINS.txt $(TEST_OPTIONS_ALL) 2>tmp/$@-2 | \
 		tee tmp/$@-1
 
 docker:

@@ -3,7 +3,7 @@ name: Releases
 on:
   push:
     tags:
-    - 'v*'
+    - '1.202[34][0-9][0-9].[0-9]'
 
 jobs:
 

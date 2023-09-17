@@ -44,7 +44,7 @@ getInstalledVersion()
 testAllIfCorrectVersion()
 {
     [ "$WE_HAVE" == "$VERSION" ] && {
-        whoisdomain -f testdata/DOMAINS.txt
+        whoisdomain -f testdata/DOMAINS.txt --withPublicSuffix --extractServers --stripHttpStatus
         # clean up the venv
         rm -rf ${ENV}
         exit 0
