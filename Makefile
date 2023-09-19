@@ -140,7 +140,7 @@ dockerTestdata:
 	docker run \
 		-v ./testdata:/testdata \
 		$(WHAT)-$${VERSION} \
-		-f /testdata/DOMAINS.txt 2>tmp/$@-2 | \
+		-f /testdata/DOMAINS.txt $(TEST_OPTIONS_ALL) 2>tmp/$@-2 | \
 		tee tmp/$@-1
 
 dockerPush:

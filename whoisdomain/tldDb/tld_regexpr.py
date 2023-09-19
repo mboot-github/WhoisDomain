@@ -2915,6 +2915,8 @@ ZZ["yahoo"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["yandex"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["zero"] = {"_privateRegistry": True}  # no whois server found in iana
 
+ZZ["onion"] = {"_privateRegistry": True}  # this is a special case https://tools.ietf.org/html/rfc7686
+
 # unknown tld abb, abb, abb, abb, whois.nic.abb,
 # unknown tld arpa, arpa, arpa, arpa, whois.iana.org,
 # unknown tld bn, bn, bn, bn, whois.bnnic.bn,
