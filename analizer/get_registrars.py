@@ -1,11 +1,15 @@
 #! /usr/bin/env python3
 
-import sys
+# import sys
 import csv
 import requests
 
 from tld import get_tld
 from urllib.parse import urlparse
+
+from Typing import (
+    List,
+)
 
 FILE_NAME: str = "registrar-ids-1.csv"
 FILE_URL: str = f"https://www.iana.org/assignments/registrar-ids/{FILE_NAME}"
