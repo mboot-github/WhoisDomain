@@ -92,6 +92,9 @@ and `make suggest`.
   * experimental: add extractServers: bool default False; when true we will try to extract the "redirect info chain" on rcf1036/whois and jwhois for linux/darwin
   * add missing option to query(), test in production environment done
 
+## 1.20231102.1
+  * fix from kazet for .pl tld.
+
 ---
 
 ## in progress
