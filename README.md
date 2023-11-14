@@ -98,3 +98,5 @@ and `make suggest`.
 ---
 
 ## in progress
+
+ * abb, bw, bn, crown, crs, fj (does not work), gp (does not work), weir, realtor, post, mw, pf (a strange one), iq (gives timout),

@@ -20,7 +20,10 @@ def getFileFromUrl(fileName: str, url: str) -> None:
         url,
         allow_redirects=True,
     )
-    open(fileName, "wb",).write(
+    open(
+        fileName,
+        "wb",
+    ).write(
         r.content,
     )
     return fileName
