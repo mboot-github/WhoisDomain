@@ -17,7 +17,7 @@ TEST_OPTIONS_ALL = --withPublicSuffix --extractServers --stripHttpStatus
 # PHONY targets: make will run its recipe regardless of whether a file with that name exists or what its last modification time is.
 .PHONY: TestSimple TestSimple2 TestAll clean
 
-first: reformat mypy pylint testP39 testP36
+first: reformat mypy pylint testP39
 
 testP39:
 	./test1.py # now tests with python 3.9
@@ -26,7 +26,7 @@ testP36:
 	docker build -t df36 -f Df-36 .
 	docker run -v .:/context df36 -d google.com
 
-second: first test2
+second: first test2 test3 test
 
 test:
 	LOGLEVEL=DEBUG ./test2.py $(TEST_OPTIONS_ALL) -t 2>2 | tee 1
