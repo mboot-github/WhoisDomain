@@ -2945,36 +2945,35 @@ ZZ["onion"] = {"_privateRegistry": True}  # this is a special case https://tools
 
 # 2023-11-14
 # unknown tld abb, abb, abb, abb, whois.nic.abb,
-ZZ["abb"] = { "_server": "whois.nic.abb", "_test": "nic.abb", "extend": "com"}
+ZZ["abb"] = {"_server": "whois.nic.abb", "_test": "nic.abb", "extend": "com"}
 # unknown tld bn, bn, bn, bn, whois.bnnic.bn,
-ZZ["bn"] = { "_server": "whois.bnnic.bn", "_test": "bnnic.bn", "extend": "com"}
-ZZ["gov.bn"] = { "_server": "whois.bnnic.bn", "_test": "egc.gov.bn", "extend": "com"}
+ZZ["bn"] = {"_server": "whois.bnnic.bn", "_test": "bnnic.bn", "extend": "com"}
+ZZ["gov.bn"] = {"_server": "whois.bnnic.bn", "_test": "egc.gov.bn", "extend": "com"}
 # unknown tld bw, bw, bw, bw, whois.nic.net.bw,
-ZZ["bw"] = { "_server": "whois.nic.net.bw", "_test": "net.bw", "extend": "com"}
+ZZ["bw"] = {"_server": "whois.nic.net.bw", "_test": "net.bw", "extend": "com"}
 # unknown tld crown, crown, crown, crown, whois.nic.crown,
-ZZ["crown"] = { "_server": "whois.nic.crown", "_test": "nic.crown", "extend": "com"}
+ZZ["crown"] = {"_server": "whois.nic.crown", "_test": "nic.crown", "extend": "com"}
 # unknown tld crs, crs, crs, crs, whois.nic.crs,
-ZZ["crs"] = { "_server": "whois.nic.crs", "_test": "nic.crs", "extend": "com"}
+ZZ["crs"] = {"_server": "whois.nic.crs", "_test": "nic.crs", "extend": "com"}
 # unknown tld fj, fj, fj, fj, www.whois.fj,
-ZZ["fj"] = { "_server": "whois.nic.fj", "_test": "nic.fj", "extend": "com"} # actually not working but server exists (dns)
+ZZ["fj"] = {"_server": "whois.nic.fj", "_test": "nic.fj", "extend": "com"}  # actually not working but server exists (dns)
 # unknown tld gp, gp, gp, gp, whois.nic.gp,
-ZZ["gp"] = { "_server": "whois.nic.gp", "_test": "nic.gp", "extend": "com"} # actually not working but server exists (dns)
+ZZ["gp"] = {"_server": "whois.nic.gp", "_test": "nic.gp", "extend": "com"}  # actually not working but server exists (dns)
 # unknown tld hm, hm, hm, hm, whois.registry.hm,
+ZZ["hm"] = {"_server": "whois.registry.hm", "_test": "registry.hm", "extend": "com"}  # actually not working but server exists (dns)
 # unknown tld il, il, il, il, whois.isoc.org.il,
 # unknown tld int, int, int, int, whois.iana.org,
+ZZ["int"] = {"_server": "whois.iana.org", "_test": "eu.int", "extend": "cz"}
 
 # unknown tld iq, iq, iq, iq, whois.cmc.iq
-ZZ["iq"] = { "_server": "whois.cmc.iq", "_test": "cmc.iq", "extend": "com"}
-
+ZZ["iq"] = {"_server": "whois.cmc.iq", "_test": "cmc.iq", "extend": "com"}
 # unknown tld mm, mm, mm, mm, whois.registry.gov.mm
-
+ZZ["mm"] = {"_server": "whois.registry.gov.mm", "_test": "registry.gov.mm", "extend": "com"}
 # unknown tld mw, mw, mw, mw, whois.nic.mw,
-ZZ["mw"] = { "_server": "whois.nic.mw", "_test": "nic.mw", "extend": "fr"}
-
-
+ZZ["mw"] = {"_server": "whois.nic.mw", "_test": "nic.mw", "extend": "fr"}
 # unknown tld post, post, post, post, whois.dotpostregistry.net,
-ZZ["post"] = { "_server": "whois.dotpostregistry.net", "_test": "us.post", "extend": "com"}
+ZZ["post"] = {"_server": "whois.dotpostregistry.net", "_test": "us.post", "extend": "com"}
 # unknown tld realtor, realtor, realtor, realtor, whois.nic.realtor,
-ZZ["realtor"] = { "_server": "whois.nic.realtor", "_test": "nic.realtor", "extend": "com"}
+ZZ["realtor"] = {"_server": "whois.nic.realtor", "_test": "nic.realtor", "extend": "com"}
 # unknown tld weir, weir, weir, weir, whois.nic.weir,
-ZZ["weir"] = { "_server": "whois.nic.weir", "_test": "nic.weir", "extend": "com"}
+ZZ["weir"] = {"_server": "whois.nic.weir", "_test": "nic.weir", "extend": "com"}
