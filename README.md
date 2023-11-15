@@ -95,7 +95,7 @@ and `make suggest`.
 ## 1.20231102.1
   * fix from kazet for .pl tld.
 
-## 1.20231115.1
+## 1.20231115.2
  New tld's and removal of a few tlds no longer supported at iana
 
  * abb, bw, bn, crown, crs, fj (does not work), gp (does not work), weir, realtor, post, mw, pf (a strange one), iq (gives timout), mm, int, hm (does not work)

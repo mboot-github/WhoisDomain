@@ -49,7 +49,7 @@ LocalTestWhl: build
 build: first
 	./bin/build.sh
 	./bin/testLocalWhl.sh 2>2 | tee 1
-	./bin/test.sh
+	./bin/test.sh 2>2 | tee 1
 
 # ==========================================================
 # scan the most recent build and fail if the status fails
