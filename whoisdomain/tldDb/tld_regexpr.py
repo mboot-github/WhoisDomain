@@ -125,7 +125,6 @@ ZZ["ac.uk"] = {
     "registrar": R(r"Registered By:\n\s?(.+)"),
     "registrant": R(r"Registrant Contact:\n([^\n]*)"),
     "name_servers": R(r"Servers:%s\n\n" % xStr(r"(?:\n[ \t]+(\S+).*)?", 10)),
-
     "expiration_date": R(r"Renewal date:\n\s*(.+)"),
     "updated_date": R(r"Entry updated:\n\s*(.+)"),
     "creation_date": R(r"Entry created:\n\s?(.+)"),

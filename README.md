@@ -104,4 +104,4 @@ and `make suggest`.
 
 ## in progress
 
-add various second level .uk for which i can create tests; comments in the tld_regexpr.py; a few have no example or whois server to test with
+add various second level .uk for which i can create tests; comments in the tld_regexpr.py; a few have no example or whois server to test with `2024-01-23`
