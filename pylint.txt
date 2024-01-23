@@ -66,6 +66,6 @@ whoisdomain/context/dataContext.py:17:0: C0115: Missing class docstring (missing
 whoisdomain/context/parameterContext.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 whoisdomain/context/parameterContext.py:148:0: C0115: Missing class docstring (missing-class-docstring)
 
-------------------------------------------------------------------
-Your code has been rated at 9.87/10 (previous run: 9.87/10, +0.00)
+-----------------------------------
+Your code has been rated at 9.87/10
 

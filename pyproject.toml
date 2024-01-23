@@ -16,7 +16,7 @@
 
     description = "Python package for retrieving WHOIS information of domains."
     readme = "README.md"
-    requires-python = ">=3.6"
+    requires-python = ">3.6"
 
     license = "MIT"
 
@@ -36,7 +36,6 @@
         "tld",
         "domain",
         "expiration",
-        "cctld",
         "registrar",
     ]
 
@@ -72,4 +71,3 @@
 [tool.pylama]
     max_line_length = 160
     skip = "*/.pytest_cache/*, */.tox/*, */mypy_cache/*, ./dist, ./docs"
-

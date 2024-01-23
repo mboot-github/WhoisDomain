@@ -22,9 +22,9 @@ first: reformat mypy pylint testP39
 testP39:
 	./test1.py # now tests with python 3.9
 
-testP36:
-	docker build -t df36 -f Df-36 .
-	docker run -v .:/context df36 -d google.com
+#testP36:
+#	docker build -t df36 -f Df-36 .
+#	docker run -v .:/context df36 -d google.com
 
 second: first test2 test3 test
 
@@ -163,7 +163,7 @@ testTestPypi:
 releaseTest: build rlsecure pypiTestUpload testTestPypi
 
 # this is for pypi owners after all tests have finished
-pypi: rlsecure
+pypi:
 	./bin/upload_to_pypi.sh
 
 release: build rlsecure pypi

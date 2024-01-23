@@ -1,5 +1,5 @@
 
-all: format
+all: clean format
 	./analizeIanaTld.py
 	./investigateTld.py 2>2 | tee 1
 
