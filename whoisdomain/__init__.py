@@ -243,6 +243,7 @@ def query(
             tryInstallMissingWhoisOnWindows=tryInstallMissingWhoisOnWindows,
             extractServers=extractServers,
             stripHttpStatus=stripHttpStatus,
+            noIgnoreWww=noIgnoreWww,
         )
 
     msg = f"{pc}"
