@@ -102,7 +102,7 @@ and `make suggest`.
 
 ---
 
-## in progress
+## 1.20240129.1
 
 add various second level .uk for which i can create tests; comments in the tld_regexpr.py; a few have no example or whois server to test with `2024-01-23`
 add switch not to ignore leading www in the domain request
