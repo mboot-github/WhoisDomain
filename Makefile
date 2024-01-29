@@ -166,7 +166,7 @@ releaseTest: build rlsecure pypiTestUpload testTestPypi
 pypi:
 	./bin/upload_to_pypi.sh
 
-release: build rlsecure pypi
+release: pypi
 
 # ====================================================
 # full test runs with all supported tld's

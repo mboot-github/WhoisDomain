@@ -100,9 +100,12 @@ and `make suggest`.
 
  * abb, bw, bn, crown, crs, fj (does not work), gp (does not work), weir, realtor, post, mw, pf (a strange one), iq (gives timout), mm, int, hm (does not work)
 
----
 
 ## 1.20240129.1
 
 add various second level .uk for which i can create tests; comments in the tld_regexpr.py; a few have no example or whois server to test with `2024-01-23`
 add switch not to ignore leading www in the domain request
+
+---
+
+## in progress
