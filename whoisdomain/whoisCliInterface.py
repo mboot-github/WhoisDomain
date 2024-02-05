@@ -125,7 +125,7 @@ class WhoisCliInterface:
         # LANG=en is added to make the ".jp" output consisent across all environments
         # STDBUF_OFF_CMD needed to not lose data on kill
 
-        s: string = ""
+        s: str = ""
 
         with subprocess.Popen(
             self.STDBUF_OFF_CMD + self._makeWhoisCommandToRun(),
