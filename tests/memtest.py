@@ -72,7 +72,8 @@ def makeTestAllCurrentTld(
 
 def check() -> None:
     # gc.set_debug(gc.DEBUG_LEAK)
-    # domains = makeTestAllCurrentTld(None)
+    gc.set_debug(gc.DEBUG_UNCOLLECTABLE)
+    domains = makeTestAllCurrentTld(None)
     n: int = 0
 
     before = defaultdict(int)
@@ -82,22 +83,36 @@ def check() -> None:
     for item in domains:
         n += 1
         print(f"Checking domain: {item}")
+        b2 = defaultdict(int)
+        for i in gc.get_objects():
+            b2[type(i)] += 1
 
         whoisdomain_call(item)
+        print(gc.collect(0)) # The number of unreachable objects found is returned.
+        print(gc.collect(1)) # The number of unreachable objects found is returned.
+        print(gc.collect(2)) # The number of unreachable objects found is returned.
+
         after = defaultdict(int)
         for i in gc.get_objects():
             after[type(i)] += 1
 
-        z = [(k, after[k] - before[k]) for k in after if after[k] - before[k]]
+        z = [(k, after[k] - before[k]) for k in after if (after[k] - before[k]) > 0]
         for item in z:
-            print(item)
+            print("since start", item)  #(<class 're.Pattern'>, 46) is growing to 288
 
-        print(gc.collect())
-        print(gc.get_stats())
+        z = [(k, after[k] - b2[k]) for k in after if (after[k] - b2[k]) > 0]
+        for item in z:
+            print("since previous", item)  #(<class 're.Pattern'>, 46) is growing to 288
+
+        n = 0
+        for item in gc.get_stats():
+            print(n, item)
+            n += 1
+
         print(gc.get_referrers())
-        # print(gc.garbage)
-        if n > 3:
-            break
+
+        for item in gc.garbage:
+            print("garbage:", item)
 
 @profile
 def whoisdomain_call(domain: str) -> None:

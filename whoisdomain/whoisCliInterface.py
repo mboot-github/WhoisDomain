@@ -125,6 +125,8 @@ class WhoisCliInterface:
         # LANG=en is added to make the ".jp" output consisent across all environments
         # STDBUF_OFF_CMD needed to not lose data on kill
 
+        s: string = ""
+
         with subprocess.Popen(
             self.STDBUF_OFF_CMD + self._makeWhoisCommandToRun(),
             stdout=subprocess.PIPE,
@@ -151,7 +153,10 @@ class WhoisCliInterface:
                     msg = f"timeout: query took more then {self.pc.timeout} seconds"
                     raise WhoisCommandTimeout(msg) from ex
 
-            return self._postProcessingResult()
+            s = self._postProcessingResult()
+
+        self.processHandle = None
+        return s
 
     def _returnWhoisPythonFromStaticTestData(self) -> str:
         testDir = os.getenv("TEST_WHOIS_PYTHON")
