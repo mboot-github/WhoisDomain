@@ -6,6 +6,7 @@ import getopt
 import sys
 import json
 import logging
+import gc
 
 from typing import (
     Optional,
@@ -210,7 +211,14 @@ def xType(x: Any) -> str:
     return s.split("'")[1]
 
 
-def testItem(
+# @profile
+def testItem(d: str, pc: whois.ParameterContext) -> Any:
+    w = whois.query(domain=d, pc=pc)
+    gc.collect()
+    return w
+
+
+def testItem1(
     d: str,
     printgetRawWhoisResult: bool = False,
 ) -> None:
@@ -242,7 +250,9 @@ def testItem(
     )
 
     # use the new query (can also simply use q2()
-    w = whois.query(domain=d, pc=pc)
+
+    # w = whois.query(domain=d, pc=pc)
+    w = testItem(d=d, pc=pc)
 
     if w is None:
         print("None")
@@ -263,6 +273,7 @@ def testItem(
             if f in wd:
                 wd[f] = f"{wd[f]}"
         print(json.dumps(wd))
+
         return
 
     for k, v in wd.items():
@@ -310,7 +321,7 @@ def testDomains(aList: List[str]) -> None:
 
         prepItem(d)
         try:
-            testItem(d)
+            testItem1(d)
         except whois.UnknownTld as e:
             errorItem(d, e, what="UnknownTld")
         except whois.FailedParsingWhoisOutput as e:

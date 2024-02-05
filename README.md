@@ -7,6 +7,10 @@
 ---
 
 ## Notes
+  * **We are aware of a memory leak**
+
+  2024-02-05: The current whoisdomain has a memory leak, we are currently investigating.
+  The memory leak is not relevant for short running use but when using whoisdomain in long running programs you should be aware that each query will increase its memory use.
 
   * This package will not support querying ip CIDR ranges or AS information
   * This was a copy of the original DanyCork 'whois'.

@@ -12,6 +12,7 @@ All public data is vizible via the __all__ List
 import sys
 import os
 import logging
+import gc
 
 from functools import wraps
 
@@ -155,6 +156,7 @@ def q2(
     domain: str,
     pc: ParameterContext,
 ) -> Optional[Domain]:
+    gc.collect()
     initLastWhois()
 
     dc = DataContext(
@@ -186,6 +188,13 @@ def q2(
     )
 
     result = pwdr.processRequest()
+    del pwdr
+    del dom
+    del wci
+    del parser
+    del dc
+    del pc
+    gc.collect()
     return result
 
 
