@@ -15,9 +15,6 @@ whoisdomain/tldInfo.py:1:0: C0114: Missing module docstring (missing-module-docs
 whoisdomain/tldInfo.py:16:0: C0115: Missing class docstring (missing-class-docstring)
 ************* Module whoisdomain.helpers
 whoisdomain/helpers.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module whoisdomain.whoisCliInterface
-whoisdomain/whoisCliInterface.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/whoisCliInterface.py:28:0: C0115: Missing class docstring (missing-class-docstring)
 ************* Module whoisdomain.whoisParser
 whoisdomain/whoisParser.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 whoisdomain/whoisParser.py:40:0: C0115: Missing class docstring (missing-class-docstring)
@@ -32,6 +29,9 @@ whoisdomain/processWhoisDomainRequest.py:305:12: W1203: Use lazy % formatting in
 ************* Module whoisdomain.main
 whoisdomain/main.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 whoisdomain/main.py:44:0: C0115: Missing class docstring (missing-class-docstring)
+************* Module whoisdomain.whoisCliInterface
+whoisdomain/whoisCliInterface.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+whoisdomain/whoisCliInterface.py:28:0: C0115: Missing class docstring (missing-class-docstring)
 ************* Module whoisdomain.cache.dbmCache
 whoisdomain/cache/dbmCache.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 whoisdomain/cache/dbmCache.py:14:0: C0115: Missing class docstring (missing-class-docstring)

@@ -155,7 +155,7 @@ class WhoisCliInterface:
 
             s = self._postProcessingResult()
 
-        self.processHandle = None
+        # self.processHandle = None
         return s
 
     def _returnWhoisPythonFromStaticTestData(self) -> str:
