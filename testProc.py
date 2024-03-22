@@ -12,10 +12,13 @@ import whoisdomain
 def main() -> None:
     pf: whoisdomain.ProcFunc = whoisdomain.ProcFunc()
 
+    maxTry = 0
     restart_after_count: int = 100
     f = pf.makeHandler(whoisdomain.remoteQ2, restart_after_count)
 
+    n = 0
     for tld in whoisdomain.validTlds():
+        n += 1
         domain = whoisdomain.getTestHint(tld)
         domain = domain if domain else f"meta.{tld}"
 
@@ -24,9 +27,12 @@ def main() -> None:
             pc = whoisdomain.ParameterContext()
             d = f(domain, pc)
             print(d)
+
         except Exception as e:
             print(e)
 
+        if maxTry and n >= maxTry:
+            break
 
 if __name__ == "__main__":
     main()
