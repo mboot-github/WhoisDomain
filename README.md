@@ -7,6 +7,11 @@
 ---
 
 ## Notes
+
+https://en.wikipedia.org/wiki/WHOIS
+
+On January 19, 2023, ICANN opened voting on a global amendment to all its registry and registrar agreements. In it they defined an RDAP Ramp-Up Period of 180 days starting with the effectiveness of this amendment. 360 days after this period is defined as the WHOIS Services Sunset Date, after which it is not a requirement for registries and registrars to offer a WHOIS service and instead only an RDAP service is required. All voting thresholds were met within the 60 day voting period and the amendment was approved by the ICANN Board. The date for WHOIS Sunset for gTLDs was set as 28 January 2025.[47]
+
   * **We are aware of a memory leak**
 
   2024-02-05: The current whoisdomain has a memory leak, we are currently investigating.
