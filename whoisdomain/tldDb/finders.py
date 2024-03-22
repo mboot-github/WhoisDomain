@@ -2,17 +2,33 @@ import os
 import re
 import logging
 
-# pylint: disable=unused-argument
+# re._MAXCACHE = 1
 
+# pylint: disable=unused-argument
+# import typing
 from typing import (
-    # Dict,
-    # Any,
+    Dict,
+    Any,
     List,
     Callable,
+    Tuple,
 )
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
+PATTERN_CACHE: Dict[Tuple[str, int], Any] = {}
+
+
+def make_pat(reStr: str, flags: int) -> Any:
+    return re.compile(reStr, flags=flags)
+
+    if (reStr, flags) in PATTERN_CACHE:
+        pattern = PATTERN_CACHE[(reStr, flags)]
+    else:
+        pattern = re.compile(reStr, flags=flags)
+        PATTERN_CACHE[(reStr, flags)] = pattern
+    return pattern
 
 
 def newLineSplit(
@@ -21,10 +37,14 @@ def newLineSplit(
     def xNewlineSplit(
         whoisStr: str,
         verbose: bool = False,
-    ) -> List[str]:
+    ) -> Any:
         # split the incoming text on newlines \n\n
-        what = r"\n\n"
-        return re.split(what, whoisStr, flags=re.IGNORECASE if ignoreCase else 0)  # NOFLAG is 3.11
+        reStr = r"\n\n"
+        flags = re.IGNORECASE if ignoreCase else 0
+        pattern = make_pat(reStr, flags)
+        z = pattern.split(whoisStr)
+        del pattern
+        return z
 
     return xNewlineSplit
 
@@ -38,16 +58,19 @@ def R(
         textStr: str,
         sData: List[str],
         verbose: bool = False,
-    ) -> List[str]:
+    ) -> Any:
         flags = re.IGNORECASE if ignoreCase else 0  # NOFLAG is 3.11
-        return re.findall(reStr, textStr, flags=flags)
+        pattern = make_pat(reStr, flags)
+        z = pattern.findall(textStr)
+        del pattern
+        return z
 
     return reFindAll
 
 
-def R2(reString: str) -> str:
-    # you could still only use strings, untested
-    return reString
+# def R2(reString: str) -> str:
+#     # you could still only use strings, untested
+#     return reString
 
 
 def findFromToAndLookFor(
@@ -65,9 +88,11 @@ def findFromToAndLookFor(
         textStr: str,
         sData: List[str],
         verbose: bool = False,
-    ) -> List[str]:
+    ) -> Any:
         flags = re.IGNORECASE if ignoreCase else 0  # NOFLAG is 3.11
-        s1 = re.search(fromStr, textStr, flags=flags)
+        p1 = make_pat(fromStr, flags)
+        s1 = p1.search(textStr)
+        del p1
 
         msg = f"s1 {s1}, {fromStr}"
         log.debug(msg)
@@ -80,16 +105,24 @@ def findFromToAndLookFor(
         msg = f"fromStr {t2}"
         log.debug(msg)
 
-        s2 = re.search(toStr, t2, flags=flags)
+        p2 = make_pat(toStr, flags)
+        p3 = make_pat(lookForStr, flags)
+
+        s2 = p2.search(t2)
+        del p2
         if s2 is None:
-            return re.findall(lookForStr, t2, flags=flags)
+            z = p3.findall(t2)
+            del p3
+            return z
 
         end = s2.end()
         t3 = t2[:end]
         msg = f"toStr {t3}"
         log.debug(msg)
 
-        return re.findall(lookForStr, t3, flags=flags)
+        z = p3.findall(t3)
+        del p3
+        return z
 
     return xFindFromToAndLookFor
 

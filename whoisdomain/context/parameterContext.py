@@ -162,7 +162,7 @@ class ParameterContext:
         "bool": bool,
     }
 
-    def loadDefaults(self) -> List[str]:
+    def _loadDefaults(self) -> List[str]:
         mandatory: List[str] = []
         for i, k in self.params.items():
             if "default" in k:
@@ -172,7 +172,7 @@ class ParameterContext:
                 self.value[i] = None
         return mandatory
 
-    def addArgs(
+    def _addArgs(
         self,
         mandatory: List[str],
         **kwargs: Dict[str, Any],
@@ -197,7 +197,7 @@ class ParameterContext:
                 if name in mandatory:
                     del mandatory[mandatory.index(name)]
 
-    def validateAllMandatoryNowKnown(
+    def _validateAllMandatoryNowKnown(
         self,
         mandatory: List[str],
     ) -> None:
@@ -212,9 +212,9 @@ class ParameterContext:
         self.params = json.loads(ParamsStringJson)
         self.value = {}
 
-        mandatory: List[str] = self.loadDefaults()
-        self.addArgs(mandatory, **kwargs)
-        self.validateAllMandatoryNowKnown(mandatory)
+        mandatory: List[str] = self._loadDefaults()
+        self._addArgs(mandatory, **kwargs)
+        self._validateAllMandatoryNowKnown(mandatory)
 
     def __getattr__(self, name: str) -> Any:
         if name in ["params", "value"]:
@@ -250,8 +250,19 @@ class ParameterContext:
                 self.value[name] = value
             # leave the default
 
+    def toJson(self) -> str:
+        rr: Dict[str, Any] = {}
+        for k, v in self.params.items():
+            rr[k] = self.get(k)
+        return json.dumps(rr)
+
+    def fromJson(self, jString: str) -> None:
+        zz = json.loads(jString)
+        for k, v in zz.items():
+            self.set(k, v)
+
 
 if __name__ == "__main__":
     domain: str = "haha.ha"
-    pc = ParameterContext(domain=domain)
+    pc = ParameterContext()
     print(pc.value)

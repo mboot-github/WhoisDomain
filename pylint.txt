@@ -1,3 +1,7 @@
+************* Module whoisdomain
+whoisdomain/__init__.py:180:12: W0621: Redefining name 'e' from outer scope (line 80) (redefined-outer-name)
+whoisdomain/__init__.py:180:19: W0718: Catching too general exception Exception (broad-exception-caught)
+whoisdomain/__init__.py:198:12: R1722: Consider using 'sys.exit' instead (consider-using-sys-exit)
 ************* Module whoisdomain.exceptions
 whoisdomain/exceptions.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 whoisdomain/exceptions.py:8:0: C0115: Missing class docstring (missing-class-docstring)
@@ -15,9 +19,6 @@ whoisdomain/tldInfo.py:1:0: C0114: Missing module docstring (missing-module-docs
 whoisdomain/tldInfo.py:16:0: C0115: Missing class docstring (missing-class-docstring)
 ************* Module whoisdomain.helpers
 whoisdomain/helpers.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module whoisdomain.whoisParser
-whoisdomain/whoisParser.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/whoisParser.py:40:0: C0115: Missing class docstring (missing-class-docstring)
 ************* Module whoisdomain.domain
 whoisdomain/domain.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 whoisdomain/domain.py:22:0: R0902: Too many instance attributes (22/20) (too-many-instance-attributes)
@@ -32,6 +33,13 @@ whoisdomain/main.py:44:0: C0115: Missing class docstring (missing-class-docstrin
 ************* Module whoisdomain.whoisCliInterface
 whoisdomain/whoisCliInterface.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 whoisdomain/whoisCliInterface.py:28:0: C0115: Missing class docstring (missing-class-docstring)
+************* Module whoisdomain.whoisParser
+whoisdomain/whoisParser.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+whoisdomain/whoisParser.py:40:0: C0115: Missing class docstring (missing-class-docstring)
+************* Module whoisdomain.procFunc
+whoisdomain/procFunc.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+whoisdomain/procFunc.py:22:0: C0115: Missing class docstring (missing-class-docstring)
+whoisdomain/procFunc.py:67:8: W0719: Raising too general exception: Exception (broad-exception-raised)
 ************* Module whoisdomain.cache.dbmCache
 whoisdomain/cache/dbmCache.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 whoisdomain/cache/dbmCache.py:14:0: C0115: Missing class docstring (missing-class-docstring)
@@ -53,12 +61,13 @@ whoisdomain/strings/ignoreStrings.py:1:0: C0114: Missing module docstring (missi
 whoisdomain/strings/noneStrings.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 ************* Module whoisdomain.strings.quotaStrings
 whoisdomain/strings/quotaStrings.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module whoisdomain.tldDb.finders
-whoisdomain/tldDb/finders.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 ************* Module whoisdomain.tldDb.groupers
 whoisdomain/tldDb/groupers.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 ************* Module whoisdomain.tldDb.tld_regexpr
 whoisdomain/tldDb/tld_regexpr.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+************* Module whoisdomain.tldDb.finders
+whoisdomain/tldDb/finders.py:1:0: C0114: Missing module docstring (missing-module-docstring)
+whoisdomain/tldDb/finders.py:26:4: W0101: Unreachable code (unreachable)
 ************* Module whoisdomain.context.dataContext
 whoisdomain/context/dataContext.py:1:0: C0114: Missing module docstring (missing-module-docstring)
 whoisdomain/context/dataContext.py:17:0: C0115: Missing class docstring (missing-class-docstring)
@@ -67,5 +76,5 @@ whoisdomain/context/parameterContext.py:1:0: C0114: Missing module docstring (mi
 whoisdomain/context/parameterContext.py:154:0: C0115: Missing class docstring (missing-class-docstring)
 
 ------------------------------------------------------------------
-Your code has been rated at 9.87/10 (previous run: 9.87/10, +0.00)
+Your code has been rated at 9.85/10 (previous run: 9.85/10, +0.00)
 

@@ -69,22 +69,22 @@ class WhoisParser:
             msg = f"parsing iana data only for tld: {self.dc.tldString}, {result}"
             log.debug(msg)
 
-    def _doExtractPattensFromWhoisString_old(
-        self,
-    ) -> None:
-        empty = [""]  # Historical: we use 'empty string' as default, not None
-
-        for key, compiledRe in self.dc.thisTld.items():
-            if key.startswith("_"):
-                # skip meta element like: _server or _privateRegistry
-                continue
-
-            self.resultDict[key] = empty  # set a default
-            if compiledRe:
-                # here we apply the regex patterns
-                self.resultDict[key] = compiledRe.findall(self.dc.whoisStr) or empty
-                msg = f"{key}, {self.resultDict[key]}"
-                log.debug(msg)
+    #    def _doExtractPattensFromWhoisString_old(
+    #        self,
+    #    ) -> None:
+    #        empty = [""]  # Historical: we use 'empty string' as default, not None
+    #
+    #        for key, compiledRe in self.dc.thisTld.items():
+    #            if key.startswith("_"):
+    #                # skip meta element like: _server or _privateRegistry
+    #                continue
+    #
+    #            self.resultDict[key] = empty  # set a default
+    #            if compiledRe:
+    #                # here we apply the regex patterns
+    #                self.resultDict[key] = compiledRe.findall(self.dc.whoisStr) or empty
+    #                msg = f"{key}, {self.resultDict[key]}"
+    #                log.debug(msg)
 
     def _doExtractPattensFromWhoisString(
         self,
@@ -116,12 +116,12 @@ class WhoisParser:
                 log.debug(msg)
                 continue
 
-            if isinstance(val, str):
-                # we still support plain strings also
-                self.resultDict[key] = re.findall(val, self.dc.whoisStr, flags=re.IGNORECASE) or empty
-                msg = f"_doExtractPattensFromWhoisStringstr: {key}, {self.resultDict[key]}"
-                log.debug(msg)
-                continue
+            #            if isinstance(val, str):
+            #                # we still support plain strings also
+            #                self.resultDict[key] = re.findall(val, self.dc.whoisStr, flags=re.IGNORECASE) or empty
+            #                msg = f"_doExtractPattensFromWhoisStringstr: {key}, {self.resultDict[key]}"
+            #                log.debug(msg)
+            #                continue
 
             msg = f"UNKNOWN: _doExtractPattensFromWhoisString {key}, {val}"
             log.debug(msg)

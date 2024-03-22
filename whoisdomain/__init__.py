@@ -52,7 +52,7 @@ from .cache.dummyCache import DummyCache
 from .cache.dbmCache import DBMCache
 from .whoisParser import WhoisParser
 from .whoisCliInterface import WhoisCliInterface
-
+from .procFunc import ProcFunc
 
 from .helpers import (
     filterTldToSupportedPattern,
@@ -140,6 +140,8 @@ __all__ = [
     "DummyCache",
     "DBMCache",
     "RedisCache",
+    # from procFunc
+    "ProcFunc",
 ]
 
 
@@ -152,11 +154,73 @@ def _result2dict(func: Any) -> Any:
     return _inner
 
 
+def remoteQ2(
+    conn: Any,
+    max_requests: int,
+    verbose: bool = False,
+) -> None:
+    n: int = 0
+    while True:
+        n += 1
+        reply: Dict[str, Any] = {}
+
+        try:
+            # unpicle the request
+            request = conn.recv()
+            if verbose:
+                print("remoteQ2:Receive:", request, file=sys.stderr)
+
+            pc: ParameterContext = ParameterContext()
+            pc.fromJson(request["pc"])
+
+            # call the func
+            allOk = True
+            try:
+                d = q2(domain=request["domain"], pc=pc)
+                # pickle the result
+                reply["result"] = d.__dict__
+            except Exception as e:
+                allOk = False
+
+                # catch exceptions and picle them also
+                reply["exception"] = e
+
+            # pickle the status
+            reply["status"] = allOk
+
+            # add some remote info
+            reply["remote"] = {
+                "pid": os.getpid(),
+                "count": n,
+                "maxCount": max_requests,
+            }
+
+            if verbose:
+                print("remoteQ2:Reply:", reply, file=sys.stderr)
+
+            conn.send(reply)
+        except EOFError as e:
+            # if the caller is done so are we
+            _ = e
+            exit(0)
+
+        if n >= max_requests:
+            break
+
+
 def q2(
     domain: str,
     pc: ParameterContext,
 ) -> Optional[Domain]:
-    gc.collect()
+    if pc.verbose is True:
+        os.putenv("LOGLEVEL", "DEBUG")
+        os.environ["LOGLEVEL"] = "DEBUG"
+        logging.basicConfig(level="DEBUG")
+
+    gc.collect(0)
+    gc.collect(1)
+    gc.collect(2)
+
     initLastWhois()
 
     dc = DataContext(
@@ -194,7 +258,11 @@ def q2(
     del parser
     del dc
     del pc
-    gc.collect()
+
+    gc.collect(0)
+    gc.collect(1)
+    gc.collect(2)
+
     return result
 
 
@@ -228,6 +296,11 @@ def query(
     # see documentation about paramaters in parameterContext.py
 
     assert isinstance(domain, str), Exception("`domain` - must be <str>")
+
+    if verbose is True:
+        os.putenv("LOGLEVEL", "DEBUG")
+        os.environ["LOGLEVEL"] = "DEBUG"
+        logging.basicConfig(level="DEBUG")
 
     if pc is None:
         pc = ParameterContext(

@@ -8,6 +8,8 @@ import sys
 import gc
 import re
 
+re._MAXCACHE = 1
+
 from memory_profiler import profile
 from collections import defaultdict
 
@@ -85,16 +87,30 @@ def check() -> None:
         print(f"Checking domain: {item}")
         b2 = defaultdict(int)
         for i in gc.get_objects():
+            # print(i, type(i))
             b2[type(i)] += 1
 
         whoisdomain_call(item)
+        re._cache.clear()
         print(gc.collect(0))  # The number of unreachable objects found is returned.
         print(gc.collect(1))  # The number of unreachable objects found is returned.
         print(gc.collect(2))  # The number of unreachable objects found is returned.
 
         after = defaultdict(int)
+
+        z = []
         for i in gc.get_objects():
+            if str(type(i)) == "<class 're.Pattern'>":
+                if str(i) in z:
+                    print(f"DUPLICATE: {i}")
+                else:
+                    z.append(str(i))
             after[type(i)] += 1
+
+        n = 0
+        for i in sorted(z):
+            n += 1
+            print(n, i)
 
         z = [(k, after[k] - before[k]) for k in after if (after[k] - before[k]) > 0]
         for item in z:
