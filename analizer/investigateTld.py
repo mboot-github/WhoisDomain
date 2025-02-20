@@ -18,7 +18,7 @@ from ianaDatabase import IanaDatabase
 
 # the next 2 belong together
 sys.path.append("..")
-from whoisdomain.tldDb import tld_regexpr
+from whoisdomain.tldDb import tld_regexpr  # noqa: E402
 
 MM = {
     "com": [
@@ -232,6 +232,16 @@ class OneTld:
         allTld: Dict[str, Any],
         ss: List[str],
     ):
+        sequence = [
+            self._skipSpecialResolve,
+            self._doUtf8Preparations,
+            self._skipKnowTld,
+            self._doNoManagerTld,
+            self._doFoundTld,
+            self._doNoWhois,
+            self._doCleanuphois,
+        ]
+
         self.row = row
         self.allTld = allTld
         self.ss = ss
@@ -248,26 +258,9 @@ class OneTld:
 
         self.thisTld = self.allKnownTldDict[self.tld]
 
-        if self._skipSpecialResolve():
-            return
-
-        if self._doUtf8Preparations():
-            return
-
-        if self._skipKnowTld():
-            return
-
-        if self._doNoManagerTld():
-            return
-
-        if self._doFoundTld():
-            return
-
-        if self._doNoWhois():
-            return
-
-        if self._doCleanuphois():
-            return
+        for n in sequence:
+            if n():
+                return
 
         print("# MISSING", self.tld, self.tld2, self.tld3, self.manager.replace("\n", ";"), self.w, self.resolve, self.reg)
 

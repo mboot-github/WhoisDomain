@@ -9,6 +9,7 @@ import whoisdomain
 # we currently dont return a Domain object but the __dict__ of the domain obj.
 # we re raise locally any exceptions from the remote side caused by normal whoisdomain exceptions.
 
+
 def main() -> None:
     pf: whoisdomain.ProcFunc = whoisdomain.ProcFunc()
 
@@ -33,6 +34,7 @@ def main() -> None:
 
         if maxTry and n >= maxTry:
             break
+
 
 if __name__ == "__main__":
     main()

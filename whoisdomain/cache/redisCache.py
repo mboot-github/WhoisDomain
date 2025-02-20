@@ -26,11 +26,7 @@ if HAS_REDIS:
         def __init__(self, verbose: bool = False, host: str = "localhost", port: int = 6379, db: int = 0) -> None:
             self.verbose = verbose
 
-            self.pool = redis.ConnectionPool(
-                host=host,
-                port=port,
-                db=db,
-            )
+            self.pool = redis.ConnectionPool(host=host, port=port, db=db, decode_responses=True)
             self.redis = redis.Redis(
                 connection_pool=self.pool,
             )
@@ -41,8 +37,7 @@ if HAS_REDIS:
         ) -> Optional[str]:
             data = self.redis.get(keyString)
             if data:
-                sdata: str = data.decode("utf-8")
-                return sdata
+                return str(data)
             return None
 
         def put(

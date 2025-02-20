@@ -4,27 +4,23 @@
 
 SHELL 		:= /bin/bash -l
 
-RLSECURE 	:= ~/tmp/rl-secure/rl-secure
-RLSTORE 	:= ~/
-
 WHAT 		:= whoisdomain
 DOCKER_WHO	:= mbootgithub
 
 SIMPLEDOMAINS = $(shell ls testdata)
 
-TEST_OPTIONS_ALL = --withPublicSuffix --extractServers --stripHttpStatus
+TEST_OPTIONS_ALL = \
+	--withPublicSuffix \
+	--extractServers \
+	--stripHttpStatus
 
 # PHONY targets: make will run its recipe regardless of whether a file with that name exists or what its last modification time is.
 .PHONY: TestSimple TestSimple2 TestAll clean
 
-first: reformat mypy pylint testP39
+first: reformat mypy pylint testP310
 
-testP39:
-	./test1.py # now tests with python 3.9
-
-#testP36:
-#	docker build -t df36 -f Df-36 .
-#	docker run -v .:/context df36 -d google.com
+testP310:
+	./test1.py # now tests with python 3.10
 
 second: first test2 test3 test
 
@@ -50,48 +46,6 @@ build: first
 	./bin/build.sh
 	./bin/testLocalWhl.sh 2>2 | tee 1
 	./bin/test.sh 2>2 | tee 1
-
-# ==========================================================
-# scan the most recent build and fail if the status fails
-rlsecure: rlsecure-scan rlsecure-list rlsecure-status rlsecure-report rlsecure-version
-
-rlsecure-scan:
-	@export VERSION=$(shell cat work/version) && \
-	$(RLSECURE) scan \
-	--rl-store $(RLSTORE) \
-	--purl mboot-github/$(WHAT)@$${VERSION} \
-	--file-path dist/$(WHAT)-$${VERSION}*.whl \
-	--replace \
-	--no-tracking
-
-rlsecure-list:
-	@export VERSION=$(shell cat work/version) && \
-	$(RLSECURE) list \
-	--rl-store $(RLSTORE) \
-	--show-all \
-	--purl mboot-github/$(WHAT)@$${VERSION} \
-	--no-color | tee rlsecure/list-$${VERSION}.txt
-
-rlsecure-status:
-	@export VERSION=$(shell cat work/version) && \
-	$(RLSECURE) status \
-	--rl-store $(RLSTORE) \
-	--purl mboot-github/$(WHAT)@$${VERSION} \
-	--show-all \
-	--return-status \
-	--no-color | tee rlsecure/status-$${VERSION}.txt
-
-rlsecure-report:
-	@export VERSION=$(shell cat work/version) && \
-	$(RLSECURE) report \
-	--rl-store $(RLSTORE) \
-	--purl mboot-github/$(WHAT)@$${VERSION} \
-	--format=all \
-	--bundle=report-$(WHAT)-$${VERSION}.zip \
-	--output-path ./rlsecure
-
-rlsecure-version:
-	@$(RLSECURE) --version
 
 # ==========================================================
 # build a docker images with the latest python and run a test -a
