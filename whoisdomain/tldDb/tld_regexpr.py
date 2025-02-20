@@ -3010,5 +3010,5 @@ ZZ["post"] = {"_server": "whois.dotpostregistry.net", "_test": "us.post", "exten
 ZZ["realtor"] = {"_server": "whois.nic.realtor", "_test": "nic.realtor", "extend": "com"}
 # unknown tld weir, weir, weir, weir, whois.nic.weir,
 ZZ["weir"] = {"_server": "whois.nic.weir", "_test": "nic.weir", "extend": "com"}
-ZZ["xn--node"] = {"_privateRegistry": True}
+ZZ["xn--node"] = {"_privateRegistry": True}  # no whois server
 ZZ["भरतम"] = {"_server": "whois.registry.in", "extend": "in"}
