@@ -117,7 +117,7 @@ add switch not to ignore leading www in the domain request
 
 ---
 
-## 1.20250220.1
+## 1.20250220.2
 
 - fix tld: global, it moved to a new organisation
 - fix some obsolete domains
