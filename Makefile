@@ -48,7 +48,7 @@ build: first
 	./bin/test.sh 2>2 | tee 1
 
 # ==========================================================
-# build a docker images with the latest python and run a test -a
+# build docker images with the latest python and run a test -a
 dockerTests: docker dockerRunLocal dockerTestdata
 
 testdocker:

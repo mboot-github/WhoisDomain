@@ -123,4 +123,8 @@ add switch not to ignore leading www in the domain request
 - fix some obsolete domains
 - fix all derived from amsterdam to use their own _server:
 
+## 1.20250929.1
+- fix coop
+- remove a few unasighed domains (iana)
+
 ## in progress
