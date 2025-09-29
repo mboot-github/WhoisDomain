@@ -1,83 +1,22 @@
-************* Module whoisdomain
-whoisdomain/__init__.py:182:19: W0718: Catching too general exception Exception (broad-exception-caught)
-whoisdomain/__init__.py:205:12: R1722: Consider using 'sys.exit' instead (consider-using-sys-exit)
-whoisdomain/__init__.py:269:0: R0917: Too many positional arguments (24/5) (too-many-positional-arguments)
-************* Module whoisdomain.exceptions
-whoisdomain/exceptions.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/exceptions.py:8:0: C0115: Missing class docstring (missing-class-docstring)
-whoisdomain/exceptions.py:13:0: C0115: Missing class docstring (missing-class-docstring)
-whoisdomain/exceptions.py:17:0: C0115: Missing class docstring (missing-class-docstring)
-whoisdomain/exceptions.py:21:0: C0115: Missing class docstring (missing-class-docstring)
-whoisdomain/exceptions.py:25:0: C0115: Missing class docstring (missing-class-docstring)
-whoisdomain/exceptions.py:29:0: C0115: Missing class docstring (missing-class-docstring)
-whoisdomain/exceptions.py:33:0: C0115: Missing class docstring (missing-class-docstring)
-whoisdomain/exceptions.py:40:0: C0115: Missing class docstring (missing-class-docstring)
-************* Module whoisdomain.doWhoisCommand
-whoisdomain/doWhoisCommand.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module whoisdomain.tldInfo
-whoisdomain/tldInfo.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/tldInfo.py:16:0: C0115: Missing class docstring (missing-class-docstring)
-************* Module whoisdomain.helpers
-whoisdomain/helpers.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module whoisdomain.domain
-whoisdomain/domain.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/domain.py:22:0: R0902: Too many instance attributes (22/20) (too-many-instance-attributes)
-************* Module whoisdomain.processWhoisDomainRequest
-whoisdomain/processWhoisDomainRequest.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/processWhoisDomainRequest.py:37:0: C0115: Missing class docstring (missing-class-docstring)
-whoisdomain/processWhoisDomainRequest.py:38:4: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
-whoisdomain/processWhoisDomainRequest.py:168:15: W0718: Catching too general exception Exception (broad-exception-caught)
-whoisdomain/processWhoisDomainRequest.py:305:12: W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)
-************* Module whoisdomain.main
-whoisdomain/main.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/main.py:5:0: W4901: Deprecated module 'getopt' (deprecated-module)
-whoisdomain/main.py:44:0: C0115: Missing class docstring (missing-class-docstring)
-************* Module whoisdomain.whoisCliInterface
-whoisdomain/whoisCliInterface.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/whoisCliInterface.py:28:0: C0115: Missing class docstring (missing-class-docstring)
-************* Module whoisdomain.whoisParser
-whoisdomain/whoisParser.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/whoisParser.py:40:0: C0115: Missing class docstring (missing-class-docstring)
-************* Module whoisdomain.procFunc
-whoisdomain/procFunc.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/procFunc.py:22:0: C0115: Missing class docstring (missing-class-docstring)
-whoisdomain/procFunc.py:68:8: W0719: Raising too general exception: Exception (broad-exception-raised)
-************* Module whoisdomain.cache.dbmCache
-whoisdomain/cache/dbmCache.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/cache/dbmCache.py:14:0: C0115: Missing class docstring (missing-class-docstring)
-************* Module whoisdomain.cache.dummyCache
-whoisdomain/cache/dummyCache.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/cache/dummyCache.py:13:0: C0115: Missing class docstring (missing-class-docstring)
-************* Module whoisdomain.cache.simpleCacheBase
-whoisdomain/cache/simpleCacheBase.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/cache/simpleCacheBase.py:19:0: C0115: Missing class docstring (missing-class-docstring)
-************* Module whoisdomain.cache.simpleCacheWithFile
-whoisdomain/cache/simpleCacheWithFile.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/cache/simpleCacheWithFile.py:19:0: C0115: Missing class docstring (missing-class-docstring)
-************* Module whoisdomain.cache.redisCache
-whoisdomain/cache/redisCache.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/cache/redisCache.py:25:4: C0115: Missing class docstring (missing-class-docstring)
-************* Module whoisdomain.strings.ignoreStrings
-whoisdomain/strings/ignoreStrings.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module whoisdomain.strings.noneStrings
-whoisdomain/strings/noneStrings.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module whoisdomain.strings.quotaStrings
-whoisdomain/strings/quotaStrings.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module whoisdomain.tldDb.groupers
-whoisdomain/tldDb/groupers.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module whoisdomain.tldDb.finders
-whoisdomain/tldDb/finders.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/tldDb/finders.py:26:4: W0101: Unreachable code (unreachable)
-whoisdomain/tldDb/finders.py:161:0: R0917: Too many positional arguments (6/5) (too-many-positional-arguments)
-************* Module whoisdomain.tldDb.tld_regexpr
-whoisdomain/tldDb/tld_regexpr.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-************* Module whoisdomain.context.dataContext
-whoisdomain/context/dataContext.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/context/dataContext.py:17:0: C0115: Missing class docstring (missing-class-docstring)
-************* Module whoisdomain.context.parameterContext
-whoisdomain/context/parameterContext.py:1:0: C0114: Missing module docstring (missing-module-docstring)
-whoisdomain/context/parameterContext.py:154:0: C0115: Missing class docstring (missing-class-docstring)
-
-------------------------------------------------------------------
-Your code has been rated at 9.84/10 (previous run: 9.84/10, +0.00)
-
+whoisdomain/domain.py:22:1 R0902 Too many instance attributes (22/20) [pylint]
+whoisdomain/processWhoisDomainRequest.py:38:5 R0917 Too many positional arguments (6/5) [pylint]
+whoisdomain/processWhoisDomainRequest.py:54:5 C901 'ProcessWhoisDomainRequest._analyzeDomainStringAndValidate' is too complex (11) [mccabe]
+whoisdomain/processWhoisDomainRequest.py:168:16 W0718 Catching too general exception Exception [pylint]
+whoisdomain/processWhoisDomainRequest.py:207:5 C901 'ProcessWhoisDomainRequest._prepRequest' is too complex (11) [mccabe]
+whoisdomain/processWhoisDomainRequest.py:305:13 W1203 Use lazy % formatting in logging functions [pylint]
+whoisdomain/main.py:119:5 C901 'ResponseCleaner.cleanupWhoisResponse' is too complex (11) [mccabe]
+whoisdomain/main.py:305:1 C901 'testDomains' is too complex (13) [mccabe]
+whoisdomain/main.py:549:1 C901 'main' is too complex (44) [mccabe]
+whoisdomain/whoisParser.py:183:82 E203 whitespace before ':' [pycodestyle]
+whoisdomain/whoisParser.py:281:5 C901 'WhoisParser._cleanupWhoisResponse' is too complex (11) [mccabe]
+whoisdomain/__init__.py:19:1 W0611 'typing.cast' imported but unused [pyflakes]
+whoisdomain/__init__.py:39:1 W0611 '.tldInfo.TldInfo' imported but unused [pyflakes]
+whoisdomain/__init__.py:46:1 W0611 '.tldDb.tld_regexpr.ZZ' imported but unused [pyflakes]
+whoisdomain/__init__.py:77:5 W0611 'redis' imported but unused [pyflakes]
+whoisdomain/__init__.py:98:5 W0611 'tld as libTld' imported but unused [pyflakes]
+whoisdomain/__init__.py:182:20 W0718 Catching too general exception Exception [pylint]
+whoisdomain/__init__.py:205:13 R1722 Consider using 'sys.exit' instead [pylint]
+whoisdomain/__init__.py:269:1 R0917 Too many positional arguments (24/5) [pylint]
+whoisdomain/procFunc.py:68:9 W0719 Raising too general exception: Exception [pylint]
+whoisdomain/tldDb/finders.py:26:5 W0101 Unreachable code [pylint]
+whoisdomain/tldDb/finders.py:161:1 R0917 Too many positional arguments (6/5) [pylint]

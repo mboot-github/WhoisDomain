@@ -151,7 +151,10 @@ mypy:
 	mypy --strict *.py bin/*.py $(WHAT)
 
 pylint:
-	python -m pylint --recursive=y whoisdomain/ >pylint.txt
+	-pylama --max-line-length=160 \
+		--linters="mccabe,mypy,pycodestyle,pyflakes,pylint" \
+		--ignore="C0114,C0115,D102,D107,D105,D103,D104,D100,D101" \
+		whoisdomain/ | tee pylint.txt
 
 clean:
 	rm -rf tmp/*

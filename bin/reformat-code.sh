@@ -3,7 +3,7 @@
 doIt()
 {
     black --line-length 160 .
-    pylama --max-line-length 160 *.py bin/*.py whoisdomain/ |
+    pylama --ignore "C0114,C0115"--max-line-length 160 *.py bin/*.py whoisdomain/ |
     awk '
     /__init__/ && / W0611/ { next }
 #    / W0401 / { next }
