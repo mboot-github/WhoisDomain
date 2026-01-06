@@ -1,6 +1,0 @@
-nic.health name server ns3.dns.nic.health.
-nic.health name server ns1.dns.nic.health.
-nic.health name server a.nic.health.
-nic.health name server c.nic.health.
-nic.health name server ns2.dns.nic.health.
-nic.health name server b.nic.health.

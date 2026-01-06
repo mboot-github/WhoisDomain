@@ -127,4 +127,8 @@ add switch not to ignore leading www in the domain request
 - fix coop
 - remove a few unasighed domains (iana)
 
+## 1.20260106.1
+- fix co.il and add il tld
+- cleanup some obsolete tld's
+
 ## in progress

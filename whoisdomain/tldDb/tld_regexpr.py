@@ -366,6 +366,8 @@ ZZ["com.tr"] = {
 
 ZZ["co.il"] = {
     "extend": "com",
+    "_server": "whois.isoc.org.il",
+    "_test": "ynet.co.il",
     "domain_name": R(r"domain:\s*(.+)"),
     "registrar": R(r"registrar name:\s*(.+)"),
     "registrant": None,
@@ -375,6 +377,9 @@ ZZ["co.il"] = {
     "updated_date": None,
     "name_servers": R(r"nserver:\s*(.+)"),
     "status": R(r"status:\s*(.+)"),
+}
+ZZ["il"] = {
+    "extend": "co.il",
 }
 
 ZZ["co.cz"] = {"extend": "cz"}
@@ -1747,7 +1752,7 @@ ZZ["drive"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["dtv"] = {"_server": "whois.nic.dtv", "extend": "com", "_test": "nic.dtv"}
 ZZ["dubai"] = {"_server": "whois.nic.dubai", "extend": "com", "_test": "nic.dubai"}
 ZZ["duckdns.org"] = {"extend": "_privateReg"}
-ZZ["dunlop"] = {"_server": "whois.nic.dunlop", "extend": "com", "_test": "nic.dunlop"}
+# ZZ["dunlop"] = {"_server": "whois.nic.dunlop", "extend": "com", "_test": "nic.dunlop"}
 ZZ["durban"] = {"_server": "whois.nic.durban", "extend": "com", "_test": "nic.durban"}
 ZZ["dvag"] = {"_server": "whois.nic.dvag", "extend": "com", "_test": "nic.dvag"}
 ZZ["dvr"] = {"_server": "whois.nic.dvr", "extend": "com", "_test": "nic.dvr"}
@@ -2624,7 +2629,7 @@ ZZ["xn--kpry57d"] = {"extend": "tw", "_test": "google.xn--kpry57d"}
 ZZ["xn--kput3i"] = {"_server": "whois.nic.xn--kput3i", "extend": "com", "_test": "nic.xn--kput3i"}
 ZZ["xn--mgb9awbf"] = {"_server": "whois.registry.om", "extend": "om"}
 ZZ["xn--mgba7c0bbn0a"] = {"_server": "whois.nic.xn--mgba7c0bbn0a", "extend": "com", "_test": "nic.xn--mgba7c0bbn0a"}
-ZZ["xn--mgbaakc7dvf"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
+# ZZ["xn--mgbaakc7dvf"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["xn--mgbab2bd"] = {"_server": "whois.nic.xn--mgbab2bd", "extend": "com", "_test": "nic.xn--mgbab2bd"}
 ZZ["xn--mgbah1a3hjkrd"] = {"_server": "whois.nic.mr", "extend": "mr"}
 ZZ["xn--mgbbh1a71e"] = {"_server": "whois.registry.in", "extend": "com"}
@@ -2996,3 +3001,54 @@ ZZ["realtor"] = {"_server": "whois.nic.realtor", "_test": "nic.realtor", "extend
 ZZ["weir"] = {"_server": "whois.nic.weir", "_test": "nic.weir", "extend": "com"}
 ZZ["xn--node"] = {"_privateRegistry": True}  # no whois server
 ZZ["भरतम"] = {"_server": "whois.registry.in", "extend": "in"}
+
+# 2026-01-06
+# MISSING xn--1ck2e1b セール xn--1ck2e1b 'Amazon Registry Services, Inc.' whois.nic.xn--1ck2e1b '[]' 'http://www.nic.xn--1ck2e1b'
+# MISSING xn--bck1b9a5dre4c ファッション xn--bck1b9a5dre4c 'Amazon Registry Services, Inc.' whois.nic.xn--bck1b9a5dre4c '[]' 'http://www.nic.xn--bck1b9a5dre4c'
+# MISSING xn--cck2b3b ストア xn--cck2b3b 'Amazon Registry Services, Inc.' whois.nic.xn--cck2b3b '[]' 'http://www.nic.xn--cck2b3b'
+# MISSING xn--eckvdtc9d ポイント xn--eckvdtc9d 'Amazon Registry Services, Inc.' whois.nic.xn--eckvdtc9d '[]' 'http://www.nic.xn--eckvdtc9d'
+# MISSING xn--fct429k 家電 xn--fct429k 'Amazon Registry Services, Inc.' whois.nic.xn--fct429k '[]' 'http://www.nic.xn--fct429k'
+# MISSING xn--g2xx48c 购物 xn--g2xx48c 'Nawang Heli(Xiamen) Network Service Co., LTD.' whois.nic.xn--g2xx48c '[]' 'http://gouwunic.com/'
+# MISSING xn--gckr3f0f クラウド xn--gckr3f0f 'Amazon Registry Services, Inc.' whois.nic.xn--gckr3f0f '[]' 'http://www.nic.xn--gckr3f0f'
+# MISSING xn--gk3at1e 通販 xn--gk3at1e 'Amazon Registry Services, Inc.' whois.nic.xn--gk3at1e '[]' 'http://www.nic.xn--gk3at1e'
+# MISSING xn--jvr189m 食品 xn--jvr189m 'Amazon Registry Services, Inc.' whois.nic.xn--jvr189m '[]' 'http://www.nic.xn--jvr189m'
+# MISSING xn--l1acc мон xn--l1acc 'Datacom Co.,Ltd' whois.mn '[]' 'https://www.datacom.mn/'
+# MISSING xn--rovu88b 書籍 xn--rovu88b 'Amazon Registry Services, Inc.' whois.nic.xn--rovu88b '[]' 'http://www.nic.xn--rovu88b'
+
+# unknown tld arpa, arpa, arpa, arpa, whois.iana.org,
+# unknown tld xn--4dbrk0ce, ישראל, ישראל, ישראל, whois.isoc.org.il,
+# unknown tld xn--55qw42g, 公益, 公益, 公益, whois.conac.cn,
+# unknown tld xn--80ao21a, қаз, қаз, қаз, whois.nic.kz,
+# unknown tld xn--90a3ac, срб, срб, срб, whois.rnids.rs,
+# unknown tld xn--90ae, бг, бг, бг, whois.imena.bg,
+# unknown tld xn--90ais, бел, бел, бел, whois.cctld.by,
+# unknown tld xn--d1acj3b, дети, дети, дети, whois.nic.xn--d1acj3b,
+# unknown tld xn--j1amh, укр, укр, укр, whois.dotukr.com,
+# unknown tld xn--lgbbat1ad8j, الجزائر, الجزائر, الجزائر, whois.nic.dz,
+# unknown tld xn--mgba3a4f16a, ایران, ایران, ایران, whois.nic.ir,
+# unknown tld xn--mgbaam7a8h, امارات, امارات, امارات, whois.aeda.net.ae,
+# unknown tld xn--mgberp4a5d4ar, السعودية, السعودية, السعودية, whois.nic.net.sa,
+# unknown tld xn--mgbtx2b, عراق, عراق, عراق, whois.cmc.iq,
+# unknown tld xn--mgbx4cd0ab, مليسيا, مليسيا, مليسيا, whois.mynic.my,
+# unknown tld xn--pgbs0dh, تونس, تونس, تونس, whois.ati.tn,
+# unknown tld xn--q7ce6a, ລາວ, ລາວ, ລາວ, whois.nic.la,
+# unknown tld xn--y9a3aq, հայ, հայ, հայ, whois.amnic.net,
+# unknown tld xn--ygbi2ammx, فلسطين, فلسطين, فلسطين, whois.pnina.ps,
+# unknown tld xn--zfr164b, 政务, 政务, 政务, whois.conac.cn,
+
+# currently defined in ZZ but missing in iana: اتصالات
+# currently defined in ZZ but missing in iana: कम
+# currently defined in ZZ but missing in iana: नट
+# currently defined in ZZ but missing in iana: भरत
+# currently defined in ZZ but missing in iana: सगठन
+# currently defined in ZZ but missing in iana: ভরত
+# currently defined in ZZ but missing in iana: ভৰত
+# currently defined in ZZ but missing in iana: ਭਰਤ
+# currently defined in ZZ but missing in iana: ભરત
+# currently defined in ZZ but missing in iana: ଭରତ
+# currently defined in ZZ but missing in iana: இநதய
+# currently defined in ZZ but missing in iana: சஙகபபர
+# currently defined in ZZ but missing in iana: భరత
+# currently defined in ZZ but missing in iana: ಭರತ
+# currently defined in ZZ but missing in iana: ഭരത
+# currently defined in ZZ but missing in iana: भरतम

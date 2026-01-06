@@ -3,49 +3,138 @@
 # https://docs.secure.software/cli
 
 SHELL 		:= /bin/bash -l
+export SHELL
+
+VENV := ./vtmp/
+export VENV
+
+# tested on 3.10-3.14
+MIN_PYTHON_VERSION := $(shell basename $$( ls /usr/bin/python3.[0-9][0-9] | awk '{print $0; exit}' ) )
+export MIN_PYTHON_VERSION
+
+PIP_INSTALL := pip3 -q \
+	--require-virtualenv \
+	--disable-pip-version-check \
+	--no-color install --no-cache-dir
+
+# ==========================================
+# Code formatting and checks
+PY_FILES := *.py bin/*.py whoisdomain/
+
+LINE_LENGTH := 160
+PL_LINTERS := eradicate,mccabe,pycodestyle,pyflakes,pylint
+
+# C0114 Missing module docstring [pylint]
+# C0115 Missing class docstring [pylint]
+# C0116 Missing function or method docstring [pylint]
+# E203 whitespace before ':' [pycodestyle]
+
+PL_IGNORE := C0114,C0115,C0116,E203
+
+MYPY_INSTALL := \
+	types-requests \
+	types-python-dateutil redis tld
+
+COMMON_VENV := rm -rf $(VENV); \
+	$(MIN_PYTHON_VERSION) -m venv $(VENV); \
+	source ./$(VENV)/bin/activate;
 
 WHAT 		:= whoisdomain
 DOCKER_WHO	:= mbootgithub
-
-SIMPLEDOMAINS = $(shell ls testdata)
 
 TEST_OPTIONS_ALL = \
 	--withPublicSuffix \
 	--extractServers \
 	--stripHttpStatus
 
-# PHONY targets: make will run its recipe regardless of whether a file with that name exists or what its last modification time is.
 .PHONY: TestSimple TestSimple2 TestAll clean
 
-first: reformat mypy pylint testP310
+first: prep test1 test2 test3 # test4
 
-testP310:
-	./test1.py # now tests with python 3.10
+# --------------------------------------------------
+# reformat, lint and verify basics
+# --------------------------------------------------
+prep: clean black pylama mypy
 
-second: first test2 test3 test
+clean:
+	rm -rf tmp/* 1 2 out *.out *.1 *.2
+	rm -rf $(VENV)
+	rm -f ./rl-secure-list-*.txt
+	rm -f ./rl-secure-status-*.txt
+	# docker container prune -f
+	# docker image prune --all --force
+	# docker image ls -a
 
-test:
-	LOGLEVEL=DEBUG ./test2.py $(TEST_OPTIONS_ALL) -t 2>2 | tee 1
+black:
+	$(COMMON_VENV) \
+	$(PIP_INSTALL) black; \
+	black \
+		--line-length $(LINE_LENGTH) \
+		$(PY_FILES)
 
-test-all:
-	LOGLEVEL=DEBUG ./test2.py $(TEST_OPTIONS_ALL) -a 2>2 | tee 1
+pylama:
+	$(COMMON_VENV) \
+	$(PIP_INSTALL) setuptools pylama; \
+	pylama \
+		--max-line-length $(LINE_LENGTH) \
+		--linters "${PL_LINTERS}" \
+		--ignore "${PL_IGNORE}" \
+		$(PY_FILES) || exit 0
 
-t4:
-	./t4.py 2>22 | tee out
+mypy:
+	$(COMMON_VENV) \
+	$(PIP_INSTALL) mypy $(MYPY_INSTALL); \
+	mypy \
+		--strict \
+		--no-incremental \
+		$(PY_FILES)
 
-# ==========================================================
-# run a test sequence local only, no docker ,no upload to pypi
-LocalTestSimple: reformat mypy test2
+# --------------------------------------------------
+# Tests
+# --------------------------------------------------
 
-# ==========================================================
-LocalTestWhl: build
-	./bin/testLocalWhl.sh 2>tmp/$@-2 | tee tmp/$@-1
+test1:
+	./test1.py | tee tmp/$@.1
+
+# test2 has the data type in the output
+test2:
+	./test2.py -f testdata/DOMAINS.txt 2>tmp/$@.2 | tee tmp/$@.1
+
+# test3 simulates the whoisdomain command and has no data type in the output
+test3:
+	./test3.py -f testdata/DOMAINS.txt 2>tmp/$@.2 | tee tmp/$@.1
+
+test4:
+	LOGLEVEL=DEBUG ./test2.py $(TEST_OPTIONS_ALL) -t 2>tmp/$@.2 | tee tmp/$@.1
+
+test_with: withPublicSuffix withExtractServers stripHttpStatus
+
+withPublicSuffix:
+	./test2.py -d  www.dublin.airport.aero --withPublicSuffix
+
+withExtractServers:
+	./test2.py -d google.com --extractServers
+
+stripHttpStatus:
+	./test2.py -d nic.aarp --stripHttpStatus
+	./test2.py -d nic.abudhabi --stripHttpStatus
+	./test2.py -d META.AU --stripHttpStatus
+	./test2.py -d google.AU --stripHttpStatus
+
+# test using python 3.6
+zz:
+	docker build -t df36 -f Df-36 .
+	docker run -v .:/context df36 -d google.com
+
+# --------------------------------------------------
+# build related
+# --------------------------------------------------
 
 # this step creates or updates the toml file
 build: first
 	./bin/build.sh
-	./bin/testLocalWhl.sh 2>2 | tee 1
-	./bin/test.sh 2>2 | tee 1
+	./bin/testLocalWhl.sh 2>tmp/$@.22 | tee tmp/$@.1
+	./bin/test.sh 2>tmp/$@.2 | tee -a tmp/$@.1
 
 # ==========================================================
 # build docker images with the latest python and run a test -a
@@ -102,6 +191,7 @@ dockerPush:
 	docker image push \
 		--all-tags $(DOCKER_WHO)/$(WHAT)
 	docker run mbootgithub/whoisdomain -d google.com -j | jq -r .
+
 # ====================================================
 # uploading to pypi an pypiTestUpload
 # build a test-mypi and download the image in a venv ane run a test
@@ -114,74 +204,10 @@ pypiTestUpload:
 testTestPypi:
 	./bin/testTestPyPiUpload.sh 2>tmp/$@-2 | tee tmp/$@-1
 
-releaseTest: build rlsecure pypiTestUpload testTestPypi
+releaseTest: build pypiTestUpload testTestPypi
+
+release: pypi
 
 # this is for pypi owners after all tests have finished
 pypi:
 	./bin/upload_to_pypi.sh
-
-release: pypi
-
-# ====================================================
-# full test runs with all supported tld's
-
-# test2 has the data type in the output
-test2: reformat mypy
-	./test2.py -f testdata/DOMAINS.txt 2> tmp/$@-2 | tee tmp/$@-1
-
-# test3 simulates the whoisdomain command and has no data type in the output
-test3: reformat mypy
-	./test3.py -f testdata/DOMAINS.txt 2> tmp/$@-2 | tee tmp/$@-1
-
-# ====================================================
-# update the sqlite db with the latest tld info and psl info and suggest missing tld's we can add with a simple fix
-suggest:
-	( cd analizer; make ) | tee suggest.out
-
-# black pylama and mypy on the source directory
-format:
-	./bin/reformat-code.sh
-
-# black pylama and mypy on the source directory
-reformat:
-	./bin/reformat-code.sh
-
-# only verify --strict all python code
-mypy:
-	mypy --strict *.py bin/*.py $(WHAT)
-
-pylint:
-	-pylama --max-line-length=160 \
-		--linters="mccabe,mypy,pycodestyle,pyflakes,pylint" \
-		--ignore="C0114,C0115,D102,D107,D105,D103,D104,D100,D101" \
-		whoisdomain/ | tee pylint.txt
-
-clean:
-	rm -rf tmp/*
-	rm -f ./rl-secure-list-*.txt
-	rm -f ./rl-secure-status-*.txt
-	docker container prune -f
-	docker image prune --all --force
-	docker image ls -a
-
-cleanDist:
-	rm -rf dist/*
-	# rm -f work/version
-
-zz:
-	docker build -t df36 -f Df-36 .
-	docker run -v .:/context df36 -d google.com
-
-with: withPublicSuffix withExtractServers stripHttpStatus
-
-withPublicSuffix:
-	./test2.py -d  www.dublin.airport.aero --withPublicSuffix
-
-withExtractServers:
-	./test2.py -d google.com --extractServers
-
-stripHttpStatus:
-	./test2.py -d nic.aarp --stripHttpStatus
-	./test2.py -d nic.abudhabi --stripHttpStatus
-	./test2.py -d META.AU --stripHttpStatus
-	./test2.py -d google.AU --stripHttpStatus

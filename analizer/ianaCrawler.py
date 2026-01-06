@@ -54,7 +54,7 @@ class IanaCrawler:
     ) -> BeautifulSoup:
         maxTry: int = 5
         n: int = 0
-
+        response = None
         while n < maxTry:
             n += 1
             try:
