@@ -66,8 +66,6 @@ main()
         }
     }
 
-    bin/reformat-code.sh
-
     setupVersionNumberToday
     buildDist
     V=$(cat "${VERSION_FILE}")

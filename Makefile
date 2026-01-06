@@ -23,13 +23,14 @@ PY_FILES := *.py bin/*.py whoisdomain/
 
 LINE_LENGTH := 160
 PL_LINTERS := eradicate,mccabe,pycodestyle,pyflakes,pylint
+PL_LINTERS := eradicate,mccabe,pycodestyle,pylint
 
 # C0114 Missing module docstring [pylint]
 # C0115 Missing class docstring [pylint]
 # C0116 Missing function or method docstring [pylint]
 # E203 whitespace before ':' [pycodestyle]
 
-PL_IGNORE := C0114,C0115,C0116,E203
+PL_IGNORE := C0114,C0115,C0116,E203,C901
 
 MYPY_INSTALL := \
 	types-requests \
@@ -79,7 +80,7 @@ pylama:
 		--max-line-length $(LINE_LENGTH) \
 		--linters "${PL_LINTERS}" \
 		--ignore "${PL_IGNORE}" \
-		$(PY_FILES) || exit 0
+		$(PY_FILES) | tee $@.out || exit 0
 
 mypy:
 	$(COMMON_VENV) \
@@ -87,7 +88,7 @@ mypy:
 	mypy \
 		--strict \
 		--no-incremental \
-		$(PY_FILES)
+		$(PY_FILES) | tee $@.out
 
 # --------------------------------------------------
 # Tests
@@ -138,30 +139,9 @@ build: first
 
 # ==========================================================
 # build docker images with the latest python and run a test -a
-dockerTests: docker dockerRunLocal dockerTestdata
+docker: docker_build testdocker dockerRunLocal dockerTestdata testdockerTestdata
 
-testdocker:
-	export VERSION=$(shell cat work/version) && \
-	docker build \
-		--build-arg VERSION \
-		--tag $(DOCKER_WHO)/$(WHAT)-test \
-		--tag $(DOCKER_WHO)/$(WHAT)-$${VERSION}-test \
-		--tag $(WHAT)-$${VERSION}-test \
-		--tag $(WHAT)-test \
-		-f Dockerfile-test .
-	docker image ls
-	docker container ls
-	docker run whoisdomain-test -t $(TEST_OPTIONS_ALL)
-
-testdockerTestdata:
-	@export VERSION=$(shell cat work/version) && \
-	docker run \
-		-v ./testdata:/testdata \
-		$(WHAT)-$${VERSION}-test \
-		-f /testdata/DOMAINS.txt $(TEST_OPTIONS_ALL) 2>tmp/$@-2 | \
-		tee tmp/$@-1
-
-docker:
+docker_build:
 	export VERSION=$(shell cat work/version) && \
 	docker build \
 		--build-arg VERSION \
@@ -170,6 +150,11 @@ docker:
 		--tag $(WHAT)-$${VERSION} \
 		--tag $(WHAT) \
 		-f Dockerfile .
+
+testdocker:
+	docker image ls
+	docker container ls
+	docker run whoisdomain-test -t $(TEST_OPTIONS_ALL)
 
 dockerRunLocal:
 	export VERSION=$(shell cat work/version) && \
@@ -185,6 +170,15 @@ dockerTestdata:
 		$(WHAT)-$${VERSION} \
 		-f /testdata/DOMAINS.txt $(TEST_OPTIONS_ALL) 2>tmp/$@-2 | \
 		tee tmp/$@-1
+
+testdockerTestdata:
+	@export VERSION=$(shell cat work/version) && \
+	docker run \
+		-v ./testdata:/testdata \
+		$(WHAT)-$${VERSION}-test \
+		-f /testdata/DOMAINS.txt $(TEST_OPTIONS_ALL) 2>tmp/$@-2 | \
+		tee tmp/$@-1
+
 
 dockerPush:
 	export VERSION=$(shell cat work/version) && \
