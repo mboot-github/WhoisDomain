@@ -145,6 +145,21 @@ ZZ["co.uk"] = {
     "_test": "livedns.co.uk",
 }
 
+ZZ["mc"] = {
+    "_server":  "whois.nic.mc",
+    "extend": "com",
+    "_test": "nic.mc",
+    "domain_name": R(r"Domain\s+:\s+(.+)"),
+    "status": R(r"Status\s+:\s*(.+)"),
+    "owner": R(r"Owner-c\s+:\s+(.+)"),
+    "registrar": R(r"Registrar\s+:\s+(.+)"),
+    "creation_date": R(r"Created\s+:(.+)"),
+    "expiration_date": R(r"Expires on\s+:(.+)"),
+    "updated_date": R(r"Last update\s+:(.+)"),
+    "name_servers": R(r"nserver\s+:\s*(.+)"),
+}
+
+
 ZZ["gov.uk"] = {
     "extend": "ac.uk",
     "_server": "whois.gov.uk",
@@ -2892,7 +2907,6 @@ ZZ["lr"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["maif"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["marshalls"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["mattel"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["mc"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["merckmsd"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["mh"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["microsoft"] = {"_privateRegistry": True}  # no whois server found in iana

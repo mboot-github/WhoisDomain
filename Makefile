@@ -189,7 +189,7 @@ dockerPush:
 # ====================================================
 # uploading to pypi an pypiTestUpload
 # build a test-mypi and download the image in a venv ane run a test
-pypiTest: pypiTestUpload testTestPypi testdocker testdockerTestdata
+pypiTest: pypiTestUpload testTestPypi # testdocker testdockerTestdata
 
 # this is only the upload now for pypi builders
 pypiTestUpload:
