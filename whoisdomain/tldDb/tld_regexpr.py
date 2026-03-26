@@ -277,12 +277,16 @@ ZZ["bank"] = {
 }
 
 ZZ["be"] = {
-    "extend": "pl",
+    "extend": "com",
+    "_server": "whois.dns.be",
     "domain_name": R(r"\nDomain:\s*(.+)"),
-    "registrar": R(r"Company Name:\n?(.+)"),
+    "registrar": R(r"Registrar:\s*\n\s+Name:\s*(.+)"),
     "creation_date": R(r"Registered:\s*(.+)\n"),
-    "status": R(r"Status:\s?(.+)"),
-    "name_servers": R(r"Nameservers:(?:\n[ \t]+(\S+))?(?:\n[ \t]+(\S+))?(?:\n[ \t]+(\S+))?(?:\n[ \t]+(\S+))?\n\n"),
+    "expiration_date": None,
+    "updated_date": None,
+    "status": R(r"Status:\s*(.+)"),
+    "name_servers": R(r"Nameservers:(?:\n[ \t]+(\S+))?(?:\n[ \t]+(\S+))?(?:\n[ \t]+(\S+))?(?:\n[ \t]+(\S+))?\n"),
+    "_test": "google.be",
 }
 
 ZZ["biz"] = {
@@ -792,13 +796,15 @@ ZZ["pharmacy"] = {
 }
 
 ZZ["pl"] = {
-    "extend": "uk",
+    "extend": "com",
+    "_server": "whois.dns.pl",
+    "domain_name": R(r"DOMAIN NAME:\s*(.+)"),
     "registrar": R(r"\nREGISTRAR:\s*(.+)\n"),
     "creation_date": R(r"\ncreated:\s*(.+)\n"),
     "updated_date": R(r"\nlast modified:\s*(.+)\n"),
     # "expiration_date": R(r"\noption expiration date:\s*(.+)\n"),
     # If no "option expiration date:" is present, use "renewal date:", but only
-    # if it's not not followed by "option expiration date:". google.pl is the test case here
+    # if it's not followed by "option expiration date:". google.pl is the test case here
     "expiration_date": R(r"(?:\noption expiration date:|renewal date:(?!(?:.|\n)*\noption expiration date:))\s*(.+)\n"),
     "name_servers": R(r"nameservers:%s" % xStr(r"(?:\s+(\S+)[^\n]*\n)?", 4)),
     "status": R(r"\nStatus:\n\s*(.+)"),
