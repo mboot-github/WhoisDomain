@@ -1,12 +1,9 @@
 #! /usr/bin/env python3
 
-import os
 import json
 import logging
-
-from typing import (
-    Optional,
-)
+import os
+import pathlib
 
 from .simpleCacheBase import (
     SimpleCacheBase,
@@ -17,12 +14,12 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 class SimpleCacheWithFile(SimpleCacheBase):
-    cacheFilePath: Optional[str] = None
+    cacheFilePath: str | None = None
 
     def __init__(
         self,
         verbose: bool = False,
-        cacheFilePath: Optional[str] = None,
+        cacheFilePath: str | None = None,
         cacheMaxAge: int = (60 * 60 * 48),
     ) -> None:
         super().__init__(verbose=verbose, cacheMaxAge=cacheMaxAge)
@@ -34,10 +31,10 @@ class SimpleCacheWithFile(SimpleCacheBase):
         if self.cacheFilePath is None:
             return
 
-        if not os.path.isfile(self.cacheFilePath):
+        if not pathlib.Path(self.cacheFilePath).is_file():
             return
 
-        with open(self.cacheFilePath, "r", encoding="utf-8") as f:
+        with pathlib.Path(self.cacheFilePath).open(encoding="utf-8") as f:
             try:
                 self.memCache = json.load(f)
             except ValueError as e:
@@ -50,7 +47,7 @@ class SimpleCacheWithFile(SimpleCacheBase):
         if self.cacheFilePath is None:
             return
 
-        with open(self.cacheFilePath, "w", encoding="utf-8") as f:
+        with pathlib.Path(self.cacheFilePath).open("w", encoding="utf-8") as f:
             json.dump(self.memCache, f)
 
     def put(
@@ -65,7 +62,7 @@ class SimpleCacheWithFile(SimpleCacheBase):
     def get(
         self,
         keyString: str,
-    ) -> Optional[str]:
+    ) -> str | None:
         self._fileLoad()
         return super().get(keyString=keyString)
 

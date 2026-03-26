@@ -1,26 +1,16 @@
 # import sys
-import os
 import logging
-
-from typing import (
-    Optional,
-    List,
-    Tuple,
-)
-
-from .exceptions import UnknownTld
+import os
 
 from .context.dataContext import DataContext
 from .context.parameterContext import ParameterContext
-
-from .helpers import filterTldToSupportedPattern
-from .helpers import get_TLD_RE
-
-from .doWhoisCommand import doWhoisAndReturnString
-from .whoisParser import WhoisParser
 from .domain import Domain
+from .doWhoisCommand import doWhoisAndReturnString
+from .exceptions import UnknownTld
+from .helpers import filterTldToSupportedPattern, get_TLD_RE
 from .lastWhois import updateLastWhois
 from .whoisCliInterface import WhoisCliInterface
+from .whoisParser import WhoisParser
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
@@ -45,7 +35,7 @@ class ProcessWhoisDomainRequest:
     ) -> None:
         self.pc = pc
         self.dc = dc
-        self.dom: Optional[Domain] = dom
+        self.dom: Domain | None = dom
         self.wci = wci
         self.parser = parser
         if self.pc.verbose:
@@ -54,7 +44,7 @@ class ProcessWhoisDomainRequest:
     def _analyzeDomainStringAndValidate(
         self,
     ) -> None:
-        def _internationalizedDomainNameToPunyCode(d: List[str]) -> List[str]:
+        def _internationalizedDomainNameToPunyCode(d: list[str]) -> list[str]:
             return [k.encode("idna").decode() or k for k in d]
 
         # Prep the domain ================
@@ -115,14 +105,13 @@ class ProcessWhoisDomainRequest:
 
     def _makeMessageForUnsupportedTld(
         self,
-    ) -> Optional[str]:
+    ) -> str | None:
         if self.pc.return_raw_text_for_unsupported_tld:
             return None
 
         a = f"The TLD {self.dc.tldString} is currently not supported by this package."
         b = "Use validTlds() to see what toplevel domains are supported."
-        msg = f"{a} {b}"
-        return msg
+        return f"{a} {b}"
 
     def _doUnsupportedTldAnyway(
         self,
@@ -150,7 +139,7 @@ class ProcessWhoisDomainRequest:
 
     def _doOneLookup(
         self,
-    ) -> Tuple[Optional[Domain], bool]:
+    ) -> tuple[Domain | None, bool]:
         msg = f"### lookup: tldString: {self.dc.tldString}; dList: {self.dc.dList}"
         log.debug(msg)
 
@@ -167,7 +156,8 @@ class ProcessWhoisDomainRequest:
             )
         except Exception as e:
             if self.pc.simplistic is False:
-                raise e
+                msg = f"{e}"
+                raise Exception(msg)
 
             self.dc.exeptionStr = f"{e}"
             assert self.dom is not None
@@ -207,9 +197,9 @@ class ProcessWhoisDomainRequest:
     def _prepRequest(self) -> bool:
         try:
             self._analyzeDomainStringAndValidate()  # may raise UnknownTld
-        except UnknownTld as e:
+        except UnknownTld:
             if self.pc.simplistic is False:
-                raise e
+                raise UnknownTld
 
             self.dc.exeptionStr = "UnknownTld"
 
@@ -231,7 +221,7 @@ class ProcessWhoisDomainRequest:
             return True
 
         # =================================================
-        myKeys: List[str] = []
+        myKeys: list[str] = []
         for item in get_TLD_RE():
             myKeys.append(item)
 
@@ -280,7 +270,7 @@ class ProcessWhoisDomainRequest:
     def init(self) -> None:
         pass
 
-    def processRequest(self) -> Optional[Domain]:
+    def processRequest(self) -> Domain | None:
         finished = self._prepRequest()
         if finished is True:
             return self.dom
@@ -295,11 +285,8 @@ class ProcessWhoisDomainRequest:
         # so ".".join(self.dc.dList) would be like: aaa.<tld> or perhaps aaa.bbb.<tld>
         # and may change if we find no data in cli whois
 
-        tldLevel: List[str] = []
-        if self.dc.hasPublicSuffix:
-            tldLevel = str(self.dc.publicSuffixStr).split(".")
-        else:
-            tldLevel = str(self.dc.tldString).split(".")
+        tldLevel: list[str] = []
+        tldLevel = str(self.dc.publicSuffixStr).split(".") if self.dc.hasPublicSuffix else str(self.dc.tldString).split(".")
 
         while len(self.dc.dList) > len(tldLevel):
             log.debug(f"{self.dc.dList}")

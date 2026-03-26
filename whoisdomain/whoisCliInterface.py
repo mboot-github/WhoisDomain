@@ -1,25 +1,19 @@
-#!  /usr/bin/env python3
-
-import subprocess
-import time
+import logging
 
 # import sys
 import os
+import pathlib
 import platform
 import shutil
-import logging
+import subprocess
+import time
 
-from typing import (
-    List,
-)
-
+from .context.dataContext import DataContext
+from .context.parameterContext import ParameterContext
 from .exceptions import (
     WhoisCommandFailed,
     WhoisCommandTimeout,
 )
-
-from .context.parameterContext import ParameterContext
-from .context.dataContext import DataContext
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
@@ -28,7 +22,7 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 class WhoisCliInterface:
     def _specificOnNonWindowsPlatforms(self) -> None:
         self.IS_WINDOWS: bool = platform.system() == "Windows"
-        self.STDBUF_OFF_CMD: List[str] = []
+        self.STDBUF_OFF_CMD: list[str] = []
         if not self.IS_WINDOWS and shutil.which("stdbuf"):
             self.STDBUF_OFF_CMD = ["stdbuf", "-o0"]
 
@@ -45,12 +39,13 @@ class WhoisCliInterface:
         Windows 'whois' command wrapper
         https://docs.microsoft.com/en-us/sysinternals/downloads/whois
         """
-        folder = os.getcwd()
-        copy_command = r"copy \\live.sysinternals.com\tools\whois.exe " + folder
-        msg = "downloading dependencies: {copy_command}"
+        folder = pathlib.Path.cwd()
+        c = r"copy \\live.sysinternals.com\tools\whois.exe "
+        copy_command = f"{c} {folder}"
+        msg = f"downloading dependencies: {copy_command}"
         log.debug(msg)
 
-        subprocess.call(
+        subprocess.call(  # noqa: S602
             copy_command,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -58,10 +53,10 @@ class WhoisCliInterface:
         )
 
     def _onWindowsFindWhoisCliAndInstallIfNeeded(self, k: str) -> None:
-        paths = os.environ["path"].split(";")
+        paths = os.environ["PATH"].split(";")
         for path in paths:
-            wpath = os.path.join(path, k)
-            if os.path.exists(wpath):
+            wpath = pathlib.Path(path) / k
+            if pathlib.Path(wpath).exists():
                 self.pc.cmd = wpath  # note we update cmd if we find one
                 return
 
@@ -70,23 +65,23 @@ class WhoisCliInterface:
 
     def _makeWhoisCommandToRunWindows(
         self,
-        whoisCommandList: List[str],
-    ) -> List[str]:
+        whoisCommandList: list[str],
+    ) -> list[str]:
         if self.pc.cmd == "whois":  # the default string
             k: str = "whois.exe"
-            if os.path.exists(k):
-                self.pc.cmd = os.path.join(".", k)
+            if pathlib.Path(k).exists():
+                self.pc.cmd = pathlib.Path(k)
             else:
                 self._onWindowsFindWhoisCliAndInstallIfNeeded(k)
 
         whoisCommandList = [self.pc.cmd]
 
         if self.pc.server:
-            return whoisCommandList + ["-v", "-nobanner", self.domain, self.pc.server]
-        return whoisCommandList + ["-v", "-nobanner", self.domain]
+            return [*whoisCommandList, "-v", "-nobanner", self.domain, self.pc.server]
+        return [*whoisCommandList, "-v", "-nobanner", self.domain]
 
-    def _makeWhoisCommandToRun(self) -> List[str]:
-        whoisCommandList: List[str] = [self.pc.cmd]
+    def _makeWhoisCommandToRun(self) -> list[str]:
+        whoisCommandList: list[str] = [self.pc.cmd]
         if " " in self.pc.cmd:
             whoisCommandList = self.pc.cmd.split(" ")
 
@@ -96,18 +91,18 @@ class WhoisCliInterface:
             )
 
         if self.pc.extractServers:
-            whoisCommandList = whoisCommandList + ["--verbose"]
+            whoisCommandList = [*whoisCommandList, "--verbose"]
 
         if self.pc.server:
-            whoisCommandList = whoisCommandList + ["-h", self.pc.server]
+            whoisCommandList = [*whoisCommandList, "-h", self.pc.server]
 
-        return whoisCommandList + [self.domain]
+        return [*whoisCommandList, self.domain]
 
     def _postProcessingResult(self) -> str:
         msg = f"{self.rawWhoisResultString}"
         log.debug(msg)
 
-        if self.pc.ignore_returncode is False and self.processHandle.returncode not in [0, 1]:
+        if self.pc.ignore_returncode is False and self.processHandle.returncode not in {0, 1}:
             if "fgets: Connection reset by peer" in self.rawWhoisResultString:
                 return self.rawWhoisResultString.replace("fgets: Connection reset by peer", "")
 
@@ -124,8 +119,6 @@ class WhoisCliInterface:
     def _runWhoisCliOnThisOs(self) -> str:
         # LANG=en is added to make the ".jp" output consisent across all environments
         # STDBUF_OFF_CMD needed to not lose data on kill
-
-        s: str = ""
 
         with subprocess.Popen(
             self.STDBUF_OFF_CMD + self._makeWhoisCommandToRun(),
@@ -153,21 +146,18 @@ class WhoisCliInterface:
                     msg = f"timeout: query took more then {self.pc.timeout} seconds"
                     raise WhoisCommandTimeout(msg) from ex
 
-            s = self._postProcessingResult()
-
-        # self.processHandle = None
-        return s
+            return self._postProcessingResult()
 
     def _returnWhoisPythonFromStaticTestData(self) -> str:
         testDir = os.getenv("TEST_WHOIS_PYTHON")
 
         pathToTestFile = f"{testDir}/{self.domain}/input"
-        if os.path.exists(pathToTestFile):
-            with open(pathToTestFile, mode="rb") as f:  # switch to binary mode as that is what Popen uses
-                # make sure the data is treated exactly the same as the output of Popen
-                return f.read().decode(errors="ignore")
+        if pathlib.Path(pathToTestFile).exists():
+            return str(pathlib.Path(pathToTestFile).read_bytes())
+            # return f.read().decode(errors="ignore")
 
-        raise WhoisCommandFailed("")
+        msg = ""
+        raise WhoisCommandFailed(msg)  # only used in testing: noqa: EM101
 
     # public
 

@@ -1,18 +1,16 @@
 #!  /usr/bin/env python3
 
 # import sys
-import os
 import logging
-
+import os
 from typing import (
-    Optional,
     Any,
 )
 
-from .whoisCliInterface import WhoisCliInterface
 from .cache.simpleCacheWithFile import SimpleCacheWithFile
-from .context.parameterContext import ParameterContext
 from .context.dataContext import DataContext
+from .context.parameterContext import ParameterContext
+from .whoisCliInterface import WhoisCliInterface
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
@@ -73,7 +71,7 @@ def doWhoisAndReturnString(
     keyString = ".".join(dc.dList)
 
     if pc.force is False:
-        oldData: Optional[str] = cache.get(keyString)
+        oldData: str | None = cache.get(keyString)
         if oldData:
             return str(oldData)
 

@@ -9,65 +9,60 @@ Module providing all public accessible functions and data for the whoisdomain pa
 All public data is vizible via the __all__ List
 """
 
-import sys
-import os
-import logging
 import gc
-
+import logging
+import os
+import sys
+from collections.abc import Callable
 from functools import wraps
-
 from typing import (
-    cast,
-    Optional,
-    List,
-    Dict,
-    Tuple,
     Any,
-    Callable,
+    Dict,
+    List,
+    Optional,
+    Tuple,
+    cast,
 )
 
-from .exceptions import (
-    UnknownTld,
-    FailedParsingWhoisOutput,
-    UnknownDateFormat,
-    WhoisCommandFailed,
-    WhoisPrivateRegistry,
-    WhoisQuotaExceeded,
-    WhoisCommandTimeout,
-)
-
-from .tldInfo import TldInfo
-from .version import VERSION
-from .processWhoisDomainRequest import ProcessWhoisDomainRequest
-from .doWhoisCommand import setMyCache
-from .domain import Domain
-from .strings.noneStrings import NoneStrings, NoneStringsAdd
-from .strings.quotaStrings import QuotaStrings, QuotaStringsAdd
-from .tldDb.tld_regexpr import ZZ
-from .context.dataContext import DataContext
-from .context.parameterContext import ParameterContext
+from .cache.dbmCache import DBMCache
+from .cache.dummyCache import DummyCache
 from .cache.simpleCacheBase import SimpleCacheBase
 from .cache.simpleCacheWithFile import SimpleCacheWithFile
-from .cache.dummyCache import DummyCache
-from .cache.dbmCache import DBMCache
-from .whoisParser import WhoisParser
-from .whoisCliInterface import WhoisCliInterface
-from .procFunc import ProcFunc
-
+from .context.dataContext import DataContext
+from .context.parameterContext import ParameterContext
+from .domain import Domain
+from .doWhoisCommand import setMyCache
+from .exceptions import (
+    FailedParsingWhoisOutput,
+    UnknownDateFormat,
+    UnknownTld,
+    WhoisCommandFailed,
+    WhoisCommandTimeout,
+    WhoisPrivateRegistry,
+    WhoisQuotaExceeded,
+)
 from .helpers import (
+    cleanupWhoisResponse,
     filterTldToSupportedPattern,
+    get_TLD_RE,
+    getTestHint,
+    getVersion,
     mergeExternalDictWithRegex,
     validTlds,
-    get_TLD_RE,
-    getVersion,
-    getTestHint,
-    cleanupWhoisResponse,
 )
-
 from .lastWhois import (
     get_last_raw_whois_data,
     initLastWhois,
 )
+from .processWhoisDomainRequest import ProcessWhoisDomainRequest
+from .procFunc import ProcFunc
+from .strings.noneStrings import NoneStrings, NoneStringsAdd
+from .strings.quotaStrings import QuotaStrings, QuotaStringsAdd
+from .tldDb.tld_regexpr import ZZ
+from .tldInfo import TldInfo
+from .version import VERSION
+from .whoisCliInterface import WhoisCliInterface
+from .whoisParser import WhoisParser
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
@@ -142,14 +137,16 @@ __all__ = [
     "RedisCache",
     # from procFunc
     "ProcFunc",
+    "TldInfo",
+    "ZZ",
 ]
 
 
 def _result2dict(func: Any) -> Any:
     @wraps(func)
-    def _inner(*args: str, **kw: Any) -> Dict[str, Any]:
+    def _inner(*args: str, **kw: Any) -> dict[str, Any]:
         r = func(*args, **kw)
-        return r and vars(r) or {}
+        return (r and vars(r)) or {}
 
     return _inner
 
@@ -162,7 +159,7 @@ def remoteQ2(
     n: int = 0
     while True:
         n += 1
-        reply: Dict[str, Any] = {}
+        reply: dict[str, Any] = {}
 
         try:
             # unpicle the request
@@ -211,7 +208,7 @@ def remoteQ2(
 def q2(
     domain: str,
     pc: ParameterContext,
-) -> Optional[Domain]:
+) -> Domain | None:
     if pc.verbose is True:
         os.putenv("LOGLEVEL", "DEBUG")
         os.environ["LOGLEVEL"] = "DEBUG"
@@ -269,22 +266,22 @@ def q2(
 def query(
     domain: str,
     force: bool = False,
-    cache_file: Optional[str] = None,
+    cache_file: str | None = None,
     cache_age: int = 60 * 60 * 48,
     slow_down: int = 0,
     ignore_returncode: bool = False,
-    server: Optional[str] = None,
+    server: str | None = None,
     verbose: bool = False,
     with_cleanup_results: bool = False,
     internationalized: bool = False,
     include_raw_whois_text: bool = False,
     return_raw_text_for_unsupported_tld: bool = False,
-    timeout: Optional[float] = None,
+    timeout: float | None = None,
     parse_partial_response: bool = False,
     cmd: str = "whois",
     simplistic: bool = False,
     withRedacted: bool = False,
-    pc: Optional[ParameterContext] = None,
+    pc: ParameterContext | None = None,
     tryInstallMissingWhoisOnWindows: bool = False,
     shortResponseLen: int = 5,
     withPublicSuffix: bool = False,
@@ -292,7 +289,7 @@ def query(
     stripHttpStatus: bool = False,
     noIgnoreWww: bool = False,
     # if you use pc as argument all above params (except domain are ignored)
-) -> Optional[Domain]:
+) -> Domain | None:
     # see documentation about paramaters in parameterContext.py
 
     assert isinstance(domain, str), Exception("`domain` - must be <str>")

@@ -1,16 +1,10 @@
 #! /usr/bin/env python3
 
-import time
+import logging
 
 # import sys
 import os
-import logging
-
-from typing import (
-    Dict,
-    Optional,
-    Tuple,
-)
+import time
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
@@ -23,7 +17,7 @@ class SimpleCacheBase:
         cacheMaxAge: int = (60 * 60 * 48),
     ) -> None:
         self.verbose = verbose
-        self.memCache: Dict[str, Tuple[float, str]] = {}
+        self.memCache: dict[str, tuple[float, str]] = {}
         self.cacheMaxAge: int = cacheMaxAge
 
     def put(
@@ -41,7 +35,7 @@ class SimpleCacheBase:
     def get(
         self,
         keyString: str,
-    ) -> Optional[str]:
+    ) -> str | None:
         cData = self.memCache.get(keyString)
         if cData is None:
             return None

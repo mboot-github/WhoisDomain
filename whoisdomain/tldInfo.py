@@ -1,12 +1,8 @@
 # import re
-import os
 import logging
-
+import os
 from typing import (
-    Dict,
-    List,
     Any,
-    Optional,
 )
 
 log = logging.getLogger(__name__)
@@ -16,7 +12,8 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 class TldInfo:
     def __init__(
         self,
-        zzDict: Dict[str, Any],
+        zzDict: dict[str, Any],
+        *,
         verbose: bool = False,
     ) -> None:
         self.verbose = verbose
@@ -30,11 +27,12 @@ class TldInfo:
         self.withStore: bool = True
 
         # the database of processed tld entries (if withStoe is True)
-        self.tldRegexDb: Dict[str, Dict[str, Any]] = {}
+        self.tldRegexDb: dict[str, dict[str, Any]] = {}
 
     def _initOne(
         self,
         tld: str,
+        *,
         override: bool = False,
     ) -> None:
         # meta domains start with _: examples _centralnic and _donuts
@@ -60,15 +58,13 @@ class TldInfo:
         if self.withStore:
             self.tldRegexDb[tld2] = what
 
-    def _cleanupResultDict(self, resultDict: Dict[str, Any]) -> Dict[str, Any]:
+    def _cleanupResultDict(self, resultDict: dict[str, Any]) -> dict[str, Any]:
         # we dont want to propagate the extend data
-        if "extend" in resultDict:
-            del resultDict["extend"]
-        if "_extend" in resultDict:
-            del resultDict["_extend"]
+        resultDict.pop("extend", None)
+        resultDict.pop("_extend", None)
 
         # we inhert all except extend or _extend
-        cleanResultDict: Dict[str, Any] = {}
+        cleanResultDict: dict[str, Any] = {}
         for key, val in resultDict.items():
             cleanResultDict[key] = val
 
@@ -79,10 +75,11 @@ class TldInfo:
     def flattenMasterTldEntry(
         self,
         tldString: str,
+        *,
         override: bool = False,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         tldDict = self.zzDictRef[tldString]
-        hasExtend: Optional[str] = tldDict.get("extend") or tldDict.get("_extend")
+        hasExtend: str | None = tldDict.get("extend") or tldDict.get("_extend")
         if hasExtend:
             eDict = self.flattenMasterTldEntry(hasExtend)  # call recursive
             tmpDict = eDict.copy()
@@ -95,15 +92,16 @@ class TldInfo:
 
     def init(self) -> None:
         # build the database of all tld
-        for tld in self.zzDictRef.keys():
+        for tld in self.zzDictRef:
             self._initOne(tld, override=False)
 
     def filterTldToSupportedPattern(
         self,
         domain: str,
-        dList: List[str],
+        dList: list[str],
+        *,
         verbose: bool = False,
-    ) -> Optional[str]:
+    ) -> str | None:
         # we have max 2 levels so first check if the last 2 are in our list
         tld = f"{dList[-2]}.{dList[-1]}"
         if tld in self.zzDictRef:
@@ -118,7 +116,7 @@ class TldInfo:
 
     def mergeExternalDictWithRegex(
         self,
-        aDict: Optional[Dict[str, Any]] = None,
+        aDict: dict[str, Any] | None = None,
     ) -> None:
         if aDict is None:
             return
@@ -127,17 +125,17 @@ class TldInfo:
             return
 
         # merge in ZZ, this extends ZZ with new tld's and overrides existing tld's
-        for tld in aDict.keys():
+        for tld in aDict:
             self.zzDictRef[tld] = aDict[tld]
 
         # reprocess the regexes we newly defined or overrode
         override = True
-        for tld in aDict.keys():
-            self._initOne(tld, override)
+        for tld in aDict:  # was: .keys()
+            self._initOne(tld, override=override)
 
-    def validTlds(self) -> List[str]:
+    def validTlds(self) -> list[str]:
         return sorted(self.tldRegexDb.keys())
 
-    def TLD_RE(self) -> Dict[str, Dict[str, Any]]:
+    def TLD_RE(self) -> dict[str, dict[str, Any]]:
         # this returns the currenly prepared list of all tlds ane theyr compiled regexes
         return self.tldRegexDb

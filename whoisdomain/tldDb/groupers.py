@@ -1,19 +1,14 @@
 # import re
 # import sys
-import os
 import logging
-
-from typing import (
-    Dict,
-    List,
-    Callable,
-)
+import os
+from collections.abc import Callable
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
-COM_LIST: List[str] = [
+COM_LIST: list[str] = [
     r"\nRegistrar",
     r"\nRegistrant",
     r"\nTech",
@@ -23,12 +18,13 @@ COM_LIST: List[str] = [
 ]
 
 
-def groupFromList(aList: List[str]) -> Callable[[str], Dict[str, str]]:
+def groupFromList(aList: list[str]) -> Callable[[str], dict[str, str]]:
     def xgroupFromList(
         whoisStr: str,
+        *,
         verbose: bool = False,
-    ) -> Dict[str, str]:
-        result: Dict[str, str] = {}
+    ) -> dict[str, str]:
+        result: dict[str, str] = {}
         # iterate over the lines of whoisStr
         #   for key each item in the list
         #       create a empty list

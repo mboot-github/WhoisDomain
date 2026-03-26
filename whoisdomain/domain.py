@@ -1,19 +1,16 @@
 #! /usr/bin/env python3
 
 # import sys
+import logging
 import os
 import re
-import logging
-
 from typing import (
     Any,
-    List,
-    Dict,
 )
 
-from .handleDateStrings import str_to_date
-from .context.parameterContext import ParameterContext
 from .context.dataContext import DataContext
+from .context.parameterContext import ParameterContext
+from .handleDateStrings import str_to_date
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
@@ -49,12 +46,13 @@ class Domain:
     def init(pc: ParameterContext,dc: DataContext) -> None:
         initialize the object with the current data from dc.data: Dict[str, Any]
         the init is separated from creating an instance as we want to use dependency injection as much as possible.
+
     """
 
     def _cleanupArray(
         self,
-        data: List[str],
-    ) -> List[str]:
+        data: list[str],
+    ) -> list[str]:
         if "" in data:
             index = data.index("")
             data.pop(index)
@@ -65,7 +63,7 @@ class Domain:
         pc: ParameterContext,
         dc: DataContext,
     ) -> None:
-        tmp: List[str] = []
+        tmp: list[str] = []
         for x in dc.data["name_servers"]:
             if isinstance(x, str):
                 tmp.append(x.strip().lower())
@@ -75,7 +73,7 @@ class Domain:
             for y in x:
                 tmp.append(y.strip().lower())
 
-        self.name_servers: List[str] = []
+        self.name_servers: list[str] = []
         for x in tmp:
             x = x.strip(" .")  # remove any leading or trailing spaces and/or dots
             if x:
@@ -130,7 +128,7 @@ class Domain:
 
     def _doOptionalFields(
         self,
-        data: Dict[str, Any],
+        data: dict[str, Any],
     ) -> None:
         # optional fields
 

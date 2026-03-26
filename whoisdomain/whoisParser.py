@@ -1,37 +1,24 @@
-#! /usr/bin/env python3
-# pylint: disable=duplicate-code
-
+import logging
+import os
+import re
 from typing import (
     Any,
-    Dict,
-    Optional,
-    List,
-    # Union,
-    Tuple,
-    # cast,
 )
 
-import re
-import os
-import logging
+from .context.dataContext import DataContext
+from .context.parameterContext import ParameterContext
+from .domain import Domain
 
 # import sys
-
 from .exceptions import (
     FailedParsingWhoisOutput,
-    WhoisQuotaExceeded,
     WhoisPrivateRegistry,
+    WhoisQuotaExceeded,
 )
-
-from .domain import Domain
+from .helpers import get_TLD_RE
+from .strings.ignoreStrings import IgnoreStrings
 from .strings.noneStrings import NoneStrings
 from .strings.quotaStrings import QuotaStrings
-from .strings.ignoreStrings import IgnoreStrings
-
-from .context.parameterContext import ParameterContext
-from .context.dataContext import DataContext
-from .helpers import get_TLD_RE
-
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
@@ -45,8 +32,8 @@ class WhoisParser:
     ) -> None:
         self.pc = pc
         self.dc = dc
-        self.dom: Optional[Domain] = None
-        self.resultDict: Dict[str, Any] = {}
+        self.dom: Domain | None = None
+        self.resultDict: dict[str, Any] = {}
         if self.pc.verbose:
             logging.basicConfig(level="DEBUG")
 
@@ -91,7 +78,7 @@ class WhoisParser:
     ) -> None:
         empty = [""]  # Historical: we use 'empty string' as default, not None , or []
 
-        sData: List[str] = []
+        sData: list[str] = []
         splitter = self.dc.thisTld.get("_split")
         if splitter:
             sData = splitter(self.dc.whoisStr, self.pc.verbose)
@@ -128,7 +115,7 @@ class WhoisParser:
 
     def _doSourceIana(
         self,
-    ) -> Optional[Domain]:
+    ) -> Domain | None:
         self.dc.whoisStr = str(self.dc.whoisStr)
 
         # here we can handle the example.com and example.net permanent IANA domains
@@ -137,14 +124,14 @@ class WhoisParser:
         msg: str = f"i have seen {k}"
         log.debug(msg)
 
-        whois_splitted: List[str] = self.dc.whoisStr.split(k)
+        whois_splitted: list[str] = self.dc.whoisStr.split(k)
         z: int = len(whois_splitted)
         if z > 2:
             self.dc.whoisStr = k.join(whois_splitted[1:])
             self.dom = None
             return self.dom
 
-        if z == 2 and whois_splitted[1].strip() != "":
+        if z == 2 and whois_splitted[1].strip():
             # if we see source: IANA and the part after is not only whitespace
             msg = f"after: {k} we see not only whitespace: {whois_splitted[1]}"
             log.debug(msg)
@@ -188,7 +175,7 @@ class WhoisParser:
         if self.dc.whoisStr is None:
             return False
 
-        whoisDnsSecList: List[str] = self.dc.whoisStr.split("DNSSEC:")
+        whoisDnsSecList: list[str] = self.dc.whoisStr.split("DNSSEC:")
         if len(whoisDnsSecList) >= 2:
             msg = "DEGUG: i have seen dnssec: {whoisDnsSecStr}"
             log.debug(msg)
@@ -201,7 +188,7 @@ class WhoisParser:
 
     def _handleShortResponse(
         self,
-    ) -> Optional[Domain]:
+    ) -> Domain | None:
         if self.dc.whoisStr is None:
             self.dom = None
             return self.dom
@@ -266,7 +253,7 @@ class WhoisParser:
 
         raise FailedParsingWhoisOutput(self.dc.whoisStr)
 
-    def _extractWhoisServer(self) -> List[str]:
+    def _extractWhoisServer(self) -> list[str]:
         # jp starts comments with [\s
         result = re.findall(r"^Using\s+server\s+([^\n]*)\n", str(self.dc.whoisStr), flags=re.IGNORECASE)
         if result:
@@ -281,10 +268,10 @@ class WhoisParser:
     def _cleanupWhoisResponse(
         self,
     ) -> str:
-        tmp2: List[str] = []
+        tmp2: list[str] = []
         self.dc.whoisStr = str(self.dc.whoisStr)
 
-        tmp: List[str] = self.dc.whoisStr.split("\n")
+        tmp: list[str] = self.dc.whoisStr.split("\n")
         for line in tmp:
             # some servers respond with: % Quota exceeded in the comment section (lines starting with %)
             if "quota exceeded" in line.lower():
@@ -375,8 +362,8 @@ class WhoisParser:
 
     def parse(
         self,
-        dom: Optional[Domain],
-    ) -> Tuple[Optional[Domain], bool]:
+        dom: Domain | None,
+    ) -> tuple[Domain | None, bool]:
         self.dc.whoisStr = str(self.dc.whoisStr)
         self.dom = dom
 

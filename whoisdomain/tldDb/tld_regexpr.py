@@ -1,19 +1,16 @@
 # pylint: disable=C0302
-import os
 import logging
-
+import os
 from typing import (
-    Dict,
     Any,
-    # Callable,
 )
 
 from .finders import (
-    newLineSplit,
     R,
     findFromToAndLookFor,
     findFromToAndLookForWithFindFirst,
     findInSplitedLookForHavingFindFirst,
+    newLineSplit,
 )
 
 log = logging.getLogger(__name__)
@@ -30,7 +27,7 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 # seems the most up to date and maintained
 
 
-def xStr(what: str, times: int = 1, firstMandatory: bool = True) -> str:
+def xStr(what: str, times: int = 1, *, firstMandatory: bool = True) -> str:
     # =================================================================
     # Often we want to repeat regex patterns,
     #   ( typically with nameservers or status fields )
@@ -52,7 +49,7 @@ def xStr(what: str, times: int = 1, firstMandatory: bool = True) -> str:
 # The database
 # When we finally apply the regexes we use IGNORE CASE allways on all matches
 
-ZZ: Dict[str, Any] = {}
+ZZ: dict[str, Any] = {}
 
 # ======================================
 # meta registrars start with _ are only used a s a common toll to define others
@@ -146,7 +143,7 @@ ZZ["co.uk"] = {
 }
 
 ZZ["mc"] = {
-    "_server":  "whois.nic.mc",
+    "_server": "whois.nic.mc",
     "extend": "com",
     "_test": "nic.mc",
     "domain_name": R(r"Domain\s+:\s+(.+)"),
@@ -2752,7 +2749,7 @@ ZZ["சஙகபபர"] = {"_server": "whois.sgnic.sg", "extend": "sg"}
 ZZ["భరత"] = {"_server": "whois.registry.in", "extend": "in"}
 ZZ["ಭರತ"] = {"_server": "whois.registry.in", "extend": "in"}
 ZZ["ഭരത"] = {"_server": "whois.registry.in", "extend": "in"}
-ZZ["คอม"] = {"_server": "whois.nic.xn--42c2d9a", "extend": "xn--42c2d9a"}  #
+ZZ["คอม"] = {"_server": "whois.nic.xn--42c2d9a", "extend": "xn--42c2d9a"}
 ZZ["ไทย"] = {"_server": "whois.thnic.co.th", "extend": "co.th"}
 ZZ["アマゾン"] = {"_server": "whois.nic.xn--cckwcxetd", "extend": "xn--cckwcxetd"}
 ZZ["グーグル"] = {"_server": "whois.nic.google", "extend": "com"}

@@ -2,12 +2,8 @@
 # pylint: disable=duplicate-code
 # pylint disable=broad-exception-caught
 
-import os
 import logging
-
-from typing import (
-    Optional,
-)
+import os
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
@@ -34,7 +30,7 @@ if HAS_REDIS:
         def get(
             self,
             keyString: str,
-        ) -> Optional[str]:
+        ) -> str | None:
             data = self.redis.get(keyString)
             if data:
                 return str(data)

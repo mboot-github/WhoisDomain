@@ -1,41 +1,39 @@
+import logging
 import os
 import re
-import logging
+from collections.abc import Callable
 
 # re._MAXCACHE = 1
-
 # pylint: disable=unused-argument
 # import typing
 from typing import (
-    Dict,
     Any,
-    List,
-    Callable,
-    Tuple,
 )
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
-PATTERN_CACHE: Dict[Tuple[str, int], Any] = {}
+PATTERN_CACHE: dict[tuple[str, int], Any] = {}
 
 
 def make_pat(reStr: str, flags: int) -> Any:
     return re.compile(reStr, flags=flags)
 
     if (reStr, flags) in PATTERN_CACHE:
-        pattern = PATTERN_CACHE[(reStr, flags)]
+        pattern = PATTERN_CACHE[reStr, flags]
     else:
         pattern = re.compile(reStr, flags=flags)
-        PATTERN_CACHE[(reStr, flags)] = pattern
+        PATTERN_CACHE[reStr, flags] = pattern
     return pattern
 
 
 def newLineSplit(
+    *,
     ignoreCase: bool = True,
-) -> Callable[[str], List[str]]:
+) -> Callable[[str], list[str]]:
     def xNewlineSplit(
         whoisStr: str,
+        *,
         verbose: bool = False,
     ) -> Any:
         # split the incoming text on newlines \n\n
@@ -51,12 +49,13 @@ def newLineSplit(
 
 def R(
     reStr: str,
+    *,
     ignoreCase: bool = True,
-) -> Callable[[str, List[str], bool], List[str]]:
+) -> Callable[[str, list[str], bool], Any]:
     # regular simple regex strings are converter with currying to functins to be called later
     def reFindAll(
         textStr: str,
-        sData: List[str],
+        sData: list[str],
         verbose: bool = False,
     ) -> Any:
         flags = re.IGNORECASE if ignoreCase else 0  # NOFLAG is 3.11
@@ -77,16 +76,17 @@ def findFromToAndLookFor(
     fromStr: str,
     toStr: str,
     lookForStr: str,
+    *,
     ignoreCase: bool = True,
     verbose: bool = False,
-) -> Callable[[str, List[str], bool], List[str]]:
+) -> Callable[[str, list[str], bool], list[str]]:
     # look for a particular string like R()
     # but limit the context we look in
     # to a specific sub section of the whois cli response
     # use currying to create a func that will be called later
     def xFindFromToAndLookFor(
         textStr: str,
-        sData: List[str],
+        sData: list[str],
         verbose: bool = False,
     ) -> Any:
         flags = re.IGNORECASE if ignoreCase else 0  # NOFLAG is 3.11
@@ -163,9 +163,10 @@ def findFromToAndLookForWithFindFirst(
     fromStr: str,  # we will replace {} in fromStr with the result from findFirst
     toStr: str,
     lookForStr: str,
+    *,
     ignoreCase: bool = True,
     verbose: bool = False,
-) -> Callable[[str, List[str], bool], List[str]]:
+) -> Callable[[str, list[str], bool], list[str]]:
     # look for a particular string like R() with find first
     #   then build a from ,to context using the result from findFirst (google.fr is a example)
     #     but limit the context we look in
@@ -173,9 +174,9 @@ def findFromToAndLookForWithFindFirst(
     # use currying to create a func that will be called later
     def xFindFromToAndLookForWithFindFirst(
         textStr: str,
-        sData: List[str],
+        sData: list[str],
         verbose: bool = False,
-    ) -> List[str]:
+    ) -> list[str]:
         flags = re.IGNORECASE if ignoreCase else 0  # NOFLAG is 3.11
 
         ff = re.findall(findFirst, textStr, flags=flags)
@@ -183,7 +184,7 @@ def findFromToAndLookForWithFindFirst(
             return []
 
         ff2: str = str(ff[0].strip())  # only use the first element and clean it
-        if ff2 == "":
+        if not ff2:
             return []
 
         msg = f"we found: {ff2}, now combine with {fromStr}"
@@ -227,15 +228,16 @@ def findInSplitedLookForHavingFindFirst(
     findFirst: str,
     lookForStr: str,
     extract: str,
+    *,
     ignoreCase: bool = True,
     verbose: bool = False,
-) -> Callable[[str, List[str], bool], List[str]]:
+) -> Callable[[str, list[str], bool], list[str]]:
     # requires splitted data
     def xfindInSplitedLookForHavingFindFirst(
         textStr: str,
-        sData: List[str],
+        sData: list[str],
         verbose: bool = False,
-    ) -> List[str]:
+    ) -> list[str]:
         flags = re.IGNORECASE if ignoreCase else 0  # NOFLAG is 3.11
 
         ff = re.findall(findFirst, textStr, flags=flags)
@@ -243,7 +245,7 @@ def findInSplitedLookForHavingFindFirst(
             return []
 
         ff2: str = str(ff[0].strip())  # only use the first element and clean it
-        if ff2 == "":
+        if not ff2:
             return []
 
         lookForStr2 = lookForStr.replace(r"{}", ff2)

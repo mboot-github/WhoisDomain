@@ -1,16 +1,11 @@
 # python3
 
-import sys
 import errno
-from typing import (
-    Tuple,
-    Any,
-    Dict,
-)
-
-from socket import error as SocketError
-
 import multiprocessing as mp
+import sys
+from typing import (
+    Any,
+)
 
 from .context.parameterContext import ParameterContext
 
@@ -25,7 +20,7 @@ class ProcFunc:
             ctx = mp.get_context("spawn")
         self.ctx = ctx
 
-    def startProc(self, f: Any, max_requests: int) -> Tuple[Any, Any]:
+    def startProc(self, f: Any, max_requests: int) -> tuple[Any, Any]:
         # start the whole parent part
         self.parent_conn, self.child_conn = mp.Pipe()
 
@@ -46,7 +41,7 @@ class ProcFunc:
     ) -> Any:
         jStr = pc.toJson()
 
-        request: Dict[str, Any] = {
+        request: dict[str, Any] = {
             "domain": domain,
             "pc": jStr,
         }
@@ -61,9 +56,7 @@ class ProcFunc:
             print("OneItem:RECEIVE:", reply, file=sys.stderr)
 
         if reply["status"] is True:
-            result = reply["result"]
-            # possibly re convert this into a Domain object.
-            return result
+            return reply["result"]
 
         raise Exception(reply["exception"])
 
@@ -81,7 +74,7 @@ class ProcFunc:
             nonlocal self
             try:
                 return self.oneItem(domain, pc)
-            except SocketError as e:
+            except OSError as e:
                 if e.errno != errno.ECONNRESET:
                     print(f"restart process {e}", file=sys.stderr)
                     raise

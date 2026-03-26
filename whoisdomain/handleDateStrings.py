@@ -4,15 +4,13 @@ This module isolates all date parsing in one place
 
 str_to_date() is the only entry point
 """
-import re
-import os
-import logging
-import datetime
 
-from typing import Optional
+import datetime
+import logging
+import os
+import re
 
 from .exceptions import UnknownDateFormat
-
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
@@ -84,9 +82,9 @@ _CUSTOM_DATE_FORMATS = {
 
 def str_to_date(
     text: str,
-    tld: Optional[str] = None,
+    tld: str | None = None,
     verbose: bool = False,
-) -> Optional[datetime.datetime]:
+) -> datetime.datetime | None:
     text = text.strip().lower()
 
     noDate = [

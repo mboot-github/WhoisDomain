@@ -1,15 +1,11 @@
-import os
 import logging
-
-from typing import (
-    List,
-)
+import os
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
-NONESTRINGS: List[str] = [
+NONESTRINGS: list[str] = [
     "the domain has not been registered",
     "no match found for",
     "no matching record",
@@ -33,7 +29,7 @@ NONESTRINGS: List[str] = [
 ]
 
 
-def NoneStrings() -> List[str]:
+def NoneStrings() -> list[str]:
     return NONESTRINGS
 
 

@@ -1,19 +1,15 @@
 #!/usr/bin/python3
 
-import os
-import re
+import gc
 import getopt
-import sys
 import json
 import logging
-import gc
-
+import os
+import pathlib
+import re
+import sys
 from typing import (
-    Optional,
-    Tuple,
     Any,
-    List,
-    Dict,
 )
 
 import whoisdomain as whois  # to be compatible with dannycork
@@ -30,7 +26,7 @@ Verbose: bool = False
 PrintGetRawWhoisResult: bool = False
 Ruleset: bool = False
 
-Failures: Dict[str, Any] = {}
+Failures: dict[str, Any] = {}
 IgnoreReturncode: bool = False
 TestAllTld: bool = False
 TestRunOnly: bool = False
@@ -43,7 +39,7 @@ WithNoIgnoreWww: bool = False
 
 class ResponseCleaner:
     data: str
-    rDict: Dict[str, Any] = {}
+    rDict: dict[str, Any] = {}
 
     def __init__(
         self,
@@ -55,17 +51,17 @@ class ResponseCleaner:
         self,
         pathToTestFile: str,
     ) -> str:
-        if not os.path.exists(pathToTestFile):
+        if not pathlib.Path(pathToTestFile).exists():
             return ""
 
-        with open(pathToTestFile, mode="rb") as f:  # switch to binary mode as that is what Popen uses
+        with pathlib.Path(pathToTestFile).open(mode="rb") as f:  # switch to binary mode as that is what Popen uses
             # make sure the data is treated exactly the same as the output of Popen
             return f.read().decode(errors="ignore")
 
     def cleanSection(
         self,
-        section: List[str],
-    ) -> List[str]:
+        section: list[str],
+    ) -> list[str]:
         # cleanup any beginning and ending empty lines from the section
 
         if len(section) == 0:
@@ -86,12 +82,12 @@ class ResponseCleaner:
 
     def splitBodyInSections(
         self,
-        body: List[str],
-    ) -> List[str]:
+        body: list[str],
+    ) -> list[str]:
         # split the body on empty line, cleanup all sections, remove empty sections
         # return list of body's
 
-        sections: List[List[str]] = []
+        sections: list[list[str]] = []
         n = 0
         sections.append([])
         for line in body:
@@ -107,7 +103,7 @@ class ResponseCleaner:
             m += 1
 
         # now remove empty sections and return
-        sections2: List[str] = []
+        sections2: list[str] = []
         m = 0
         while m < len(sections):
             if len(sections[m]) > 0:
@@ -120,23 +116,23 @@ class ResponseCleaner:
         self,
         verbose: bool = False,
         with_cleanup_results: bool = False,
-    ) -> Tuple[str, Dict[Any, Any]]:
+    ) -> tuple[str, dict[Any, Any]]:
         result = whois.cleanupWhoisResponse(
             self.data,
             verbose,
             with_cleanup_results,
         )
 
-        self.rDict: Dict[str, Any] = {
-            "BodyHasSections": False,  # if this is true the body is not a list of lines but a list of sections with lines
+        self.rDict: dict[str, Any] = {
+            "BodyHasSections": False,  # if this is true the body is not a list of lines but a list of sections
             "Preamble": [],  # the lines telling what whois servers wwere contacted
             "Percent": [],  # lines staring with %% , often not present but may contain hints
             "Body": [],  # the body of the whois, may be in sections separated by empty lines
             "Postamble": [],  # copyright and other not relevant info for actual parsing whois
         }
-        body: List[str] = []
+        body: list[str] = []
 
-        rr: List[str] = []
+        rr: list[str] = []
         z = result.split("\n")
         preambleSeen = False
         postambleSeen = False
@@ -202,7 +198,7 @@ class ResponseCleaner:
 
 def prepItem(d: str) -> None:
     if PrintJson is False:
-        print("")
+        print()
         print(f"test domain: <<<<<<<<<< {d} >>>>>>>>>>>>>>>>>>>>")
 
 
@@ -222,19 +218,8 @@ def testItem1(
     d: str,
     printgetRawWhoisResult: bool = False,
 ) -> None:
-    global IgnoreReturncode
-    global Verbose
-    global PrintGetRawWhoisResult
-
-    global SIMPLISTIC
-    global TestAllTld
-    global TestRunOnly
-
-    global WithRedacted
-    global WithPublicSuffix
-    global WithExtractServers
-    global WithStripHttpStatus
-    global WithNoIgnoreWww
+    global IgnoreReturncode, Verbose, PrintGetRawWhoisResult, SIMPLISTIC, TestAllTld, TestRunOnly
+    global WithRedacted, WithPublicSuffix, WithExtractServers, WithStripHttpStatus, WithNoIgnoreWww
 
     pc = whois.ParameterContext(
         ignore_returncode=IgnoreReturncode,
@@ -302,7 +287,7 @@ def errorItem(d: str, e: Any, what: str = "Generic") -> None:
     print(message)
 
 
-def testDomains(aList: List[str]) -> None:
+def testDomains(aList: list[str]) -> None:
     for d in aList:
         # skip empty lines
         if not d:
@@ -340,8 +325,8 @@ def testDomains(aList: List[str]) -> None:
         #    errorItem(d, e, what="Generic")
 
 
-def getTestFileOne(fPath: str, fileData: Dict[str, Any]) -> None:
-    if not os.path.isfile(fPath):  # only files
+def getTestFileOne(fPath: str, fileData: dict[str, Any]) -> None:
+    if not pathlib.Path(fPath).is_file():  # only files
         return
 
     if not fPath.endswith(".txt"):  # ending in .txt
@@ -351,7 +336,7 @@ def getTestFileOne(fPath: str, fileData: Dict[str, Any]) -> None:
     fileData[bName] = []
     xx = fileData[bName]
 
-    with open(fPath, encoding="utf-8") as f:
+    with pathlib.Path(fPath).open(encoding="utf-8") as f:
         for index, line in enumerate(f):
             line = line.strip()
             if len(line) == 0 or line.startswith("#"):
@@ -366,40 +351,38 @@ def getTestFileOne(fPath: str, fileData: Dict[str, Any]) -> None:
 
 def getTestFilesAll(
     tDir: str,
-    fileData: Dict[str, Any],
+    fileData: dict[str, Any],
 ) -> None:
     for item in os.listdir(tDir):
         fPath = f"{tDir}/{item}"
         getTestFileOne(fPath, fileData)
 
 
-def getAllCurrentTld() -> List[str]:
+def getAllCurrentTld() -> list[str]:
     return whois.validTlds()
 
 
 def appendHintOrMeta(
-    rr: List[str],
-    allRegex: Optional[str],
+    rr: list[str],
+    allRegex: str | None,
     tld: str,
 ) -> None:
-    global TestAllTld
-    global TestRunOnly
+    global TestAllTld, TestRunOnly
 
     if TestAllTld is True:
         hint = whois.getTestHint(tld)
-        hint = hint if hint else f"meta.{tld}"
+        hint = hint or f"meta.{tld}"
         rr.append(f"{hint}")
     else:
         rr.append(f"meta.{tld}")
 
 
 def appendHint(
-    rr: List[str],
-    allRegex: Optional[str],
+    rr: list[str],
+    allRegex: str | None,
     tld: str,
 ) -> None:
-    global TestAllTld
-    global TestRunOnly
+    global TestAllTld, TestRunOnly
 
     if TestAllTld is True:
         hint = whois.getTestHint(tld)
@@ -408,10 +391,10 @@ def appendHint(
 
 
 def makeMetaAllCurrentTld(
-    allHaving: Optional[str] = None,
-    allRegex: Optional[str] = None,
-) -> List[str]:
-    rr: List[str] = []
+    allHaving: str | None = None,
+    allRegex: str | None = None,
+) -> list[str]:
+    rr: list[str] = []
     for tld in getAllCurrentTld():
         if allRegex is None:
             appendHintOrMeta(rr, allRegex, tld)
@@ -424,9 +407,9 @@ def makeMetaAllCurrentTld(
 
 
 def makeTestAllCurrentTld(
-    allRegex: Optional[str] = None,
-) -> List[str]:
-    rr: List[str] = []
+    allRegex: str | None = None,
+) -> list[str]:
+    rr: list[str] = []
     for tld in getAllCurrentTld():
         if allRegex is None:
             appendHint(rr, allRegex, tld)
@@ -457,8 +440,7 @@ def ShowRuleset(tld: str) -> None:
 def usage() -> None:
     name = os.path.basename(sys.argv[0])
 
-    print(
-        f"""
+    print(f"""
 {name}
     [ -h | --usage ]
         print this text and exit
@@ -524,8 +506,7 @@ def usage() -> None:
     # test one specific directory with verbose and IgnoreReturncode
     example: {name} -v -I -D tests
 
-"""
-    )
+""")
 
     """
     TODO
@@ -547,28 +528,14 @@ def showFailures() -> None:
 
 
 def main() -> None:
-    global PrintJson
-    global Verbose
-    global IgnoreReturncode
-    global PrintGetRawWhoisResult
-    global Ruleset
-    global SIMPLISTIC
-    global WithRedacted
-    global TestAllTld
-    global TestRunOnly
-    global WithPublicSuffix
-    global WithExtractServers
-    global WithStripHttpStatus
-    global WithNoIgnoreWww
+    global PrintJson, Verbose, IgnoreReturncode, PrintGetRawWhoisResult, Ruleset, SIMPLISTIC, WithRedacted
+    global TestAllTld, TestRunOnly, WithPublicSuffix, WithExtractServers, WithStripHttpStatus, WithNoIgnoreWww
 
-    name: str = os.path.basename(sys.argv[0])
-    if name == "test2.py":
-        SIMPLISTIC = False
-    else:
-        SIMPLISTIC = True
+    name: str = pathlib.Path.name(pathlib.PurePath(sys.argv[0]))
+    SIMPLISTIC = False if name == "test2.py" else True
 
     try:
-        opts, args = getopt.getopt(
+        opts, _ = getopt.getopt(
             sys.argv[1:],
             "TtjRSpvVIhaf:d:D:r:H:C:",
             [
@@ -601,27 +568,27 @@ def main() -> None:
 
     # TestAllTld: bool = False
 
-    allHaving: Optional[str] = None  # from all supported tld only process the ones having this :: TODO ::
-    allRegex: Optional[str] = None  # from all supported tld process only the ones matching this regex
+    allHaving: str | None = None  # from all supported tld only process the ones having this :: TODO ::
+    allRegex: str | None = None  # from all supported tld process only the ones matching this regex
 
-    directory: Optional[str] = None
-    dirs: List[str] = []
+    directory: str | None = None
+    dirs: list[str] = []
 
-    filename: Optional[str] = None
-    files: List[str] = []
+    filename: str | None = None
+    files: list[str] = []
 
-    domain: Optional[str] = None
-    domains: List[str] = []
+    domain: str | None = None
+    domains: list[str] = []
 
-    fileData: Dict[str, Any] = {}
+    fileData: dict[str, Any] = {}
 
     for opt, arg in opts:
-        if opt in ("-S", "SupportedTld"):
+        if opt in {"-S", "SupportedTld"}:
             for tld in sorted(whois.validTlds()):
                 print(tld)
             sys.exit(0)
 
-        if opt in ("-V", "Version"):
+        if opt in {"-V", "Version"}:
             print(whois.getVersion())
             sys.exit(0)
 
@@ -629,28 +596,28 @@ def main() -> None:
             usage()
             sys.exit(0)
 
-        if opt in ("-a", "--all"):
+        if opt in {"-a", "--all"}:
             TestAllTld = True
 
-        if opt in ("-H", "--having"):
+        if opt in {"-H", "--having"}:
             TestAllTld = True
             allHaving = str(arg)
 
-        if opt in ("-r", "--reg"):
+        if opt in {"-r", "--reg"}:
             TestAllTld = True
             allRegex = str(arg)
 
-        if opt in ("-v", "--verbose"):
+        if opt in {"-v", "--verbose"}:
             Verbose = True
             logging.basicConfig(level="DEBUG")
 
-        if opt in ("-p", "--print"):
+        if opt in {"-p", "--print"}:
             PrintGetRawWhoisResult = True
 
-        if opt in ("-j", "--json"):
+        if opt in {"-j", "--json"}:
             PrintJson = True
 
-        if opt in ("-T", "--Testing"):
+        if opt in {"-T", "--Testing"}:
             # print out all names of tld where we have _test
             TestAllTld = True
             rr = makeTestAllCurrentTld(None)
@@ -658,37 +625,37 @@ def main() -> None:
                 print(item)
             sys.exit(0)
 
-        if opt in ("-t", "--test"):
+        if opt in {"-t", "--test"}:
             # collect all _test entries defined and only run those,
             # o not run the default meta.tld
             TestAllTld = True
             TestRunOnly = True
 
-        if opt in ("-R", "--Ruleset"):
+        if opt in {"-R", "--Ruleset"}:
             Ruleset = True
 
-        if opt in ("-D", "--Directory"):
+        if opt in {"-D", "--Directory"}:
             directory = arg
-            isDir = os.path.isdir(directory)
+            isDir = pathlib.Path(directory).is_dir()
             if isDir is False:
                 print(f"{directory} cannot be found or is not a directory", file=sys.stderr)
                 sys.exit(101)
 
-        if opt in ("-C", "--Cleanup"):
+        if opt in {"-C", "--Cleanup"}:
             inFile = arg
-            isFile = os.path.isfile(arg)
+            isFile = pathlib.Path(arg).is_file()
             if isFile is False:
                 print(f"{inFile} cannot be found or is not a file", file=sys.stderr)
                 sys.exit(101)
 
             rc = ResponseCleaner(inFile)
-            d1, rDict = rc.cleanupWhoisResponse()
+            rc.cleanupWhoisResponse()
             rc.printMe()
             sys.exit(0)
 
-        if opt in ("-f", "--file"):
+        if opt in {"-f", "--file"}:
             filename = arg
-            isFile = os.path.isfile(filename)
+            isFile = pathlib.Path(filename).is_file()
             if isFile is False:
                 print(f"{filename} cannot be found or is not a file", file=sys.stderr)
                 sys.exit(101)
@@ -697,24 +664,24 @@ def main() -> None:
                 files.append(filename)
                 TestAllTld = False
 
-        if opt in ("-d", "--domain"):
+        if opt in {"-d", "--domain"}:
             domain = arg
             if domain not in domains:
                 domains.append(domain)
 
-        if opt in ("--extractServers"):
+        if opt == "--extractServers":
             WithExtractServers = True
 
-        if opt in ("--stripHttpStatus"):
+        if opt == "--stripHttpStatus":
             WithStripHttpStatus = True
 
-        if opt in ("--withRedacted"):
+        if opt == "--withRedacted":
             WithRedacted = True
 
-        if opt in ("--withPublicSuffix"):
+        if opt == "--withPublicSuffix":
             WithPublicSuffix = True
 
-        if opt in ("--withNoIgnoreWww"):
+        if opt == "--withNoIgnoreWww":
             WithNoIgnoreWww = True
 
     msg = f"{name} SIMPLISTIC: {SIMPLISTIC}"
@@ -738,7 +705,7 @@ def main() -> None:
         fileData = {}
         for dName in dirs:
             getTestFilesAll(dName, fileData)
-        for testFile, x in fileData.items():
+        for x in fileData.values():
             testDomains(x)
         showFailures()
         sys.exit(0)
@@ -747,7 +714,7 @@ def main() -> None:
         fileData = {}
         for testFile in files:
             getTestFileOne(testFile, fileData)
-        for testFile, x in fileData.items():
+        for x in fileData.values():
             testDomains(x)
         showFailures()
         sys.exit(0)
