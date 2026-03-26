@@ -41,7 +41,8 @@ class WhoisCliInterface:
         https://docs.microsoft.com/en-us/sysinternals/downloads/whois
         """
         folder = pathlib.Path.cwd()
-        copy_command = r"copy \\live.sysinternals.com\tools\whois.exe " + folder
+        rr = r"copy \\live.sysinternals.com\tools\whois.exe "
+        copy_command = f"{rr} {folder}"
         msg = f"downloading dependencies: {copy_command}"
         log.debug(msg)
 

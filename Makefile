@@ -50,8 +50,6 @@ TEST_OPTIONS_ALL = \
 
 .PHONY: TestSimple TestSimple2 TestAll clean
 
-first: prep test1 test2 test3 # test4
-
 # --------------------------------------------------
 # reformat, lint and verify basics
 # --------------------------------------------------
@@ -123,7 +121,7 @@ zz:
 # --------------------------------------------------
 
 # this step creates or updates the toml file
-build: first
+build:
 	./bin/build.sh
 	./bin/testLocalWhl.sh 2>tmp/$@.22 | tee tmp/$@.1
 	./bin/test.sh 2>tmp/$@.2 | tee -a tmp/$@.1
