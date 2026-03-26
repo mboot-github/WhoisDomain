@@ -131,4 +131,10 @@ add switch not to ignore leading www in the domain request
 - fix co.il and add il tld
 - cleanup some obsolete tld's
 
+## 1.20260326.1
+- fix 'be' and 'pl' ; thanks Misiu Tomasz.
+- add additional domains from iana.
+- remove domains no longer in iana.
+- Makefile: switch to ruff instead of black and pylama.
+
 ## in progress
