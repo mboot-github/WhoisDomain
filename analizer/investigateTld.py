@@ -262,7 +262,9 @@ class OneTld:
             if n():
                 return
 
-        print("# MISSING", self.tld, self.tld2, self.tld3, self.manager.replace("\n", ";"), self.w, self.resolve, self.reg)
+        print(
+            "# MISSING", self.tld, self.tld2, self.tld3, self.manager.replace("\n", ";"), self.w, self.resolve, self.reg
+        )
 
 
 def extractServers(aDict: Dict[str, Any]) -> Dict[str, Any]:

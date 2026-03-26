@@ -9,65 +9,60 @@ Module providing all public accessible functions and data for the whoisdomain pa
 All public data is vizible via the __all__ List
 """
 
-import sys
-import os
-import logging
 import gc
-
+import logging
+import os
+import sys
+from collections.abc import Callable
 from functools import wraps
-
 from typing import (
-    cast,
-    Optional,
-    List,
-    Dict,
-    Tuple,
     Any,
-    Callable,
+    Dict,
+    List,
+    Optional,
+    Tuple,
+    cast,
 )
 
-from .exceptions import (
-    UnknownTld,
-    FailedParsingWhoisOutput,
-    UnknownDateFormat,
-    WhoisCommandFailed,
-    WhoisPrivateRegistry,
-    WhoisQuotaExceeded,
-    WhoisCommandTimeout,
-)
-
-from .tldInfo import TldInfo
-from .version import VERSION
-from .processWhoisDomainRequest import ProcessWhoisDomainRequest
-from .doWhoisCommand import setMyCache
-from .domain import Domain
-from .strings.noneStrings import NoneStrings, NoneStringsAdd
-from .strings.quotaStrings import QuotaStrings, QuotaStringsAdd
-from .tldDb.tld_regexpr import ZZ
-from .context.dataContext import DataContext
-from .context.parameterContext import ParameterContext
+from .cache.dbmCache import DBMCache
+from .cache.dummyCache import DummyCache
 from .cache.simpleCacheBase import SimpleCacheBase
 from .cache.simpleCacheWithFile import SimpleCacheWithFile
-from .cache.dummyCache import DummyCache
-from .cache.dbmCache import DBMCache
-from .whoisParser import WhoisParser
-from .whoisCliInterface import WhoisCliInterface
-from .procFunc import ProcFunc
-
+from .context.dataContext import DataContext
+from .context.parameterContext import ParameterContext
+from .domain import Domain
+from .doWhoisCommand import setMyCache
+from .exceptions import (
+    FailedParsingWhoisOutput,
+    UnknownDateFormat,
+    UnknownTld,
+    WhoisCommandFailed,
+    WhoisCommandTimeout,
+    WhoisPrivateRegistry,
+    WhoisQuotaExceeded,
+)
 from .helpers import (
+    cleanupWhoisResponse,
     filterTldToSupportedPattern,
+    get_TLD_RE,
+    getTestHint,
+    getVersion,
     mergeExternalDictWithRegex,
     validTlds,
-    get_TLD_RE,
-    getVersion,
-    getTestHint,
-    cleanupWhoisResponse,
 )
-
 from .lastWhois import (
     get_last_raw_whois_data,
     initLastWhois,
 )
+from .processWhoisDomainRequest import ProcessWhoisDomainRequest
+from .procFunc import ProcFunc
+from .strings.noneStrings import NoneStrings, NoneStringsAdd
+from .strings.quotaStrings import QuotaStrings, QuotaStringsAdd
+from .tldDb.tld_regexpr import ZZ
+from .tldInfo import TldInfo
+from .version import VERSION
+from .whoisCliInterface import WhoisCliInterface
+from .whoisParser import WhoisParser
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
@@ -102,46 +97,38 @@ except ImportError as e:
     _ = e  # ignore any error
 
 __all__ = [
-    # from exceptions
-    "UnknownTld",
+    "cleanupWhoisResponse",
+    "DBMCache",
+    "DummyCache",
     "FailedParsingWhoisOutput",
-    "UnknownDateFormat",
-    "WhoisCommandFailed",
-    "WhoisPrivateRegistry",
-    "WhoisQuotaExceeded",
-    "WhoisCommandTimeout",
-    # from helpers
-    "validTlds",
-    "mergeExternalDictWithRegex",
     "filterTldToSupportedPattern",
+    "get_last_raw_whois_data",
+    "getTestHint",
     "get_TLD_RE",
     "getVersion",
-    "getTestHint",
-    "cleanupWhoisResponse",  # we will drop this most likely
-    # from version
-    "VERSION",
-    # from parameterContext
-    "ParameterContext",
-    # from this file
-    "query",
-    "q2",
-    # from lastWhois
-    "get_last_raw_whois_data",
-    # from doWhoisCommand
-    "setMyCache",  # to build your own caching interface
-    # from doParse
+    "mergeExternalDictWithRegex",
     "NoneStrings",
     "NoneStringsAdd",
+    "ParameterContext",
+    "ProcFunc",
+    "q2",
+    "query",
     "QuotaStrings",
     "QuotaStringsAdd",
-    # from Cache
+    "RedisCache",
+    "setMyCache",
     "SimpleCacheBase",
     "SimpleCacheWithFile",
-    "DummyCache",
-    "DBMCache",
-    "RedisCache",
-    # from procFunc
-    "ProcFunc",
+    "TldInfo",
+    "UnknownDateFormat",
+    "UnknownTld",
+    "validTlds",
+    "VERSION",
+    "WhoisCommandFailed",
+    "WhoisCommandTimeout",
+    "WhoisPrivateRegistry",
+    "WhoisQuotaExceeded",
+    "ZZ",
 ]
 
 
@@ -149,7 +136,7 @@ def _result2dict(func: Any) -> Any:
     @wraps(func)
     def _inner(*args: str, **kw: Any) -> Dict[str, Any]:
         r = func(*args, **kw)
-        return r and vars(r) or {}
+        return (r and vars(r)) or {}
 
     return _inner
 
@@ -202,7 +189,7 @@ def remoteQ2(
         except EOFError as e:
             # if the caller is done so are we
             _ = e
-            exit(0)
+            sys.exit(0)
 
         if n >= max_requests:
             break

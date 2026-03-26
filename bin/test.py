@@ -1,15 +1,12 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 # from: https://github.com/maarten-boot/python-whois-extended
 
 import sys
-
 from typing import (
-    Optional,
     List,
+    Optional,
 )
-
 
 import whoisdomain as whois
 
@@ -90,9 +87,9 @@ def query(
     domain: str,
     host: Optional[str] = None,
 ) -> None:
-    print("")
+    print()
     print("-" * 80)
-    print("Domain: {0}, host: {1}".format(domain, host))
+    print(f"Domain: {domain}, host: {host}")
 
     timout = 30  # seconds
     try:

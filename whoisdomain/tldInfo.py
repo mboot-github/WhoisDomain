@@ -1,11 +1,10 @@
 # import re
-import os
 import logging
-
+import os
 from typing import (
+    Any,
     Dict,
     List,
-    Any,
     Optional,
 )
 
@@ -62,10 +61,8 @@ class TldInfo:
 
     def _cleanupResultDict(self, resultDict: Dict[str, Any]) -> Dict[str, Any]:
         # we dont want to propagate the extend data
-        if "extend" in resultDict:
-            del resultDict["extend"]
-        if "_extend" in resultDict:
-            del resultDict["_extend"]
+        resultDict.pop("extend", None)
+        resultDict.pop("_extend", None)
 
         # we inhert all except extend or _extend
         cleanResultDict: Dict[str, Any] = {}
@@ -95,7 +92,7 @@ class TldInfo:
 
     def init(self) -> None:
         # build the database of all tld
-        for tld in self.zzDictRef.keys():
+        for tld in self.zzDictRef:
             self._initOne(tld, override=False)
 
     def filterTldToSupportedPattern(
@@ -127,12 +124,12 @@ class TldInfo:
             return
 
         # merge in ZZ, this extends ZZ with new tld's and overrides existing tld's
-        for tld in aDict.keys():
+        for tld in aDict:
             self.zzDictRef[tld] = aDict[tld]
 
         # reprocess the regexes we newly defined or overrode
         override = True
-        for tld in aDict.keys():
+        for tld in aDict:
             self._initOne(tld, override)
 
     def validTlds(self) -> List[str]:

@@ -21,8 +21,7 @@ def main() -> None:
     for tld in whoisdomain.validTlds():
         n += 1
         domain = whoisdomain.getTestHint(tld)
-        domain = domain if domain else f"meta.{tld}"
-
+        domain = domain or f"meta.{tld}"
         try:
             print(f"# try: {domain}")
             pc = whoisdomain.ParameterContext()

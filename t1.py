@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
-
 import os
-
+import sys
 from typing import Any
 
 from whoisdomain import ProcFunc
@@ -20,7 +19,7 @@ def remoteFunc(
             conn.send(reply)
         except EOFError as e:
             _ = e
-            exit(0)
+            sys.exit(0)
 
         if n >= max_requests:
             break

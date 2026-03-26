@@ -1,36 +1,30 @@
-#! /usr/bin/env python3
-# pylint: disable=duplicate-code
-
+import logging
+import os
+import re
 from typing import (
     Any,
     Dict,
-    Optional,
     List,
+    Optional,
     # Union,
     Tuple,
     # cast,
 )
 
-import re
-import os
-import logging
+from .context.dataContext import DataContext
+from .context.parameterContext import ParameterContext
+from .domain import Domain
 
 # import sys
-
 from .exceptions import (
     FailedParsingWhoisOutput,
-    WhoisQuotaExceeded,
     WhoisPrivateRegistry,
+    WhoisQuotaExceeded,
 )
-
-from .domain import Domain
+from .helpers import get_TLD_RE
+from .strings.ignoreStrings import IgnoreStrings
 from .strings.noneStrings import NoneStrings
 from .strings.quotaStrings import QuotaStrings
-from .strings.ignoreStrings import IgnoreStrings
-
-from .context.parameterContext import ParameterContext
-from .context.dataContext import DataContext
-from .helpers import get_TLD_RE
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
@@ -143,7 +137,7 @@ class WhoisParser:
             self.dom = None
             return self.dom
 
-        if z == 2 and whois_splitted[1].strip() != "":
+        if z == 2 and whois_splitted[1].strip():
             # if we see source: IANA and the part after is not only whitespace
             msg = f"after: {k} we see not only whitespace: {whois_splitted[1]}"
             log.debug(msg)

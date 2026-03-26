@@ -1,9 +1,7 @@
-#! /usr/bin/env python3
-
-import os
 import json
 import logging
-
+import os
+import pathlib
 from typing import (
     Optional,
 )
@@ -34,10 +32,10 @@ class SimpleCacheWithFile(SimpleCacheBase):
         if self.cacheFilePath is None:
             return
 
-        if not os.path.isfile(self.cacheFilePath):
+        if not pathlib.Path(self.cacheFilePath).is_file():
             return
 
-        with open(self.cacheFilePath, "r", encoding="utf-8") as f:
+        with pathlib.Path(self.cacheFilePath).open(encoding="utf-8") as f:
             try:
                 self.memCache = json.load(f)
             except ValueError as e:
@@ -50,7 +48,7 @@ class SimpleCacheWithFile(SimpleCacheBase):
         if self.cacheFilePath is None:
             return
 
-        with open(self.cacheFilePath, "w", encoding="utf-8") as f:
+        with pathlib.Path(self.cacheFilePath).open("w", encoding="utf-8") as f:
             json.dump(self.memCache, f)
 
     def put(

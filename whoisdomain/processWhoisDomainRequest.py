@@ -1,26 +1,21 @@
 # import sys
-import os
 import logging
-
+import os
 from typing import (
-    Optional,
     List,
+    Optional,
     Tuple,
 )
 
-from .exceptions import UnknownTld
-
 from .context.dataContext import DataContext
 from .context.parameterContext import ParameterContext
-
-from .helpers import filterTldToSupportedPattern
-from .helpers import get_TLD_RE
-
-from .doWhoisCommand import doWhoisAndReturnString
-from .whoisParser import WhoisParser
 from .domain import Domain
+from .doWhoisCommand import doWhoisAndReturnString
+from .exceptions import UnknownTld
+from .helpers import filterTldToSupportedPattern, get_TLD_RE
 from .lastWhois import updateLastWhois
 from .whoisCliInterface import WhoisCliInterface
+from .whoisParser import WhoisParser
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
@@ -296,10 +291,7 @@ class ProcessWhoisDomainRequest:
         # and may change if we find no data in cli whois
 
         tldLevel: List[str] = []
-        if self.dc.hasPublicSuffix:
-            tldLevel = str(self.dc.publicSuffixStr).split(".")
-        else:
-            tldLevel = str(self.dc.tldString).split(".")
+        tldLevel = str(self.dc.publicSuffixStr).split(".") if self.dc.hasPublicSuffix else str(self.dc.tldString).split(".")
 
         while len(self.dc.dList) > len(tldLevel):
             log.debug(f"{self.dc.dList}")

@@ -1,16 +1,15 @@
+import logging
 import os
 import re
-import logging
+from collections.abc import Callable
 
 # re._MAXCACHE = 1
-
 # pylint: disable=unused-argument
 # import typing
 from typing import (
-    Dict,
     Any,
+    Dict,
     List,
-    Callable,
     Tuple,
 )
 
@@ -24,10 +23,10 @@ def make_pat(reStr: str, flags: int) -> Any:
     return re.compile(reStr, flags=flags)
 
     if (reStr, flags) in PATTERN_CACHE:
-        pattern = PATTERN_CACHE[(reStr, flags)]
+        pattern = PATTERN_CACHE[reStr, flags]
     else:
         pattern = re.compile(reStr, flags=flags)
-        PATTERN_CACHE[(reStr, flags)] = pattern
+        PATTERN_CACHE[reStr, flags] = pattern
     return pattern
 
 
@@ -183,7 +182,7 @@ def findFromToAndLookForWithFindFirst(
             return []
 
         ff2: str = str(ff[0].strip())  # only use the first element and clean it
-        if ff2 == "":
+        if not ff2:
             return []
 
         msg = f"we found: {ff2}, now combine with {fromStr}"
@@ -243,7 +242,7 @@ def findInSplitedLookForHavingFindFirst(
             return []
 
         ff2: str = str(ff[0].strip())  # only use the first element and clean it
-        if ff2 == "":
+        if not ff2:
             return []
 
         lookForStr2 = lookForStr.replace(r"{}", ff2)

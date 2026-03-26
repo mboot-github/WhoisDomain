@@ -1,12 +1,9 @@
-#! /usr/bin/env python3
-
-import os
 import logging
-
+import os
 from typing import (
-    List,
-    Dict,
     Any,
+    Dict,
+    List,
     Optional,
 )
 

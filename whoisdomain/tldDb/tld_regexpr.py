@@ -1,19 +1,19 @@
 # pylint: disable=C0302
-import os
-import logging
+# line length = 160
 
+import logging
+import os
 from typing import (
-    Dict,
     Any,
-    # Callable,
+    Dict,
 )
 
 from .finders import (
-    newLineSplit,
     R,
     findFromToAndLookFor,
     findFromToAndLookForWithFindFirst,
     findInSplitedLookForHavingFindFirst,
+    newLineSplit,
 )
 
 log = logging.getLogger(__name__)
@@ -69,7 +69,7 @@ ZZ["_donuts"] = {
     "_server": "whois.donuts.co",
     "registrant": R(r"Registrant Organization:\s?(.+)"),
     "status": R(r"Domain Status:\s?(.+)"),
-}  # updated all downstream
+}
 
 ZZ["_centralnic"] = {
     "extend": "com",
@@ -80,14 +80,14 @@ ZZ["_centralnic"] = {
     "expiration_date": R(r"Registry Expiry Date:\s?(.+)"),
     "updated_date": R(r"Updated Date:\s?(.+)"),
     "status": R(r"Domain Status:\s?(.+)"),
-}  # updated all downstream
+}
 
 ZZ["_gtldKnet"] = {
     "extend": "com",
     "_server": "whois.gtld.knet.cn",
     "admin": R(r"Admin\s*Name:\s+(.+)"),
     "_test": None,
-}  # updated all downstream
+}
 
 # ======================================
 # start of regular entries, simple domains are at the end
@@ -171,8 +171,6 @@ ZZ["org.uk"] = {
     "_test": "greenpeace.org.uk",
 }
 
-# ltd.uk: no example to test with
-
 ZZ["me.uk"] = {
     "extend": "co.uk",
     "_server": "whois.nic.uk",
@@ -190,6 +188,7 @@ ZZ["net.uk"] = {
 # police.uk: no example to test; may not actually have a public whois server
 
 # Armenia
+
 ZZ["am"] = {
     "domain_name": R(r"Domain name:\s+(.+)"),
     "_server": "whois.amnic.net",
@@ -238,7 +237,6 @@ ZZ["at"] = {
     "updated_date": R(r"changed:\s?(.+)"),
     "name_servers": R(r"nserver:\s*(.+)"),
     "registrar": R(r"registrar:\s?(.+)"),
-    # "registrant": R(r"registrant:\s?(.+)"),
     "registrant": findInSplitedLookForHavingFindFirst(
         findFirst=r"registrant:\s?(.+)",
         lookForStr=r"nic-hdl:\s*{}\n",
@@ -406,7 +404,6 @@ ZZ["cz"] = {
     "extend": "com",
     "domain_name": R(r"domain:\s?(.+)"),
     "registrar": R(r"registrar:\s?(.+)"),
-    # "registrant": R(r"registrant:\s?(.+)"),
     "registrant_country": None,
     "creation_date": R(r"registered:\s?(.+)"),
     "expiration_date": R(r"expire:\s?(.+)"),
@@ -490,14 +487,11 @@ ZZ["fr"] = {
     "extend": "com",
     "domain_name": R(r"domain:\s?(.+)"),
     "registrar": R(r"registrar:\s*(.+)"),
-    # "registrant": R(r"contact:\s?(.+)"),
-    # "registrant_organization": R(r"type:\s+ORGANIZATION\scontact:\s+(.*)"),
     "creation_date": R(r"created:\s?(.+)"),
     "expiration_date": R(r"Expiry Date:\s?(.+)"),
     "updated_date": R(r"last-update:\s?(.+)"),
     "name_servers": R(r"nserver:\s*(.+)"),
     "status": R(r"status:\s?(.+)"),
-    # "registrant_country": R(r"Country:\s?(.+)"),
     "_test": "sfr.fr",
     "registrant": findFromToAndLookForWithFindFirst(
         findFirst=r"holder-c:\s*([^\n]*)\n",
@@ -568,7 +562,6 @@ ZZ["is"] = {
     "_server": "whois.isnic.is",
     "domain_name": R(r"domain:\s?(.+)"),
     "registrar": None,
-    # "registrant": R(r"registrant:\s?(.+)"),
     "registrant_country": None,
     "creation_date": R(r"created:\s?(.+)"),
     "expiration_date": R(r"expires:\s?(.+)"),
@@ -596,7 +589,8 @@ ZZ["it"] = {
     "status": R(r"Status:\s?(.+)"),
 }
 
-# The Japanese whois servers always return English unless a Japanese locale is specified in the user's LANG environmental variable.
+# The Japanese whois servers always return English
+#  unless a Japanese locale is specified in the user's LANG environmental variable.
 # See: https://www.computerhope.com/unix/uwhois.htm
 # Additionally, whois qeuries can explicitly request english:
 #   To suppress Japanese output, add'/e' at the end of command, e.g. 'whois -h whois.jprs.jp xxx/e'.
@@ -1277,7 +1271,6 @@ ZZ["mk"] = {
     "_server": "whois.marnet.mk",
     "domain_name": R(r"domain:\s?(.+)"),
     "registrar": R(r"registrar:\s?(.+)"),
-    # "registrant": R(r"registrant:\s?(.+)"),
     "registrant_country": R(r"Registrant Country:\s?(.+)"),
     "creation_date": R(r"registered:\s?(.+)"),
     "expiration_date": R(r"expire:\s?(.+)"),
@@ -1359,7 +1352,6 @@ ZZ["ve"] = {
     "_server": "whois.nic.ve",
     "domain_name": R(r"domain\s*:\s?(.+)"),
     "registrar": R(r"registrar:\s?(.+)"),
-    # "registrant": R(r"registrant:\s?(.+)"),
     "creation_date": R(r"created:\s?(.+)"),
     "expiration_date": R(r"expire:\s?(.+)"),
     "updated_date": R(r"changed\s*:\s?(.+)"),
@@ -1435,7 +1427,6 @@ ZZ["au"] = {
     "registrant": r"Registrant:\s*([^\n]*)\n",
 }
 
-# unknown tld pf, pf, pf, pf, whois.registry.pf,
 ZZ["pf"] = {
     "_server": "whois.registry.pf",
     "_test": "registry.pf",
@@ -1449,18 +1440,36 @@ ZZ["pf"] = {
     "registrant_country": None,
 }
 
+ZZ["download"] = {
+    "extend": "amsterdam",
+    "name_servers": R(r"Name Server:[ \t]+(\S+)"),
+    "status": R(r"Domain Status:\s*([a-zA-z]+)"),
+    "_server": "whois.nic.download",
+}
+
+ZZ["global"] = {
+    "extend": "amsterdam",
+    "name_servers": R(r"Name Server: (.+)"),
+    "_server": "whois.nic.global",
+    "_test": "nic.global",
+}
+
 # ======================================
 # ======================================
 # ======================================
 
+ZZ["aaa"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["aarp"] = {"_server": "whois.nic.aarp", "extend": "com", "_test": "nic.aarp"}
 ZZ["abbott"] = {"_server": "whois.nic.abbott", "extend": "com", "_test": "nic.abbott"}
+ZZ["abb"] = {"_server": "whois.nic.abb", "_test": "nic.abb", "extend": "com"}
 ZZ["abbvie"] = {"_server": "whois.nic.abbvie", "extend": "com", "_test": "nic.abbvie"}
 ZZ["abc"] = {"_server": "whois.nic.abc", "extend": "com", "_test": "nic.abc"}
+ZZ["able"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["abogado"] = {"_server": "whois.nic.abogado", "extend": "com", "_test": "nic.abogado"}
 ZZ["abudhabi"] = {"_server": "whois.nic.abudhabi", "extend": "com", "_test": "nic.abudhabi"}
 ZZ["academy"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["ac.bd"] = {"extend": "bd"}
+ZZ["accenture"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["accountant"] = {"extend": "com", "_server": "whois.nic.accountant", "_test": "nic.accountant"}
 ZZ["accountants"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["ac.jp"] = {"extend": "co.jp", "_test": "icu.ac.jp"}
@@ -1471,20 +1480,20 @@ ZZ["ac.th"] = {"extend": "co.th", "_test": "chula.ac.th"}
 ZZ["actor"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["ac.ug"] = {"extend": "ug", "_privateRegistry": True}
 ZZ["ad.jp"] = {"extend": "co.jp", "_test": "nic.ad.jp"}
+ZZ["ad"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["ads"] = {"_server": "whois.nic.ads", "extend": "com", "_test": "nic.ads"}
 ZZ["adult"] = {"_server": "whois.nic.adult", "extend": "com", "_test": "nic.adult"}
 ZZ["aeg"] = {"_server": "whois.nic.aeg", "extend": "com", "_test": "nic.aeg"}
 ZZ["aero"] = {"extend": "ac", "_server": "whois.aero", "registrant_country": R(r"Registrant\s+Country:\s+(.+)")}
+ZZ["aetna"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["af"] = {"extend": "ac"}
-ZZ["com.af"] = {"extend": "af"}
 ZZ["afl"] = {"_server": "whois.nic.afl", "extend": "com", "_test": "nic.afl"}
 ZZ["africa"] = {"extend": "com", "_server": "whois.nic.africa", "_test": "nic.africa"}
 ZZ["agakhan"] = {"_server": "whois.nic.agakhan", "extend": "com", "_test": "nic.agakhan"}
 ZZ["agency"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["ag"] = {"extend": "ac"}
-ZZ["com.ag"] = {"extend": "ac"}
-
 ZZ["ai"] = {"extend": "com", "_server": "whois.nic.ai"}  # Anguill, "_test": "nic.ai"}
+ZZ["aig"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["airbus"] = {"_server": "whois.nic.airbus", "extend": "com", "_test": "nic.airbus"}
 ZZ["airforce"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["airtel"] = {"_server": "whois.nic.airtel", "extend": "com", "_test": "nic.airtel"}
@@ -1498,17 +1507,24 @@ ZZ["ally"] = {"_server": "whois.nic.ally", "extend": "com", "_test": "nic.ally"}
 ZZ["alsace"] = {"_server": "whois.nic.alsace", "extend": "com", "_test": "nic.alsace"}
 ZZ["alstom"] = {"_server": "whois.nic.alstom", "extend": "com", "_test": "nic.alstom"}
 ZZ["amazon"] = {"_server": "whois.nic.amazon", "extend": "com", "_test": "nic.amazon"}
+ZZ["americanexpress"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["americanfamily"] = {"_server": "whois.nic.americanfamily", "extend": "com", "_test": "nic.americanfamily"}
+ZZ["amex"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["amfam"] = {"_server": "whois.nic.amfam", "extend": "com", "_test": "nic.amfam"}
+ZZ["amica"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["analytics"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["android"] = {"_server": "whois.nic.android", "extend": "com", "_test": "nic.android"}
 ZZ["anquan"] = {"extend": "_teleinfo", "_server": "whois.teleinfo.cn"}
 ZZ["anz"] = {"_server": "whois.nic.anz", "extend": "com", "_test": "nic.anz"}
 ZZ["aol"] = {"_server": "whois.nic.aol", "extend": "com", "_test": "nic.aol"}
+ZZ["ao"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["apartments"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["app"] = {"extend": "com", "_server": "whois.nic.google"}
 ZZ["apple"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
+ZZ["aq"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["aquarelle"] = {"_server": "whois.nic.aquarelle", "extend": "com", "_test": "nic.aquarelle"}
 ZZ["arab"] = {"_server": "whois.nic.arab", "extend": "com", "_test": "nic.arab"}
+ZZ["aramco"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["archi"] = {"_server": "whois.nic.archi", "extend": "com", "_test": "nic.archi"}
 ZZ["army"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["arte"] = {"_server": "whois.nic.arte", "extend": "com", "_test": "nic.arte"}
@@ -1517,6 +1533,7 @@ ZZ["asda"] = {"_server": "whois.nic.asda", "extend": "com", "_test": "nic.asda"}
 ZZ["as"] = {"extend": "gg"}
 ZZ["asia"] = {"extend": "com"}
 ZZ["associates"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["athleta"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["attorney"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["auction"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["audible"] = {"_server": "whois.nic.audible", "extend": "com", "_test": "nic.audible"}
@@ -1526,13 +1543,15 @@ ZZ["auspost"] = {"_server": "whois.nic.auspost", "extend": "com", "_test": "nic.
 ZZ["author"] = {"_server": "whois.nic.author", "extend": "com", "_test": "nic.author"}
 ZZ["auto"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["autos"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
-# ZZ["avianca"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["aw"] = {"extend": "nl", "name_servers": R(r"Domain nameservers.*:\n%s" % xStr(r"(?:\s+(\S+)\n)?", 4))}
 ZZ["aws"] = {"_server": "whois.nic.aws", "extend": "com", "_test": "nic.aws"}
+ZZ["axa"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["az"] = {"extend": "_privateReg"}
+ZZ["azure"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["baby"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["ba"] = {"extend": "_privateReg"}
 ZZ["baidu"] = {"_server": "whois.gtld.knet.cn", "extend": "com", "_test": "nic.baidu"}
+ZZ["banamex"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["band"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["barcelona"] = {"_server": "whois.nic.barcelona", "extend": "com", "_test": "nic.barcelona"}
 ZZ["barclaycard"] = {"_server": "whois.nic.barclaycard", "extend": "com", "_test": "nic.barclaycard"}
@@ -1540,10 +1559,12 @@ ZZ["barclays"] = {"_server": "whois.nic.barclays", "extend": "com", "_test": "ni
 ZZ["barefoot"] = {"_server": "whois.nic.barefoot", "extend": "com", "_test": "nic.barefoot"}
 ZZ["bar"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["bargains"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["baseball"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["basketball"] = {"_server": "whois.nic.basketball", "extend": "com", "_test": "nic.basketball"}
 ZZ["bauhaus"] = {"_server": "whois.nic.bauhaus", "extend": "com", "_test": "nic.bauhaus"}
 ZZ["bayern"] = {"_server": "whois.nic.bayern", "extend": "com", "_test": "nic.bayern"}
 ZZ["bbc"] = {"_server": "whois.nic.bbc", "extend": "com", "_test": "nic.bbc"}
+ZZ["bb"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["bbt"] = {"_server": "whois.nic.bbt", "extend": "com", "_test": "nic.bbt"}
 ZZ["bbva"] = {"_server": "whois.nic.bbva", "extend": "com", "_test": "nic.bbva"}
 ZZ["bcg"] = {"_server": "whois.nic.bcg", "extend": "com", "_test": "nic.bcg"}
@@ -1552,31 +1573,37 @@ ZZ["bd"] = {"extend": "_privateReg"}  # Bangladesh
 ZZ["beats"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["beauty"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["beer"] = {"_server": "whois.nic.beer", "extend": "com", "_test": "nic.beer"}
-# ZZ["bentley"] = {"_server": "whois.nic.bentley", "extend": "com", "_test": "nic.bentley"}
 ZZ["berlin"] = {"_server": "whois.nic.berlin", "extend": "com", "_test": "nic.berlin"}
 ZZ["bestbuy"] = {"_server": "whois.nic.bestbuy", "extend": "com", "_test": "nic.bestbuy"}
 ZZ["best"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["bet"] = {"extend": "ac", "_server": "whois.nic.bet", "_test": "nic.bet"}
 ZZ["bf"] = {"extend": "com", "_server": "whois.nic.bf", "registrant": R(r"Registrant Name:\s?(.+)"), "_test": "nic.bf"}
+ZZ["bharti"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["bh"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["bible"] = {"_server": "whois.nic.bible", "extend": "com", "_test": "nic.bible"}
 ZZ["bid"] = {"extend": "ac", "_server": "whois.nic.bid", "_test": "nic.bid"}
 ZZ["bike"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["bingo"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["bing"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["bio"] = {"_server": "whois.nic.bio", "extend": "com", "_test": "nic.bio"}
 ZZ["bi"] = {"_server": "whois1.nic.bi", "extend": "com"}
 ZZ["blackfriday"] = {"extend": "_uniregistry", "_server": "whois.uniregistry.net"}
 ZZ["black"] = {"_server": "whois.nic.black", "extend": "com", "_test": "nic.black"}
 ZZ["blockbuster"] = {"_server": "whois.nic.blockbuster", "extend": "com", "_test": "nic.blockbuster"}
 ZZ["blog"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
+ZZ["bloomberg"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["blue"] = {"extend": "com"}
+ZZ["bm"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["bms"] = {"_server": "whois.nic.bms", "extend": "com", "_test": "nic.bms"}
 ZZ["bmw"] = {"_server": "whois.nic.bmw", "extend": "com", "_test": "nic.bmw"}
 ZZ["bnpparibas"] = {"_server": "whois.nic.bnpparibas", "extend": "com", "_test": "group.bnpparibas"}
+ZZ["bn"] = {"_server": "whois.bnnic.bn", "_test": "bnnic.bn", "extend": "com"}
 ZZ["boats"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["boehringer"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["bofa"] = {"_server": "whois.nic.bofa", "extend": "com", "_test": "nic.bofa"}
 ZZ["bom"] = {"extend": "com", "_server": "whois.gtlds.nic.br"}
 ZZ["bond"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
+ZZ["booking"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["book"] = {"_server": "whois.nic.book", "extend": "com", "_test": "nic.book"}
 ZZ["boo"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["bosch"] = {"_server": "whois.nic.bosch", "extend": "com", "_test": "nic.bosch"}
@@ -1591,17 +1618,22 @@ ZZ["broadway"] = {"_server": "whois.nic.broadway", "extend": "com", "_test": "ni
 ZZ["broker"] = {"_server": "whois.nic.broker", "extend": "com", "_test": "nic.broker"}
 ZZ["brother"] = {"_server": "whois.nic.brother", "extend": "com", "_test": "nic.brother"}
 ZZ["brussels"] = {"_server": "whois.nic.brussels", "extend": "com", "_test": "nic.brussels"}
+ZZ["bs"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["bt"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["builders"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["build"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["business"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["buy"] = {"_server": "whois.nic.buy", "extend": "com", "_test": "nic.buy"}
 ZZ["buzz"] = {"extend": "amsterdam", "_server": "whois.nic.buzz"}
+ZZ["bv"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["bw"] = {"_server": "whois.nic.net.bw", "_test": "net.bw", "extend": "com"}
 ZZ["bz"] = {"extend": "_privateReg"}
 ZZ["cab"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["ca"] = {"extend": "com"}
 ZZ["cafe"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["call"] = {"_server": "whois.nic.call", "extend": "com", "_test": "nic.call"}
 ZZ["cal"] = {"_server": "whois.nic.google", "extend": "com"}
+ZZ["calvinklein"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["camera"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["cam"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["camp"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
@@ -1609,6 +1641,7 @@ ZZ["canon"] = {"_server": "whois.nic.canon", "extend": "com", "_test": "nic.cano
 ZZ["capetown"] = {"_server": "whois.nic.capetown", "extend": "com", "_test": "nic.capetown"}
 ZZ["capital"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["capitalone"] = {"_server": "whois.nic.capitalone", "extend": "com", "_test": "nic.capitalone"}
+ZZ["caravan"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["cards"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["career"] = {"_server": "whois.nic.career", "extend": "com", "_test": "nic.career"}
 ZZ["careers"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
@@ -1624,16 +1657,19 @@ ZZ["cat"] = {"extend": "com", "_server": "whois.nic.cat", "_test": "nic.cat"}
 ZZ["catholic"] = {"_server": "whois.nic.catholic", "extend": "com", "_test": "nic.catholic"}
 ZZ["ca.ug"] = {"extend": "ug"}
 ZZ["cba"] = {"_server": "whois.nic.cba", "extend": "com", "_test": "nic.cba"}
-# ZZ["cbs"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
+ZZ["cbn"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["cbre"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["cd"] = {"extend": "ac", "_server": "whois.nic.cd", "registrant_country": R(r"Registrant\s+Country:\s+(.+)"), "_test": "nic.cd"}
 ZZ["center"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["ceo"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["cern"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["cfa"] = {"_server": "whois.nic.cfa", "extend": "com", "_test": "nic.cfa"}
 ZZ["cfd"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
+ZZ["cg"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["chanel"] = {"_server": "whois.nic.chanel", "extend": "com", "_test": "nic.chanel"}
 ZZ["channel"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["charity"] = {"extend": "_donuts", "_server": "whois.nic.charity", "_test": "nic.charity"}
+ZZ["chase"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["chat"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["cheap"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["ch"] = {"extend": "_privateReg"}
@@ -1643,9 +1679,13 @@ ZZ["chrome"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["church"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["cipriani"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["circle"] = {"_server": "whois.nic.circle", "extend": "com", "_test": "nic.circle"}
+ZZ["cisco"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["ci"] = {"_server": "whois.nic.ci", "extend": "com", "_test": "nic.ci"}
-# ZZ["cityeats"] = {"_server": "whois.nic.cityeats", "extend": "com", "_test": "nic.cityeats"}
+ZZ["citadel"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["citic"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["citi"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["city"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["ck"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["claims"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["cleaning"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["click"] = {"extend": "com"}
@@ -1657,20 +1697,23 @@ ZZ["club"] = {"extend": "com"}
 ZZ["clubmed"] = {"_server": "whois.nic.clubmed", "extend": "com", "_test": "nic.clubmed"}
 ZZ["cm"] = {"extend": "com"}
 ZZ["coach"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["co.cr"] = {"extend": "cr"}
 ZZ["codes"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["co"] = {"extend": "biz", "status": R(r"Status:\s?(.+)")}
 ZZ["coffee"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["co.ke"] = {"extend": "ke"}
 ZZ["college"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["cologne"] = {"_server": "whois.ryce-rsp.com", "extend": "com"}
+ZZ["com.af"] = {"extend": "af"}
+ZZ["com.ag"] = {"extend": "ac"}
 ZZ["com.au"] = {"extend": "au"}
 ZZ["com.bd"] = {"extend": "bd"}
 ZZ["com.bo"] = {"extend": "bo"}
-# ZZ["comcast"] = {"_server": "whois.nic.comcast", "extend": "com", "_test": "nic.comcast"} # Revocation of the .comcast domain (2024-02-07)
 ZZ["com.cn"] = {"extend": "cn"}
 ZZ["com.do"] = {"extend": "_privateReg"}
 ZZ["com.ec"] = {"extend": "ec"}
-ZZ["com.eg"] = {"extend": "_privateReg"}  # Egipt
+ZZ["com.eg"] = {"extend": "_privateReg"}
+ZZ["com.et"] = {"extend": "et", "_test": "google.com.et"}
 ZZ["com.ly"] = {"extend": "ly"}
 ZZ["commbank"] = {"_server": "whois.nic.commbank", "extend": "com", "_test": "nic.commbank"}
 ZZ["com.mo"] = {"extend": "mo"}
@@ -1701,6 +1744,7 @@ ZZ["corsica"] = {"_server": "whois.nic.corsica", "extend": "com", "_test": "nic.
 ZZ["co.rw"] = {"extend": "rw"}
 ZZ["co.ug"] = {"extend": "ug"}
 ZZ["country"] = {"_server": "whois.nic.country", "extend": "com", "_test": "nic.country"}
+ZZ["coupon"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["coupons"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["courses"] = {"extend": "com"}
 ZZ["co.ve"] = {"extend": "ve"}
@@ -1709,21 +1753,20 @@ ZZ["cpa"] = {"_server": "whois.nic.cpa", "extend": "com", "_test": "nic.cpa"}
 ZZ["creditcard"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["credit"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["creditunion"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
-
 ZZ["cr"] = {"extend": "cz"}
-ZZ["co.cr"] = {"extend": "cr"}
-
 ZZ["cricket"] = {"extend": "com", "_server": "whois.nic.cricket", "_test": "nic.cricket"}
+ZZ["crown"] = {"_server": "whois.nic.crown", "_test": "nic.crown", "extend": "com"}
+ZZ["crs"] = {"_server": "whois.nic.crs", "_test": "nic.crs", "extend": "com"}
 ZZ["cruise"] = {"_server": "whois.nic.cruise", "extend": "com", "_test": "nic.cruise"}
 ZZ["cruises"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["cuisinella"] = {"_server": "whois.nic.cuisinella", "extend": "com", "_test": "nic.cuisinella"}
+ZZ["cu"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["cv"] = {"extend": "_privateReg"}  # Cape Verde
 ZZ["cw"] = {"extend": "_privateReg"}
 ZZ["cx"] = {"extend": "com"}
-ZZ["cymru"] = {"_server": "whois.nic.cymru", "extend": "com", "_test": "nic.cymru"}
+ZZ["cymru"] = {"_server": "whois.nic.cymru", "extend": "com", "_test": "nic.cymru"}  # Yea
 ZZ["cyou"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["cy"] = {"_privateRegistry": True}
-# ZZ["dabur"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["dad"] = {"extend": "com", "_server": "whois.nic.google"}
 ZZ["dance"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["data"] = {"_server": "whois.nic.data", "extend": "com", "_test": "nic.data"}
@@ -1738,6 +1781,7 @@ ZZ["deal"] = {"_server": "whois.nic.deal", "extend": "com", "_test": "nic.deal"}
 ZZ["deals"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["degree"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["delivery"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["dell"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["deloitte"] = {"_server": "whois.nic.deloitte", "extend": "com", "_test": "nic.deloitte"}
 ZZ["delta"] = {"_server": "whois.nic.delta", "extend": "com", "_test": "nic.delta"}
 ZZ["democrat"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
@@ -1746,14 +1790,17 @@ ZZ["dentist"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["desi"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["design"] = {"extend": "ac"}
 ZZ["dev"] = {"extend": "com"}
+ZZ["dhl"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["diamonds"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["diet"] = {"extend": "_uniregistry", "_server": "whois.uniregistry.net"}
 ZZ["digital"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["direct"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["directory"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["discount"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["discover"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["dish"] = {"_server": "whois.nic.dish", "extend": "com", "_test": "nic.dish"}
 ZZ["diy"] = {"_server": "whois.nic.diy", "extend": "com", "_test": "nic.diy"}
+ZZ["dj"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["dm"] = {"_server": "whois.dmdomains.dm", "extend": "com"}
 ZZ["dnp"] = {"_server": "whois.nic.dnp", "extend": "com", "_test": "nic.dnp"}
 ZZ["docs"] = {"_server": "whois.nic.google", "extend": "com"}
@@ -1763,17 +1810,11 @@ ZZ["do"] = {"extend": "_privateReg"}
 ZZ["dog"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["domains"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["dot"] = {"_server": "whois.nic.dot", "extend": "com", "_test": "nic.dot"}
-ZZ["download"] = {
-    "extend": "amsterdam",
-    "name_servers": R(r"Name Server:[ \t]+(\S+)"),
-    "status": R(r"Domain Status:\s*([a-zA-z]+)"),
-    "_server": "whois.nic.download",
-}
 ZZ["drive"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["dtv"] = {"_server": "whois.nic.dtv", "extend": "com", "_test": "nic.dtv"}
 ZZ["dubai"] = {"_server": "whois.nic.dubai", "extend": "com", "_test": "nic.dubai"}
 ZZ["duckdns.org"] = {"extend": "_privateReg"}
-# ZZ["dunlop"] = {"_server": "whois.nic.dunlop", "extend": "com", "_test": "nic.dunlop"}
+ZZ["dupont"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["durban"] = {"_server": "whois.nic.durban", "extend": "com", "_test": "nic.durban"}
 ZZ["dvag"] = {"_server": "whois.nic.dvag", "extend": "com", "_test": "nic.dvag"}
 ZZ["dvr"] = {"_server": "whois.nic.dvr", "extend": "com", "_test": "nic.dvr"}
@@ -1798,12 +1839,11 @@ ZZ["epson"] = {"_server": "whois.nic.epson", "extend": "com", "_test": "nic.epso
 ZZ["equipment"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["ericsson"] = {"_server": "whois.nic.ericsson", "extend": "com", "_test": "nic.ericsson"}
 ZZ["erni"] = {"_server": "whois.nic.erni", "extend": "com", "_test": "nic.erni"}
+ZZ["er"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["es"] = {"extend": "_privateReg"}
 ZZ["esq"] = {"extend": "com", "_server": "whois.nic.google"}
 ZZ["estate"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["et"] = {"extend": "com", "_server": "whois.ethiotelecom.et"}
-ZZ["com.et"] = {"extend": "et", "_test": "google.com.et"}
-# ZZ["etisalat"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["eurovision"] = {"_server": "whois.nic.eurovision", "extend": "com", "_test": "nic.eurovision"}
 ZZ["eus"] = {"extend": "ac"}
 ZZ["events"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
@@ -1819,12 +1859,14 @@ ZZ["faith"] = {"extend": "com", "_server": "whois.nic.faith", "_test": "nic.fait
 ZZ["family"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["fan"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["fans"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
+ZZ["farmers"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["farm"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["fashion"] = {"extend": "com", "_server": "whois.nic.fashion", "_test": "nic.fashion"}
 ZZ["fast"] = {"_server": "whois.nic.fast", "extend": "com", "_test": "nic.fast"}
 ZZ["fedex"] = {"_server": "whois.nic.fedex", "extend": "com", "_test": "nic.fedex"}
 ZZ["feedback"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["ferrari"] = {"_server": "whois.nic.ferrari", "extend": "com", "_test": "nic.ferrari"}
+ZZ["ferrero"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["fidelity"] = {"_server": "whois.nic.fidelity", "extend": "com", "_test": "nic.fidelity"}
 ZZ["fido"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["film"] = {"_server": "whois.nic.film", "extend": "com", "_test": "nic.film"}
@@ -1838,14 +1880,20 @@ ZZ["fish"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["fishing"] = {"_server": "whois.nic.fishing", "extend": "com", "_test": "nic.fishing"}
 ZZ["fit"] = {"extend": "com"}
 ZZ["fitness"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["fj"] = {"_server": "whois.nic.fj", "_test": "nic.fj", "extend": "com"}
+ZZ["fk"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["flickr"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["flights"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["flir"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["florist"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["flowers"] = {"extend": "_uniregistry", "_server": "whois.uniregistry.net"}
 ZZ["fly"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["fm"] = {"extend": "com"}
 ZZ["fo"] = {"extend": "com", "registrant": None}
+ZZ["food"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["foo"] = {"extend": "com", "_server": "whois.nic.google"}
 ZZ["football"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["ford"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["forex"] = {"_server": "whois.nic.forex", "extend": "com", "_test": "nic.forex"}
 ZZ["forsale"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["forum"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
@@ -1855,7 +1903,8 @@ ZZ["free"] = {"_server": "whois.nic.free", "extend": "com", "_test": "nic.free"}
 ZZ["fresenius"] = {"_server": "whois.nic.fresenius", "extend": "com", "_test": "nic.fresenius"}
 ZZ["frl"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["frogans"] = {"_server": "whois.nic.frogans", "extend": "com", "_test": "nic.frogans"}
-# ZZ["frontdoor"] = {"_server": "whois.nic.frontdoor", "extend": "com", "_test": "nic.frontdoor"}
+ZZ["frontier"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["ftr"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["fujitsu"] = {"_server": "whois.nic.gmo", "extend": "com"}
 ZZ["fund"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["fun"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
@@ -1869,9 +1918,11 @@ ZZ["gallup"] = {"_server": "whois.nic.gallup", "extend": "com", "_test": "nic.ga
 ZZ["gal"] = {"_server": "whois.nic.gal", "extend": "com", "_test": "nic.gal"}
 ZZ["game"] = {"extend": "amsterdam", "_server": "whois.nic.game"}
 ZZ["games"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["gap"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["garden"] = {"extend": "com", "_server": "whois.nic.garden", "_test": "nic.garden"}
 ZZ["gay"] = {"extend": "com", "_server": "whois.nic.gay", "_test": "nic.gay"}
 ZZ["gbiz"] = {"_server": "whois.nic.google", "extend": "com"}
+ZZ["gb"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["gd"] = {"extend": "com"}
 ZZ["gdn"] = {"_server": "whois.nic.gdn", "extend": "com", "_test": "nic.gdn"}  # no host ip for whois.nic.gdn
 ZZ["gea"] = {"_server": "whois.nic.gea", "extend": "com", "_test": "nic.gea"}
@@ -1890,18 +1941,14 @@ ZZ["gives"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["giving"] = {"_server": "whois.nic.giving", "extend": "com", "_test": "nic.giving"}
 ZZ["glass"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["gle"] = {"_server": "whois.nic.google", "extend": "com"}
-ZZ["global"] = {
-    "extend": "amsterdam",
-    "name_servers": R(r"Name Server: (.+)"),
-    "_server": "whois.nic.global",
-    "_test": "nic.global",
-}
 ZZ["globo"] = {"_server": "whois.gtlds.nic.br", "extend": "bom"}
 ZZ["gl"] = {"_server": "whois.nic.gl", "extend": "com", "_test": "nic.gl"}
 ZZ["gmail"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["gmbh"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["gmo"] = {"_server": "whois.nic.gmo", "extend": "com", "_test": "nic.gmo"}
+ZZ["gm"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["gmx"] = {"_server": "whois.nic.gmx", "extend": "com", "_test": "nic.gmx"}
+ZZ["gn"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["gob.ec"] = {"extend": "ec"}
 ZZ["godaddy"] = {"_server": "whois.nic.godaddy", "extend": "com", "_test": "nic.godaddy"}
 ZZ["go.jp"] = {"extend": "co.jp"}
@@ -1912,21 +1959,25 @@ ZZ["golf"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["goodyear"] = {"_server": "whois.nic.goodyear", "extend": "com", "_test": "nic.goodyear"}
 ZZ["google"] = {"_server": "whois.nic.google", "extend": "com", "_test": "nic.google"}
 ZZ["goog"] = {"_server": "whois.nic.google", "extend": "com"}
-ZZ["goo"] = {"_server": "whois.nic.gmo", "extend": "com"}
+# ZZ["goo"] = {"_server": "whois.nic.gmo", "extend": "com"}
 ZZ["gop"] = {"_server": "whois.nic.gop", "extend": "com", "_test": "nic.gop"}
 ZZ["go.th"] = {"extend": "co.th"}
 ZZ["got"] = {"_server": "whois.nic.got", "extend": "com", "_test": "nic.got"}
 ZZ["gov.bd"] = {"extend": "bd"}
+ZZ["gov.bn"] = {"_server": "whois.bnnic.bn", "_test": "egc.gov.bn", "extend": "com"}
 ZZ["gov"] = {"extend": "com"}
 ZZ["gov.rw"] = {"extend": "rw"}
 ZZ["gov.tr"] = {"extend": "com.tr", "_server": "whois.trabis.gov.tr", "_test": "www.turkiye.gov.tr"}
+ZZ["gp"] = {"_server": "whois.nic.gp", "_test": "nic.gp", "extend": "com"}
 ZZ["gq"] = {"extend": "ml", "_server": "whois.domino.gq"}
+ZZ["grainger"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["graphics"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["gratis"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["green"] = {"extend": "com"}
 ZZ["gr"] = {"extend": "_privateReg"}
 ZZ["gripe"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["gr.jp"] = {"extend": "co.jp"}
+ZZ["grocery"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["group"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["gs"] = {"_server": "whois.nic.gs", "extend": "com", "_test": "nic.gs"}
 ZZ["gt"] = {"extend": "_privateReg"}
@@ -1934,12 +1985,15 @@ ZZ["gucci"] = {"_server": "whois.nic.gucci", "extend": "com", "_test": "nic.gucc
 ZZ["guge"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["guide"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["guitars"] = {"extend": "_uniregistry", "_server": "whois.uniregistry.net"}
+ZZ["gu"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["guru"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["gw"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["gy"] = {"extend": "com"}
 ZZ["hair"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["hamburg"] = {"_server": "whois.nic.hamburg", "extend": "com", "_test": "nic.hamburg"}
 ZZ["hangout"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["haus"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["hbo"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["hdfcbank"] = {"_server": "whois.nic.hdfcbank", "extend": "com", "_test": "nic.hdfcbank"}
 ZZ["hdfc"] = {"_server": "whois.nic.hdfc", "extend": "com", "_test": "nic.hdfc"}
 ZZ["healthcare"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
@@ -1953,11 +2007,14 @@ ZZ["hisamitsu"] = {"_server": "whois.nic.gmo", "extend": "com"}
 ZZ["hitachi"] = {"_server": "whois.nic.gmo", "extend": "com"}
 ZZ["hiv"] = {"_server": "whois.nic.hiv", "extend": "com", "_test": "nic.hiv"}
 ZZ["hkt"] = {"_server": "whois.nic.hkt", "extend": "com", "_test": "nic.hkt"}
+ZZ["hm"] = {"_server": "whois.registry.hm", "_test": "registry.hm", "extend": "com"}
 ZZ["hn"] = {"extend": "com"}  # Honduras
 ZZ["hockey"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["holdings"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["holiday"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["homedepot"] = {"_server": "whois.nic.homedepot", "extend": "com", "_test": "nic.homedepot"}
+ZZ["homegoods"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["homesense"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["homes"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["honda"] = {"_server": "whois.nic.honda", "extend": "com", "_test": "nic.honda"}
 ZZ["hopto.org"] = {"extend": "_privateReg"}  # dynamic dns without any whois
@@ -1965,17 +2022,22 @@ ZZ["horse"] = {"_server": "whois.nic.horse", "extend": "com", "_test": "nic.hors
 ZZ["hospital"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["host"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["hosting"] = {"extend": "_uniregistry", "_server": "whois.uniregistry.net"}
+ZZ["hotels"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["hotmail"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["hot"] = {"_server": "whois.nic.hot", "extend": "com", "_test": "nic.hot"}
 ZZ["house"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["how"] = {"_server": "whois.nic.google", "extend": "com"}
+ZZ["hsbc"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["ht"] = {"_server": "whois.nic.ht", "extend": "com", "_test": "nic.ht"}
 ZZ["hu"] = {"extend": "_privateReg"}
 ZZ["hughes"] = {"_server": "whois.nic.hughes", "extend": "com", "_test": "nic.hughes"}
+ZZ["hyatt"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["hyundai"] = {"_server": "whois.nic.hyundai", "extend": "com", "_test": "nic.hyundai"}
 ZZ["ibm"] = {"_server": "whois.nic.ibm", "extend": "com", "_test": "nic.ibm"}
 ZZ["icbc"] = {"_server": "whois.nic.icbc", "extend": "com", "_test": "nic.icbc"}
 ZZ["ice"] = {"_server": "whois.nic.ice", "extend": "com", "_test": "nic.ice"}
 ZZ["icu"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
+ZZ["ieee"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["ie"] = {"extend": "com"}  # Ireland
 ZZ["ifm"] = {"_server": "whois.nic.ifm", "extend": "com", "_test": "nic.ifm"}
 ZZ["ikano"] = {"_server": "whois.nic.ikano", "extend": "com", "_test": "nic.ikano"}
@@ -1987,7 +2049,6 @@ ZZ["inc"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["industries"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["in"] = {"extend": "com", "_server": "whois.registry.in"}
 ZZ["infiniti"] = {"_server": "whois.nic.gmo", "extend": "com"}
-# ZZ["info"] = {"extend": "com"} # only rdap
 ZZ["info.ke"] = {"extend": "ke"}
 ZZ["info.ve"] = {"extend": "ve"}
 ZZ["ing"] = {"_server": "whois.nic.google", "extend": "com"}
@@ -1997,12 +2058,17 @@ ZZ["insurance"] = {"_server": "whois.nic.insurance", "extend": "com", "_test": "
 ZZ["insure"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["international"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["in.th"] = {"extend": "co.th"}
+ZZ["int"] = {"_server": "whois.iana.org", "_test": "eu.int", "extend": "cz"}
+ZZ["intuit"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["investments"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["io"] = {"extend": "com", "expiration_date": R(r"\nRegistry Expiry Date:\s?(.+)")}
+ZZ["ipiranga"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["iq"] = {"_server": " whois.cmc.iq", "_test": "cmc.iq", "extend": "com"}  # ho host:  whois.cmc.iq
 ZZ["irish"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["ismaili"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["istanbul"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["ist"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
+ZZ["itau"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["itv"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["jaguar"] = {"_server": "whois.nic.jaguar", "extend": "com", "_test": "nic.jaguar"}
 ZZ["java"] = {"_server": "whois.nic.java", "extend": "com", "_test": "nic.java"}
@@ -2013,42 +2079,53 @@ ZZ["jetzt"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["jewelry"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["jio"] = {"_server": "whois.nic.jio", "extend": "com", "_test": "nic.jio"}
 ZZ["jll"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
+ZZ["jmp"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["jm"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["jnj"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["jobs"] = {"_server": "whois.nic.jobs", "extend": "com", "_test": "nic.jobs"}
 ZZ["joburg"] = {"_server": "whois.nic.joburg", "extend": "com", "_test": "nic.joburg"}
+ZZ["jo"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["jot"] = {"_server": "whois.nic.jot", "extend": "com", "_test": "nic.jot"}
 ZZ["joy"] = {"_server": "whois.nic.joy", "extend": "com", "_test": "nic.joy"}
+ZZ["jpmorgan"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["jprs"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["juegos"] = {"extend": "_uniregistry", "_server": "whois.uniregistry.net"}
 ZZ["juniper"] = {"_server": "whois.nic.juniper", "extend": "com", "_test": "nic.juniper"}
 ZZ["kaufen"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["kddi"] = {"_server": "whois.nic.kddi", "extend": "com", "_test": "nic.kddi"}
 ZZ["ke"] = {"extend": "com", "_server": "whois.kenic.or.ke"}
 ZZ["kerryhotels"] = {"_server": "whois.nic.kerryhotels", "extend": "com", "_test": "nic.kerryhotels"}
-# ZZ["kerrylogistics"] = {"_server": "whois.nic.kerrylogistics", "extend": "com", "_test": "nic.kerrylogistics"}
 ZZ["kerryproperties"] = {"_server": "whois.nic.kerryproperties", "extend": "com", "_test": "nic.kerryproperties"}
 ZZ["kfh"] = {"_server": "whois.nic.kfh", "extend": "com", "_test": "nic.kfh"}
+ZZ["kh"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["kia"] = {"_server": "whois.nic.kia", "extend": "com", "_test": "nic.kia"}
 ZZ["kids"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
-ZZ["ki"] = {"extend": "com", "_server": "whois.nic.ki", "_test": None}  # kiribati never answeres, timout is the normal response
+ZZ["ki"] = {"extend": "com", "_server": "whois.nic.ki", "_test": None}  # kiribati never answeres
 ZZ["kim"] = {"_server": "whois.nic.kim", "extend": "com", "_test": "nic.kim"}
 ZZ["kindle"] = {"_server": "whois.nic.kindle", "extend": "com", "_test": "nic.kindle"}
 ZZ["kitchen"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["kiwi"] = {"extend": "com"}
+ZZ["km"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["kn"] = {"extend": "com"}  # Saint Kitts and Nevis
 ZZ["koeln"] = {"_server": "whois.ryce-rsp.com", "extend": "com"}
 ZZ["komatsu"] = {"_server": "whois.nic.komatsu", "extend": "com", "_test": "nic.komatsu"}
 ZZ["kosher"] = {"_server": "whois.nic.kosher", "extend": "com", "_test": "nic.kosher"}
+ZZ["kpmg"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["kpn"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["kp"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["krd"] = {"_server": "whois.nic.krd", "extend": "com", "_test": "nic.krd"}
 ZZ["kred"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["kuokgroup"] = {"_server": "whois.nic.kuokgroup", "extend": "com", "_test": "nic.kuokgroup"}
+ZZ["kw"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["kyoto"] = {"_server": "whois.nic.kyoto", "extend": "com", "_test": "nic.kyoto"}
 ZZ["ky"] = {"_server": "whois.kyregistry.ky", "extend": "com"}
 ZZ["lacaixa"] = {"_server": "whois.nic.lacaixa", "extend": "com", "_test": "nic.lacaixa"}
 ZZ["la"] = {"extend": "com"}
 ZZ["lamborghini"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["lamer"] = {"_server": "whois.nic.lamer", "extend": "com", "_test": "nic.lamer"}
-# ZZ["lancaster"] = {"_server": "whois.nic.lancaster", "extend": "com", "_test": "nic.lancaster"}
 ZZ["land"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["landrover"] = {"_server": "whois.nic.landrover", "extend": "com", "_test": "nic.landrover"}
+ZZ["lanxess"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["lasalle"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["lat"] = {"extend": "com"}
 ZZ["latino"] = {"_server": "whois.nic.latino", "extend": "com", "_test": "nic.latino"}
@@ -2069,14 +2146,17 @@ ZZ["lg.jp"] = {"extend": "co.jp"}
 ZZ["lidl"] = {"_server": "whois.nic.lidl", "extend": "com", "_test": "nic.lidl"}
 ZZ["li"] = {"extend": "_privateReg"}
 ZZ["life"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["lifeinsurance"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["lifestyle"] = {"_server": "whois.nic.lifestyle", "extend": "com", "_test": "nic.lifestyle"}
 ZZ["lighting"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["like"] = {"_server": "whois.nic.like", "extend": "com", "_test": "nic.like"}
+ZZ["lilly"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["limited"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["limo"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["lincoln"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["link"] = {"extend": "amsterdam", "_server": "whois.uniregistry.net"}
-# ZZ["lipsy"] = {"_server": "whois.nic.lipsy", "extend": "com", "_test": "nic.lipsy"}
 ZZ["live"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["living"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["lk"] = {"extend": "_privateReg"}  # Sri Lanka
 ZZ["llc"] = {"_server": "whois.nic.llc", "extend": "com", "_test": "nic.llc"}
 ZZ["llp"] = {"_server": "whois.nic.llp", "extend": "com", "_test": "nic.llp"}
@@ -2091,6 +2171,7 @@ ZZ["lotto"] = {"_server": "whois.nic.lotto", "extend": "com", "_test": "nic.lott
 ZZ["love"] = {"extend": "ac", "registrant_country": R(r"Registrant\s+Country:\s+(.+)")}
 ZZ["lplfinancial"] = {"_server": "whois.nic.lplfinancial", "extend": "com", "_test": "nic.lplfinancial"}
 ZZ["lpl"] = {"_server": "whois.nic.lpl", "extend": "com", "_test": "nic.lpl"}
+ZZ["lr"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["ls"] = {"extend": "cz", "_server": "whois.nic.ls", "_test": "nic.ls"}
 ZZ["ltda"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["ltd"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
@@ -2101,6 +2182,7 @@ ZZ["lviv.ua"] = {"extend": "com"}
 ZZ["ly"] = {"extend": "ac", "_server": "whois.nic.ly", "registrant_country": R(r"Registrant\s+Country:\s+(.+)"), "_test": "nic.ly"}
 ZZ["madrid"] = {"_server": "whois.nic.madrid", "extend": "com", "_test": "nic.madrid"}
 ZZ["ma"] = {"extend": "ac", "_server": "whois.registre.ma", "registrar": R(r"Sponsoring Registrar:\s*(.+)")}
+ZZ["maif"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["maison"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["makeup"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["management"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
@@ -2111,6 +2193,8 @@ ZZ["market"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["marketing"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["markets"] = {"_server": "whois.nic.markets", "extend": "com", "_test": "nic.markets"}
 ZZ["marriott"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
+ZZ["marshalls"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["mattel"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["mba"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["mckinsey"] = {"_server": "whois.nic.mckinsey", "extend": "com", "_test": "nic.mckinsey"}
 ZZ["media"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
@@ -2122,17 +2206,23 @@ ZZ["meme"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["memorial"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["men"] = {"_server": "whois.nic.men", "extend": "com", "_test": "nic.men"}
 ZZ["menu"] = {"_server": "whois.nic.menu", "extend": "com", "_test": "nic.menu"}
+ZZ["merckmsd"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["mg"] = {"extend": "ac", "registrant_country": R(r"Registrant\s+Country:\s+(.+)")}
+ZZ["mh"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["miami"] = {"_server": "whois.nic.miami", "extend": "com", "_test": "nic.miami"}
+ZZ["microsoft"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["mil"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["mil.rw"] = {"extend": "rw"}
 ZZ["mini"] = {"_server": "whois.nic.mini", "extend": "com", "_test": "nic.mini"}
+ZZ["mint"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["mit"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["mitsubishi"] = {"_server": "whois.nic.gmo", "extend": "com"}
+ZZ["mlb"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["mls"] = {"_server": "whois.nic.mls", "extend": "com", "_test": "nic.mls"}
 ZZ["mma"] = {"_server": "whois.nic.mma", "extend": "com", "_test": "nic.mma"}
+ZZ["mm"] = {"_server": "whois.registry.gov.mm", "_test": "registry.gov.mm", "extend": "com"}
 ZZ["mn"] = {"extend": "com"}
 ZZ["mn"] = {"extend": "com", "_server": "whois.nic.mn", "_test": "nic.mn"}
-# ZZ["mobi"] = {"extend": "com", "expiration_date": R(r"\nRegistry Expiry Date:\s?(.+)"), "updated_date": R(r"\nUpdated Date:\s?(.+)")} # only rdap
 ZZ["mobi.ke"] = {"extend": "ke"}
 ZZ["mobile"] = {"_server": "whois.nic.mobile", "extend": "com", "_test": "nic.mobile"}
 ZZ["moda"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
@@ -2145,35 +2235,41 @@ ZZ["monster"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["mormon"] = {"_server": "whois.nic.mormon", "extend": "com", "_test": "nic.mormon"}
 ZZ["mortgage"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["moscow"] = {"_server": "whois.nic.moscow", "extend": "com", "_test": "nic.moscow"}
+ZZ["moto"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["motorcycles"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["mov"] = {"extend": "com", "_server": "whois.nic.google"}
 ZZ["movie"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["mp"] = {"extend": "_privateReg"}
 ZZ["mq"] = {"extend": "si", "_server": "whois.mediaserv.net"}
-ZZ["mr"] = {"_server": "whois.nic.mr", "extend": "com", "_test": "nic.mr"}  # server exists but: "Unable to connect to remote host"
-ZZ["msk.ru"] = {"extend": "com.ru"}  # test with: mining.msk.ru
-# ZZ["ms"] = {"_server": "whois.nic.ms", "extend": "com", "_test": "nic.ms"} # whois.nic.ms does not exist
+ZZ["mr"] = {"_server": "whois.nic.mr", "extend": "com", "_test": "nic.mr"}
+ZZ["msd"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["ms"] = {"extend": "_privateReg"}
+ZZ["msk.ru"] = {"extend": "com.ru"}  # test with: mining.msk.ru
 ZZ["mtn"] = {"_server": "whois.nic.mtn", "extend": "com", "_test": "nic.mtn"}
+ZZ["mt"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["mtr"] = {"_server": "whois.nic.mtr", "extend": "com", "_test": "nic.mtr"}
 ZZ["mu"] = {"extend": "bank"}
 ZZ["mu"] = {"extend": "bank"}
 ZZ["museum"] = {"_server": "whois.nic.museum", "extend": "com", "_test": "nic.museum"}
 ZZ["music"] = {"_server": "whois.nic.music", "extend": "com", "_test": "nic.music"}
+ZZ["mv"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["mw"] = {"_server": "whois.nic.mw", "_test": "nic.mw", "extend": "fr"}
 ZZ["my"] = {"extend": "_privateReg"}
 ZZ["mz"] = {"_server": "whois.nic.mz", "extend": "com", "_test": "nic.mz"}
 ZZ["nab"] = {"_server": "whois.nic.nab", "extend": "com", "_test": "nic.nab"}
 ZZ["nagoya"] = {"_server": "whois.nic.nagoya", "extend": "com", "_test": "nic.nagoya"}
 ZZ["name"] = {"extend": "com", "status": R(r"Domain Status:\s?(.+)")}
 ZZ["na"] = {"_server": "whois.na-nic.com.na", "extend": "com"}
-# ZZ["natura"] = {"_server": "whois.gtlds.nic.br", "extend": "bom"}
 ZZ["navy"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["nba"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["nec"] = {"_server": "whois.nic.nec", "extend": "com", "_test": "nic.nec"}
 ZZ["ne.jp"] = {"extend": "co.jp"}
 ZZ["ne.ke"] = {"extend": "ke"}
+ZZ["ne"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["netbank"] = {"_server": "whois.nic.netbank", "extend": "com", "_test": "nic.netbank"}
 ZZ["net.bd"] = {"extend": "bd"}
 ZZ["net"] = {"extend": "com"}
+ZZ["netflix"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["net.ph"] = {"extend": "ph"}
 ZZ["net.rw"] = {"extend": "rw"}
 ZZ["net.tr"] = {"extend": "com.tr", "_server": "whois.trabis.gov.tr", "_test": "trt.net.tr"}
@@ -2181,18 +2277,22 @@ ZZ["net.ua"] = {"extend": "ua"}
 ZZ["net.ve"] = {"extend": "ve"}
 ZZ["network"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["net.za"] = {"extend": "za", "_server": "net-whois.registry.net.za"}
+ZZ["neustar"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["new"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["news"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["nextdirect"] = {"_server": "whois.nic.nextdirect", "extend": "com", "_test": "nic.nextdirect"}
 ZZ["next"] = {"_server": "whois.nic.next", "extend": "com", "_test": "nic.next"}
 ZZ["nexus"] = {"extend": "com", "_server": "whois.nic.google"}
+ZZ["nfl"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["nf"] = {"_server": "whois.nic.nf", "extend": "com", "_test": "nic.nf"}
 ZZ["ngo"] = {"_server": "whois.nic.ngo", "extend": "com", "_test": "nic.ngo"}
 ZZ["ng"] = {"_server": "whois.nic.net.ng", "extend": "ac", "registrant_country": R(r"Registrant Country:\s+(.+)")}
 ZZ["nhk"] = {"_server": "whois.nic.nhk", "extend": "com", "_test": "nic.nhk"}
 ZZ["nico"] = {"_server": "whois.nic.nico", "extend": "com", "_test": "nic.nico"}
+ZZ["nike"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["nikon"] = {"_server": "whois.nic.nikon", "extend": "com", "_test": "nic.nikon"}
 ZZ["ninja"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["ni"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["nissan"] = {"_server": "whois.nic.gmo", "extend": "com"}
 ZZ["nissay"] = {"_server": "whois.nic.nissay", "extend": "com", "_test": "nic.nissay"}
 ZZ["noip.com"] = {"extend": "_privateReg"}
@@ -2204,10 +2304,13 @@ ZZ["now"] = {"_server": "whois.nic.now", "extend": "com", "_test": "nic.now"}
 ZZ["nowtv"] = {"_server": "whois.nic.nowtv", "extend": "com", "_test": "nic.nowtv"}
 ZZ["np"] = {"extend": "_privateReg"}
 ZZ["nra"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
+ZZ["nr"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["nrw"] = {"extend": "com"}
+ZZ["ntt"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["nu"] = {"extend": "se"}
 ZZ["obi"] = {"_server": "whois.nic.obi", "extend": "com", "_test": "nic.obi"}
 ZZ["observer"] = {"extend": "com", "_server": "whois.nic.observer", "_test": "nic.observer"}
+ZZ["office"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["okinawa"] = {"_server": "whois.nic.okinawa", "extend": "com", "_test": "nic.okinawa"}
 ZZ["olayangroup"] = {"_server": "whois.nic.olayangroup", "extend": "com", "_test": "nic.olayangroup"}
 ZZ["olayan"] = {"_server": "whois.nic.olayan", "extend": "com", "_test": "nic.olayan"}
@@ -2216,9 +2319,11 @@ ZZ["omega"] = {"_server": "whois.nic.omega", "extend": "com", "_test": "nic.omeg
 ZZ["om"] = {"_server": "whois.registry.om", "extend": "com", "_test": "registry.om"}
 ZZ["one"] = {"extend": "com", "_server": "whois.nic.one", "_test": "nic.one"}
 ZZ["ong"] = {"extend": "ac", "registrant_country": R(r"Registrant Country:\s+(.+)")}
+ZZ["onion"] = {"_privateRegistry": True}  # this is a special case https://tools.ietf.org/html/rfc7686
 ZZ["onl"] = {"extend": "com"}
 ZZ["online"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["ooo"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
+ZZ["open"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["oracle"] = {"_server": "whois.nic.oracle", "extend": "com", "_test": "nic.oracle"}
 ZZ["orange"] = {"_server": "whois.nic.orange", "extend": "com", "_test": "nic.orange"}
 ZZ["organic"] = {"_server": "whois.nic.organic", "extend": "com", "_test": "nic.organic"}
@@ -2247,6 +2352,8 @@ ZZ["pay"] = {"_server": "whois.nic.pay", "extend": "com", "_test": "nic.pay"}
 ZZ["pccw"] = {"_server": "whois.nic.pccw", "extend": "com", "_test": "nic.pccw"}
 ZZ["pe"] = {"extend": "com", "registrant": R(r"Registrant Name:\s?(.+)"), "admin": R(r"Admin Name:\s?(.+)")}
 ZZ["pet"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["pfizer"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["pg"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["phd"] = {"extend": "com", "_server": "whois.nic.google"}
 ZZ["ph"] = {"extend": "_privateReg"}
 ZZ["ph"] = {"extend": "_privateReg"}
@@ -2257,8 +2364,10 @@ ZZ["photography"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["photos"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["physio"] = {"_server": "whois.nic.physio", "extend": "com", "_test": "nic.physio"}
 ZZ["pics"] = {"extend": "ac"}
+ZZ["pictet"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["pictures"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["pid"] = {"_server": "whois.nic.pid", "extend": "com", "_test": "nic.pid"}
+ZZ["ping"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["pink"] = {"_server": "whois.nic.pink", "extend": "com", "_test": "nic.pink"}
 ZZ["pin"] = {"_server": "whois.nic.pin", "extend": "com", "_test": "nic.pin"}
 ZZ["pioneer"] = {"_server": "whois.nic.pioneer", "extend": "com", "_test": "nic.pioneer"}
@@ -2271,10 +2380,13 @@ ZZ["plumbing"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["plus"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["pm"] = {"extend": "re", "_server": "whois.nic.pm", "_test": "nic.pm"}
 ZZ["pnc"] = {"_server": "whois.nic.pnc", "extend": "com", "_test": "nic.pnc"}
+ZZ["pn"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["pohl"] = {"_server": "whois.nic.pohl", "extend": "com", "_test": "nic.pohl"}
 ZZ["poker"] = {"_server": "whois.nic.poker", "extend": "com", "_test": "nic.poker"}
 ZZ["politie"] = {"_server": "whois.nic.politie", "extend": "com", "_test": "nic.politie"}
 ZZ["porn"] = {"_server": "whois.nic.porn", "extend": "com", "_test": "nic.porn"}
+ZZ["post"] = {"_server": "whois.dotpostregistry.net", "_test": "us.post", "extend": "com"}
+ZZ["praxi"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["press"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["prime"] = {"_server": "whois.nic.prime", "extend": "com", "_test": "nic.prime"}
 ZZ["prod"] = {"_server": "whois.nic.google", "extend": "com"}
@@ -2287,6 +2399,8 @@ ZZ["properties"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["property"] = {"extend": "_uniregistry", "_server": "whois.uniregistry.net"}
 ZZ["protection"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["pr"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
+ZZ["prudential"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["pru"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["ps"] = {"_privateRegistry": True}  # no host can be contacted only http://www.nic.ps
 ZZ["pub"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["pwc"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
@@ -2299,10 +2413,10 @@ ZZ["racing"] = {"extend": "com", "_server": "whois.nic.racing", "_test": "nic.ra
 ZZ["radio"] = {"extend": "com", "_server": "whois.nic.radio", "_test": "nic.radio"}
 ZZ["read"] = {"_server": "whois.nic.read", "extend": "com", "_test": "nic.read"}
 ZZ["realestate"] = {"_server": "whois.nic.realestate", "extend": "com", "_test": "nic.realestate"}
+ZZ["realtor"] = {"_server": "whois.nic.realtor", "_test": "nic.realtor", "extend": "com"}
 ZZ["realty"] = {"_server": "whois.nic.realty", "extend": "com", "_test": "nic.realty"}
 ZZ["recipes"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["red"] = {"extend": "com"}
-# ZZ["redstone"] = {"_server": "whois.nic.redstone", "extend": "com", "_test": "nic.redstone"}
 ZZ["redumbrella"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["rehab"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["reise"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
@@ -2341,6 +2455,7 @@ ZZ["ryukyu"] = {"_server": "whois.nic.ryukyu", "extend": "com", "_test": "nic.ry
 ZZ["saarland"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["safe"] = {"_server": "whois.nic.safe", "extend": "com", "_test": "nic.safe"}
 ZZ["safety"] = {"_server": "whois.nic.safety", "extend": "com", "_test": "nic.safety"}
+ZZ["sakura"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["sale"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["salon"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["samsclub"] = {"_server": "whois.nic.samsclub", "extend": "com", "_test": "nic.samsclub"}
@@ -2350,12 +2465,12 @@ ZZ["sandvik"] = {"_server": "whois.nic.sandvik", "extend": "com", "_test": "nic.
 ZZ["sanofi"] = {"_server": "whois.nic.sanofi", "extend": "com", "_test": "nic.sanofi"}
 ZZ["sap"] = {"_server": "whois.nic.sap", "extend": "com", "_test": "nic.sap"}
 ZZ["sarl"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["sas"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["save"] = {"_server": "whois.nic.save", "extend": "com", "_test": "nic.save"}
 ZZ["saxo"] = {"_server": "whois.nic.saxo", "extend": "com", "_test": "nic.saxo"}
 ZZ["sb"] = {"extend": "com", "_server": "whois.nic.net.sb"}
 ZZ["sbi"] = {"_server": "whois.nic.sbi", "extend": "com", "_test": "nic.sbi"}
 ZZ["sbs"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
-# ZZ["sca"] = {"_server": "whois.nic.sca", "extend": "com", "_test": "nic.sca"} # Revocation of the .sca domain (2023-12-11)
 ZZ["scb"] = {"_server": "whois.nic.scb", "extend": "com", "_test": "nic.scb"}
 ZZ["schaeffler"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["schmidt"] = {"_server": "whois.nic.schmidt", "extend": "com", "_test": "nic.schmidt"}
@@ -2374,6 +2489,7 @@ ZZ["secure"] = {"_server": "whois.nic.secure", "extend": "com", "_test": "nic.se
 ZZ["security"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["seek"] = {"_server": "whois.nic.seek", "extend": "com", "_test": "nic.seek"}
 ZZ["select"] = {"_server": "whois.nic.select", "extend": "com", "_test": "nic.select"}
+ZZ["sener"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["한국"] = {"_server": "whois.kr", "extend": "kr"}
 ZZ["삼성"] = {"_server": "whois.kr", "extend": "kr"}
 ZZ["닷컴"] = {"_server": "whois.nic.xn--mk1bu44c", "extend": "xn--mk1bu44c"}
@@ -2386,7 +2502,6 @@ ZZ["sexy"] = {"extend": "_uniregistry", "_server": "whois.uniregistry.net"}
 ZZ["sfr"] = {"_server": "whois.nic.sfr", "extend": "com", "_test": "nic.sfr"}
 ZZ["shangrila"] = {"_server": "whois.nic.shangrila", "extend": "com", "_test": "nic.shangrila"}
 ZZ["sharp"] = {"_server": "whois.nic.gmo", "extend": "com"}
-# ZZ["shaw"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["shell"] = {"_server": "whois.nic.shell", "extend": "com", "_test": "nic.shell"}
 ZZ["shia"] = {"_server": "whois.nic.shia", "extend": "com", "_test": "nic.shia"}
 ZZ["shiksha"] = {"_server": "whois.nic.shiksha", "extend": "com", "_test": "nic.shiksha"}
@@ -2395,13 +2510,14 @@ ZZ["shop"] = {"extend": "com"}
 ZZ["shopping"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["shouji"] = {"extend": "_teleinfo", "_server": "whois.teleinfo.cn"}
 ZZ["show"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
-# ZZ["showtime"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["silk"] = {"_server": "whois.nic.silk", "extend": "com", "_test": "nic.silk"}
 ZZ["sina"] = {"_server": "whois.nic.sina", "extend": "com", "_test": "nic.sina"}
 ZZ["singles"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["site"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
+ZZ["sj"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["skin"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["ski"] = {"_server": "whois.nic.ski", "extend": "com", "_test": "nic.ski"}
+ZZ["skype"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["sky"] = {"_server": "whois.nic.sky", "extend": "com", "_test": "nic.sky"}
 ZZ["sl"] = {"extend": "com", "_server": "whois.nic.sl", "_test": "nic.sl"}
 ZZ["sling"] = {"_server": "whois.nic.sling", "extend": "com", "_test": "nic.sling"}
@@ -2413,8 +2529,10 @@ ZZ["social"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["so"] = {"extend": "com"}
 ZZ["softbank"] = {"_server": "whois.nic.softbank", "extend": "com", "_test": "nic.softbank"}
 ZZ["software"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["sohu"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["solar"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["solutions"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["song"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["sony"] = {"_server": "whois.nic.sony", "extend": "com", "_test": "nic.sony"}
 ZZ["soy"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["space"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
@@ -2426,8 +2544,10 @@ ZZ["sr"] = {"extend": "_privateReg"}
 ZZ["srl"] = {"_server": "whois.afilias-srs.net", "extend": "ac", "registrant_country": R(r"Registrant Country:\s+(.+)")}
 ZZ["ss"] = {"_server": "whois.nic.ss", "extend": "com", "_test": "nic.ss"}
 ZZ["stada"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
+ZZ["staples"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["star"] = {"_server": "whois.nic.star", "extend": "com", "_test": "nic.star"}
 ZZ["statebank"] = {"_server": "whois.nic.statebank", "extend": "com", "_test": "nic.statebank"}
+ZZ["statefarm"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["stcgroup"] = {"_server": "whois.nic.stcgroup", "extend": "com", "_test": "nic.stcgroup"}
 ZZ["stc"] = {"_server": "whois.nic.stc", "extend": "com", "_test": "nic.stc"}
 ZZ["stockholm"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
@@ -2452,10 +2572,12 @@ ZZ["sx"] = {"extend": "com", "_server": "whois.sx"}
 ZZ["sydney"] = {"_server": "whois.nic.sydney", "extend": "com", "_test": "nic.sydney"}
 ZZ["sy"] = {"extend": "com", "_server": "whois.tld.sy", "_test": "tld.sy"}
 ZZ["systems"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["sz"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["tab"] = {"_server": "whois.nic.tab", "extend": "com", "_test": "nic.tab"}
 ZZ["taipei"] = {"_server": "whois.nic.taipei", "extend": "com", "_test": "nic.taipei"}
 ZZ["talk"] = {"_server": "whois.nic.talk", "extend": "com", "_test": "nic.talk"}
 ZZ["taobao"] = {"_server": "whois.nic.taobao", "extend": "com", "_test": "nic.taobao"}
+ZZ["target"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["tatamotors"] = {"_server": "whois.nic.tatamotors", "extend": "com", "_test": "nic.tatamotors"}
 ZZ["tatar"] = {"_server": "whois.nic.tatar", "extend": "com", "_test": "nic.tatar"}
 ZZ["tattoo"] = {"extend": "_uniregistry", "_server": "whois.uniregistry.net"}
@@ -2481,7 +2603,11 @@ ZZ["tienda"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["tips"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["tires"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["tirol"] = {"_server": "whois.nic.tirol", "extend": "com", "_test": "nic.tirol"}
+ZZ["tjmaxx"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["tj"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["tjx"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["tk"] = {"extend": "_privateReg"}
+ZZ["tkmaxx"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["tl"] = {"extend": "com"}
 ZZ["tmall"] = {"_server": "whois.nic.tmall", "extend": "com", "_test": "nic.tmall"}
 ZZ["today"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
@@ -2540,15 +2666,16 @@ ZZ["vig"] = {"_server": "whois.nic.vig", "extend": "com", "_test": "nic.vig"}
 ZZ["viking"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["villas"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["vin"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["vi"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["vip"] = {"_server": "whois.nic.vip", "extend": "com", "updated_date": None, "_test": "nic.vip"}
 ZZ["virgin"] = {"_server": "whois.nic.virgin", "extend": "com", "_test": "nic.virgin"}
 ZZ["visa"] = {"_server": "whois.nic.visa", "extend": "com", "_test": "nic.visa"}
 ZZ["vision"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["viva"] = {"_server": "whois.nic.viva", "extend": "com", "_test": "nic.viva"}
+ZZ["vivo"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["vlaanderen"] = {"_server": "whois.nic.vlaanderen", "extend": "com", "_test": "nic.vlaanderen"}
 ZZ["vn"] = {"extend": "_privateReg"}
 ZZ["vodka"] = {"_server": "whois.nic.vodka", "extend": "com", "_test": "nic.vodka"}
-# ZZ["volkswagen"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["volvo"] = {"_server": "whois.nic.volvo", "extend": "com", "_test": "nic.volvo"}
 ZZ["vote"] = {"_server": "whois.nic.vote", "extend": "com", "_test": "nic.vote"}
 ZZ["voting"] = {"_server": "whois.nic.voting", "extend": "com", "_test": "nic.voting"}
@@ -2562,6 +2689,8 @@ ZZ["wang"] = {"extend": "_gtldKnet", "_server": "whois.gtld.knet.cn", "_test": "
 ZZ["wanggou"] = {"_server": "whois.nic.wanggou", "extend": "com", "_test": "nic.wanggou"}
 ZZ["watches"] = {"_server": "whois.nic.watches", "extend": "com", "_test": "nic.watches"}
 ZZ["watch"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["weatherchannel"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["weather"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["webcam"] = {"extend": "com", "_server": "whois.nic.webcam", "_test": "nic.webcam"}
 ZZ["weber"] = {"_server": "whois.nic.weber", "extend": "com", "_test": "nic.weber"}
 ZZ["website"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
@@ -2570,23 +2699,29 @@ ZZ["web.za"] = {"extend": "za", "_server": "web-whois.registry.net.za"}
 ZZ["wedding"] = {"_server": "whois.nic.wedding", "extend": "com", "_test": "nic.wedding"}
 ZZ["wed"] = {"_server": "whois.nic.wed", "extend": "com", "_test": "nic.wed"}
 ZZ["weibo"] = {"_server": "whois.nic.weibo", "extend": "com", "_test": "nic.weibo"}
+ZZ["weir"] = {"_server": "whois.nic.weir", "_test": "nic.weir", "extend": "com"}
 ZZ["whoswho"] = {"_server": "whois.nic.whoswho", "extend": "com", "_test": "nic.whoswho"}
 ZZ["wien"] = {"_server": "whois.nic.wien", "extend": "com", "_test": "nic.wien"}
+ZZ["williamhill"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["windows"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["wine"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["win"] = {"extend": "com"}
+ZZ["winners"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["wme"] = {"_server": "whois.nic.wme", "extend": "com", "_test": "nic.wme"}
-ZZ["wolterskluwer"] = {"_server": "whois.nic.wolterskluwer", "extend": "com", "_test": "nic.wolterskluwer"}
+# ZZ["wolterskluwer"] = {"_server": "whois.nic.wolterskluwer", "extend": "com", "_test": "nic.wolterskluwer"}
 ZZ["woodside"] = {"_server": "whois.nic.woodside", "extend": "com", "_test": "nic.woodside"}
 ZZ["works"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["world"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
 ZZ["wow"] = {"_server": "whois.nic.wow", "extend": "com", "_test": "nic.wow"}
 ZZ["wtc"] = {"_server": "whois.nic.wtc", "extend": "com", "_test": "nic.wtc"}
 ZZ["wtf"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
+ZZ["xbox"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["xerox"] = {"_server": "whois.nic.xerox", "extend": "com", "_test": "nic.xerox"}
-# ZZ["xfinity"] = {"_server": "whois.nic.xfinity", "extend": "com", "_test": "nic.xfinity"} # Revocation of the .xfinity domain (2024-02-07)
 ZZ["xihuan"] = {"extend": "_teleinfo", "_server": "whois.teleinfo.cn"}
 ZZ["xin"] = {"extend": "com", "_server": "whois.nic.xin", "_test": "nic.xin"}
 ZZ["xn--11b4c3d"] = {"_server": "whois.nic.xn--11b4c3d", "extend": "com", "_test": "nic.xn--11b4c3d"}
+ZZ["xn--1ck2e1b"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--1ck2e1b"] = {"_server": "whois.nic.xn--1ck2e1b", "_test": "nic.xn--1ck2e1b", "extend": "com"}
 ZZ["xn--1qqw23a"] = {"_server": "whois.ngtld.cn", "extend": "com"}
 ZZ["xn--2scrj9c"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--30rr7y"] = {"_server": "whois.gtld.knet.cn", "extend": "com", "_test": None}
@@ -2600,6 +2735,7 @@ ZZ["xn--45br5cyl"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--45brj9c"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--45q11c"] = {"extend": "_gtldKnet", "_server": "whois.gtld.knet.cn", "_test": None}
 ZZ["xn--4gbrim"] = {"_server": "whois.nic.xn--4gbrim", "extend": "com", "_test": "nic.xn--4gbrim"}
+ZZ["xn--54b7fta0cc"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["xn--55qx5d"] = {"_server": "whois.ngtld.cn", "extend": "com"}
 ZZ["xn--5su34j936bgsg"] = {"_server": "whois.nic.xn--5su34j936bgsg", "extend": "com", "_test": "nic.xn--5su34j936bgsg"}
 ZZ["xn--5tzm5g"] = {"_server": "whois.nic.xn--5tzm5g", "extend": "com", "_test": "nic.xn--5tzm5g"}
@@ -2615,16 +2751,25 @@ ZZ["xn--9dbq2a"] = {"_server": "whois.nic.xn--9dbq2a", "extend": "com", "_test":
 ZZ["xn--9et52u"] = {"_server": "whois.gtld.knet.cn", "extend": "com", "_test": None}
 ZZ["xn--9krt00a"] = {"_server": "whois.nic.xn--9krt00a", "extend": "com", "_test": "nic.xn--9krt00a"}
 ZZ["xn--b4w605ferd"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
+ZZ["xn--bck1b9a5dre4c"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--bck1b9a5dre4c"] = {"_server": "whois.nic.xn--bck1b9a5dre4c", "_test": "nic.xn--bck1b9a5dre4c", "extend": "com"}
 ZZ["xn--c1avg"] = {"_server": "whois.nic.xn--c1avg", "extend": "com", "_test": "nic.xn--c1avg"}
 ZZ["xn--c2br7g"] = {"_server": "whois.nic.xn--c2br7g", "extend": "com", "_test": "nic.xn--c2br7g"}
+ZZ["xn--cck2b3b"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--cck2b3b"] = {"_server": "whois.nic.xn--cck2b3b", "_test": "nic.xn--cck2b3b", "extend": "com"}
 ZZ["xn--cckwcxetd"] = {"_server": "whois.nic.xn--cckwcxetd", "extend": "com", "_test": "nic.xn--cckwcxetd"}
 ZZ["xn--cg4bki"] = {"_server": "whois.kr", "extend": "kr"}
 ZZ["xn--clchc0ea0b2g2a9gcd"] = {"_server": "whois.sgnic.sg", "extend": "sg"}
+ZZ["xn--czr694b"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["xn--czrs0t"] = {"_server": "whois.nic.xn--czrs0t", "extend": "com", "_test": "nic.xn--czrs0t"}
 ZZ["xn--czru2d"] = {"extend": "_gtldKnet", "_server": "whois.gtld.knet.cn", "_test": None}
 ZZ["xn--d1alf"] = {"_server": "whois.marnet.mk", "extend": "mk"}
 ZZ["xn--e1a4c"] = {"_server": "whois.eu", "extend": "eu"}
+ZZ["xn--eckvdtc9d"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--eckvdtc9d"] = {"_server": "whois.nic.xn--eckvdtc9d", "_test": "nic.xn--eckvdtc9d", "extend": "com"}
 ZZ["xn--efvy88h"] = {"_server": "whois.nic.xn--efvy88h", "extend": "com", "_test": "nic.xn--efvy88h"}
+ZZ["xn--fct429k"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--fct429k"] = {"_server": "whois.nic.xn--fct429k", "_test": "nic.xn--fct429k", "extend": "com"}
 ZZ["xn--fhbei"] = {"_server": "whois.nic.xn--fhbei", "extend": "com", "_test": "nic.xn--fhbei"}
 ZZ["xn--fiq228c5hs"] = {"extend": "_teleinfo", "_server": "whois.teleinfo.cn"}
 ZZ["xn--fiq64b"] = {"_server": "whois.gtld.knet.cn", "extend": "com", "_test": None}
@@ -2633,31 +2778,48 @@ ZZ["xn--fiqz9s"] = {"_server": "whois.cnnic.cn", "extend": "com"}
 ZZ["xn--fjq720a"] = {"_server": "whois.nic.xn--fjq720a", "extend": "com", "_test": "nic.xn--fjq720a"}
 ZZ["xn--flw351e"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["xn--fpcrj9c3d"] = {"_server": "whois.registry.in", "extend": "com"}
+ZZ["xn--fzc2c9e2c"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["xn--fzys8d69uvgm"] = {"_server": "whois.nic.xn--fzys8d69uvgm", "extend": "com", "_test": "nic.xn--fzys8d69uvgm"}
+ZZ["xn--g2xx48c"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--g2xx48c"] = {"_server": "whois.nic.xn--g2xx48c", "_test": "nic.xn--g2xx48c", "extend": "com"}
+ZZ["xn--gckr3f0f"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--gckr3f0f"] = {"_server": "whois.nic.xn--gckr3f0f", "_test": "nic.xn--gckr3f0f", "extend": "com"}
 ZZ["xn--gecrj9c"] = {"_server": "whois.registry.in", "extend": "com"}
+ZZ["xn--gk3at1e"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--gk3at1e"] = {"_server": "whois.nic.xn--gk3at1e", "_test": "nic.xn--gk3at1e", "extend": "com"}
 ZZ["xn--h2breg3eve"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--h2brj9c8c"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--h2brj9c"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--hxt814e"] = {"extend": "_gtldKnet", "_server": "whois.gtld.knet.cn", "_test": None}
 ZZ["xn--i1b6b1a6a2e"] = {"_server": "whois.nic.xn--i1b6b1a6a2e", "extend": "com", "_test": "nic.xn--i1b6b1a6a2e"}
+ZZ["xn--imr513n"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["xn--io0a7i"] = {"_server": "whois.ngtld.cn", "extend": "com"}
 ZZ["xn--j1aef"] = {"_server": "whois.nic.xn--j1aef", "extend": "com", "_test": "nic.xn--j1aef"}
 ZZ["xn--j6w193g"] = {"_server": "whois.hkirc.hk", "extend": "hk", "_test": "hkirc.hk"}
 ZZ["xn--jlq480n2rg"] = {"_server": "whois.nic.xn--jlq480n2rg", "extend": "com", "_test": "nic.xn--jlq480n2rg"}
+ZZ["xn--jvr189m"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--jvr189m"] = {"_server": "whois.nic.xn--jvr189m", "_test": "nic.xn--jvr189m", "extend": "com"}
 ZZ["xn--kcrx77d1x4a"] = {"_server": "whois.nic.xn--kcrx77d1x4a", "extend": "com", "_test": "nic.xn--kcrx77d1x4a"}
 ZZ["xn--kprw13d"] = {"extend": "tw", "_test": "google.xn--kprw13d"}
 ZZ["xn--kpry57d"] = {"extend": "tw", "_test": "google.xn--kpry57d"}
 ZZ["xn--kput3i"] = {"_server": "whois.nic.xn--kput3i", "extend": "com", "_test": "nic.xn--kput3i"}
+ZZ["xn--l1acc"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--l1acc"] = {"_server": "whois.mn", "_test": "whois.mn", "extend": "mn"}
 ZZ["xn--mgb9awbf"] = {"_server": "whois.registry.om", "extend": "om"}
+ZZ["xn--mgba3a3ejt"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["xn--mgba7c0bbn0a"] = {"_server": "whois.nic.xn--mgba7c0bbn0a", "extend": "com", "_test": "nic.xn--mgba7c0bbn0a"}
-# ZZ["xn--mgbaakc7dvf"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["xn--mgbab2bd"] = {"_server": "whois.nic.xn--mgbab2bd", "extend": "com", "_test": "nic.xn--mgbab2bd"}
 ZZ["xn--mgbah1a3hjkrd"] = {"_server": "whois.nic.mr", "extend": "mr"}
+ZZ["xn--mgbai9azgqp6j"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--mgbayh7gpa"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["xn--mgbbh1a71e"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--mgbbh1a"] = {"_server": "whois.registry.in", "extend": "com"}
+ZZ["xn--mgbc0a9azcg"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["xn--mgbca7dzdo"] = {"_server": "whois.nic.xn--mgbca7dzdo", "extend": "com", "_test": "nic.xn--mgbca7dzdo"}
+ZZ["xn--mgbcpq6gpa1a"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["xn--mgbgu82a"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--mgbi4ecexp"] = {"_server": "whois.nic.xn--mgbi4ecexp", "extend": "com", "_test": "nic.xn--mgbi4ecexp"}
+ZZ["xn--mgbpl2fh"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["xn--mgbt3dhd"] = {"_server": "whois.nic.xn--mgbt3dhd", "extend": "com", "_test": "nic.xn--mgbt3dhd"}
 ZZ["xn--mix891f"] = {"_server": "whois.monic.mo", "extend": "mo"}
 ZZ["xn--mk1bu44c"] = {"_server": "whois.nic.xn--mk1bu44c", "extend": "com", "_test": "nic.xn--mk1bu44c"}
@@ -2665,16 +2827,23 @@ ZZ["xn--mxtq1m"] = {"_server": "whois.nic.xn--mxtq1m", "extend": "com", "_test":
 ZZ["xn--ngbc5azd"] = {"_server": "whois.nic.xn--ngbc5azd", "extend": "com", "_test": "nic.xn--ngbc5azd"}
 ZZ["xn--ngbe9e0a"] = {"_server": "whois.nic.xn--ngbe9e0a", "extend": "com", "_test": "nic.xn--ngbe9e0a"}
 ZZ["xn--ngbrx"] = {"_server": "whois.nic.xn--ngbrx", "extend": "com", "_test": "nic.xn--ngbrx"}
+ZZ["xn--node"] = {"_privateRegistry": True}  # no whois server
 ZZ["xn--nqv7fs00ema"] = {"_server": "whois.nic.xn--nqv7fs00ema", "extend": "com", "_test": "nic.xn--nqv7fs00ema"}
 ZZ["xn--nqv7f"] = {"_server": "whois.nic.xn--nqv7f", "extend": "com", "_test": "nic.xn--nqv7f"}
+ZZ["xn--nyqy26a"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["xn--o3cw4h"] = {"_server": "whois.thnic.co.th", "extend": "co.th"}
 ZZ["xn--ogbpf8fl"] = {"_server": "whois.tld.sy", "extend": "sy", "_test": "tld.sy"}
+ZZ["xn--otu796d"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["xn--p1acf"] = {"extend": "com"}
 ZZ["xn--p1ai"] = {"extend": "ru"}
 ZZ["xn--pssy2u"] = {"_server": "whois.nic.xn--pssy2u", "extend": "com", "_test": "nic.xn--pssy2u"}
 ZZ["xn--q9jyb4c"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["xn--qcka1pmc"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["xn--qxa6a"] = {"_server": "whois.eu", "extend": "eu"}
+ZZ["xn--qxam"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--rhqv96g"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--rovu88b"] = {"_privateRegistry": True}  # no whois server found in iana
+ZZ["xn--rovu88b"] = {"_server": "whois.nic.xn--rovu88b", "_test": "nic.xn--rovu88b", "extend": "com"}
 ZZ["xn--rvc1e0am3e"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--s9brj9c"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--ses554g"] = {"_server": "whois.nic.xn--ses554g", "extend": "com", "_test": "nic.xn--ses554g"}
@@ -2688,14 +2857,18 @@ ZZ["xn--vhquv"] = {"_server": "whois.nic.xn--vhquv", "extend": "com", "_test": "
 ZZ["xn--vuq861b"] = {"extend": "_teleinfo", "_server": "whois.teleinfo.cn"}
 ZZ["xn--w4r85el8fhu5dnra"] = {"_server": "whois.nic.xn--w4r85el8fhu5dnra", "extend": "com", "_test": "nic.xn--w4r85el8fhu5dnra"}
 ZZ["xn--w4rs40l"] = {"_server": "whois.nic.xn--w4rs40l", "extend": "com", "_test": "nic.xn--w4rs40l"}
+ZZ["xn--wgbh1c"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["xn--wgbl6a"] = {"_server": "whois.registry.qa", "extend": "qa", "_test": "registry.qa"}
 ZZ["xn--xhq521b"] = {"_server": "whois.ngtld.cn", "extend": "com"}
+ZZ["xn--xkc2al3hye2a"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["xn--xkc2dl3a5ee0h"] = {"_server": "whois.registry.in", "extend": "com"}
 ZZ["xn--yfro4i67o"] = {"_server": "whois.sgnic.sg", "extend": "sg"}
 ZZ["xxx"] = {"_server": "whois.nic.xxx", "extend": "com", "_test": "nic.xxx"}
 ZZ["xyz"] = {"extend": "_centralnic", "_server": "whois.nic.xyz", "_test": "nic.xyz"}
 ZZ["yachts"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
+ZZ["yahoo"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["yamaxun"] = {"_server": "whois.nic.yamaxun", "extend": "com", "_test": "nic.yamaxun"}
+ZZ["yandex"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["ye"] = {"extend": "com", "_server": "whois.y.net.ye", "_test": "net.ye"}
 ZZ["yodobashi"] = {"_server": "whois.nic.gmo", "extend": "com"}
 ZZ["yoga"] = {"_server": "whois.nic.yoga", "extend": "com", "_test": "nic.yoga"}
@@ -2707,6 +2880,7 @@ ZZ["yun"] = {"extend": "_teleinfo", "_server": "whois.teleinfo.cn"}
 ZZ["za"] = {"extend": "com"}
 ZZ["zappos"] = {"_server": "whois.nic.zappos", "extend": "com", "_test": "nic.zappos"}
 ZZ["zara"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
+ZZ["zero"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["zip"] = {"extend": "com", "_server": "whois.nic.zip", "_test": "nic.zip"}
 ZZ["zm"] = {"extend": "com"}
 ZZ["zone"] = {"extend": "_donuts", "_server": "whois.donuts.co"}
@@ -2717,6 +2891,7 @@ ZZ["ею"] = {"_server": "whois.eu", "extend": "eu"}
 ZZ["католик"] = {"_server": "whois.nic.xn--80aqecdr1a", "extend": "xn--80aqecdr1a"}
 ZZ["ком"] = {"_server": "whois.nic.xn--j1aef", "extend": "xn--j1aef"}
 ZZ["мкд"] = {"_server": "whois.marnet.mk", "extend": "mk"}
+ZZ["мон"] = {"_server": "whois.mn", "extend": "xn--l1acc"}  # whois.mn ['xn--l1acc']
 ZZ["москва"] = {"_server": "whois.nic.xn--80adxhks", "extend": "xn--80adxhks"}
 ZZ["онлайн"] = {"extend": "com"}
 ZZ["орг"] = {"_server": "whois.nic.xn--c1avg", "extend": "xn--c1avg"}
@@ -2746,7 +2921,7 @@ ZZ["कम"] = {"_server": "whois.nic.xn--11b4c3d", "extend": "xn--11b4c3d"}
 ZZ["नट"] = {"_server": "whois.nic.xn--c2br7g", "extend": "xn--c2br7g"}
 ZZ["भरत"] = {"_server": "whois.registry.in", "extend": "in"}
 ZZ["भरत"] = {"_server": "whois.registry.in", "extend": "in"}
-# ZZ["भरतम"] = {"_server": "whois.registry.in", "extend": "in"}
+ZZ["भरतम"] = {"_server": "whois.registry.in", "extend": "in"}
 ZZ["सगठन"] = {"_server": "whois.nic.xn--i1b6b1a6a2e", "extend": "xn--i1b6b1a6a2e"}
 ZZ["ভরত"] = {"_server": "whois.registry.in", "extend": "in"}
 ZZ["ভৰত"] = {"_server": "whois.registry.in", "extend": "in"}
@@ -2758,11 +2933,16 @@ ZZ["சஙகபபர"] = {"_server": "whois.sgnic.sg", "extend": "sg"}
 ZZ["భరత"] = {"_server": "whois.registry.in", "extend": "in"}
 ZZ["ಭರತ"] = {"_server": "whois.registry.in", "extend": "in"}
 ZZ["ഭരത"] = {"_server": "whois.registry.in", "extend": "in"}
-ZZ["คอม"] = {"_server": "whois.nic.xn--42c2d9a", "extend": "xn--42c2d9a"}  #
+ZZ["คอม"] = {"_server": "whois.nic.xn--42c2d9a", "extend": "xn--42c2d9a"}
 ZZ["ไทย"] = {"_server": "whois.thnic.co.th", "extend": "co.th"}
 ZZ["アマゾン"] = {"_server": "whois.nic.xn--cckwcxetd", "extend": "xn--cckwcxetd"}
 ZZ["グーグル"] = {"_server": "whois.nic.google", "extend": "com"}
+ZZ["クラウド"] = {"_server": "whois.nic.xn--gckr3f0f", "extend": "xn--gckr3f0f"}  # whois.nic.xn--gckr3f0f ['xn--gckr3f0f']
 ZZ["コム"] = {"_server": "whois.nic.xn--tckwe", "extend": "xn--tckwe"}
+ZZ["ストア"] = {"_server": "whois.nic.xn--cck2b3b", "extend": "xn--cck2b3b"}  # whois.nic.xn--cck2b3b ['xn--cck2b3b']
+ZZ["セール"] = {"_server": "whois.nic.xn--1ck2e1b", "extend": "xn--1ck2e1b"}  # whois.nic.xn--1ck2e1b ['xn--1ck2e1b']
+ZZ["ファッション"] = {"_server": "whois.nic.xn--bck1b9a5dre4c", "extend": "xn--bck1b9a5dre4c"}  # whois.nic.xn--bck1b9a5dre4c ['xn--bck1b9a5dre4c']
+ZZ["ポイント"] = {"_server": "whois.nic.xn--eckvdtc9d", "extend": "xn--eckvdtc9d"}  # whois.nic.xn--eckvdtc9d ['xn--eckvdtc9d']
 ZZ["みんな"] = {"_server": "whois.nic.google", "extend": "com"}
 ZZ["中信"] = {"_server": "whois.gtld.knet.cn", "extend": "com", "_test": None}
 ZZ["中国"] = {"_server": "whois.cnnic.cn", "extend": "xn--fiqs8s"}
@@ -2784,6 +2964,7 @@ ZZ["在线"] = {"extend": "_teleinfo", "_server": "whois.teleinfo.cn"}
 ZZ["大拿"] = {"_server": "whois.nic.xn--pssy2u", "extend": "xn--pssy2u"}
 ZZ["天主教"] = {"_server": "whois.nic.xn--tiq49xqyj", "extend": "xn--tiq49xqyj"}
 ZZ["娱乐"] = {"_server": "whois.nic.xn--fjq720a", "extend": "xn--fjq720a"}
+ZZ["家電"] = {"_server": "whois.nic.xn--fct429k", "extend": "xn--fct429k"}  # whois.nic.xn--fct429k ['xn--fct429k']
 ZZ["广东"] = {"_server": "whois.ngtld.cn", "extend": "com"}
 ZZ["微博"] = {"_server": "whois.nic.xn--9krt00a", "extend": "xn--9krt00a"}
 ZZ["慈善"] = {"_server": "whois.gtld.knet.cn", "extend": "com", "_test": None}
@@ -2793,6 +2974,7 @@ ZZ["政府"] = {"_server": "whois.nic.xn--mxtq1m", "extend": "xn--mxtq1m"}
 ZZ["新加坡"] = {"_server": "whois.sgnic.sg", "extend": "sg"}
 ZZ["新闻"] = {"_server": "whois.gtld.knet.cn", "extend": "com", "_test": None}
 ZZ["时尚"] = {"_server": "whois.gtld.knet.cn", "extend": "com", "_test": None}
+ZZ["書籍"] = {"_server": "whois.nic.xn--rovu88b", "extend": "xn--rovu88b"}  # whois.nic.xn--rovu88b ['xn--rovu88b']
 ZZ["机构"] = {"_server": "whois.nic.xn--nqv7f", "extend": "xn--nqv7f"}
 ZZ["淡马锡"] = {"_server": "whois.afilias-srs.net", "extend": "com"}
 ZZ["游戏"] = {"_server": "whois.nic.xn--unup4y", "extend": "xn--unup4y"}
@@ -2806,269 +2988,11 @@ ZZ["网站"] = {"_server": "whois.nic.xn--5tzm5g", "extend": "xn--5tzm5g"}
 ZZ["网络"] = {"_server": "whois.ngtld.cn", "extend": "com", "_test": "ngtld.cn"}
 ZZ["联通"] = {"_server": "whois.gtld.knet.cn", "extend": "com", "_test": None}
 ZZ["谷歌"] = {"_server": "whois.nic.google", "extend": "com"}
+ZZ["购物"] = {"_server": "whois.nic.xn--g2xx48c", "extend": "xn--g2xx48c"}  # whois.nic.xn--g2xx48c ['xn--g2xx48c']
+ZZ["通販"] = {"_server": "whois.nic.xn--gk3at1e", "extend": "xn--gk3at1e"}  # whois.nic.xn--gk3at1e ['xn--gk3at1e']
 ZZ["集团"] = {"_server": "whois.gtld.knet.cn", "extend": "com", "_test": None}
 ZZ["電訊盈科"] = {"_server": "whois.nic.xn--fzys8d69uvgm", "extend": "xn--fzys8d69uvgm"}
 ZZ["飞利浦"] = {"_server": "whois.nic.xn--kcrx77d1x4a", "extend": "xn--kcrx77d1x4a"}
+ZZ["食品"] = {"_server": "whois.nic.xn--jvr189m", "extend": "xn--jvr189m"}  # whois.nic.xn--jvr189m ['xn--jvr189m']
 ZZ["香格里拉"] = {"_server": "whois.nic.xn--5su34j936bgsg", "extend": "xn--5su34j936bgsg", "_test": "nic.xn--5su34j936bgsg"}
 ZZ["香港"] = {"_server": "whois.hkirc.hk", "extend": "hk", "_test": "hkirc.hk"}
-
-# भारतम् xn--h2breg3eve ; still issues with some utf8 strings 2023-08-28 mboot
-
-ZZ["aaa"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["able"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["accenture"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["ad"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["aetna"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["aig"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["americanexpress"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["amex"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["amica"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["analytics"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["ao"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["aq"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["aramco"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["athleta"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["axa"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["azure"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["banamex"] = {"_privateRegistry": True}  # no whois server found in iana
-# ZZ["bananarepublic"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["baseball"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["bb"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["bh"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["bharti"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["bing"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["bloomberg"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["bm"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["booking"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["bs"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["bt"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["bv"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["calvinklein"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["caravan"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["cbn"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["cbre"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["cg"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["chase"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["cisco"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["citadel"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["citi"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["citic"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["ck"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["coupon"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["cu"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["dell"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["dhl"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["discover"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["dj"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["dupont"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["er"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["farmers"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["ferrero"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["fk"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["flickr"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["flir"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["food"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["ford"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["frontier"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["ftr"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["gap"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["gb"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["gm"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["gn"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["grainger"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["grocery"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["gu"] = {"_privateRegistry": True}  # no whois server found in iana
-# ZZ["guardian"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["gw"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["hbo"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["homegoods"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["homesense"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["hotels"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["hotmail"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["hsbc"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["hyatt"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["ieee"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["intuit"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["ipiranga"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["itau"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["jm"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["jmp"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["jnj"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["jo"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["jpmorgan"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["jprs"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["kh"] = {"_privateRegistry": True}  # no whois server found in iana
-# ZZ["kinder"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["km"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["kp"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["kpmg"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["kpn"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["kw"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["lanxess"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["lifeinsurance"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["lilly"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["lincoln"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["living"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["lr"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["maif"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["marshalls"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["mattel"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["merckmsd"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["mh"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["microsoft"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["mil"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["mint"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["mlb"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["moto"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["msd"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["mt"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["mv"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["nba"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["ne"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["netflix"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["neustar"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["nfl"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["ni"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["nike"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["nr"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["ntt"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["office"] = {"_privateRegistry": True}  # no whois server found in iana
-# ZZ["oldnavy"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["open"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["pfizer"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["pg"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["pictet"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["ping"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["pn"] = {"_privateRegistry": True}  # no whois server found in iana
-# ZZ["pramerica"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["praxi"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["pru"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["prudential"] = {"_privateRegistry": True}  # no whois server found in iana
-# ZZ["rocher"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["sakura"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["sas"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["sener"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["sj"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["skype"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["sohu"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["song"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["staples"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["statefarm"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["sz"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["target"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["tj"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["tjmaxx"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["tjx"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["tkmaxx"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["vi"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["vivo"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["weather"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["weatherchannel"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["williamhill"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["windows"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["winners"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xbox"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--1ck2e1b"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--54b7fta0cc"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--bck1b9a5dre4c"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--cck2b3b"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--czr694b"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--eckvdtc9d"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--fct429k"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--fzc2c9e2c"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--g2xx48c"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--gckr3f0f"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--gk3at1e"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--imr513n"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--jvr189m"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--l1acc"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--mgba3a3ejt"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--mgbai9azgqp6j"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--mgbayh7gpa"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--mgbc0a9azcg"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--mgbcpq6gpa1a"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--mgbpl2fh"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--nyqy26a"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--otu796d"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--qxam"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--rhqv96g"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--rovu88b"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--wgbh1c"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["xn--xkc2al3hye2a"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["yahoo"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["yandex"] = {"_privateRegistry": True}  # no whois server found in iana
-ZZ["zero"] = {"_privateRegistry": True}  # no whois server found in iana
-
-ZZ["onion"] = {"_privateRegistry": True}  # this is a special case https://tools.ietf.org/html/rfc7686
-
-# 2023-11-14
-ZZ["abb"] = {"_server": "whois.nic.abb", "_test": "nic.abb", "extend": "com"}
-ZZ["bn"] = {"_server": "whois.bnnic.bn", "_test": "bnnic.bn", "extend": "com"}
-ZZ["gov.bn"] = {"_server": "whois.bnnic.bn", "_test": "egc.gov.bn", "extend": "com"}
-ZZ["bw"] = {"_server": "whois.nic.net.bw", "_test": "net.bw", "extend": "com"}
-ZZ["crown"] = {"_server": "whois.nic.crown", "_test": "nic.crown", "extend": "com"}
-ZZ["crs"] = {"_server": "whois.nic.crs", "_test": "nic.crs", "extend": "com"}
-ZZ["fj"] = {"_server": "whois.nic.fj", "_test": "nic.fj", "extend": "com"}  # actually not working but server exists (dns),
-ZZ["gp"] = {"_server": "whois.nic.gp", "_test": "nic.gp", "extend": "com"}  # actually not working but server exists (dns)
-ZZ["hm"] = {"_server": "whois.registry.hm", "_test": "registry.hm", "extend": "com"}  # actually not working but server exists (dns)
-ZZ["int"] = {"_server": "whois.iana.org", "_test": "eu.int", "extend": "cz"}
-
-ZZ["iq"] = {"_server": " whois.cmc.iq", "_test": "cmc.iq", "extend": "com"}  # ho host:  whois.cmc.iq
-ZZ["mm"] = {"_server": "whois.registry.gov.mm", "_test": "registry.gov.mm", "extend": "com"}
-ZZ["mw"] = {"_server": "whois.nic.mw", "_test": "nic.mw", "extend": "fr"}
-ZZ["post"] = {"_server": "whois.dotpostregistry.net", "_test": "us.post", "extend": "com"}
-ZZ["realtor"] = {"_server": "whois.nic.realtor", "_test": "nic.realtor", "extend": "com"}
-ZZ["weir"] = {"_server": "whois.nic.weir", "_test": "nic.weir", "extend": "com"}
-ZZ["xn--node"] = {"_privateRegistry": True}  # no whois server
-ZZ["भरतम"] = {"_server": "whois.registry.in", "extend": "in"}
-
-# 2026-01-06
-# MISSING xn--1ck2e1b セール xn--1ck2e1b 'Amazon Registry Services, Inc.' whois.nic.xn--1ck2e1b '[]' 'http://www.nic.xn--1ck2e1b'
-# MISSING xn--bck1b9a5dre4c ファッション xn--bck1b9a5dre4c 'Amazon Registry Services, Inc.' whois.nic.xn--bck1b9a5dre4c '[]' 'http://www.nic.xn--bck1b9a5dre4c'
-# MISSING xn--cck2b3b ストア xn--cck2b3b 'Amazon Registry Services, Inc.' whois.nic.xn--cck2b3b '[]' 'http://www.nic.xn--cck2b3b'
-# MISSING xn--eckvdtc9d ポイント xn--eckvdtc9d 'Amazon Registry Services, Inc.' whois.nic.xn--eckvdtc9d '[]' 'http://www.nic.xn--eckvdtc9d'
-# MISSING xn--fct429k 家電 xn--fct429k 'Amazon Registry Services, Inc.' whois.nic.xn--fct429k '[]' 'http://www.nic.xn--fct429k'
-# MISSING xn--g2xx48c 购物 xn--g2xx48c 'Nawang Heli(Xiamen) Network Service Co., LTD.' whois.nic.xn--g2xx48c '[]' 'http://gouwunic.com/'
-# MISSING xn--gckr3f0f クラウド xn--gckr3f0f 'Amazon Registry Services, Inc.' whois.nic.xn--gckr3f0f '[]' 'http://www.nic.xn--gckr3f0f'
-# MISSING xn--gk3at1e 通販 xn--gk3at1e 'Amazon Registry Services, Inc.' whois.nic.xn--gk3at1e '[]' 'http://www.nic.xn--gk3at1e'
-# MISSING xn--jvr189m 食品 xn--jvr189m 'Amazon Registry Services, Inc.' whois.nic.xn--jvr189m '[]' 'http://www.nic.xn--jvr189m'
-# MISSING xn--l1acc мон xn--l1acc 'Datacom Co.,Ltd' whois.mn '[]' 'https://www.datacom.mn/'
-# MISSING xn--rovu88b 書籍 xn--rovu88b 'Amazon Registry Services, Inc.' whois.nic.xn--rovu88b '[]' 'http://www.nic.xn--rovu88b'
-
-# unknown tld arpa, arpa, arpa, arpa, whois.iana.org,
-# unknown tld xn--4dbrk0ce, ישראל, ישראל, ישראל, whois.isoc.org.il,
-# unknown tld xn--55qw42g, 公益, 公益, 公益, whois.conac.cn,
-# unknown tld xn--80ao21a, қаз, қаз, қаз, whois.nic.kz,
-# unknown tld xn--90a3ac, срб, срб, срб, whois.rnids.rs,
-# unknown tld xn--90ae, бг, бг, бг, whois.imena.bg,
-# unknown tld xn--90ais, бел, бел, бел, whois.cctld.by,
-# unknown tld xn--d1acj3b, дети, дети, дети, whois.nic.xn--d1acj3b,
-# unknown tld xn--j1amh, укр, укр, укр, whois.dotukr.com,
-# unknown tld xn--lgbbat1ad8j, الجزائر, الجزائر, الجزائر, whois.nic.dz,
-# unknown tld xn--mgba3a4f16a, ایران, ایران, ایران, whois.nic.ir,
-# unknown tld xn--mgbaam7a8h, امارات, امارات, امارات, whois.aeda.net.ae,
-# unknown tld xn--mgberp4a5d4ar, السعودية, السعودية, السعودية, whois.nic.net.sa,
-# unknown tld xn--mgbtx2b, عراق, عراق, عراق, whois.cmc.iq,
-# unknown tld xn--mgbx4cd0ab, مليسيا, مليسيا, مليسيا, whois.mynic.my,
-# unknown tld xn--pgbs0dh, تونس, تونس, تونس, whois.ati.tn,
-# unknown tld xn--q7ce6a, ລາວ, ລາວ, ລາວ, whois.nic.la,
-# unknown tld xn--y9a3aq, հայ, հայ, հայ, whois.amnic.net,
-# unknown tld xn--ygbi2ammx, فلسطين, فلسطين, فلسطين, whois.pnina.ps,
-# unknown tld xn--zfr164b, 政务, 政务, 政务, whois.conac.cn,
-
-# currently defined in ZZ but missing in iana: اتصالات
-# currently defined in ZZ but missing in iana: कम
-# currently defined in ZZ but missing in iana: नट
-# currently defined in ZZ but missing in iana: भरत
-# currently defined in ZZ but missing in iana: सगठन
-# currently defined in ZZ but missing in iana: ভরত
-# currently defined in ZZ but missing in iana: ভৰত
-# currently defined in ZZ but missing in iana: ਭਰਤ
-# currently defined in ZZ but missing in iana: ભરત
-# currently defined in ZZ but missing in iana: ଭରତ
-# currently defined in ZZ but missing in iana: இநதய
-# currently defined in ZZ but missing in iana: சஙகபபர
-# currently defined in ZZ but missing in iana: భరత
-# currently defined in ZZ but missing in iana: ಭರತ
-# currently defined in ZZ but missing in iana: ഭരത
-# currently defined in ZZ but missing in iana: भरतम

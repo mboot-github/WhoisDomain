@@ -1,19 +1,15 @@
-#! /usr/bin/env python3
-
-# import sys
+import logging
 import os
 import re
-import logging
-
 from typing import (
     Any,
-    List,
     Dict,
+    List,
 )
 
-from .handleDateStrings import str_to_date
-from .context.parameterContext import ParameterContext
 from .context.dataContext import DataContext
+from .context.parameterContext import ParameterContext
+from .handleDateStrings import str_to_date
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
@@ -49,6 +45,7 @@ class Domain:
     def init(pc: ParameterContext,dc: DataContext) -> None:
         initialize the object with the current data from dc.data: Dict[str, Any]
         the init is separated from creating an instance as we want to use dependency injection as much as possible.
+
     """
 
     def _cleanupArray(

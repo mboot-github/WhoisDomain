@@ -1,13 +1,12 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 
 # from https://github.com/maarten-boot/python-whois-extended
-
-from whoisdomain.handleDateStrings import str_to_date
 
 from typing import (
     List,
 )
+
+from whoisdomain.handleDateStrings import str_to_date
 
 TEST_DATETIMES: List[str] = [
     "02-jan-2000",

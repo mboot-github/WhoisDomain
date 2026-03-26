@@ -1,10 +1,5 @@
-#! /usr/bin/env python3
-# pylint: disable=duplicate-code
-# pylint disable=broad-exception-caught
-
-import os
 import logging
-
+import os
 from typing import (
     Optional,
 )

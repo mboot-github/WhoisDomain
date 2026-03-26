@@ -1,19 +1,19 @@
 #!/usr/bin/python3
 
-import os
-import re
+import gc
 import getopt
-import sys
 import json
 import logging
-import gc
-
+import os
+import pathlib
+import re
+import sys
 from typing import (
+    Any,
+    Dict,
+    List,
     Optional,
     Tuple,
-    Any,
-    List,
-    Dict,
 )
 
 import whoisdomain as whois  # to be compatible with dannycork
@@ -55,10 +55,10 @@ class ResponseCleaner:
         self,
         pathToTestFile: str,
     ) -> str:
-        if not os.path.exists(pathToTestFile):
+        if not pathlib.Path(pathToTestFile).exists():
             return ""
 
-        with open(pathToTestFile, mode="rb") as f:  # switch to binary mode as that is what Popen uses
+        with pathlib.Path(pathToTestFile).open(mode="rb") as f:  # switch to binary mode as that is what Popen uses
             # make sure the data is treated exactly the same as the output of Popen
             return f.read().decode(errors="ignore")
 
@@ -167,13 +167,14 @@ class ResponseCleaner:
 
             body.append(line)
 
+            ll = line
             if "\t" in line:
-                line = "TAB;" + line  # mark lines having tabs
+                ll = "TAB;" + line  # mark lines having tabs
 
-            if line.endswith("\r"):
-                line = "CR;" + line  # mark lines having CR (\r)
+            if ll.endswith("\r"):
+                ll = "CR;" + line  # mark lines having CR (\r)
 
-            rr.append(line)
+            rr.append(ll)
 
         body = self.cleanSection(body)
         self.rDict["Body"] = self.splitBodyInSections(body)
@@ -202,7 +203,7 @@ class ResponseCleaner:
 
 def prepItem(d: str) -> None:
     if PrintJson is False:
-        print("")
+        print()
         print(f"test domain: <<<<<<<<<< {d} >>>>>>>>>>>>>>>>>>>>")
 
 
@@ -222,19 +223,18 @@ def testItem1(
     d: str,
     printgetRawWhoisResult: bool = False,
 ) -> None:
-    global IgnoreReturncode
-    global Verbose
-    global PrintGetRawWhoisResult
-
-    global SIMPLISTIC
-    global TestAllTld
-    global TestRunOnly
-
-    global WithRedacted
-    global WithPublicSuffix
-    global WithExtractServers
-    global WithStripHttpStatus
-    global WithNoIgnoreWww
+    global \
+        IgnoreReturncode, \
+        Verbose, \
+        PrintGetRawWhoisResult, \
+        SIMPLISTIC, \
+        TestAllTld, \
+        TestRunOnly, \
+        WithRedacted, \
+        WithPublicSuffix, \
+        WithExtractServers, \
+        WithStripHttpStatus, \
+        WithNoIgnoreWww
 
     pc = whois.ParameterContext(
         ignore_returncode=IgnoreReturncode,
@@ -316,32 +316,29 @@ def testDomains(aList: List[str]) -> None:
             continue
 
         # skip comments behind the domain
-        d = d.split("#")[0]
-        d = d.strip()
+        dd = d.split("#")[0].strip()
 
-        prepItem(d)
+        prepItem(dd)
         try:
-            testItem1(d)
+            testItem1(dd)
         except whois.UnknownTld as e:
-            errorItem(d, e, what="UnknownTld")
+            errorItem(dd, e, what="UnknownTld")
         except whois.FailedParsingWhoisOutput as e:
-            errorItem(d, e, what="FailedParsingWhoisOutput")
+            errorItem(dd, e, what="FailedParsingWhoisOutput")
         except whois.UnknownDateFormat as e:
-            errorItem(d, e, what="UnknownDateFormat")
+            errorItem(dd, e, what="UnknownDateFormat")
         except whois.WhoisCommandFailed as e:
-            errorItem(d, e, what="WhoisCommandFailed")
+            errorItem(dd, e, what="WhoisCommandFailed")
         except whois.WhoisQuotaExceeded as e:
-            errorItem(d, e, what="WhoisQuotaExceeded")
+            errorItem(dd, e, what="WhoisQuotaExceeded")
         except whois.WhoisPrivateRegistry as e:
-            errorItem(d, e, what="WhoisPrivateRegistry")
+            errorItem(dd, e, what="WhoisPrivateRegistry")
         except whois.WhoisCommandTimeout as e:
-            errorItem(d, e, what="WhoisCommandTimeout")
-        # except Exception as e:
-        #    errorItem(d, e, what="Generic")
+            errorItem(dd, e, what="WhoisCommandTimeout")
 
 
 def getTestFileOne(fPath: str, fileData: Dict[str, Any]) -> None:
-    if not os.path.isfile(fPath):  # only files
+    if not pathlib.Path(fPath).is_file():  # only files
         return
 
     if not fPath.endswith(".txt"):  # ending in .txt
@@ -351,13 +348,13 @@ def getTestFileOne(fPath: str, fileData: Dict[str, Any]) -> None:
     fileData[bName] = []
     xx = fileData[bName]
 
-    with open(fPath, encoding="utf-8") as f:
-        for index, line in enumerate(f):
-            line = line.strip()
-            if len(line) == 0 or line.startswith("#"):
+    with pathlib.Path(fPath).open(encoding="utf-8") as f:
+        for _, line in enumerate(f):
+            ll = line.strip()
+            if len(ll) == 0 or ll.startswith("#"):
                 continue
 
-            aa = re.split(r"\s+", line)
+            aa = re.split(r"\s+", ll)
             if aa[0] not in xx:
                 xx.append(aa[0])
 
@@ -382,12 +379,11 @@ def appendHintOrMeta(
     allRegex: Optional[str],
     tld: str,
 ) -> None:
-    global TestAllTld
-    global TestRunOnly
+    global TestAllTld, TestRunOnly
 
     if TestAllTld is True:
         hint = whois.getTestHint(tld)
-        hint = hint if hint else f"meta.{tld}"
+        hint = hint or f"meta.{tld}"
         rr.append(f"{hint}")
     else:
         rr.append(f"meta.{tld}")
@@ -398,8 +394,7 @@ def appendHint(
     allRegex: Optional[str],
     tld: str,
 ) -> None:
-    global TestAllTld
-    global TestRunOnly
+    global TestAllTld, TestRunOnly
 
     if TestAllTld is True:
         hint = whois.getTestHint(tld)
@@ -545,28 +540,16 @@ def showFailures() -> None:
 
 
 def main() -> None:
-    global PrintJson
-    global Verbose
-    global IgnoreReturncode
-    global PrintGetRawWhoisResult
-    global Ruleset
-    global SIMPLISTIC
-    global WithRedacted
-    global TestAllTld
-    global TestRunOnly
-    global WithPublicSuffix
-    global WithExtractServers
-    global WithStripHttpStatus
-    global WithNoIgnoreWww
+    global PrintJson, Verbose, IgnoreReturncode, PrintGetRawWhoisResult, Ruleset, SIMPLISTIC
+    global WithRedacted, TestAllTld, TestRunOnly, WithPublicSuffix, WithExtractServers, WithStripHttpStatus, WithNoIgnoreWww
 
     name: str = os.path.basename(sys.argv[0])
+    SIMPLISTIC = True
     if name == "test2.py":
         SIMPLISTIC = False
-    else:
-        SIMPLISTIC = True
 
     try:
-        opts, args = getopt.getopt(
+        opts, _ = getopt.getopt(
             sys.argv[1:],
             "TtjRSpvVIhaf:d:D:r:H:C:",
             [
@@ -667,26 +650,26 @@ def main() -> None:
 
         if opt in ("-D", "--Directory"):
             directory = arg
-            isDir = os.path.isdir(directory)
+            isDir = pathlib.Path(directory).is_dir()
             if isDir is False:
                 print(f"{directory} cannot be found or is not a directory", file=sys.stderr)
                 sys.exit(101)
 
         if opt in ("-C", "--Cleanup"):
             inFile = arg
-            isFile = os.path.isfile(arg)
+            isFile = pathlib.Path(arg).is_file()
             if isFile is False:
                 print(f"{inFile} cannot be found or is not a file", file=sys.stderr)
                 sys.exit(101)
 
             rc = ResponseCleaner(inFile)
-            d1, rDict = rc.cleanupWhoisResponse()
+            _, _ = rc.cleanupWhoisResponse()
             rc.printMe()
             sys.exit(0)
 
         if opt in ("-f", "--file"):
             filename = arg
-            isFile = os.path.isfile(filename)
+            isFile = pathlib.Path(filename).is_file()
             if isFile is False:
                 print(f"{filename} cannot be found or is not a file", file=sys.stderr)
                 sys.exit(101)
@@ -736,7 +719,7 @@ def main() -> None:
         fileData = {}
         for dName in dirs:
             getTestFilesAll(dName, fileData)
-        for testFile, x in fileData.items():
+        for x in fileData.values():
             testDomains(x)
         showFailures()
         sys.exit(0)
@@ -745,7 +728,7 @@ def main() -> None:
         fileData = {}
         for testFile in files:
             getTestFileOne(testFile, fileData)
-        for testFile, x in fileData.items():
+        for x in fileData.values():
             testDomains(x)
         showFailures()
         sys.exit(0)

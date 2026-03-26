@@ -1,15 +1,13 @@
-#! /usr/bin/env python3
 """
 This module isolates all date parsing in one place
 
 str_to_date() is the only entry point
 """
 
-import re
-import os
-import logging
 import datetime
-
+import logging
+import os
+import re
 from typing import Optional
 
 from .exceptions import UnknownDateFormat
@@ -104,7 +102,7 @@ def str_to_date(
     # text = re.sub(r"(\+[0-9]{2})$", "\\1:00", text)
     # text = re.sub(r"(\+[0-9]{2})$", "\\100", text) # python 3.6 does not parse : in the timezone offset
     if re.search(r"(\+[0-9]{2})$", text):
-        text = text + "00"
+        text += "00"
 
     # strip trailing space and comment
     text = re.sub(r"(\ #.*)", "", text)
@@ -142,7 +140,8 @@ def str_to_date(
         except ValueError as v:
             _ = v
 
-    raise UnknownDateFormat(f"Unknown date format: '{text}'")
+    msg = f"Unknown date format: '{text}'"
+    raise UnknownDateFormat(msg)
 
 
 if __name__ == "__main__":

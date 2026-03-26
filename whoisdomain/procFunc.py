@@ -1,16 +1,13 @@
 # python3
 
-import sys
 import errno
+import multiprocessing as mp
+import sys
 from typing import (
-    Tuple,
     Any,
     Dict,
+    Tuple,
 )
-
-from socket import error as SocketError
-
-import multiprocessing as mp
 
 from .context.parameterContext import ParameterContext
 
@@ -81,7 +78,7 @@ class ProcFunc:
             nonlocal self
             try:
                 return self.oneItem(domain, pc)
-            except SocketError as e:
+            except OSError as e:
                 if e.errno != errno.ECONNRESET:
                     print(f"restart process {e}", file=sys.stderr)
                     raise

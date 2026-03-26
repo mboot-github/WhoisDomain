@@ -1,11 +1,6 @@
-#! /usr/bin/env python3
-
-import time
-
-# import sys
-import os
 import logging
-
+import os
+import time
 from typing import (
     Dict,
     Optional,

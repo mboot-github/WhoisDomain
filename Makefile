@@ -2,7 +2,7 @@
 # ==========================================================
 # https://docs.secure.software/cli
 
-SHELL 		:= /bin/bash -l
+SHELL := /bin/bash -l
 export SHELL
 
 VENV := ./vtmp/
@@ -55,7 +55,7 @@ first: prep test1 test2 test3 # test4
 # --------------------------------------------------
 # reformat, lint and verify basics
 # --------------------------------------------------
-prep: clean black pylama mypy
+prep: clean format check mypy
 
 clean:
 	rm -rf tmp/* 1 2 out *.out *.1 *.2
@@ -66,21 +66,11 @@ clean:
 	# docker image prune --all --force
 	# docker image ls -a
 
-black:
-	$(COMMON_VENV) \
-	$(PIP_INSTALL) black; \
-	black \
-		--line-length $(LINE_LENGTH) \
-		$(PY_FILES)
+format:
+	ruff format $(PY_FILES)
 
-pylama:
-	$(COMMON_VENV) \
-	$(PIP_INSTALL) setuptools pylama; \
-	pylama \
-		--max-line-length $(LINE_LENGTH) \
-		--linters "${PL_LINTERS}" \
-		--ignore "${PL_IGNORE}" \
-		$(PY_FILES) | tee $@.out || exit 0
+check:
+	ruff check --fix $(PY_FILES)
 
 mypy:
 	$(COMMON_VENV) \
@@ -93,6 +83,7 @@ mypy:
 # --------------------------------------------------
 # Tests
 # --------------------------------------------------
+test: test1 test2 test3 test4
 
 test1:
 	./test1.py | tee tmp/$@.1

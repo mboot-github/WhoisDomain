@@ -1,13 +1,10 @@
-#! /usr/bin/env python3
-
-import os
-import logging
 import json
-
+import logging
+import os
 from typing import (
-    List,
-    Dict,
     Any,
+    Dict,
+    List,
 )
 
 log = logging.getLogger(__name__)
@@ -230,7 +227,8 @@ class ParameterContext:
     def get(self, name: str) -> Any:
         if name in self.value:
             return self.value[name]
-        raise AttributeError(f"'{self.__class__.__name__}' object has no attribute '{name}'")
+        msg = f"'{self.__class__.__name__}' object has no attribute '{name}'"
+        raise AttributeError(msg)
 
     def set(self, name: str, value: Any) -> None:
         if name not in self.params:
@@ -252,7 +250,7 @@ class ParameterContext:
 
     def toJson(self) -> str:
         rr: Dict[str, Any] = {}
-        for k, v in self.params.items():
+        for k, _ in self.params.items():
             rr[k] = self.get(k)
         return json.dumps(rr)
 

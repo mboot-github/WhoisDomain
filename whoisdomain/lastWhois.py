@@ -8,13 +8,12 @@ public access is only needed fow: get_last_raw_whois_data()
 
 """
 
-import os
 import logging
-
+import os
 from typing import (
-    List,
-    Dict,
     Any,
+    Dict,
+    List,
 )
 
 from .context.parameterContext import ParameterContext

@@ -1,19 +1,17 @@
-import os
 import logging
-
+import os
 from typing import (
-    Optional,
-    List,
-    Dict,
     Any,
+    Dict,
+    List,
+    Optional,
 )
 
+from .context.parameterContext import ParameterContext
 from .exceptions import WhoisQuotaExceeded
-
+from .tldDb.tld_regexpr import ZZ
 from .tldInfo import TldInfo
 from .version import VERSION
-from .tldDb.tld_regexpr import ZZ
-from .context.parameterContext import ParameterContext
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
