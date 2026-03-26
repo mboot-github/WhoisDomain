@@ -457,8 +457,7 @@ def ShowRuleset(tld: str) -> None:
 def usage() -> None:
     name = os.path.basename(sys.argv[0])
 
-    print(
-        f"""
+    print(f"""
 {name}
     [ -h | --usage ]
         print this text and exit
@@ -524,8 +523,7 @@ def usage() -> None:
     # test one specific directory with verbose and IgnoreReturncode
     example: {name} -v -I -D tests
 
-"""
-    )
+""")
 
     """
     TODO

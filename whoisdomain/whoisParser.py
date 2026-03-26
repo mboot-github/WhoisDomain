@@ -32,7 +32,6 @@ from .context.parameterContext import ParameterContext
 from .context.dataContext import DataContext
 from .helpers import get_TLD_RE
 
-
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 

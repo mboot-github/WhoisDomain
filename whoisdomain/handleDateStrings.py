@@ -4,6 +4,7 @@ This module isolates all date parsing in one place
 
 str_to_date() is the only entry point
 """
+
 import re
 import os
 import logging
@@ -12,7 +13,6 @@ import datetime
 from typing import Optional
 
 from .exceptions import UnknownDateFormat
-
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))

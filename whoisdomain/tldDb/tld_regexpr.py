@@ -146,7 +146,7 @@ ZZ["co.uk"] = {
 }
 
 ZZ["mc"] = {
-    "_server":  "whois.nic.mc",
+    "_server": "whois.nic.mc",
     "extend": "com",
     "_test": "nic.mc",
     "domain_name": R(r"Domain\s+:\s+(.+)"),
