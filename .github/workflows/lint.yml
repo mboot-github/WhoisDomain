@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install ruff mypy tld types-redis types-requests python-dateutil
+          pip install ruff mypy pylint tld types-redis types-requests python-dateutil
 
       - name: Run ruff format check
         run: ruff format --check *.py whoisdomain/
@@ -33,6 +33,34 @@ jobs:
 
       - name: Run mypy (strict)
         run: mypy --strict --no-incremental *.py whoisdomain/
+
+      - name: Run pylint
+        run: pylint --rcfile=.pylintrc whoisdomain/
+
+  test:
+    name: Test on Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6.2.0
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+
+      - name: Smoke test
+        run: python -c "import whoisdomain; print(whoisdomain.getVersion())"
 
   build:
     name: Build distribution packages
