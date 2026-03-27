@@ -1,0 +1,66 @@
+# ==========================================================
+SHELL := /bin/bash -l
+export SHELL
+
+# tested on 3.10-3.14
+MIN_PYTHON_VERSION := $(shell basename $$( ls /usr/bin/python3.[0-9][0-9] | awk '{print $0; exit}' ) )
+export MIN_PYTHON_VERSION
+
+WHAT 		:= whoisdomain
+DOCKER_WHO	:= mbootgithub
+
+TEST_OPTIONS_ALL = \
+	--withPublicSuffix \
+	--extractServers \
+	--stripHttpStatus
+
+docker: docker_build \
+		testdocker \
+		dockerRunLocal \
+		dockerTestdata \
+		testdockerTestdata
+
+docker_build:
+	export VERSION=$(shell cat work/version) && \
+	docker build \
+		--build-arg VERSION \
+		--tag $(DOCKER_WHO)/$(WHAT) \
+		--tag $(DOCKER_WHO)/$(WHAT)-$${VERSION} \
+		--tag $(WHAT)-$${VERSION} \
+		--tag $(WHAT) \
+		-f Dockerfile .
+
+testdocker:
+	docker image ls
+	docker container ls
+	docker run whoisdomain-test -t $(TEST_OPTIONS_ALL)
+
+dockerRunLocal:
+	export VERSION=$(shell cat work/version) && \
+	docker run \
+		-v ./testdata:/testdata \
+		$(WHAT)-$${VERSION} \
+		-d google.com -j | jq -r .
+
+dockerTestdata:
+	@export VERSION=$(shell cat work/version) && \
+	docker run \
+		-v ./testdata:/testdata \
+		$(WHAT)-$${VERSION} \
+		-f /testdata/DOMAINS.txt $(TEST_OPTIONS_ALL) 2>tmp/$@-2 | \
+		tee tmp/$@-1
+
+testdockerTestdata:
+	@export VERSION=$(shell cat work/version) && \
+	docker run \
+		-v ./testdata:/testdata \
+		$(WHAT)-$${VERSION}-test \
+		-f /testdata/DOMAINS.txt $(TEST_OPTIONS_ALL) 2>tmp/$@-2 | \
+		tee tmp/$@-1
+
+# prod push: needs to be called manually
+dockerPush:
+	export VERSION=$(shell cat work/version) && \
+	docker image push \
+		--all-tags $(DOCKER_WHO)/$(WHAT)
+	docker run mbootgithub/whoisdomain -d google.com -j | jq -r .

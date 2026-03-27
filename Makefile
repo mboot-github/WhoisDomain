@@ -1,7 +1,4 @@
 # ==========================================================
-# ==========================================================
-# https://docs.secure.software/cli
-
 SHELL := /bin/bash -l
 export SHELL
 
@@ -22,15 +19,6 @@ PIP_INSTALL := pip3 -q \
 PY_FILES := *.py bin/*.py whoisdomain/
 
 LINE_LENGTH := 160
-PL_LINTERS := eradicate,mccabe,pycodestyle,pyflakes,pylint
-PL_LINTERS := eradicate,mccabe,pycodestyle,pylint
-
-# C0114 Missing module docstring [pylint]
-# C0115 Missing class docstring [pylint]
-# C0116 Missing function or method docstring [pylint]
-# E203 whitespace before ':' [pycodestyle]
-
-PL_IGNORE := C0114,C0115,C0116,E203,C901
 
 MYPY_INSTALL := \
 	types-requests \
@@ -39,16 +27,6 @@ MYPY_INSTALL := \
 COMMON_VENV := rm -rf $(VENV); \
 	$(MIN_PYTHON_VERSION) -m venv $(VENV); \
 	source ./$(VENV)/bin/activate;
-
-WHAT 		:= whoisdomain
-DOCKER_WHO	:= mbootgithub
-
-TEST_OPTIONS_ALL = \
-	--withPublicSuffix \
-	--extractServers \
-	--stripHttpStatus
-
-.PHONY: TestSimple TestSimple2 TestAll clean
 
 # --------------------------------------------------
 # reformat, lint and verify basics
@@ -60,9 +38,6 @@ clean:
 	rm -rf $(VENV)
 	rm -f ./rl-secure-list-*.txt
 	rm -f ./rl-secure-status-*.txt
-	# docker container prune -f
-	# docker image prune --all --force
-	# docker image ls -a
 
 format:
 	ruff format $(PY_FILES)
@@ -78,119 +53,8 @@ mypy:
 		--no-incremental \
 		$(PY_FILES) | tee $@.out
 
-# --------------------------------------------------
-# Tests
-# --------------------------------------------------
-test: test1 test2 test3 test4
-
-test1:
-	./test1.py | tee tmp/$@.1
-
-# test2 has the data type in the output
-test2:
-	./test2.py -f testdata/DOMAINS.txt 2>tmp/$@.2 | tee tmp/$@.1
-
-# test3 simulates the whoisdomain command and has no data type in the output
-test3:
-	./test3.py -f testdata/DOMAINS.txt 2>tmp/$@.2 | tee tmp/$@.1
-
-test4:
-	LOGLEVEL=DEBUG ./test2.py $(TEST_OPTIONS_ALL) -t 2>tmp/$@.2 | tee tmp/$@.1
-
-test_with: withPublicSuffix withExtractServers stripHttpStatus
-
-withPublicSuffix:
-	./test2.py -d  www.dublin.airport.aero --withPublicSuffix
-
-withExtractServers:
-	./test2.py -d google.com --extractServers
-
-stripHttpStatus:
-	./test2.py -d nic.aarp --stripHttpStatus
-	./test2.py -d nic.abudhabi --stripHttpStatus
-	./test2.py -d META.AU --stripHttpStatus
-	./test2.py -d google.AU --stripHttpStatus
-
-# test using python 3.6
-zz:
-	docker build -t df36 -f Df-36 .
-	docker run -v .:/context df36 -d google.com
-
-# --------------------------------------------------
-# build related
-# --------------------------------------------------
-
 # this step creates or updates the toml file
 build:
 	./bin/build.sh
 	./bin/testLocalWhl.sh 2>tmp/$@.22 | tee tmp/$@.1
 	./bin/test.sh 2>tmp/$@.2 | tee -a tmp/$@.1
-
-# ==========================================================
-# build docker images with the latest python and run a test -a
-docker: docker_build testdocker dockerRunLocal dockerTestdata testdockerTestdata
-
-docker_build:
-	export VERSION=$(shell cat work/version) && \
-	docker build \
-		--build-arg VERSION \
-		--tag $(DOCKER_WHO)/$(WHAT) \
-		--tag $(DOCKER_WHO)/$(WHAT)-$${VERSION} \
-		--tag $(WHAT)-$${VERSION} \
-		--tag $(WHAT) \
-		-f Dockerfile .
-
-testdocker:
-	docker image ls
-	docker container ls
-	docker run whoisdomain-test -t $(TEST_OPTIONS_ALL)
-
-dockerRunLocal:
-	export VERSION=$(shell cat work/version) && \
-	docker run \
-		-v ./testdata:/testdata \
-		$(WHAT)-$${VERSION} \
-		-d google.com -j | jq -r .
-
-dockerTestdata:
-	@export VERSION=$(shell cat work/version) && \
-	docker run \
-		-v ./testdata:/testdata \
-		$(WHAT)-$${VERSION} \
-		-f /testdata/DOMAINS.txt $(TEST_OPTIONS_ALL) 2>tmp/$@-2 | \
-		tee tmp/$@-1
-
-testdockerTestdata:
-	@export VERSION=$(shell cat work/version) && \
-	docker run \
-		-v ./testdata:/testdata \
-		$(WHAT)-$${VERSION}-test \
-		-f /testdata/DOMAINS.txt $(TEST_OPTIONS_ALL) 2>tmp/$@-2 | \
-		tee tmp/$@-1
-
-
-dockerPush:
-	export VERSION=$(shell cat work/version) && \
-	docker image push \
-		--all-tags $(DOCKER_WHO)/$(WHAT)
-	docker run mbootgithub/whoisdomain -d google.com -j | jq -r .
-
-# ====================================================
-# uploading to pypi an pypiTestUpload
-# build a test-mypi and download the image in a venv ane run a test
-pypiTest: pypiTestUpload testTestPypi # testdocker testdockerTestdata
-
-# this is only the upload now for pypi builders
-pypiTestUpload:
-	./bin/upload_to_pypiTest.sh
-
-testTestPypi:
-	./bin/testTestPyPiUpload.sh 2>tmp/$@-2 | tee tmp/$@-1
-
-releaseTest: build pypiTestUpload testTestPypi
-
-release: pypi
-
-# this is for pypi owners after all tests have finished
-pypi:
-	./bin/upload_to_pypi.sh

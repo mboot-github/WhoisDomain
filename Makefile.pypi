@@ -1,0 +1,29 @@
+# ==========================================================
+# ==========================================================
+# https://docs.secure.software/cli
+
+SHELL := /bin/bash -l
+export SHELL
+
+# tested on 3.10-3.14
+MIN_PYTHON_VERSION := $(shell basename $$( ls /usr/bin/python3.[0-9][0-9] | awk '{print $0; exit}' ) )
+export MIN_PYTHON_VERSION
+
+# ====================================================
+# uploading to pypi an pypiTestUpload
+# build a test-mypi and download the image in a venv ane run a test
+pypiTest: pypiTestUpload testTestPypi
+
+# this is only the upload now for pypi builders
+pypiTestUpload:
+	./bin/upload_to_pypiTest.sh
+
+testTestPypi:
+	./bin/testTestPyPiUpload.sh 2>tmp/$@-2 | tee tmp/$@-1
+
+# this is for pypi owners after all tests have finished
+# needs to be called manually, can be transferred to github action
+release: pypi
+
+pypi:
+	./bin/upload_to_pypi.sh
