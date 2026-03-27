@@ -5,6 +5,8 @@
   * Python >=3.10
   * Currently no additional python packages need to be installed.
 
+
+[![Spectra Assure Community Badge](https://secure.software/pypi/badge/whoisdomain)](https://secure.software/pypi/packages/whoisdomain)
 ---
 
 ## Notes
