@@ -142,7 +142,3 @@ def str_to_date(
 
     msg = f"Unknown date format: '{text}'"
     raise UnknownDateFormat(msg)
-
-
-if __name__ == "__main__":
-    pass

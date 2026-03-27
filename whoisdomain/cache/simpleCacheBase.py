@@ -47,7 +47,3 @@ class SimpleCacheBase:
             return None
 
         return cData[1]
-
-
-if __name__ == "__main__":
-    pass

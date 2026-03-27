@@ -66,7 +66,3 @@ class SimpleCacheWithFile(SimpleCacheBase):
     ) -> Optional[str]:
         self._fileLoad()
         return super().get(keyString=keyString)
-
-
-if __name__ == "__main__":
-    pass
