@@ -13,16 +13,8 @@ import gc
 import logging
 import os
 import sys
-from collections.abc import Callable
 from functools import wraps
-from typing import (
-    Any,
-    Dict,
-    List,
-    Optional,
-    Tuple,
-    cast,
-)
+from typing import Any
 
 from .cache.dbmCache import DBMCache
 from .cache.dummyCache import DummyCache
@@ -69,7 +61,7 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 HAS_REDIS = False
 try:
-    import redis
+    import redis  # noqa: F401
 
     HAS_REDIS = True
 except ImportError as e:
@@ -90,51 +82,51 @@ if "SIMPLISTIC" in WD:
 
 TLD_LIB_PRESENT: bool = False
 try:
-    import tld as libTld
+    import tld as libTld  # noqa: F401
 
     TLD_LIB_PRESENT = True
 except ImportError as e:
     _ = e  # ignore any error
 
 __all__ = [
-    "cleanupWhoisResponse",
+    "VERSION",
+    "ZZ",
     "DBMCache",
     "DummyCache",
     "FailedParsingWhoisOutput",
-    "filterTldToSupportedPattern",
-    "get_last_raw_whois_data",
-    "getTestHint",
-    "get_TLD_RE",
-    "getVersion",
-    "mergeExternalDictWithRegex",
     "NoneStrings",
     "NoneStringsAdd",
     "ParameterContext",
     "ProcFunc",
-    "q2",
-    "query",
     "QuotaStrings",
     "QuotaStringsAdd",
     "RedisCache",
-    "setMyCache",
     "SimpleCacheBase",
     "SimpleCacheWithFile",
     "TldInfo",
     "UnknownDateFormat",
     "UnknownTld",
-    "validTlds",
-    "VERSION",
     "WhoisCommandFailed",
     "WhoisCommandTimeout",
     "WhoisPrivateRegistry",
     "WhoisQuotaExceeded",
-    "ZZ",
+    "cleanupWhoisResponse",
+    "filterTldToSupportedPattern",
+    "getTestHint",
+    "getVersion",
+    "get_TLD_RE",
+    "get_last_raw_whois_data",
+    "mergeExternalDictWithRegex",
+    "q2",
+    "query",
+    "setMyCache",
+    "validTlds",
 ]
 
 
 def _result2dict(func: Any) -> Any:
     @wraps(func)
-    def _inner(*args: str, **kw: Any) -> Dict[str, Any]:
+    def _inner(*args: str, **kw: Any) -> dict[str, Any]:
         r = func(*args, **kw)
         return (r and vars(r)) or {}
 
@@ -149,7 +141,7 @@ def remoteQ2(
     n: int = 0
     while True:
         n += 1
-        reply: Dict[str, Any] = {}
+        reply: dict[str, Any] = {}
 
         try:
             # unpicle the request
@@ -198,7 +190,7 @@ def remoteQ2(
 def q2(
     domain: str,
     pc: ParameterContext,
-) -> Optional[Domain]:
+) -> Domain | None:
     if pc.verbose is True:
         os.putenv("LOGLEVEL", "DEBUG")
         os.environ["LOGLEVEL"] = "DEBUG"
@@ -256,22 +248,22 @@ def q2(
 def query(
     domain: str,
     force: bool = False,
-    cache_file: Optional[str] = None,
+    cache_file: str | None = None,
     cache_age: int = 60 * 60 * 48,
     slow_down: int = 0,
     ignore_returncode: bool = False,
-    server: Optional[str] = None,
+    server: str | None = None,
     verbose: bool = False,
     with_cleanup_results: bool = False,
     internationalized: bool = False,
     include_raw_whois_text: bool = False,
     return_raw_text_for_unsupported_tld: bool = False,
-    timeout: Optional[float] = None,
+    timeout: float | None = None,
     parse_partial_response: bool = False,
     cmd: str = "whois",
     simplistic: bool = False,
     withRedacted: bool = False,
-    pc: Optional[ParameterContext] = None,
+    pc: ParameterContext | None = None,
     tryInstallMissingWhoisOnWindows: bool = False,
     shortResponseLen: int = 5,
     withPublicSuffix: bool = False,
@@ -279,7 +271,7 @@ def query(
     stripHttpStatus: bool = False,
     noIgnoreWww: bool = False,
     # if you use pc as argument all above params (except domain are ignored)
-) -> Optional[Domain]:
+) -> Domain | None:
     # see documentation about paramaters in parameterContext.py
 
     assert isinstance(domain, str), Exception("`domain` - must be <str>")

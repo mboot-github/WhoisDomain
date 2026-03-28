@@ -5,9 +5,6 @@ import platform
 import shutil
 import subprocess
 import time
-from typing import (
-    List,
-)
 
 from .context.dataContext import DataContext
 from .context.parameterContext import ParameterContext
@@ -23,7 +20,7 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 class WhoisCliInterface:
     def _specificOnNonWindowsPlatforms(self) -> None:
         self.IS_WINDOWS: bool = platform.system() == "Windows"
-        self.STDBUF_OFF_CMD: List[str] = []
+        self.STDBUF_OFF_CMD: list[str] = []
         if not self.IS_WINDOWS and shutil.which("stdbuf"):
             self.STDBUF_OFF_CMD = ["stdbuf", "-o0"]
 
@@ -56,7 +53,7 @@ class WhoisCliInterface:
     def _onWindowsFindWhoisCliAndInstallIfNeeded(self, k: str) -> None:
         paths = os.environ["PATH"].split(";")
         for path in paths:
-            wpath = os.path.join(path, k)
+            wpath = str(pathlib.Path(path) / k)
             if pathlib.Path(wpath).exists():
                 self.pc.cmd = wpath  # note we update cmd if we find one
                 return
@@ -66,23 +63,23 @@ class WhoisCliInterface:
 
     def _makeWhoisCommandToRunWindows(
         self,
-        whoisCommandList: List[str],
-    ) -> List[str]:
+        whoisCommandList: list[str],
+    ) -> list[str]:
         if self.pc.cmd == "whois":  # the default string
             k: str = "whois.exe"
             if pathlib.Path(k).exists():
-                self.pc.cmd = os.path.join(".", k)
+                self.pc.cmd = str(pathlib.Path(k))
             else:
                 self._onWindowsFindWhoisCliAndInstallIfNeeded(k)
 
         whoisCommandList = [self.pc.cmd]
 
         if self.pc.server:
-            return whoisCommandList + ["-v", "-nobanner", self.domain, self.pc.server]
-        return whoisCommandList + ["-v", "-nobanner", self.domain]
+            return [*whoisCommandList, "-v", "-nobanner", self.domain, self.pc.server]
+        return [*whoisCommandList, "-v", "-nobanner", self.domain]
 
-    def _makeWhoisCommandToRun(self) -> List[str]:
-        whoisCommandList: List[str] = [self.pc.cmd]
+    def _makeWhoisCommandToRun(self) -> list[str]:
+        whoisCommandList: list[str] = [self.pc.cmd]
         if " " in self.pc.cmd:
             whoisCommandList = self.pc.cmd.split(" ")
 
@@ -97,7 +94,7 @@ class WhoisCliInterface:
         if self.pc.server:
             whoisCommandList += ["-h", self.pc.server]
 
-        return whoisCommandList + [self.domain]
+        return [*whoisCommandList, self.domain]
 
     def _postProcessingResult(self) -> str:
         msg = f"{self.rawWhoisResultString}"
@@ -120,8 +117,6 @@ class WhoisCliInterface:
     def _runWhoisCliOnThisOs(self) -> str:
         # LANG=en is added to make the ".jp" output consisent across all environments
         # STDBUF_OFF_CMD needed to not lose data on kill
-
-        s: str = ""
 
         with subprocess.Popen(
             self.STDBUF_OFF_CMD + self._makeWhoisCommandToRun(),
@@ -147,22 +142,18 @@ class WhoisCliInterface:
                     msg = f"timeout: query took more then {self.pc.timeout} seconds"
                     raise WhoisCommandTimeout(msg) from ex
 
-            s = self._postProcessingResult()
-
-        # self.processHandle = None
-        return s
+            return self._postProcessingResult()
 
     def _returnWhoisPythonFromStaticTestData(self) -> str:
         testDir = os.getenv("TEST_WHOIS_PYTHON")
 
         pathToTestFile = f"{testDir}/{self.domain}/input"
         if pathlib.Path(pathToTestFile).exists():
-            with pathlib.Path(pathToTestFile).open(mode="rb") as f:  # switch to binary mode as that is what Popen uses
-                # pathlib.Path(pathToTestFile).read_bytes()
-                # make sure the data is treated exactly the same as the output of Popen
-                return f.read().decode(errors="ignore")
+            # switch to binary mode as that is what Popen uses; make sure the data is treated exactly the same
+            return pathlib.Path(pathToTestFile).read_bytes().decode(errors="ignore")
 
-        raise WhoisCommandFailed("")
+        msg = f"no test data found for: {pathToTestFile}"
+        raise WhoisCommandFailed(msg)
 
     # public
 

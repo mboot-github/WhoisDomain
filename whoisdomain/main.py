@@ -10,10 +10,6 @@ import re
 import sys
 from typing import (
     Any,
-    Dict,
-    List,
-    Optional,
-    Tuple,
 )
 
 import whoisdomain as whois  # to be compatible with dannycork
@@ -30,7 +26,7 @@ Verbose: bool = False
 PrintGetRawWhoisResult: bool = False
 Ruleset: bool = False
 
-Failures: Dict[str, Any] = {}
+Failures: dict[str, Any] = {}
 IgnoreReturncode: bool = False
 TestAllTld: bool = False
 TestRunOnly: bool = False
@@ -43,7 +39,7 @@ WithNoIgnoreWww: bool = False
 
 class ResponseCleaner:
     data: str
-    rDict: Dict[str, Any] = {}
+    rDict: dict[str, Any] = {}
 
     def __init__(
         self,
@@ -58,14 +54,13 @@ class ResponseCleaner:
         if not pathlib.Path(pathToTestFile).exists():
             return ""
 
-        with pathlib.Path(pathToTestFile).open(mode="rb") as f:  # switch to binary mode as that is what Popen uses
-            # make sure the data is treated exactly the same as the output of Popen
-            return f.read().decode(errors="ignore")
+        # switch to binary mode as that is what Popen uses; make sure the data is treated exactly the same
+        return pathlib.Path(pathToTestFile).read_bytes().decode(errors="ignore")
 
     def cleanSection(
         self,
-        section: List[str],
-    ) -> List[str]:
+        section: list[str],
+    ) -> list[str]:
         # cleanup any beginning and ending empty lines from the section
 
         if len(section) == 0:
@@ -86,12 +81,12 @@ class ResponseCleaner:
 
     def splitBodyInSections(
         self,
-        body: List[str],
-    ) -> List[str]:
+        body: list[str],
+    ) -> list[str]:
         # split the body on empty line, cleanup all sections, remove empty sections
         # return list of body's
 
-        sections: List[List[str]] = []
+        sections: list[list[str]] = []
         n = 0
         sections.append([])
         for line in body:
@@ -107,7 +102,7 @@ class ResponseCleaner:
             m += 1
 
         # now remove empty sections and return
-        sections2: List[str] = []
+        sections2: list[str] = []
         m = 0
         while m < len(sections):
             if len(sections[m]) > 0:
@@ -120,23 +115,23 @@ class ResponseCleaner:
         self,
         verbose: bool = False,
         with_cleanup_results: bool = False,
-    ) -> Tuple[str, Dict[Any, Any]]:
+    ) -> tuple[str, dict[Any, Any]]:
         result = whois.cleanupWhoisResponse(
             self.data,
             verbose,
             with_cleanup_results,
         )
 
-        self.rDict: Dict[str, Any] = {
+        self.rDict: dict[str, Any] = {
             "BodyHasSections": False,  # if this is true the body is not a list of lines but a list of sections with lines
             "Preamble": [],  # the lines telling what whois servers wwere contacted
             "Percent": [],  # lines staring with %% , often not present but may contain hints
             "Body": [],  # the body of the whois, may be in sections separated by empty lines
             "Postamble": [],  # copyright and other not relevant info for actual parsing whois
         }
-        body: List[str] = []
+        body: list[str] = []
 
-        rr: List[str] = []
+        rr: list[str] = []
         z = result.split("\n")
         preambleSeen = False
         postambleSeen = False
@@ -191,13 +186,11 @@ class ResponseCleaner:
 
         k = "Body"
         if self.rDict[k]:
-            n = 0
-            for lines in self.rDict[k]:
+            for n, lines in enumerate(self.rDict[k]):
                 ws = " [WHITESPACE AT END] " if re.search(r"[ \t]+\r?\n", lines) else ""
                 tab = " [TAB] " if "\t" in lines else ""  # tabs are present in this section
                 cr = " [CR] " if "\r" in lines else ""  # \r is present in this section
                 print(f"# --- {k} Section: {n} {cr}{tab}{ws}")
-                n += 1
                 print(lines)
 
 
@@ -302,7 +295,7 @@ def errorItem(d: str, e: Any, what: str = "Generic") -> None:
     print(message)
 
 
-def testDomains(aList: List[str]) -> None:
+def testDomains(aList: list[str]) -> None:
     for d in aList:
         # skip empty lines
         if not d:
@@ -337,7 +330,7 @@ def testDomains(aList: List[str]) -> None:
             errorItem(dd, e, what="WhoisCommandTimeout")
 
 
-def getTestFileOne(fPath: str, fileData: Dict[str, Any]) -> None:
+def getTestFileOne(fPath: str, fileData: dict[str, Any]) -> None:
     if not pathlib.Path(fPath).is_file():  # only files
         return
 
@@ -349,7 +342,7 @@ def getTestFileOne(fPath: str, fileData: Dict[str, Any]) -> None:
     xx = fileData[bName]
 
     with pathlib.Path(fPath).open(encoding="utf-8") as f:
-        for _, line in enumerate(f):
+        for line in f:
             ll = line.strip()
             if len(ll) == 0 or ll.startswith("#"):
                 continue
@@ -363,20 +356,19 @@ def getTestFileOne(fPath: str, fileData: Dict[str, Any]) -> None:
 
 def getTestFilesAll(
     tDir: str,
-    fileData: Dict[str, Any],
+    fileData: dict[str, Any],
 ) -> None:
-    for item in os.listdir(tDir):
-        fPath = f"{tDir}/{item}"
-        getTestFileOne(fPath, fileData)
+    for item in pathlib.Path(tDir).iterdir():
+        getTestFileOne(str(item), fileData)
 
 
-def getAllCurrentTld() -> List[str]:
+def getAllCurrentTld() -> list[str]:
     return whois.validTlds()
 
 
 def appendHintOrMeta(
-    rr: List[str],
-    allRegex: Optional[str],
+    rr: list[str],
+    allRegex: str | None,
     tld: str,
 ) -> None:
     global TestAllTld, TestRunOnly
@@ -390,8 +382,8 @@ def appendHintOrMeta(
 
 
 def appendHint(
-    rr: List[str],
-    allRegex: Optional[str],
+    rr: list[str],
+    allRegex: str | None,
     tld: str,
 ) -> None:
     global TestAllTld, TestRunOnly
@@ -403,10 +395,10 @@ def appendHint(
 
 
 def makeMetaAllCurrentTld(
-    allHaving: Optional[str] = None,
-    allRegex: Optional[str] = None,
-) -> List[str]:
-    rr: List[str] = []
+    allHaving: str | None = None,
+    allRegex: str | None = None,
+) -> list[str]:
+    rr: list[str] = []
     for tld in getAllCurrentTld():
         if allRegex is None:
             appendHintOrMeta(rr, allRegex, tld)
@@ -419,9 +411,9 @@ def makeMetaAllCurrentTld(
 
 
 def makeTestAllCurrentTld(
-    allRegex: Optional[str] = None,
-) -> List[str]:
-    rr: List[str] = []
+    allRegex: str | None = None,
+) -> list[str]:
+    rr: list[str] = []
     for tld in getAllCurrentTld():
         if allRegex is None:
             appendHint(rr, allRegex, tld)
@@ -450,7 +442,7 @@ def ShowRuleset(tld: str) -> None:
 
 
 def usage() -> None:
-    name = os.path.basename(sys.argv[0])
+    name = pathlib.Path(sys.argv[0]).name
 
     print(f"""
 {name}
@@ -540,10 +532,9 @@ def showFailures() -> None:
 
 
 def main() -> None:
-    global PrintJson, Verbose, IgnoreReturncode, PrintGetRawWhoisResult, Ruleset, SIMPLISTIC
-    global WithRedacted, TestAllTld, TestRunOnly, WithPublicSuffix, WithExtractServers, WithStripHttpStatus, WithNoIgnoreWww
+    global PrintJson, Verbose, IgnoreReturncode, PrintGetRawWhoisResult, Ruleset, SIMPLISTIC, WithRedacted, TestAllTld, TestRunOnly, WithPublicSuffix, WithExtractServers, WithStripHttpStatus, WithNoIgnoreWww  # noqa: E501  # pylint: disable=line-too-long
 
-    name: str = os.path.basename(sys.argv[0])
+    name: str = pathlib.Path(sys.argv[0]).name
     SIMPLISTIC = True
     if name == "test2.py":
         SIMPLISTIC = False
@@ -582,19 +573,19 @@ def main() -> None:
 
     # TestAllTld: bool = False
 
-    allHaving: Optional[str] = None  # from all supported tld only process the ones having this :: TODO ::
-    allRegex: Optional[str] = None  # from all supported tld process only the ones matching this regex
+    allHaving: str | None = None  # from all supported tld only process the ones having this :: TODO ::
+    allRegex: str | None = None  # from all supported tld process only the ones matching this regex
 
-    directory: Optional[str] = None
-    dirs: List[str] = []
+    directory: str | None = None
+    dirs: list[str] = []
 
-    filename: Optional[str] = None
-    files: List[str] = []
+    filename: str | None = None
+    files: list[str] = []
 
-    domain: Optional[str] = None
-    domains: List[str] = []
+    domain: str | None = None
+    domains: list[str] = []
 
-    fileData: Dict[str, Any] = {}
+    fileData: dict[str, Any] = {}
 
     for opt, arg in opts:
         if opt in ("-S", "SupportedTld"):

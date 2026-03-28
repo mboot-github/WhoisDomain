@@ -1,13 +1,10 @@
 import logging
 import os
-from typing import (
-    List,
-)
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
-QUOTASTRINGS: List[str] = [
+QUOTASTRINGS: list[str] = [
     "limit exceeded",
     "quota exceeded",
     "try again later",
@@ -20,7 +17,7 @@ QUOTASTRINGS: List[str] = [
 ]
 
 
-def QuotaStrings() -> List[str]:
+def QuotaStrings() -> list[str]:
     return QUOTASTRINGS
 
 

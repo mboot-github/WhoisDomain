@@ -2,9 +2,6 @@ import logging
 import os
 from typing import (
     Any,
-    Dict,
-    List,
-    Optional,
 )
 
 from .context.parameterContext import ParameterContext
@@ -19,15 +16,15 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 def filterTldToSupportedPattern(
     domain: str,
-    dList: List[str],
+    dList: list[str],
     verbose: bool = False,
-) -> Optional[str]:
+) -> str | None:
     global tldInfo
     return tldInfo.filterTldToSupportedPattern(domain, dList, verbose=verbose)
 
 
 def mergeExternalDictWithRegex(
-    aDict: Optional[Dict[str, Any]] = None,
+    aDict: dict[str, Any] | None = None,
 ) -> None:
     global tldInfo
     if aDict is None:
@@ -38,12 +35,12 @@ def mergeExternalDictWithRegex(
     tldInfo.mergeExternalDictWithRegex(aDict)
 
 
-def validTlds() -> List[str]:
+def validTlds() -> list[str]:
     global tldInfo
     return tldInfo.validTlds()
 
 
-def get_TLD_RE() -> Dict[str, Any]:
+def get_TLD_RE() -> dict[str, Any]:
     global tldInfo
     return tldInfo.TLD_RE()
 
@@ -52,7 +49,7 @@ def getVersion() -> str:
     return VERSION
 
 
-def getTestHint(tldString: str) -> Optional[str]:
+def getTestHint(tldString: str) -> str | None:
     k: str = "_test"
     if tldString in ZZ and k in ZZ[tldString] and ZZ[tldString][k]:
         return str(ZZ[tldString][k])
@@ -65,9 +62,9 @@ def cleanupWhoisResponse(
     verbose: bool = False,
     with_cleanup_results: bool = False,
     withRedacted: bool = False,
-    pc: Optional[ParameterContext] = None,
+    pc: ParameterContext | None = None,
 ) -> str:
-    tmp2: List[str] = []
+    tmp2: list[str] = []
 
     if pc is None:
         pc = ParameterContext(
@@ -76,7 +73,7 @@ def cleanupWhoisResponse(
             with_cleanup_results=with_cleanup_results,
         )
 
-    tmp: List[str] = whoisStr.split("\n")
+    tmp: list[str] = whoisStr.split("\n")
     for line in tmp:
         # some servers respond with: % Quota exceeded in the comment section (lines starting with %)
         if "quota exceeded" in line.lower():

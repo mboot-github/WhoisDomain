@@ -1,8 +1,5 @@
 import logging
 import os
-from typing import (
-    Optional,
-)
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
@@ -18,7 +15,7 @@ class DummyCache:
     def get(
         self,
         keyString: str,
-    ) -> Optional[str]:
+    ) -> str | None:
         return None
 
     def put(

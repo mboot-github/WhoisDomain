@@ -1,13 +1,10 @@
 import logging
 import os
-from typing import (
-    List,
-)
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
-IGNORESTRINGS: List[str] = [
+IGNORESTRINGS: list[str] = [
     "<data not disclosed>",
     "Contact Privacy Inc. Customer",
     "Data Protected",
@@ -51,7 +48,7 @@ IGNORESTRINGS: List[str] = [
 ]
 
 
-def IgnoreStrings() -> List[str]:
+def IgnoreStrings() -> list[str]:
     return IGNORESTRINGS
 
 

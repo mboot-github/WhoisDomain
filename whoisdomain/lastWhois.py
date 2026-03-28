@@ -12,8 +12,6 @@ import logging
 import os
 from typing import (
     Any,
-    Dict,
-    List,
 )
 
 from .context.parameterContext import ParameterContext
@@ -21,11 +19,11 @@ from .context.parameterContext import ParameterContext
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
-LastWhois: Dict[str, Any] = {}
+LastWhois: dict[str, Any] = {}
 
 
 def updateLastWhois(
-    dList: List[str],
+    dList: list[str],
     whoisStr: str,
     pc: ParameterContext,
 ) -> None:
@@ -45,6 +43,6 @@ def initLastWhois() -> None:
     LastWhois["Try"] = []  # init on start of query
 
 
-def get_last_raw_whois_data() -> Dict[str, Any]:
+def get_last_raw_whois_data() -> dict[str, Any]:
     global LastWhois
     return LastWhois

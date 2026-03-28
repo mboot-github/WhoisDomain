@@ -8,7 +8,6 @@ import datetime
 import logging
 import os
 import re
-from typing import Optional
 
 from .exceptions import UnknownDateFormat
 
@@ -82,9 +81,9 @@ _CUSTOM_DATE_FORMATS = {
 
 def str_to_date(
     text: str,
-    tld: Optional[str] = None,
+    tld: str | None = None,
     verbose: bool = False,
-) -> Optional[datetime.datetime]:
+) -> datetime.datetime | None:
     text = text.strip().lower()
 
     noDate = [
@@ -134,11 +133,10 @@ def str_to_date(
     for f in _DATE_FORMATS:
         try:
             z = datetime.datetime.strptime(text, f)
-            z = z.astimezone()
-            z = z.replace(tzinfo=None)
-            return z
         except ValueError as v:
             _ = v
+        else:
+            return z.astimezone().replace(tzinfo=None)
 
     msg = f"Unknown date format: '{text}'"
     raise UnknownDateFormat(msg)

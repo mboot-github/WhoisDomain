@@ -2,7 +2,6 @@ import logging
 import os
 from typing import (
     Any,
-    Optional,
 )
 
 from .cache.simpleCacheWithFile import SimpleCacheWithFile
@@ -69,7 +68,7 @@ def doWhoisAndReturnString(
     keyString = ".".join(dc.dList)
 
     if pc.force is False:
-        oldData: Optional[str] = cache.get(keyString)
+        oldData: str | None = cache.get(keyString)
         if oldData:
             return str(oldData)
 
