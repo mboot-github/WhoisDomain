@@ -5,7 +5,6 @@ import sys
 sys.path.append("..")
 import whoisdomain
 
-
 print("TEST: manually setup a cache", file=sys.stderr)
 verbose: bool = True
 

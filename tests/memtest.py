@@ -1,20 +1,17 @@
 #! /usr/bin/env python3
 
-from typing import (
-    Optional,
-    List,
-)
-import sys
 import gc
 import re
+import sys
 
 re._MAXCACHE = 1
 
-from memory_profiler import profile
-from collections import defaultdict
+from collections import defaultdict  # noqa: E402
+
+from memory_profiler import profile  # noqa: E402
 
 sys.path.append("..")
-import whoisdomain
+import whoisdomain  # noqa: E402
 
 domains = [
     "google.com",
@@ -44,13 +41,13 @@ domains = [
 ]
 
 
-def getAllCurrentTld() -> List[str]:
+def getAllCurrentTld() -> list[str]:
     return whoisdomain.validTlds()
 
 
 def appendHint(
-    rr: List[str],
-    allRegex: Optional[str],
+    rr: list[str],
+    allRegex: str | None,
     tld: str,
 ) -> None:
     hint = whoisdomain.getTestHint(tld)
@@ -59,9 +56,9 @@ def appendHint(
 
 
 def makeTestAllCurrentTld(
-    allRegex: Optional[str] = None,
-) -> List[str]:
-    rr: List[str] = []
+    allRegex: str | None = None,
+) -> list[str]:
+    rr: list[str] = []
     for tld in getAllCurrentTld():
         if allRegex is None:
             appendHint(rr, allRegex, tld)

@@ -1,13 +1,13 @@
 
 google:
-	./test-google-tld.py 2>2 | tee 1
+	/usr/bin/python3 ./test-google-tld.py 2>2 | tee 1
 
 redacted:
 	# show redacted output anyway
-	./testWithRedacted.py
+	/usr/bin/python3 ./testWithRedacted.py
 
 fr:
-	./testFr.py
+	/usr/bin/python3 ./testFr.py
 
 cache:
-	./testCache.py
+	/usr/bin/python3 ./testCache.py

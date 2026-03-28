@@ -1,23 +1,19 @@
 #! /usr/bin/env python3
 
 import sys
-import requests
 
 sys.path.append("..")
-import whoisdomain
-
 from typing import (
-    List,
-    Dict,
-    Optional,
     cast,
 )
+
+import whoisdomain
 
 
 def getDomains(
     url: str,
     verbose: bool = False,
-) -> List[str]:
+) -> list[str]:
     return [
         "facebook.cn",
         "facebook.com",
@@ -52,7 +48,7 @@ def getDomains(
 
 def getOneRegistrant(
     domain: str,
-    registrants: Dict[str | None, List[str]],
+    registrants: dict[str | None, list[str]],
     verbose: bool = False,
 ) -> None:
     try:
@@ -88,13 +84,13 @@ def xMain() -> None:
     verbose: bool = True
     url: str = "https://www.google.com/supported_domains"
 
-    domains: List[str] = getDomains(url, verbose)
-    registrants: Dict[str | None, List[str]] = {}
+    domains: list[str] = getDomains(url, verbose)
+    registrants: dict[str | None, list[str]] = {}
 
     for domain in domains:
         getOneRegistrant(domain, registrants, verbose)
 
-    ll = cast(List[str], registrants.keys())
+    ll = cast("list[str]", registrants.keys())
     for k in sorted(ll):
         print(k, registrants[k])
 
