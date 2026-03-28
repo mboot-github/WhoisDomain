@@ -1,9 +1,6 @@
 import dbm
 import logging
 import os
-from typing import (
-    Optional,
-)
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
@@ -21,7 +18,7 @@ class DBMCache:
     def get(
         self,
         keyString: str,
-    ) -> Optional[str]:
+    ) -> str | None:
         msg = f"{type(self).__name__} get: {keyString}"
         log.debug(msg)
 

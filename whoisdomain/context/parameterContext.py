@@ -3,8 +3,6 @@ import logging
 import os
 from typing import (
     Any,
-    Dict,
-    List,
 )
 
 log = logging.getLogger(__name__)
@@ -149,18 +147,18 @@ ParamsStringJson: str = """
 
 
 class ParameterContext:
-    params: Dict[str, Any]
-    value: Dict[str, Any]
+    params: dict[str, Any]
+    value: dict[str, Any]
 
-    KT: Dict[str, Any] = {
+    KT: dict[str, Any] = {
         "int": int,
         "float": float,
         "str": str,
         "bool": bool,
     }
 
-    def _loadDefaults(self) -> List[str]:
-        mandatory: List[str] = []
+    def _loadDefaults(self) -> list[str]:
+        mandatory: list[str] = []
         for i, k in self.params.items():
             if "default" in k:
                 self.value[i] = k["default"]
@@ -171,8 +169,8 @@ class ParameterContext:
 
     def _addArgs(
         self,
-        mandatory: List[str],
-        **kwargs: Dict[str, Any],
+        mandatory: list[str],
+        **kwargs: dict[str, Any],
     ) -> None:
         for name, value in kwargs.items():
             if name not in self.params:
@@ -196,7 +194,7 @@ class ParameterContext:
 
     def _validateAllMandatoryNowKnown(
         self,
-        mandatory: List[str],
+        mandatory: list[str],
     ) -> None:
         if len(mandatory) != 0:
             msg = f"missing mandatory parametrs: {sorted(mandatory)}"
@@ -209,7 +207,7 @@ class ParameterContext:
         self.params = json.loads(ParamsStringJson)
         self.value = {}
 
-        mandatory: List[str] = self._loadDefaults()
+        mandatory: list[str] = self._loadDefaults()
         self._addArgs(mandatory, **kwargs)
         self._validateAllMandatoryNowKnown(mandatory)
 
@@ -249,8 +247,8 @@ class ParameterContext:
             # leave the default
 
     def toJson(self) -> str:
-        rr: Dict[str, Any] = {}
-        for k, _ in self.params.items():
+        rr: dict[str, Any] = {}
+        for k in self.params:
             rr[k] = self.get(k)
         return json.dumps(rr)
 

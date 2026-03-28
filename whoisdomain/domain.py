@@ -3,8 +3,6 @@ import os
 import re
 from typing import (
     Any,
-    Dict,
-    List,
 )
 
 from .context.dataContext import DataContext
@@ -50,8 +48,8 @@ class Domain:
 
     def _cleanupArray(
         self,
-        data: List[str],
-    ) -> List[str]:
+        data: list[str],
+    ) -> list[str]:
         if "" in data:
             index = data.index("")
             data.pop(index)
@@ -62,17 +60,16 @@ class Domain:
         pc: ParameterContext,
         dc: DataContext,
     ) -> None:
-        tmp: List[str] = []
+        tmp: list[str] = []
         for x in dc.data["name_servers"]:
             if isinstance(x, str):
                 tmp.append(x.strip().lower())
                 continue
 
             # not a string but an array
-            for y in x:
-                tmp.append(y.strip().lower())
+            tmp.extend(y.strip().lower() for y in x)
 
-        self.name_servers: List[str] = []
+        self.name_servers: list[str] = []
         for x in tmp:
             x = x.strip(" .")  # remove any leading or trailing spaces and/or dots
             if x:
@@ -113,7 +110,7 @@ class Domain:
         # deduplicate results with set comprehension {}
 
         self.statuses = sorted(
-            list({s.strip() for s in dc.data["status"]}),
+            {s.strip() for s in dc.data["status"]},
         )
         if "" in self.statuses:
             self.statuses = self._cleanupArray(self.statuses)
@@ -127,7 +124,7 @@ class Domain:
 
     def _doOptionalFields(
         self,
-        data: Dict[str, Any],
+        data: dict[str, Any],
     ) -> None:
         # optional fields
 
@@ -154,7 +151,7 @@ class Domain:
             # list(set(...))) to deduplicate results
 
             self.emails = sorted(
-                list({s.strip() for s in data["emails"]}),
+                {s.strip() for s in data["emails"]},
             )
             if "" in self.emails:
                 self.emails = self._cleanupArray(self.emails)

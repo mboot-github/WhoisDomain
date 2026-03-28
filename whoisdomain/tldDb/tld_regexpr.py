@@ -3,10 +3,7 @@
 
 import logging
 import os
-from typing import (
-    Any,
-    Dict,
-)
+from typing import Any
 
 from .finders import (
     R,
@@ -52,7 +49,7 @@ def xStr(what: str, times: int = 1, firstMandatory: bool = True) -> str:
 # The database
 # When we finally apply the regexes we use IGNORE CASE allways on all matches
 
-ZZ: Dict[str, Any] = {}
+ZZ: dict[str, Any] = {}
 
 # ======================================
 # meta registrars start with _ are only used a s a common toll to define others
@@ -113,7 +110,7 @@ ZZ["uk"] = {
     "creation_date": R(r"Registered on:\s*(.+)"),
     "expiration_date": R(r"Expiry date:\s*(.+)"),
     "updated_date": R(r"Last updated:\s*(.+)"),
-    "name_servers": R(r"Name servers:%s\n\n" % xStr(r"(?:\n[ \t]+(\S+).*)?", 10)),  # capture up to 10
+    "name_servers": R(r"Name servers:{}\n\n".format(xStr(r"(?:\n[ \t]+(\S+).*)?", 10))),  # capture up to 10
     "status": R(r"Registration status:\n\s*(.+)"),
 }
 
@@ -124,7 +121,7 @@ ZZ["ac.uk"] = {
     "owner": R(r"Domain Owner:\n\s?(.+)"),
     "registrar": R(r"Registered By:\n\s?(.+)"),
     "registrant": R(r"Registrant Contact:\n([^\n]*)"),
-    "name_servers": R(r"Servers:%s\n\n" % xStr(r"(?:\n[ \t]+(\S+).*)?", 10)),
+    "name_servers": R(r"Servers:{}\n\n".format(xStr(r"(?:\n[ \t]+(\S+).*)?", 10))),
     "expiration_date": R(r"Renewal date:\n\s*(.+)"),
     "updated_date": R(r"Entry updated:\n\s*(.+)"),
     "creation_date": R(r"Entry created:\n\s?(.+)"),
@@ -199,7 +196,7 @@ ZZ["am"] = {
     "creation_date": R(r"Registered:\s+(.+)"),
     "expiration_date": R(r"Expires:\s+(.+)"),
     "updated_date": R(r"Last modified:\s+(.+)"),
-    "name_servers": R(r"DNS servers.*:\n%s" % xStr(r"(?:\s+(\S+)\n)?", 4)),
+    "name_servers": R(r"DNS servers.*:\n{}".format(xStr(r"(?:\s+(\S+)\n)?", 4))),
     "_test": "amnic.net",
 }
 
@@ -445,7 +442,7 @@ ZZ["edu"] = {
     "creation_date": R(r"Domain record activated:\s?(.+)"),
     "updated_date": R(r"Domain record last updated:\s?(.+)"),
     "expiration_date": R(r"Domain expires:\s?(.+)"),
-    "name_servers": R(r"Name Servers:\s?%s" % xStr(r"(?:\t(.+)\n)?", 10)),
+    "name_servers": R(r"Name Servers:\s?{}".format(xStr(r"(?:\t(.+)\n)?", 10))),
     "_test": "rutgers.edu",
 }
 
@@ -726,7 +723,7 @@ ZZ["nl"] = {
     "expiration_date": None,
     "registrant_country": None,
     "domain_name": R(r"Domain name:\s?(.+)"),
-    "name_servers": R(r"Domain nameservers.*:\n%s" % xStr(r"(?:\s+(\S+)\n)?", 10)),
+    "name_servers": R(r"Domain nameservers.*:\n{}".format(xStr(r"(?:\s+(\S+)\n)?", 10))),
     "reseller": R(r"Reseller:\s?(.+)"),
     "abuse_contact": R(r"Abuse Contact:\s?(.+)"),
     "_test": "google.nl",
@@ -800,7 +797,7 @@ ZZ["pl"] = {
     # If no "option expiration date:" is present, use "renewal date:", but only
     # if it's not followed by "option expiration date:". google.pl is the test case here
     "expiration_date": R(r"(?:\noption expiration date:|renewal date:(?!(?:.|\n)*\noption expiration date:))\s*(.+)\n"),
-    "name_servers": R(r"nameservers:%s" % xStr(r"(?:\s+(\S+)[^\n]*\n)?", 4)),
+    "name_servers": R(r"nameservers:{}".format(xStr(r"(?:\s+(\S+)[^\n]*\n)?", 4))),
     "status": R(r"\nStatus:\n\s*(.+)"),
     "_test": "google.pl",
 }
@@ -813,7 +810,7 @@ ZZ["pt"] = {
     "creation_date": R(r"Creation Date:\s?(.+)"),
     "expiration_date": R(r"Expiration Date:\s?(.+)"),
     "updated_date": None,
-    "name_servers": R(r"Name Server:%s" % xStr(r"(?:\s*(\S+)[^\n]*\n)?", 2)),
+    "name_servers": R(r"Name Server:{}".format(xStr(r"(?:\s*(\S+)[^\n]*\n)?", 2))),
     "status": R(r"Domain Status:\s?(.+)"),
     "_test": None,  # portugal never answeres, timout is all we get
 }
@@ -947,7 +944,7 @@ ZZ["tn"] = {
     "creation_date": R(r"Creation date\.+:\s?(.+)"),
     "expiration_date": None,
     "updated_date": None,
-    "name_servers": R(r"DNS servers\n%s" % xStr(r"(?:Name\.+:\s*(\S+)\n)?", 4)),
+    "name_servers": R(r"DNS servers\n{}".format(xStr(r"(?:Name\.+:\s*(\S+)\n)?", 4))),
     "status": R(r"Domain status\.+:(.+)"),
 }
 
@@ -995,7 +992,7 @@ ZZ["uz"] = {
     "expiration_date": R(r"Expiration Date:\s?(.+)"),
     "updated_date": R(r"Updated Date:\s?(.+)"),
     "status": R(r"Status:\s?(.+)"),
-    "name_servers": R(r"Domain servers in listed order:%s\n\n" % xStr(r"(?:\n\s+(\S+))?", 4)),
+    "name_servers": R(r"Domain servers in listed order:{}\n\n".format(xStr(r"(?:\n\s+(\S+))?", 4))),
     # sometimes 'not.defined is returned as a nameserver (e.g. google.uz)
 }
 
@@ -1050,7 +1047,7 @@ ZZ["bg"] = {
     "_server": "whois.register.bg",
     "domain_name": R(r"DOMAIN\s+NAME:\s+(.+)"),
     "status": R(r"registration\s+status:\s(.+)"),
-    "name_servers": R(r"NAME SERVER INFORMATION:\n%s" % xStr(r"(?:(.+)\n)?", 4)),
+    "name_servers": R(r"NAME SERVER INFORMATION:\n{}".format(xStr(r"(?:(.+)\n)?", 4))),
     "creation_date": None,
     "expiration_date": None,
     "updated_date": None,
@@ -1129,7 +1126,7 @@ ZZ["sg"] = {
     "updated_date": R(r"\s+Modified Date:\s+(.+)"),
     "status": R(r"\s+Domain Status:\s(.+)"),
     "registrant_country": None,
-    "name_servers": R(r"Name Servers:%s" % xStr(r"(?:\n[ \t]+(\S+)[^\n]*)?", 4)),
+    "name_servers": R(r"Name Servers:{}".format(xStr(r"(?:\n[ \t]+(\S+)[^\n]*)?", 4))),
     # make sure the dnssec is not matched
     "_test": "sgnic.sg",
 }
@@ -1143,7 +1140,7 @@ ZZ["tw"] = {
     "registrar": R(r"Registration\s+Service\s+Provider:\s+(.+)"),
     "updated_date": None,
     "registrant_country": None,
-    "name_servers": R(r"Domain servers in listed order:%s" % xStr(r"(?:\s+(\S+)[ \t]*\r?\n)?", 4)),
+    "name_servers": R(r"Domain servers in listed order:{}".format(xStr(r"(?:\s+(\S+)[ \t]*\r?\n)?", 4))),
     "_test": "net.tw",
     "registrant": R(r"\n\s*Registrant:[\s\n]*([^\n]*)\n*"),
 }
@@ -1543,7 +1540,7 @@ ZZ["auspost"] = {"_server": "whois.nic.auspost", "extend": "com", "_test": "nic.
 ZZ["author"] = {"_server": "whois.nic.author", "extend": "com", "_test": "nic.author"}
 ZZ["auto"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
 ZZ["autos"] = {"extend": "_centralnic", "_server": "whois.centralnic.com"}
-ZZ["aw"] = {"extend": "nl", "name_servers": R(r"Domain nameservers.*:\n%s" % xStr(r"(?:\s+(\S+)\n)?", 4))}
+ZZ["aw"] = {"extend": "nl", "name_servers": R(r"Domain nameservers.*:\n{}".format(xStr(r"(?:\s+(\S+)\n)?", 4)))}
 ZZ["aws"] = {"_server": "whois.nic.aws", "extend": "com", "_test": "nic.aws"}
 ZZ["axa"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["az"] = {"extend": "_privateReg"}

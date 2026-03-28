@@ -2,9 +2,6 @@ import json
 import logging
 import os
 import pathlib
-from typing import (
-    Optional,
-)
 
 from .simpleCacheBase import (
     SimpleCacheBase,
@@ -15,12 +12,12 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 class SimpleCacheWithFile(SimpleCacheBase):
-    cacheFilePath: Optional[str] = None
+    cacheFilePath: str | None = None
 
     def __init__(
         self,
         verbose: bool = False,
-        cacheFilePath: Optional[str] = None,
+        cacheFilePath: str | None = None,
         cacheMaxAge: int = (60 * 60 * 48),
     ) -> None:
         super().__init__(verbose=verbose, cacheMaxAge=cacheMaxAge)
@@ -63,6 +60,6 @@ class SimpleCacheWithFile(SimpleCacheBase):
     def get(
         self,
         keyString: str,
-    ) -> Optional[str]:
+    ) -> str | None:
         self._fileLoad()
         return super().get(keyString=keyString)

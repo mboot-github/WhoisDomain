@@ -17,9 +17,7 @@ def main() -> None:
     restart_after_count: int = 100
     f = pf.makeHandler(whoisdomain.remoteQ2, restart_after_count)
 
-    n = 0
-    for tld in whoisdomain.validTlds():
-        n += 1
+    for n, tld in enumerate(whoisdomain.validTlds(), start=1):
         domain = whoisdomain.getTestHint(tld)
         domain = domain or f"meta.{tld}"
         try:
