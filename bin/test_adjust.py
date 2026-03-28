@@ -2,13 +2,10 @@
 
 # from https://github.com/maarten-boot/python-whois-extended
 
-from typing import (
-    List,
-)
 
 from whoisdomain.handleDateStrings import str_to_date
 
-TEST_DATETIMES: List[str] = [
+TEST_DATETIMES: list[str] = [
     "02-jan-2000",
     "02.02.2000",
     "01/06/2011",

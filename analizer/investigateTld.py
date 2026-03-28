@@ -2,23 +2,18 @@
 
 # should run after a valid database is created with analizeIanaTld.py
 
-from typing import (
-    Dict,
-    Any,
-    List,
-    Tuple,
-)
-
 import re
 import sys
+from typing import (
+    Any,
+)
 
 import idna as idna2
-
 from ianaDatabase import IanaDatabase
 
 # the next 2 belong together
 sys.path.append("..")
-from whoisdomain.tldDb import tld_regexpr  # noqa: E402
+from whoisdomain.tldDb import tld_regexpr
 
 MM = {
     "com": [
@@ -47,11 +42,11 @@ MM = {
 
 class OneTld:
     verbose: bool = True
-    allKnownTldDict: Dict[str, Any] = {}
+    allKnownTldDict: dict[str, Any] = {}
 
     row: Any = None
-    allTld: Dict[str, Any] = {}
-    ss: List[str] = []
+    allTld: dict[str, Any] = {}
+    ss: list[str] = []
 
     tld = None
     tld2 = None
@@ -63,11 +58,11 @@ class OneTld:
     resolve = None
     reg = None
 
-    thisTld: Dict[str, Any] = {}
+    thisTld: dict[str, Any] = {}
 
     def __init__(
         self,
-        allKnownTldDict: Dict[str, Any],
+        allKnownTldDict: dict[str, Any],
         verbose: bool = False,
     ):
         self.verbose = verbose
@@ -84,7 +79,7 @@ class OneTld:
         self.resolve = self.row[5]
         self.reg = self.row[6]
 
-    def _doCentralNic(self, s1: str, TLD: Dict[str, Any]) -> bool:
+    def _doCentralNic(self, s1: str, TLD: dict[str, Any]) -> bool:
         return True
 
         kk = "_centralnic"
@@ -100,7 +95,7 @@ class OneTld:
 
         return True
 
-    def _doDonuts(self, s1: str, TLD: Dict[str, Any]) -> bool:
+    def _doDonuts(self, s1: str, TLD: dict[str, Any]) -> bool:
         # currently not used
         return True
 
@@ -146,7 +141,7 @@ class OneTld:
             self.tld3 = idna2.encode(self.tld3).decode() or self.tld3
         except Exception as e:
             print(f"## {self.tld} {self.tld2} {self.tld3} {e}")
-            return
+            return None
 
         self.tld4 = self.tld4.encode("idna").decode()
         if self.tld != self.tld2:
@@ -229,8 +224,8 @@ class OneTld:
     def processRow(
         self,
         row: Any,
-        allTld: Dict[str, Any],
-        ss: List[str],
+        allTld: dict[str, Any],
+        ss: list[str],
     ):
         sequence = [
             self._skipSpecialResolve,
@@ -262,15 +257,13 @@ class OneTld:
             if n():
                 return
 
-        print(
-            "# MISSING", self.tld, self.tld2, self.tld3, self.manager.replace("\n", ";"), self.w, self.resolve, self.reg
-        )
+        print("# MISSING", self.tld, self.tld2, self.tld3, self.manager.replace("\n", ";"), self.w, self.resolve, self.reg)
 
 
-def extractServers(aDict: Dict[str, Any]) -> Dict[str, Any]:
-    servers: Dict[str, Any] = {}
+def extractServers(aDict: dict[str, Any]) -> dict[str, Any]:
+    servers: dict[str, Any] = {}
     k = "_server"
-    for key in aDict.keys():
+    for key in aDict:
         if k in aDict[key]:
             server = aDict[key][k]
             if server not in servers:
@@ -279,7 +272,7 @@ def extractServers(aDict: Dict[str, Any]) -> Dict[str, Any]:
     return servers
 
 
-def getAllDataTld(iad: Any) -> Tuple[Any, Any]:
+def getAllDataTld(iad: Any) -> tuple[Any, Any]:
     # investigate all known iana tld and see if we have them
 
     sql = """
@@ -299,10 +292,10 @@ FROM
     return result, cursor
 
 
-def postProcessingOne(allTld: List[str], tld: str):
+def postProcessingOne(allTld: list[str], tld: str):
     if "." in tld:
         return
-    if "_" == tld[0]:
+    if tld[0] == "_":
         return
 
     try:
@@ -315,7 +308,7 @@ def postProcessingOne(allTld: List[str], tld: str):
         print(f"# currently defined in ZZ but missing in iana: {tld}")
 
 
-def postProcessing(allTld: List[str]):
+def postProcessing(allTld: list[str]):
     allTld = sorted(allTld)
     for tld in tld_regexpr.ZZ:
         postProcessingOne(allTld, tld)
@@ -324,7 +317,7 @@ def postProcessing(allTld: List[str]):
 def xMain() -> None:
     verbose = True
     dbFileName = "IanaDb.sqlite"
-    allTld: List[str] = []
+    allTld: list[str] = []
 
     ss = extractServers(tld_regexpr.ZZ)
 

@@ -6,14 +6,14 @@ Analyze all tld's currently in the iana root db
 
 import io
 import re
-from dns.resolver import (
-    Resolver,
-    LRUCache,
-)
 
+from dns.resolver import (
+    LRUCache,
+    Resolver,
+)
 from ianaCrawler import IanaCrawler
-from pslGrabber import PslGrabber
 from ianaDatabase import IanaDatabase
+from pslGrabber import PslGrabber
 
 
 def prepDb(
@@ -50,7 +50,7 @@ def doOnePslEntry(
     verbose: bool = False,
 ) -> None:
     n = 0
-    z = z.split()[0]
+    z = z.split(maxsplit=1)[0]
     if "." in z:
         tld = z.split(".")[-1]
         n = len(z.split("."))

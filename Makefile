@@ -16,9 +16,9 @@ PIP_INSTALL := pip3 -q \
 
 # ==========================================
 # Code formatting and checks
-PY_FILES := *.py bin/*.py whoisdomain/
+PY_FILES := *.py whoisdomain/
 
-LINE_LENGTH := 160
+# LINE_LENGTH := 160
 
 MYPY_INSTALL := \
 	types-requests \
@@ -58,3 +58,6 @@ build:
 	./bin/build.sh
 	./bin/testLocalWhl.sh 2>tmp/$@.22 | tee tmp/$@.1
 	./bin/test.sh 2>tmp/$@.2 | tee -a tmp/$@.1
+
+test:
+	make -f Makefile.tests

@@ -1,5 +1,4 @@
 from typing import (
-    List,
     Any,
 )
 
@@ -33,7 +32,7 @@ class PslGrabber:
         response = self.Session.get(url)
         return response
 
-    def ColumnsPsl(self) -> List[str]:
+    def ColumnsPsl(self) -> list[str]:
         return [
             "Tld",
             "Psl",

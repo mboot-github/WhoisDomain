@@ -2,11 +2,11 @@
 
 # import sys
 import csv
-import requests
-
-from tld import get_tld
+import pathlib
 from urllib.parse import urlparse
 
+import requests
+from tld import get_tld
 from Typing import (
     List,
 )
@@ -20,10 +20,7 @@ def getFileFromUrl(fileName: str, url: str) -> None:
         url,
         allow_redirects=True,
     )
-    open(
-        fileName,
-        "wb",
-    ).write(
+    pathlib.Path(fileName).open("wb").write(
         r.content,
     )
     return fileName
@@ -31,7 +28,7 @@ def getFileFromUrl(fileName: str, url: str) -> None:
 
 def readCsvFile(fileName: str):
     result: List[List[str]] = []
-    with open(fileName) as csv_file:
+    with pathlib.Path(fileName).open() as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=",")
 
         line_count = 0

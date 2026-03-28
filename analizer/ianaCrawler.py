@@ -1,16 +1,12 @@
-#
+import sys
+import time
 from typing import (
-    Optional,
-    List,
-    Dict,
     Any,
     # Tuple,
 )
 
-import sys
-from bs4 import BeautifulSoup
-import time
 import requests_cache
+from bs4 import BeautifulSoup
 
 
 class IanaCrawler:
@@ -22,9 +18,9 @@ class IanaCrawler:
     verbose: bool = False
     cacheBackend: str = "filesystem"
 
-    records: List[Any] = []
-    columns: List[Any] = []
-    toDelete: List[str] = []
+    records: list[Any] = []
+    columns: list[Any] = []
+    toDelete: list[str] = []
 
     resolver: Any = None
 
@@ -70,8 +66,8 @@ class IanaCrawler:
     def _getAdditionalItem(
         self,
         what: str,
-        data: List[str],
-    ) -> Optional[str]:
+        data: list[str],
+    ) -> str | None:
         for i in [0, 1]:
             try:
                 z: str = f"{what}:"
@@ -86,8 +82,8 @@ class IanaCrawler:
         self,
         soup: BeautifulSoup,
         text: str,
-    ) -> Optional[str]:
-        gfg: List[Any] = soup.find_all(lambda tag: tag.name == "p" and text in tag.text)
+    ) -> str | None:
+        gfg: list[Any] = soup.find_all(lambda tag: tag.name == "p" and text in tag.text)
         if len(gfg):
             s: str = gfg[0].text.strip()
             return s
@@ -96,10 +92,10 @@ class IanaCrawler:
     def _resolveWhois(
         self,
         whois: str,
-    ) -> List[Any]:
-        ll: List[Any] = []
+    ) -> list[Any]:
+        ll: list[Any] = []
         if self.resolver:
-            answer: List[Any] = []
+            answer: list[Any] = []
 
             n: int = 3
             while n:
@@ -124,7 +120,7 @@ class IanaCrawler:
     def extractInfoFromPageSoup(
         self,
         soup: BeautifulSoup,
-        tldItem: List[Any],
+        tldItem: list[Any],
     ) -> None:
         zz = {
             "Whois": "WHOIS Server",
@@ -132,7 +128,7 @@ class IanaCrawler:
         }
 
         for key, val in zz.items():
-            regDataW: Optional[str] = self._getTldParagraphWithString(soup, val)
+            regDataW: str | None = self._getTldParagraphWithString(soup, val)
             if not regDataW:
                 tldItem.append(None)
                 continue
@@ -144,8 +140,8 @@ class IanaCrawler:
 
     def doWhoisServerResolve_DoesItExist(
         self,
-        server: Optional[str],
-        tldItem: List[Any],
+        server: str | None,
+        tldItem: list[Any],
     ) -> None:
         if server is None:
             tldItem.append(None)
@@ -156,8 +152,8 @@ class IanaCrawler:
 
     def _addInfoToOneTld(
         self,
-        tldItem: List[Any],
-    ) -> List[str]:
+        tldItem: list[Any],
+    ) -> list[str]:
         tldName = tldItem[0]
 
         if tldItem[3] == "Not assigned":
@@ -172,8 +168,8 @@ class IanaCrawler:
 
         return tldItem
 
-    def _processOneTableData(self, trs: List[str]) -> List[str]:
-        record: List[str] = []
+    def _processOneTableData(self, trs: list[str]) -> list[str]:
+        record: list[str] = []
         for each in trs:
             try:
                 link = each.find("a")["href"]
@@ -199,14 +195,14 @@ class IanaCrawler:
 
     def getTldInfoAllFromIanaUrl(self) -> None:
         """
-        extract all current defined tld names from the main iana root db page
+        Extract all current defined tld names from the main iana root db page
 
         """
         soup = self._getPageFromUrlIntoSoupWithRetry(self._getUrl())
         table: Any = soup.find("table")  # the first table has the tld data
 
-        self.records: List[Any] = []
-        self.columns: List[Any] = []
+        self.records: list[Any] = []
+        self.columns: list[Any] = []
 
         for tr in table.findAll("tr"):  # Table Row
             self._processOneTableRow(tr)
@@ -214,8 +210,8 @@ class IanaCrawler:
         self.columns.insert(0, "Link")
 
     def addInfoToAllTld(self) -> None:
-        records2: List[str] = []
-        toDelete: List[str] = []
+        records2: list[str] = []
+        toDelete: list[str] = []
 
         self.columns[3] = self.columns[3].replace(" ", "_")
         self.columns.insert(4, "Whois")  # is there a whois server defined
@@ -234,10 +230,10 @@ class IanaCrawler:
 
     def getDeleted(
         self,
-    ) -> List[str]:
+    ) -> list[str]:
         return self.toDelete
 
-    def getResults(self) -> Dict[str, Any]:
+    def getResults(self) -> dict[str, Any]:
         ll = list(self.columns)
         # ll[3] = ll[3].replace(" ", "_")
         return {

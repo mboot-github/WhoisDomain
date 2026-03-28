@@ -3,10 +3,6 @@
 # from: https://github.com/maarten-boot/python-whois-extended
 
 import sys
-from typing import (
-    List,
-    Optional,
-)
 
 import whoisdomain as whois
 
@@ -85,7 +81,7 @@ nic.онлайн
 
 def query(
     domain: str,
-    host: Optional[str] = None,
+    host: str | None = None,
 ) -> None:
     print()
     print("-" * 80)
@@ -118,7 +114,7 @@ def parse(data: str) -> None:
         query(data)
         return
 
-    dList: List[str] = data.split(",")
+    dList: list[str] = data.split(",")
 
     if len(dList) == 1:
         query(dList[0])

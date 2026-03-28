@@ -1,16 +1,11 @@
 #! /usr/bin/env python3
-from typing import (
-    # Optional,
-    List,
-    # Dict,
-    Any,
-    Tuple,
-)
-
-import sys
-
 import json
 import sqlite3
+import sys
+from typing import (
+    # Dict,
+    Any,
+)
 
 
 class IanaDatabase:
@@ -38,7 +33,7 @@ class IanaDatabase:
         self,
         sql: str,
         data: Any = None,
-    ) -> Tuple[Any, Any]:
+    ) -> tuple[Any, Any]:
         self.testValidConnection()
         cur: Any = self.conn.cursor()
 
@@ -107,9 +102,9 @@ CREATE TABLE IF NOT EXISTS IANA_PSL (
 
     def prepData(
         self,
-        columns: List[str],
-        values: List[str],
-    ) -> Tuple[str, str, List[Any]]:
+        columns: list[str],
+        values: list[str],
+    ) -> tuple[str, str, list[Any]]:
         cc = "`" + "`,`".join(columns) + "`"
 
         data = []
@@ -134,9 +129,9 @@ CREATE TABLE IF NOT EXISTS IANA_PSL (
 
     def makeInsOrUpdSqlTld(
         self,
-        columns: List[str],
-        values: List[str],
-    ) -> Tuple[str, List[Any]]:
+        columns: list[str],
+        values: list[str],
+    ) -> tuple[str, list[Any]]:
         cc, vv, data = self.prepData(columns, values)
         return (
             f"""
@@ -152,14 +147,14 @@ INSERT OR REPLACE INTO IANA_TLD (
     def makeDelSqlTld(
         self,
         tld: str,
-    ) -> Tuple[str, List[Any]]:
+    ) -> tuple[str, list[Any]]:
         return f"DELETE FROM IANA_TLD WHERE Link = '{tld}';"
 
     def makeInsOrUpdSqlPsl(
         self,
-        columns: List[str],
-        values: List[str],
-    ) -> Tuple[str, List[Any]]:
+        columns: list[str],
+        values: list[str],
+    ) -> tuple[str, list[Any]]:
         cc, vv, data = self.prepData(columns, values)
 
         return (
@@ -176,5 +171,5 @@ INSERT OR REPLACE INTO IANA_PSL (
     def makeDelSqlPsl(
         self,
         tld: str,
-    ) -> Tuple[str, List[Any]]:
+    ) -> tuple[str, list[Any]]:
         return f"DELETE FROM IANA_PSL WHERE Tld = '{tld}';"

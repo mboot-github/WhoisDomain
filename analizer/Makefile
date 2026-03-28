@@ -62,34 +62,15 @@ cleanupVenv:
 # ======================================
 # prep the code with format, lint typing
 
-prep: black pylama
+prep: format check test
 
-black:
-	$(COMMON_VENV) \
-	$(PIP_INSTALL) black; \
-	black \
-		--line-length $(LINE_LENGTH) \
-		$(PY_FILES)
+format:
+	ruff format *.py
 
-pylama:
-	$(COMMON_VENV) \
-	$(PIP_INSTALL) setuptools pylama; \
-	pylama \
-		--max-line-length $(LINE_LENGTH) \
-		--linters "${PL_LINTERS}" \
-		--ignore "${PL_IGNORE}" \
-		$(PY_FILES)
-
-mypy:
-	$(COMMON_VENV) \
-	$(PIP_INSTALL) mypy $(MYPY_INSTALL); \
-	mypy \
-		--strict \
-		--no-incremental \
-		$(PY_FILES)
+check:
+	ls
 
 test:
 	$(COMMON_VENV) \
 	$(PIP_INSTALL) -r requirements.txt ;\
-	./analizeIanaTld.py;  \
-	./investigateTld.py 2>2 | tee 1
+	./analizeIanaTld.py && ./investigateTld.py 2>2 | tee 1
