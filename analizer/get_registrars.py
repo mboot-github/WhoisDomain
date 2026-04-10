@@ -7,9 +7,6 @@ from urllib.parse import urlparse
 
 import requests
 from tld import get_tld
-from Typing import (
-    List,
-)
 
 FILE_NAME: str = "registrar-ids-1.csv"
 FILE_URL: str = f"https://www.iana.org/assignments/registrar-ids/{FILE_NAME}"
@@ -19,16 +16,15 @@ def getFileFromUrl(fileName: str, url: str) -> None:
     r = requests.get(
         url,
         allow_redirects=True,
+        timeout=300,
     )
-    pathlib.Path(fileName).open("wb").write(
-        r.content,
-    )
+    pathlib.Path(fileName).write_bytes(r.content)
     return fileName
 
 
 def readCsvFile(fileName: str):
-    result: List[List[str]] = []
-    with pathlib.Path(fileName).open() as csv_file:
+    result: list[list[str]] = []
+    with pathlib.Path(fileName).open("r", encoding="utf8") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=",")
 
         line_count = 0
@@ -46,15 +42,15 @@ def readCsvFile(fileName: str):
 
 def xMain() -> None:
     fileName: str = getFileFromUrl(FILE_NAME, FILE_URL)
-    result: List[List[str]] = readCsvFile(fileName)
+    result: list[list[str]] = readCsvFile(fileName)
 
-    rdapList: List[str] = []
-    hostList: List[str] = []
-    tldList: List[str] = []
-    fldList: List[str] = []
+    rdapList: list[str] = []
+    hostList: list[str] = []
+    tldList: list[str] = []
+    fldList: list[str] = []
 
     for row in result:
-        if row[3].strip() == "":
+        if not row[3].strip():
             continue
 
         rdap = row[3]

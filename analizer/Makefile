@@ -68,7 +68,7 @@ format:
 	ruff format *.py
 
 check:
-	ls
+	ruff check --fix *.py
 
 test:
 	$(COMMON_VENV) \

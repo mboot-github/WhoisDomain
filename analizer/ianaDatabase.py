@@ -27,7 +27,8 @@ class IanaDatabase:
 
     def testValidConnection(self) -> None:
         if self.conn is None:
-            raise Exception("No valid connection to the database exist")
+            msg = "No valid connection to the database exist"
+            raise Exception(msg)
 
     def selectSql(
         self,
@@ -38,14 +39,11 @@ class IanaDatabase:
         cur: Any = self.conn.cursor()
 
         try:
-            if data:
-                result = cur.execute(sql, data)
-            else:
-                result = cur.execute(sql)
+            result = cur.execute(sql, data) if data else cur.execute(sql)
 
         except Exception as e:
             print(sql, data, e, file=sys.stderr)
-            exit(101)
+            sys.exit(101)
         return result, cur
 
     def doSql(
@@ -58,17 +56,14 @@ class IanaDatabase:
         cur: Any = self.conn.cursor()
 
         try:
-            if data:
-                result = cur.execute(sql, data)
-            else:
-                result = cur.execute(sql)
+            result = cur.execute(sql, data) if data else cur.execute(sql)
 
             if withCommit:
                 self.conn.commit()
 
         except Exception as e:
             print(sql, e, file=sys.stderr)
-            exit(101)
+            sys.exit(101)
         return result
 
     def createTableTld(self) -> None:
@@ -80,11 +75,11 @@ CREATE TABLE IF NOT EXISTS IANA_TLD (
     TLD_Manager     TEXT,
     Whois           TEXT,
     'DnsResolve-A'  TEXT,
-    RegistrationUrl TEXT
+    RegistrationUrl TEXT,
+    Rdap            TEXT
 );
 """
-        rr = self.doSql(sql)
-        return rr
+        return self.doSql(sql)
 
     def createTablePsl(self) -> None:
         sql = """
@@ -97,8 +92,7 @@ CREATE TABLE IF NOT EXISTS IANA_PSL (
     PRIMARY KEY (Tld, Psl)
 );
 """
-        rr = self.doSql(sql)
-        return rr
+        return self.doSql(sql)
 
     def prepData(
         self,

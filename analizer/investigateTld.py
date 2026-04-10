@@ -9,6 +9,7 @@ from typing import (
 )
 
 import idna as idna2
+
 from ianaDatabase import IanaDatabase
 
 # the next 2 belong together
@@ -70,7 +71,7 @@ class OneTld:
 
     def _normalizeRow(self) -> None:
         self.tld = self.row[0].replace("'", "")
-        self.tld2 = "".join(map(lambda s: s and re.sub(r"[^\w\s]", "", s), self.row[1]))
+        self.tld2 = "".join(map(lambda s: s and re.sub(r"[^\w\s]", "", s), self.row[1]))  # noqa: C417
         self.tld3 = self.row[1].replace(".", "").replace("'", "").replace("\u200f", "").replace("\u200e", "")
         self.tld4 = self.tld3
 
@@ -131,10 +132,7 @@ class OneTld:
         if "whois.centralnicregistry.com." in self.resolve and self._doCentralNic(serverHint, self.thisTld):
             return True
 
-        if "whois.donuts.co" in self.resolve and self._doCentralNic(serverHint, self.thisTld):
-            return True
-
-        return False
+        return "whois.donuts.co" in self.resolve and self._doCentralNic(serverHint, self.thisTld)
 
     def _doUtf8Preparations(self):
         try:
@@ -144,10 +142,6 @@ class OneTld:
             return None
 
         self.tld4 = self.tld4.encode("idna").decode()
-        if self.tld != self.tld2:
-            if 0 and self.tld2 not in self.ss:
-                print("# idna", self.tld, self.tld2, self.tld3, self.tld4, self.tld.encode("idna"))
-
         if self.tld != self.tld3:
             print(f"#SKIP {self.tld} {self.tld2} {self.tld3}")
             return True
@@ -158,10 +152,7 @@ class OneTld:
         if self.tld2 == self.tld and self.tld in self.allKnownTldDict:
             return True
 
-        if self.tld2 in self.allKnownTldDict and self.tld in self.allKnownTldDict:
-            return True
-
-        return False
+        return self.tld2 in self.allKnownTldDict and self.tld in self.allKnownTldDict
 
     def _doNoManagerTld(self):
         if self.manager == "NULL":
@@ -194,14 +185,11 @@ class OneTld:
             # unclear,
             # we have existing ns records indicating some self.tld's actually exist
             # but have no whois, lets skip for now
-            # TODO add ns records
+            # TO_DO add ns records
             if self.tld not in self.allKnownTldDict:
                 print(f'# ZZ["{self.tld}"] = ' + '{"_privateRegistry": True} # noWhois ')
 
-        if self.w == "NULL":
-            return True
-
-        return False
+        return self.w == "NULL"
 
     def _doCleanuphois(self):
         def xx(zz):
@@ -263,9 +251,9 @@ class OneTld:
 def extractServers(aDict: dict[str, Any]) -> dict[str, Any]:
     servers: dict[str, Any] = {}
     k = "_server"
-    for key in aDict:
-        if k in aDict[key]:
-            server = aDict[key][k]
+    for key, value in aDict.items():
+        if k in value:
+            server = value[k]
             if server not in servers:
                 servers[server] = []
             servers[server].append(key)
@@ -323,7 +311,7 @@ def xMain() -> None:
 
     iad = IanaDatabase(verbose=verbose)
     iad.connectDb(dbFileName)
-    rr, cur = getAllDataTld(iad)
+    _, cur = getAllDataTld(iad)
     for row in cur:
         ot = OneTld(tld_regexpr.ZZ, verbose=verbose)
         ot.processRow(row, allTld, ss)

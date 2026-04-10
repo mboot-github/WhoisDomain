@@ -1,8 +1,6 @@
 #! /usr/bin/env python3
 
-"""
-Analyze all tld's currently in the iana root db
-"""
+# Analyze all tld's currently in the iana root db
 
 import io
 import re
@@ -11,6 +9,7 @@ from dns.resolver import (
     LRUCache,
     Resolver,
 )
+
 from ianaCrawler import IanaCrawler
 from ianaDatabase import IanaDatabase
 from pslGrabber import PslGrabber
@@ -29,7 +28,7 @@ def prepDb(
 
 def prepResolver() -> Resolver:
     resolver: Resolver = Resolver()
-    resolver.cache = LRUCache()  # type: ignore
+    resolver.cache = LRUCache()
 
 
 def updateAllIanaTldData(

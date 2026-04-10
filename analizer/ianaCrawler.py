@@ -60,8 +60,7 @@ class IanaCrawler:
                 print(e, file=sys.stderr)
                 time.sleep(15)
 
-        soup = BeautifulSoup(response.text, "html.parser")
-        return soup
+        return BeautifulSoup(response.text, "html.parser")
 
     def _getAdditionalItem(
         self,
@@ -73,8 +72,8 @@ class IanaCrawler:
                 z: str = f"{what}:"
                 if z in data[i]:
                     return data[i].replace(z, "").strip()
-            except Exception as _:
-                _ = _
+            except Exception as e:
+                _ = e
                 return None
         return None
 
@@ -105,7 +104,7 @@ class IanaCrawler:
                 except Exception as e:
                     print(whois, e, n, file=sys.stderr)
                     time.sleep(5)
-                    n = n - 1
+                    n -= 1
 
             for a in answer:
                 s = str(a)
@@ -122,11 +121,14 @@ class IanaCrawler:
         soup: BeautifulSoup,
         tldItem: list[Any],
     ) -> None:
+        # URL for registration services: http://www.aaa.com
+        # WHOIS Server: whois.nic.aaa
+        # RDAP Server: https://rdap.nic.aaa/
         zz = {
             "Whois": "WHOIS Server",
+            "Rdap": "RDAP Server",
             "RegistrationUrl": "URL for registration services",
         }
-
         for key, val in zz.items():
             regDataW: str | None = self._getTldParagraphWithString(soup, val)
             if not regDataW:
@@ -136,7 +138,8 @@ class IanaCrawler:
             regDataW = regDataW.replace(val, key)
             regDataA = regDataW.split("\n")
             for s in [key]:
-                tldItem.append(self._getAdditionalItem(s, regDataA))
+                s = self._getAdditionalItem(s, regDataA)
+                tldItem.append(s)
 
     def doWhoisServerResolve_DoesItExist(
         self,
@@ -174,10 +177,12 @@ class IanaCrawler:
             try:
                 link = each.find("a")["href"]
                 aa = link.split("/")
-                record.append(aa[-1].replace(".html", ""))
-                record.append(each.text.strip())
-            except Exception as _:
-                _ = _
+                s = aa[-1].replace(".html", "")
+                record.append(s)
+                s = each.text.strip()
+                record.append(s)
+            except Exception as e:
+                _ = f"{e}"
                 record.append(each.text)
         return record
 
@@ -194,10 +199,7 @@ class IanaCrawler:
         self.records.append(record)
 
     def getTldInfoAllFromIanaUrl(self) -> None:
-        """
-        Extract all current defined tld names from the main iana root db page
-
-        """
+        """Extract all current defined tld names from the main iana root db page"""
         soup = self._getPageFromUrlIntoSoupWithRetry(self._getUrl())
         table: Any = soup.find("table")  # the first table has the tld data
 
@@ -217,6 +219,7 @@ class IanaCrawler:
         self.columns.insert(4, "Whois")  # is there a whois server defined
         self.columns.insert(5, "RegistrationUrl")  # is there a registration url defined
         self.columns.insert(6, "DnsResolve-A")  # if we have a whois server does it actually resolve to sometething real
+        self.columns.insert(7, "Rdap")  # is there a whois server defined
 
         for tldItem in self.records:  # tldItem is a list
             rr = self._addInfoToOneTld(tldItem)

@@ -29,8 +29,7 @@ class PslGrabber:
         self,
         url: str,
     ) -> Any:
-        response = self.Session.get(url)
-        return response
+        return self.Session.get(url)
 
     def ColumnsPsl(self) -> list[str]:
         return [

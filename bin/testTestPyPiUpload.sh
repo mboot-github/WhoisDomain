@@ -2,7 +2,7 @@
 
 set -x
 
-time=300
+time=60 # 1 minute
 
 VERSION=$( cat ./work/version )
 WHAT="whoisdomain"
@@ -19,11 +19,6 @@ makeVenv()
     source ./${ENV}/bin/activate
 }
 
-installFromDistWhl()
-{
-    pip3 install dist/${WHAT}-${VERSION}-py3-none-any.whl
-}
-
 installFromTestPyPi()
 {
     sleep $time
@@ -34,35 +29,29 @@ installFromTestPyPi()
     done
 }
 
-getInstalledVersion()
-{
-    # after install
-    WE_HAVE=$( whoisdomain -V )
-    echo "$WE_HAVE" >&2
-}
-
-testAllIfCorrectVersion()
-{
-    [ "$WE_HAVE" == "$VERSION" ] && {
-        whoisdomain -f testdata/DOMAINS.txt --withPublicSuffix --extractServers --stripHttpStatus
-        # clean up the venv
-        rm -rf ${ENV}
-        exit 0
-    }
-}
-
 main()
 {
-    [ -f "${PACKAGE_FILE}" ] && {
-        makeVenv
-        # installFromDistWhl
-        installFromTestPyPi
-        getInstalledVersion
-        testAllIfCorrectVersion
+    [ ! -f "${PACKAGE_FILE}" ] && {
+        echo "$(basename $0) missing whl file ${PACKAGE_FILE}" >&2
+        exit 101
+    }
+    makeVenv
+
+    installFromTestPyPi
+
+    local WE_HAVE=$( whoisdomain -V )
+    echo "$WE_HAVE" >&2
+
+    [ "$WE_HAVE" == "$VERSION" ] && {
+        whoisdomain \
+            -f testdata/DOMAINS.txt \
+            --withPublicSuffix \
+            --extractServers \
+            --stripHttpStatus
     }
 
-    echo "$(basename $0) Failed" >&2
-    exit 101
+    # clean up the venv
+    rm -rf ${ENV}
 }
 
 main
