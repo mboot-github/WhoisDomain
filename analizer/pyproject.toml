@@ -1,80 +1,9 @@
-[build-system]
-    requires = ["hatchling"]
-    build-backend = "hatchling.build"
-
 [project]
-    name = "whoisdomain"
-    dynamic = ['version']
-
-    authors = [
-      { name="mboot-github"},
-    ]
-
-    maintainers = [
-      { name="Maarten Boot", email="130295084+mboot-github@users.noreply.github.com" },
-    ]
-
-    description = "Python package for retrieving WHOIS information of domains."
-    readme = "README.md"
-    requires-python = ">=3.10"
-
-    license = "MIT"
-
-    classifiers = [
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-        "Intended Audience :: Developers",
-        "Environment :: Console",
-        "Programming Language :: Python :: 3",
-        "Topic :: Internet",
-        "Topic :: Software Development :: Libraries :: Python Modules",
-    ]
-
-    keywords = [
-        "Python",
-        "whois",
-        "tld",
-        "domain",
-        "expiration",
-        "registrar",
-    ]
-
-[project.scripts]
-    whoisdomain = 'whoisdomain.main:main'
-
-[project.urls]
-    "Bug Tracker" = "https://github.com/mboot-github/WhoisDomain/issues"
-    "Home Page" = "https://github.com/mboot-github/WhoisDomain/"
-    "Repository" = "https://github.com/mboot-github/WhoisDomain/"
-
-[tool.hatch.version]
-    path = "whoisdomain/version.py"
-
-[tool.hatch.build]
-    only-packages = true
-
-    include = [
-        "whoisdomain/",
-    ]
-
-    exclude = [
-        "/Old/*",
-        "/lib/*",
-        "/etc/*",
-        "/bin/*",
-        "/testdata/*",
-        "Makefile",
-        ".gitignore",
-        "/.gitignore",
-    ]
-
-[tool.pylama]
-    max_line_length = 160
-    skip = "*/.pytest_cache/*, */.tox/*, */mypy_cache/*, ./dist, ./docs"
+    name = "tld_analyze"
 
 [tool.ruff]
-    target-version = "py310"
-    line-length = 160
+    target-version = "py310" # always keep it on the lowest official vesion
+    line-length = 120
     exclude = [
         ".bzr",
         ".direnv",
@@ -94,8 +23,6 @@
         "_build",
         "buck-out",
         "build",
-        "dist",
-        "node_modules",
         "venv",
     ]
 
@@ -105,8 +32,10 @@
        "FAST",
        "YTT",
        "ASYNC",
+       "S",
        "S1", "S2", "S302", "S303", "S304", "S305", "S306", "S307", "S31", "S32", "S401", "S402", "S406", "S407", "S408", "S409", "S41", "S5", "S601", "S602", "S604", "S605", "S606", "S607", "S609", "S61", "S7",
        "FBT",
+       "B",
        "B00", "B01", "B020", "B021", "B022", "B023", "B025", "B027", "B028", "B029", "B03", "B901", "B903", "B905", "B911",
        "A",
        "COM",
@@ -165,7 +94,7 @@
         # ignore for now:
         "S101", "N803", "N999", "PLR6201",
         "S602", "FBT002", "FBT001", "RUF001", "N812", "PLW0603", "PLW0602",
-        "PLW2901", "PIE810", "PERF203", "FIX004", "N818",
+        "PLW2901", "PIE810", "PERF203", "FIX004", "N818","N802","N815","S608",
         "RUF067",
         # end for now.
         "COM812", "D203",
@@ -182,13 +111,3 @@
     fixable = ["ALL"]
     unfixable = []
     preview = true
-
-[tool.ruff.lint.per-file-ignores]
-
-[tool.ruff.lint.flake8-boolean-trap]
-
-[tool.ruff.lint.pylint]
-    max-statements = 234
-
-[tool.ruff.lint.mccabe]
-    max-complexity = 70  # value is far from perfect (recommended default is 10). But we will try to decrease it over the time.

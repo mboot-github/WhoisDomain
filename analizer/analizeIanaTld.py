@@ -29,6 +29,7 @@ def prepDb(
 def prepResolver() -> Resolver:
     resolver: Resolver = Resolver()
     resolver.cache = LRUCache()
+    return resolver
 
 
 def updateAllIanaTldData(
@@ -36,7 +37,7 @@ def updateAllIanaTldData(
     verbose: bool = False,
 ) -> IanaCrawler:
     iac = IanaCrawler(verbose=verbose, resolver=resolver)
-    iac.getTldInfoAllFromIanaUrl()
+    iac.fromIanaGetAllCurrenlyDefinedTld()
     iac.addInfoToAllTld()
     return iac
 
@@ -69,7 +70,10 @@ def doOnePslEntry(
     iad.doSql(sql, data)
 
 
-def getAllPslDataAndProcess(iad: IanaDatabase, verbose: bool = False) -> None:
+def getAllPslDataAndProcess(
+    iad: IanaDatabase,
+    verbose: bool = False,
+) -> None:
     pg: PslGrabber = PslGrabber()
     response = pg.getData(pg.getUrl())
     text = response.text
@@ -117,6 +121,7 @@ def xMain() -> None:
     dbFileName: str = "IanaDb.sqlite"
 
     resolver: Resolver = prepResolver()
+    print(resolver)
     iac = updateAllIanaTldData(resolver, verbose)
 
     iad = prepDb(dbFileName, verbose)
@@ -126,13 +131,17 @@ def xMain() -> None:
     for tld in xx:
         sql = iad.makeDelSqlTld(tld)
         iad.doSql(sql)
+
         sql = iad.makeDelSqlPsl(tld)
         iad.doSql(sql)
 
     # process all known tld's
     xx = iac.getResults()
     for item in xx["data"]:
-        sql, data = iad.makeInsOrUpdSqlTld(xx["header"], item)
+        sql, data = iad.makeInsOrUpdSqlTld(
+            xx["header"],
+            item,
+        )
         iad.doSql(sql, data)
 
     getAllPslDataAndProcess(

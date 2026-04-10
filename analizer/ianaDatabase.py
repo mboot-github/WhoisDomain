@@ -74,9 +74,9 @@ CREATE TABLE IF NOT EXISTS IANA_TLD (
     Type            TEXT NOT NULL,
     TLD_Manager     TEXT,
     Whois           TEXT,
-    'DnsResolve-A'  TEXT,
     RegistrationUrl TEXT,
-    Rdap            TEXT
+    Rdap            TEXT,
+    'DnsResolve-A'  TEXT
 );
 """
         return self.doSql(sql)
@@ -167,3 +167,21 @@ INSERT OR REPLACE INTO IANA_PSL (
         tld: str,
     ) -> tuple[str, list[Any]]:
         return f"DELETE FROM IANA_PSL WHERE Tld = '{tld}';"
+
+    def getAllDataTld(self) -> tuple[Any, Any]:
+        sql = """
+SELECT
+    Link,
+    Domain,
+    Type,
+    TLD_Manager,
+    RegistrationUrl,
+    Whois,
+    Rdap,
+    `DnsResolve-A`
+FROM
+    IANA_TLD
+    """
+
+        result, cursor = self.selectSql(sql)
+        return result, cursor

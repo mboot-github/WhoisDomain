@@ -18,21 +18,7 @@ PIP_INSTALL := pip3 -q \
 
 # ==========================================
 # Code formatting and checks
-PY_FILES := \
-		*.py
-
-LINE_LENGTH := 120
-PL_LINTERS := eradicate,mccabe,pycodestyle,pyflakes,pylint
-
-# C0114 Missing module docstring [pylint]
-# C0115 Missing class docstring [pylint]
-# C0116 Missing function or method docstring [pylint]
-# E203 whitespace before ':' [pycodestyle]
-#
-# W0105 String statement has no effect
-# C901 : is to complex
-
-PL_IGNORE := C0114,C0115,C0116,E203
+PY_FILES := *.py
 
 MYPY_INSTALL := \
 	types-requests \
@@ -52,25 +38,27 @@ all: clean prep test
 clean: cleanupVenv
 	rm -f *.1 *.2 *.log *.tmp  1 2
 	rm -rf .mypy_cache
-	rm -f IanaDb.sqlite
+	# rm -f IanaDb.sqlite # dont remove during testing
 	rm -rf .iana_cache/ .psl_cache/
 
 # cleanup the virtual env
 cleanupVenv:
 	rm -rf $(VENV)
 
-# ======================================
-# prep the code with format, lint typing
-
-prep: format check test
+prep: format check
 
 format:
-	ruff format *.py
+	ruff format $(PY_FILES)
 
 check:
-	ruff check --fix *.py
+	ruff check --fix $(PY_FILES)
 
-test:
+test: IanaDb.sqlite
 	$(COMMON_VENV) \
 	$(PIP_INSTALL) -r requirements.txt ;\
-	./analizeIanaTld.py && ./investigateTld.py 2>2 | tee 1
+		./investigateTld.py 2>2 | tee 1
+
+IanaDb.sqlite:
+	$(COMMON_VENV) \
+	$(PIP_INSTALL) -r requirements.txt ;\
+		./analizeIanaTld.py
