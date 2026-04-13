@@ -3040,19 +3040,55 @@ ZZ["xn--rvc1e0am3e"] = {"_server": "whois.nixiregistry.in", "_test": "nixiregist
 ZZ["xn--s9brj9c"] = {"_server": "whois.nixiregistry.in", "_test": "nixiregistry.in", "extend": "in"}
 ZZ["xn--xkc2dl3a5ee0h"] = {"_server": "whois.nixiregistry.in", "_test": "nixiregistry.in", "extend": "in"}
 
-ZZ["ಭರತ"] = {"_server": "whois.nixiregistry.in", "extend": "xn--2scrj9c"} #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
-ZZ["ଭରତ"] = {"_server": "whois.nixiregistry.in", "extend": "xn--2scrj9c"} #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
-ZZ["ভৰত"] = {"_server": "whois.nixiregistry.in", "extend": "xn--2scrj9c"} #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
-ZZ["ভরত"] = {"_server": "whois.nixiregistry.in", "extend": "xn--2scrj9c"} #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
-ZZ["சஙகபபர"] = {"_server": "whois.ta.sgnic.sg", "extend": "xn--clchc0ea0b2g2a9gcd"} #  whois.ta.sgnic.sg ['xn--clchc0ea0b2g2a9gcd']
-ZZ["భరత"] = {"_server": "whois.nixiregistry.in", "extend": "xn--2scrj9c"} #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
-ZZ["ભરત"] = {"_server": "whois.nixiregistry.in", "extend": "xn--2scrj9c"} #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
-ZZ["भरतम"] = {"_server": "whois.nixiregistry.in", "extend": "xn--2scrj9c"} #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
-ZZ["भरत"] = {"_server": "whois.nixiregistry.in", "extend": "xn--2scrj9c"} #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
-ZZ["भरत"] = {"_server": "whois.nixiregistry.in", "extend": "xn--2scrj9c"} #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
-ZZ["ഭരത"] = {"_server": "whois.nixiregistry.in", "extend": "xn--2scrj9c"} #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
-ZZ["ਭਰਤ"] = {"_server": "whois.nixiregistry.in", "extend": "xn--2scrj9c"} #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
-ZZ["இநதய"] = {"_server": "whois.nixiregistry.in", "extend": "xn--2scrj9c"} #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
+ZZ["ಭರತ"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
+ZZ["ଭରତ"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
+ZZ["ভৰত"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
+ZZ["ভরত"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
+ZZ["சஙகபபர"] = {"_server": "whois.ta.sgnic.sg", "extend": "xn--clchc0ea0b2g2a9gcd"}  #  whois.ta.sgnic.sg ['xn--clchc0ea0b2g2a9gcd']
+ZZ["భరత"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
+ZZ["ભરત"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
+ZZ["भरतम"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
+ZZ["भरत"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
+ZZ["भरत"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
+ZZ["ഭരത"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
+ZZ["ਭਰਤ"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
+ZZ["இநதய"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  #  whois.nixiregistry.in ['xn--2scrj9c', 'xn--3hcrj9c', 'xn--45br5cyl', 'xn--45brj9c', 'xn--fpcrj9c3d', 'xn--gecrj9c', 'xn--h2breg3eve', 'xn--rvc1e0am3e', 'xn--s9brj9c', 'xn--xkc2dl3a5ee0h']
 # currently defined in ZZ but missing in iana: onion
 # currently defined in ZZ but missing in iana: कम
 # currently defined in ZZ but missing in iana: नट
