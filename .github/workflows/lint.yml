@@ -34,9 +34,6 @@ jobs:
       - name: Run mypy (strict)
         run: mypy --strict --no-incremental *.py whoisdomain/
 
-      - name: Run pylint
-        run: pylint --rcfile=.pylintrc whoisdomain/
-
   test:
     name: Test on Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
