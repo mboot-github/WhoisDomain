@@ -7,22 +7,41 @@ import whodap
 import whoisdomain
 
 
+class DataResponse:  # noqa: B903
+    status: bool  # if status is True we have data else a message
+    data: Any
+    message: str
+
+    def __init__(
+        self,
+        *,
+        status: bool = False,
+        data: Any = None,
+        message: str = "",
+    ) -> None:
+        self.status = status
+        self.data = data
+        self.message = message
+
+
 class WhoisRdap:
     def __init__(self) -> None:
         self.dnsc = whodap.DNSClient.new_client()  # make sure we cache the primary looup for the tld rdap servers
 
-    def do_one_domain(self, domain: str) -> dict[str, Any] | None:
+    def fld(self, domain: str) -> str:
+        return tld.get_fld(domain, fix_protocol=True, fail_silently=True)
+
+    def do_one_domain(self, domain: str) -> DataResponse:
         try:
-            fld = tld.get_fld(domain, fix_protocol=True, fail_silently=True)
-            a = fld.split(".")
+            xfld = self.fld(domain)
+            a = xfld.split(".")
             dom = ".".join(a[:-1])
             xtld = a[-1]
             resp = self.dnsc.lookup(dom, xtld)
-            return resp.to_whois_dict()
+            return DataResponse(status=True, data=resp.to_whois_dict())
         except Exception as e:
             print(f"Exception: {e}", file=sys.stderr)
-
-        return None
+            return DataResponse(status=False, message=e)
 
 
 def xmain() -> None:
@@ -36,13 +55,17 @@ def xmain() -> None:
             continue
 
         print("##", k, server, test)
-        fld = tld.get_fld(server, fix_protocol=True, fail_silently=True)
-        if fld in rr:
-            continue
 
-        rr[fld] = wr.do_one_domain(server)
-        if rr[fld]:
-            print(fld, rr[fld])
+        xfld = wr.fld(server)
+        if xfld not in rr:
+            dd = wr.do_one_domain(server)
+            rr[xfld] = dd.data if dd.status else dd.message
+            if rr[xfld]:
+                print("Server:", xfld, rr[xfld])
+
+        if test:
+            dd = wr.do_one_domain(test)
+            print("Test:", test, dd.data if dd.status else dd.message)
 
 
 xmain()
