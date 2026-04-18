@@ -111,7 +111,7 @@ class ResponseCleaner:
 
         return sections2
 
-    def cleanupWhoisResponse(
+    def cleanupWhoisResponse(  # noqa: C901
         self,
         verbose: bool = False,
         with_cleanup_results: bool = False,
@@ -295,7 +295,7 @@ def errorItem(d: str, e: Any, what: str = "Generic") -> None:
     print(message)
 
 
-def testDomains(aList: list[str]) -> None:
+def testDomains(aList: list[str]) -> None:  # noqa: C901
     for d in aList:
         # skip empty lines
         if not d:
@@ -531,7 +531,7 @@ def showFailures() -> None:
                 print(i, j, Failures[i][j])
 
 
-def main() -> None:
+def main() -> None:  # noqa: C901,PLR0915
     global PrintJson, Verbose, IgnoreReturncode, PrintGetRawWhoisResult, Ruleset, SIMPLISTIC, WithRedacted, TestAllTld, TestRunOnly, WithPublicSuffix, WithExtractServers, WithStripHttpStatus, WithNoIgnoreWww  # noqa: E501  # pylint: disable=line-too-long
 
     name: str = pathlib.Path(sys.argv[0]).name

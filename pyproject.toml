@@ -178,13 +178,3 @@
     fixable = ["ALL"]
     unfixable = []
     preview = true
-
-[tool.ruff.lint.per-file-ignores]
-
-[tool.ruff.lint.flake8-boolean-trap]
-
-[tool.ruff.lint.pylint]
-    max-statements = 234
-
-[tool.ruff.lint.mccabe]
-    max-complexity = 70  # value is far from perfect (recommended default is 10). But we will try to decrease it over the time.

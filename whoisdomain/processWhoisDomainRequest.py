@@ -41,7 +41,7 @@ class ProcessWhoisDomainRequest:
         if self.pc.verbose:
             logging.basicConfig(level="DEBUG")
 
-    def _analyzeDomainStringAndValidate(
+    def _analyzeDomainStringAndValidate(  # noqa: C901
         self,
     ) -> None:
         def _internationalizedDomainNameToPunyCode(d: list[str]) -> list[str]:

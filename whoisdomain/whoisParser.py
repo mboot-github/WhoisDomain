@@ -266,7 +266,7 @@ class WhoisParser:
 
         return []
 
-    def _cleanupWhoisResponse(
+    def _cleanupWhoisResponse(  # noqa: C901
         self,
     ) -> str:
         tmp2: list[str] = []
