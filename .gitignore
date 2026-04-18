@@ -79,3 +79,5 @@ out
 lint.txt
 pylint.txt
 vtmp/
+*.1
+*.2

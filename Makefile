@@ -22,7 +22,7 @@ PY_FILES := *.py whoisdomain/
 
 MYPY_INSTALL := \
 	types-requests \
-	types-python-dateutil redis tld
+	types-python-dateutil
 
 COMMON_VENV := rm -rf $(VENV); \
 	$(MIN_PYTHON_VERSION) -m venv $(VENV); \
@@ -47,7 +47,7 @@ check:
 
 mypy:
 	$(COMMON_VENV) \
-	$(PIP_INSTALL) mypy $(MYPY_INSTALL); \
+	$(PIP_INSTALL) -r requirements.txt mypy $(MYPY_INSTALL); \
 	mypy \
 		--strict \
 		--no-incremental \
@@ -61,3 +61,8 @@ build:
 
 test:
 	make -f Makefile.tests
+
+t2:
+	$(COMMON_VENV) \
+	$(PIP_INSTALL) -r requirements.txt; \
+	$(MIN_PYTHON_VERSION) t2.py 2>$@.2 | tee $@.1
