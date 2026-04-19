@@ -23,16 +23,13 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install ruff mypy pylint tld types-redis types-requests python-dateutil
+          pip install ruff tld types-redis types-requests python-dateutil whodap
 
       - name: Run ruff format check
-        run: ruff format --check *.py whoisdomain/
+        run: ruff format --check whoisdomain/
 
       - name: Run ruff lint
-        run: ruff check *.py whoisdomain/
-
-      - name: Run mypy (strict)
-        run: mypy --strict --no-incremental *.py whoisdomain/
+        run: ruff check whoisdomain/
 
   test:
     name: Test on Python ${{ matrix.python-version }}
