@@ -5,7 +5,7 @@ from typing import (
 )
 
 from .context.parameterContext import ParameterContext
-from .exceptions import WhoisQuotaExceeded
+from .exceptions import WhoisQuotaExceededError
 from .tldDb.tld_regexpr import ZZ
 from .tldInfo import TldInfo
 from .version import VERSION
@@ -17,30 +17,30 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 def filterTldToSupportedPattern(
     dList: list[str],
 ) -> str | None:
-    global tldInfo
-    return tldInfo.filterTldToSupportedPattern(dList)
+    global MY_TLD_INFO
+    return MY_TLD_INFO.filterTldToSupportedPattern(dList)
 
 
 def mergeExternalDictWithRegex(
     aDict: dict[str, Any] | None = None,
 ) -> None:
-    global tldInfo
+    global MY_TLD_INFO
     if aDict is None:
         return
     if len(aDict) == 0:
         return
 
-    tldInfo.mergeExternalDictWithRegex(aDict)
+    MY_TLD_INFO.mergeExternalDictWithRegex(aDict)
 
 
 def validTlds() -> list[str]:
-    global tldInfo
-    return tldInfo.validTlds()
+    global MY_TLD_INFO
+    return MY_TLD_INFO.validTlds()
 
 
 def get_TLD_RE() -> dict[str, dict[str, Any]]:
-    global tldInfo
-    return tldInfo.TLD_RE()
+    global MY_TLD_INFO
+    return MY_TLD_INFO.TLD_RE()
 
 
 def getVersion() -> str:
@@ -76,7 +76,7 @@ def cleanupWhoisResponse(
     for line in tmp:
         # some servers respond with: % Quota exceeded in the comment section (lines starting with %)
         if "quota exceeded" in line.lower():
-            raise WhoisQuotaExceeded(whoisStr)
+            raise WhoisQuotaExceededError(whoisStr)
 
         if pc.with_cleanup_results is True and line.startswith("%"):  # only remove if requested
             continue
@@ -97,6 +97,6 @@ def cleanupWhoisResponse(
 
 VERBOSE: bool = False
 
-# Here we focre load on import the processing of the ZZ database
-tldInfo = TldInfo(ZZ, verbose=VERBOSE)
-tldInfo.init()  # must run on import
+# Here we force-load on import the processing of the ZZ database
+MY_TLD_INFO = TldInfo(ZZ, verbose=VERBOSE)
+MY_TLD_INFO.init()  # must run on import

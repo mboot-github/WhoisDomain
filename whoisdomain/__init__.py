@@ -25,13 +25,13 @@ from .context.parameterContext import ParameterContext
 from .domain import Domain
 from .doWhoisCommand import setMyCache
 from .exceptions import (
-    FailedParsingWhoisOutput,
-    UnknownDateFormat,
-    UnknownTld,
-    WhoisCommandFailed,
-    WhoisCommandTimeout,
-    WhoisPrivateRegistry,
-    WhoisQuotaExceeded,
+    FailedParsingWhoisOutputError,
+    UnknownDateFormatError,
+    UnknownTldError,
+    WhoisCommandFailedError,
+    WhoisCommandTimeoutError,
+    WhoisPrivateRegistryError,
+    WhoisQuotaExceededError,
 )
 from .helpers import (
     cleanupWhoisResponse,
@@ -83,7 +83,7 @@ if "SIMPLISTIC" in WD:
 
 TLD_LIB_PRESENT: bool = False
 try:
-    import tld as libTld  # noqa: F401
+    import tld as lib_tld  # noqa: F401
 
     TLD_LIB_PRESENT = True
 except ImportError as e:
@@ -94,7 +94,7 @@ __all__ = [
     "ZZ",
     "DBMCache",
     "DummyCache",
-    "FailedParsingWhoisOutput",
+    "FailedParsingWhoisOutputError",
     "NoneStrings",
     "NoneStringsAdd",
     "ParameterContext",
@@ -105,12 +105,12 @@ __all__ = [
     "SimpleCacheBase",
     "SimpleCacheWithFile",
     "TldInfo",
-    "UnknownDateFormat",
-    "UnknownTld",
-    "WhoisCommandFailed",
-    "WhoisCommandTimeout",
-    "WhoisPrivateRegistry",
-    "WhoisQuotaExceeded",
+    "UnknownDateFormatError",
+    "UnknownTldError",
+    "WhoisCommandFailedError",
+    "WhoisCommandTimeoutError",
+    "WhoisPrivateRegistryError",
+    "WhoisQuotaExceededError",
     "WhoisRdap",
     "cleanupWhoisResponse",
     "filterTldToSupportedPattern",

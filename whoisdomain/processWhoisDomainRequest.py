@@ -6,7 +6,7 @@ from .context.dataContext import DataContext
 from .context.parameterContext import ParameterContext
 from .domain import Domain
 from .doWhoisCommand import doWhoisAndReturnString
-from .exceptions import UnknownTld
+from .exceptions import UnknownTldError
 from .helpers import filterTldToSupportedPattern, get_TLD_RE
 from .lastWhois import updateLastWhois
 from .whoisCliInterface import WhoisCliInterface
@@ -17,7 +17,7 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 TLD_LIB_PRESENT: bool = False
 try:
-    import tld as libTld
+    import tld as lib_tld
 
     TLD_LIB_PRESENT = True
 except ImportError as ee:
@@ -53,7 +53,7 @@ class ProcessWhoisDomainRequest:
 
         # test with: www.dublin.airport.aero see make withPublicSuffix
         if self.dc.hasLibTld and self.pc.withPublicSuffix:
-            res = libTld.get_tld(
+            res = lib_tld.get_tld(
                 self.dc.domain,
                 fail_silently=True,
                 fix_protocol=True,
@@ -94,7 +94,7 @@ class ProcessWhoisDomainRequest:
             a = f"The TLD {tld} is currently not supported by this package."
             b = "Use validTlds() to see what toplevel domains are supported."
             msg = f"{a} {b}"
-            raise UnknownTld(msg)
+            raise UnknownTldError(msg)
 
         # Internationalized domains: Idna translate
         if self.pc.internationalized:
@@ -193,7 +193,7 @@ class ProcessWhoisDomainRequest:
     def _prepRequest(self) -> bool:
         try:
             self._analyzeDomainStringAndValidate()  # may raise UnknownTld
-        except UnknownTld:
+        except UnknownTldError:
             if self.pc.simplistic is False:
                 raise
 
@@ -231,7 +231,7 @@ class ProcessWhoisDomainRequest:
                 return True
 
             if self.pc.simplistic is False:
-                raise UnknownTld(msg)
+                raise UnknownTldError(msg)
 
             self.dc.exeptionStr = msg  # was: self.dc.exeptionStr = "UnknownTld"
             assert self.dom is not None

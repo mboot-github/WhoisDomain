@@ -9,8 +9,8 @@ import time
 from .context.dataContext import DataContext
 from .context.parameterContext import ParameterContext
 from .exceptions import (
-    WhoisCommandFailed,
-    WhoisCommandTimeout,
+    WhoisCommandFailedError,
+    WhoisCommandTimeoutError,
 )
 
 log = logging.getLogger(__name__)
@@ -110,7 +110,7 @@ class WhoisCliInterface:
             if self.pc.simplistic:
                 return self.rawWhoisResultString
 
-            raise WhoisCommandFailed(self.rawWhoisResultString)
+            raise WhoisCommandFailedError(self.rawWhoisResultString)
 
         return str(self.rawWhoisResultString)
 
@@ -140,7 +140,7 @@ class WhoisCliInterface:
                 # Add this option to cover those cases
                 if not self.pc.parse_partial_response or not self.rawWhoisResultString:
                     msg = f"timeout: query took more then {self.pc.timeout} seconds"
-                    raise WhoisCommandTimeout(msg) from ex
+                    raise WhoisCommandTimeoutError(msg) from ex
 
             return self._postProcessingResult()
 
@@ -153,7 +153,7 @@ class WhoisCliInterface:
             return pathlib.Path(pathToTestFile).read_bytes().decode(errors="ignore")
 
         msg = f"no test data found for: {pathToTestFile}"
-        raise WhoisCommandFailed(msg)
+        raise WhoisCommandFailedError(msg)
 
     # public
 

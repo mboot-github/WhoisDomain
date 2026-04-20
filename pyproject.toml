@@ -156,28 +156,19 @@
     ]
 
     ignore = [
-        # ignore for now:
-        #"ARG001",
-        #"ARG002",
-
-        "D100",
-        "D101",
-        "D102",
-        "D104",
-        "D105",
-        "D107",
+        "D100", # Missing docstring in public module
+        "D101", # Missing docstring in public module
+        "D102", # Missing docstring in public method
         "D103", # Missing docstring in public function
+        "D104", # Missing docstring in public package
+        "D105", # Missing docstring in magic method
+        "D107", # Missing docstring in magic method
+        "D203", "D211", # `incorrect-blank-line-before-class` (D203) and `no-blank-line-before-class` (D211) are incompatible. Ignoring `incorrect-blank-line-before-class`.
 
-        "N802",
-        "N803",
-        "N806",
-        "N812",
-        "N815",
-        "N816",
-        "N818",
-        "N999",
-
-        "PLR2004",
+        "N802", # Function name `getThisTld` should be lowercase
+        "N803", # Argument name `xx` should be lowercase
+        "N806", # Variable `xx` in function should be lowercase
+        "N999", # Invalid module name
 
         "PLR0911", # Too many return statements
         "PLR0912", # Too many branches
@@ -186,9 +177,10 @@
         "PLW0603", # Using the global statement to update `xxx` is discouraged
         "PLW0602", # Using global for `xxx` but no assignment is done
 
-        "RUF001","RUF067", "RUF012",
-        "S101", # Use of `assert` detected
+        "RUF001", # String contains ambiguous  urf8 char
+        "RUF067", # `__init__` module should only contain docstrings and re-exports
 
+        "S101", # Use of `assert` detected
         #
         "COM812", # The following rule may cause conflicts when used with the formatter: `COM812`
         "T201",   # print statements are ok, used in verbose mode

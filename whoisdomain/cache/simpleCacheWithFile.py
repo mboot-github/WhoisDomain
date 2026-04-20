@@ -12,28 +12,28 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 class SimpleCacheWithFile(SimpleCacheBase):
-    cacheFilePath: str | None = None
+    cache_file_path: str | None = None
 
     def __init__(
         self,
         *,
         verbose: bool = False,
-        cacheFilePath: str | None = None,
-        cacheMaxAge: int = (60 * 60 * 48),
+        cache_file_path: str | None = None,
+        cache_max_age: int = (60 * 60 * 48),
     ) -> None:
-        super().__init__(verbose=verbose, cacheMaxAge=cacheMaxAge)
-        self.cacheFilePath = cacheFilePath
+        super().__init__(verbose=verbose, cache_max_age=cache_max_age)
+        self.cache_file_path = cache_file_path
 
     def _fileLoad(
         self,
     ) -> None:
-        if self.cacheFilePath is None:
+        if self.cache_file_path is None:
             return
 
-        if not pathlib.Path(self.cacheFilePath).is_file():
+        if not pathlib.Path(self.cache_file_path).is_file():
             return
 
-        with pathlib.Path(self.cacheFilePath).open(encoding="utf-8") as f:
+        with pathlib.Path(self.cache_file_path).open(encoding="utf-8") as f:
             try:
                 self.memCache = json.load(f)
             except ValueError as e:
@@ -43,10 +43,10 @@ class SimpleCacheWithFile(SimpleCacheBase):
     def _fileSave(
         self,
     ) -> None:
-        if self.cacheFilePath is None:
+        if self.cache_file_path is None:
             return
 
-        with pathlib.Path(self.cacheFilePath).open("w", encoding="utf-8") as f:
+        with pathlib.Path(self.cache_file_path).open("w", encoding="utf-8") as f:
             json.dump(self.memCache, f)
 
     def put(

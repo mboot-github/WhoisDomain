@@ -46,8 +46,8 @@ def _initDefaultCache(
     # if no cache defined init the default cache (optional with file storage based on pc)
     CACHE_STUB = SimpleCacheWithFile(
         verbose=pc.verbose,
-        cacheFilePath=pc.cache_file,
-        cacheMaxAge=pc.cache_age,
+        cache_file_path=pc.cache_file,
+        cache_max_age=pc.cache_age,
     )
 
     msg = "initializing default cache"

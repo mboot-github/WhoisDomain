@@ -39,13 +39,14 @@ WithNoIgnoreWww: bool = False
 
 class ResponseCleaner:
     data: str
-    rDict: dict[str, Any] = {}
+    my_response_dict: dict[str, Any]
 
     def __init__(
         self,
         pathToTestFile: str,
     ):
         self.data = self.readInputFile(pathToTestFile)
+        self.my_response_dict = {}
 
     @classmethod
     def readInputFile(
@@ -125,7 +126,7 @@ class ResponseCleaner:
             with_cleanup_results=with_cleanup_results,
         )
 
-        self.rDict: dict[str, Any] = {
+        self.my_response_dict: dict[str, Any] = {
             "BodyHasSections": False,  # if this is true the body is not a list of lines but a list of sections with lines
             "Preamble": [],  # the lines telling what whois servers wwere contacted
             "Percent": [],  # lines staring with %% , often not present but may contain hints
@@ -143,14 +144,14 @@ class ResponseCleaner:
             lline = line
             if preambleSeen is False:
                 if lline.startswith("["):
-                    self.rDict["Preamble"].append(lline)
+                    self.my_response_dict["Preamble"].append(lline)
                     lline = "PRE;" + lline
                     continue
                 preambleSeen = True
 
             if preambleSeen is True and percentSeen is False:
                 if lline.startswith("%"):
-                    self.rDict["Percent"].append(lline)
+                    self.my_response_dict["Percent"].append(lline)
                     lline = "PERCENT;" + lline
                     continue
                 percentSeen = True
@@ -165,7 +166,7 @@ class ResponseCleaner:
                     postambleSeen = True
 
             if postambleSeen is True:
-                self.rDict["Postamble"].append(lline)
+                self.my_response_dict["Postamble"].append(lline)
                 lline = "POST;" + lline
                 continue
 
@@ -181,21 +182,21 @@ class ResponseCleaner:
             rr.append(ll)
 
         body = self.cleanSection(body)
-        self.rDict["Body"] = self.splitBodyInSections(body)
-        return "\n".join(rr), self.rDict
+        self.my_response_dict["Body"] = self.splitBodyInSections(body)
+        return "\n".join(rr), self.my_response_dict
 
     def printMe(self) -> None:
         zz = ["Preamble", "Percent", "Postamble"]
         for k in zz:
             n = 0
-            for lines in self.rDict[k]:
+            for lines in self.my_response_dict[k]:
                 tab = " [TAB] " if "\t" in lines else ""  # tabs are present in this section
                 cr = " [CR] " if "\r" in lines else ""  # \r is present in this section
                 print(k, cr, tab, lines)
 
         k = "Body"
-        if self.rDict[k]:
-            for n, lines in enumerate(self.rDict[k]):
+        if self.my_response_dict[k]:
+            for n, lines in enumerate(self.my_response_dict[k]):
                 ws = " [WHITESPACE AT END] " if re.search(r"[ \t]+\r?\n", lines) else ""
                 tab = " [TAB] " if "\t" in lines else ""  # tabs are present in this section
                 cr = " [CR] " if "\r" in lines else ""  # \r is present in this section
@@ -322,19 +323,19 @@ def testDomains(aList: list[str]) -> None:  # noqa: C901
         prepItem(dd)
         try:
             testItem1(dd)
-        except whois.UnknownTld as e:
+        except whois.UnknownTldError as e:
             errorItem(dd, e, what="UnknownTld")
-        except whois.FailedParsingWhoisOutput as e:
+        except whois.FailedParsingWhoisOutputError as e:
             errorItem(dd, e, what="FailedParsingWhoisOutput")
-        except whois.UnknownDateFormat as e:
+        except whois.UnknownDateFormatError as e:
             errorItem(dd, e, what="UnknownDateFormat")
-        except whois.WhoisCommandFailed as e:
+        except whois.WhoisCommandFailedError as e:
             errorItem(dd, e, what="WhoisCommandFailed")
-        except whois.WhoisQuotaExceeded as e:
+        except whois.WhoisQuotaExceededError as e:
             errorItem(dd, e, what="WhoisQuotaExceeded")
-        except whois.WhoisPrivateRegistry as e:
+        except whois.WhoisPrivateRegistryError as e:
             errorItem(dd, e, what="WhoisPrivateRegistry")
-        except whois.WhoisCommandTimeout as e:
+        except whois.WhoisCommandTimeoutError as e:
             errorItem(dd, e, what="WhoisCommandTimeout")
 
 

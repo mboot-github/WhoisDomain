@@ -5,37 +5,37 @@ log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
-class WhoisException(Exception):
+class WhoisExceptionError(Exception):
     # make all other exeptions based on a generic exception
     pass
 
 
-class UnknownTld(WhoisException):
+class UnknownTldError(WhoisExceptionError):
     pass
 
 
-class FailedParsingWhoisOutput(WhoisException):
+class FailedParsingWhoisOutputError(WhoisExceptionError):
     pass
 
 
-class WhoisQuotaExceeded(WhoisException):
+class WhoisQuotaExceededError(WhoisExceptionError):
     pass
 
 
-class UnknownDateFormat(WhoisException):
+class UnknownDateFormatError(WhoisExceptionError):
     pass
 
 
-class WhoisCommandFailed(WhoisException):
+class WhoisCommandFailedError(WhoisExceptionError):
     pass
 
 
-class WhoisPrivateRegistry(WhoisException):
+class WhoisPrivateRegistryError(WhoisExceptionError):
     # also known as restricted : see comments at the bottom in tld_regexpr.py
     # almost no info is returned or there is no cli whois server at all:
     # see: https://www.iana.org/domains/root/db/<tld>.html
     pass
 
 
-class WhoisCommandTimeout(WhoisException):
+class WhoisCommandTimeoutError(WhoisExceptionError):
     pass

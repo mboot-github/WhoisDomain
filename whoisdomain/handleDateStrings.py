@@ -9,7 +9,7 @@ import logging
 import os
 import re
 
-from .exceptions import UnknownDateFormat
+from .exceptions import UnknownDateFormatError
 
 log = logging.getLogger(__name__)
 logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
@@ -139,4 +139,4 @@ def str_to_date(
             return z.astimezone().replace(tzinfo=None)
 
     msg = f"Unknown date format: '{text}'"
-    raise UnknownDateFormat(msg)
+    raise UnknownDateFormatError(msg)

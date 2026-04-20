@@ -5,6 +5,8 @@ from typing import Any
 
 from whoisdomain import ProcFunc
 
+N = 26
+
 
 def remoteFunc(
     conn: Any,
@@ -51,7 +53,7 @@ def main() -> None:
         for item in names:
             v = f(item)
             print(v)
-        if n >= 26:
+        if n >= N:
             break
 
     f = pf.makeHandler(remoteFunc, restart_after_count)
@@ -61,7 +63,7 @@ def main() -> None:
         for item in names:
             v = f(item)
             print(v)
-        if n >= 26:
+        if n >= N:
             break
 
 

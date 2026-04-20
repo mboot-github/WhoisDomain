@@ -149,13 +149,7 @@ ParamsStringJson: str = """
 class ParameterContext:
     params: dict[str, Any]
     value: dict[str, Any]
-
-    KT: dict[str, Any] = {
-        "int": int,
-        "float": float,
-        "str": str,
-        "bool": bool,
-    }
+    KT: dict[str, Any]
 
     def _loadDefaults(self) -> list[str]:
         mandatory: list[str] = []
@@ -205,6 +199,13 @@ class ParameterContext:
         self,
         **kwargs: Any,
     ) -> None:
+        self.KT = {
+            "int": int,
+            "float": float,
+            "str": str,
+            "bool": bool,
+        }
+
         self.params = json.loads(ParamsStringJson)
         self.value = {}
 
