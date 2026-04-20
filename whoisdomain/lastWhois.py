@@ -1,5 +1,5 @@
 """
-This module keeps track of the original whois string for the last query request
+Keep track of the original whois string for the last query request.
 
 it should be rewritten to use a static class or singleton
 it is re-initialized on each new request

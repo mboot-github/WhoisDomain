@@ -59,7 +59,7 @@ class ProcFunc:
             # possibly re convert this into a Domain object.
             return reply["result"]
 
-        raise Exception(reply["exception"])
+        raise Exception(reply["exception"])  # noqa: TRY002
 
     def makeHandler(
         self,

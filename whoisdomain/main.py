@@ -47,8 +47,9 @@ class ResponseCleaner:
     ):
         self.data = self.readInputFile(pathToTestFile)
 
+    @classmethod
     def readInputFile(
-        self,
+        cls,
         pathToTestFile: str,
     ) -> str:
         if not pathlib.Path(pathToTestFile).exists():
@@ -57,8 +58,9 @@ class ResponseCleaner:
         # switch to binary mode as that is what Popen uses; make sure the data is treated exactly the same
         return pathlib.Path(pathToTestFile).read_bytes().decode(errors="ignore")
 
+    @classmethod
     def cleanSection(
-        self,
+        cls,
         section: list[str],
     ) -> list[str]:
         # cleanup any beginning and ending empty lines from the section
@@ -151,7 +153,7 @@ class ResponseCleaner:
                     continue
                 percentSeen = True
 
-            if postambleSeen is False:
+            if postambleSeen is False:  # noqa: SIM102
                 if line.startswith("-- ") or line.startswith(">>> ") or line.startswith("Copyright notice"):
                     postambleSeen = True
 

@@ -17,7 +17,7 @@ class Domain:
     # The docstrings for classes should summarize its behavior
     # and list the public methods and instance variables.
     """
-    A class to represent a standarized result of a whois lookup
+    A class to represent a standarized result of a whois lookup.
 
     # Attributes
     * Attributes are created dynamically,
@@ -46,8 +46,9 @@ class Domain:
 
     """
 
+    @classmethod
     def _cleanupArray(
-        self,
+        cls,
         data: list[str],
     ) -> list[str]:
         if "" in data:
@@ -83,7 +84,11 @@ class Domain:
 
         self.name_servers = sorted(self.name_servers)
 
-    def cleanStatus(self, item: str) -> str:
+    @classmethod
+    def cleanStatus(
+        cls,
+        item: str,
+    ) -> str:
         if "icann.org/epp#" in item:
             res = re.split(r"\s*\(?https?://(www\.)?icann\.org/epp#\s*", item)
             if res and res[0]:

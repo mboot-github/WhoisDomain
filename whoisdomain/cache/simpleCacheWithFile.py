@@ -37,7 +37,7 @@ class SimpleCacheWithFile(SimpleCacheBase):
                 self.memCache = json.load(f)
             except ValueError as e:
                 msg = f"ignore json load err: {e}"
-                log.error(msg)
+                log.exception(msg)
 
     def _fileSave(
         self,

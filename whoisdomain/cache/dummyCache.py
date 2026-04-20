@@ -12,13 +12,13 @@ class DummyCache:
     ) -> None:
         self.verbose = verbose
 
-    def get(
+    def get(  # noqa: PLR6301
         self,
         keyString: str,
     ) -> str | None:
         return None
 
-    def put(
+    def put(  # noqa: PLR6301
         self,
         keyString: str,
         data: str,

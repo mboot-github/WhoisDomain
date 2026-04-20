@@ -192,8 +192,9 @@ class ParameterContext:
                 if name in mandatory:
                     del mandatory[mandatory.index(name)]
 
+    @classmethod
     def _validateAllMandatoryNowKnown(
-        self,
+        cls,
         mandatory: list[str],
     ) -> None:
         if len(mandatory) != 0:

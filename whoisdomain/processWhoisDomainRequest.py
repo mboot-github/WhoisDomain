@@ -41,7 +41,7 @@ class ProcessWhoisDomainRequest:
         if self.pc.verbose:
             logging.basicConfig(level="DEBUG")
 
-    def _analyzeDomainStringAndValidate(  # noqa: C901
+    def _analyzeDomainStringAndValidate(
         self,
     ) -> None:
         def _internationalizedDomainNameToPunyCode(d: list[str]) -> list[str]:
@@ -69,9 +69,8 @@ class ProcessWhoisDomainRequest:
             self.dc.dList = []
             return
 
-        if self.dc.dList[0] == "www":
-            if self.pc.noIgnoreWww is False:
-                self.dc.dList = self.dc.dList[1:]
+        if self.dc.dList[0] == "www" and self.pc.noIgnoreWww is False:
+            self.dc.dList = self.dc.dList[1:]
 
         if len(self.dc.dList) == 0:
             self.dc.tldString = None
@@ -220,10 +219,7 @@ class ProcessWhoisDomainRequest:
             return True
 
         # =================================================
-        myKeys: list[str] = []
-        for item in get_TLD_RE():
-            myKeys.append(item)
-
+        myKeys: list[str] = list(get_TLD_RE())
         if self.dc.tldString not in myKeys:
             msg = self._makeMessageForUnsupportedTld()
             if msg is None:

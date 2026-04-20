@@ -37,9 +37,8 @@ class TldInfo:
         if tld[0] == "_":  # skip meta domain patterns , these are not domains just handles we reuse
             return
 
-        if override is False:
-            if tld in self.tldRegexDb:
-                return
+        if not override and tld in self.tldRegexDb:
+            return
 
         what = self.flattenMasterTldEntry(tld, override=override)
         if self.withStore:
@@ -56,7 +55,8 @@ class TldInfo:
         if self.withStore:
             self.tldRegexDb[tld2] = what
 
-    def _cleanupResultDict(self, resultDict: dict[str, Any]) -> dict[str, Any]:
+    @classmethod
+    def _cleanupResultDict(cls, resultDict: dict[str, Any]) -> dict[str, Any]:
         # we dont want to propagate the extend data
         resultDict.pop("extend", None)
         resultDict.pop("_extend", None)
@@ -64,7 +64,7 @@ class TldInfo:
         # we inhert all except extend or _extend
         cleanResultDict: dict[str, Any] = {}
         for key, val in resultDict.items():
-            cleanResultDict[key] = val
+            cleanResultDict[key] = val  # noqa: PERF403
 
         return cleanResultDict
 
@@ -133,5 +133,5 @@ class TldInfo:
         return sorted(self.tldRegexDb.keys())
 
     def TLD_RE(self) -> dict[str, dict[str, Any]]:
-        # this returns the currenly prepared list of all tlds ane theyr compiled regexes
+        # this returns the currenly prepared list of all tlds and the compiled regexes
         return self.tldRegexDb

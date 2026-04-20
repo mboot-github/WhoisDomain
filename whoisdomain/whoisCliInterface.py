@@ -3,7 +3,7 @@ import os
 import pathlib
 import platform
 import shutil
-import subprocess
+import subprocess  # noqa: S404
 import time
 
 from .context.dataContext import DataContext
@@ -32,11 +32,11 @@ class WhoisCliInterface:
         self.dc = dc
         self.pc = pc
 
-    def _tryInstallMissingWhoisOnWindows(self) -> None:
-        """
-        Windows 'whois' command wrapper
-        https://docs.microsoft.com/en-us/sysinternals/downloads/whois
-        """
+    @classmethod
+    def _tryInstallMissingWhoisOnWindows(cls) -> None:
+        # Windows 'whois' command wrapper.
+        # https://docs.microsoft.com/en-us/sysinternals/downloads/whois
+
         folder = pathlib.Path.cwd()
         rr = r"copy \\live.sysinternals.com\tools\whois.exe "
         copy_command = f"{rr} {folder}"
@@ -118,7 +118,7 @@ class WhoisCliInterface:
         # LANG=en is added to make the ".jp" output consisent across all environments
         # STDBUF_OFF_CMD needed to not lose data on kill
 
-        with subprocess.Popen(
+        with subprocess.Popen(  # noqa: S603
             self.STDBUF_OFF_CMD + self._makeWhoisCommandToRun(),
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,

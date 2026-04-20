@@ -197,7 +197,6 @@ class WhoisParser:
         msg = f"shortResponse:: {self.dc.tldString} {self.dc.whoisStr}"
         log.debug(msg)
 
-        # TODO: some short responses are actually valid:
         # lookfor Domain: and Status but all other fields are missing so the regexec could fail
         # this domain is taken already or reserved
 
@@ -334,9 +333,8 @@ class WhoisParser:
         self.pc.slow_down = self.pc.slow_down or 0
 
         slowDown = self.dc.thisTld.get("_slowdown")
-        if slowDown:
-            if self.pc.slow_down == 0 and int(slowDown) > 0:
-                self.pc.slow_down = int(slowDown)
+        if slowDown and self.pc.slow_down == 0 and int(slowDown) > 0:
+            self.pc.slow_down = int(slowDown)
 
         if int(self.pc.slow_down):
             msg = f"using _slowdown hint {self.pc.slow_down} for tld: {self.dc.tldString}"

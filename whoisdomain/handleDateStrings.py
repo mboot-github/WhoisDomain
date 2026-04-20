@@ -1,5 +1,5 @@
 """
-This module isolates all date parsing in one place
+Isolates all date parsing in one place.
 
 str_to_date() is the only entry point
 """
@@ -132,8 +132,8 @@ def str_to_date(
 
     for f in _DATE_FORMATS:
         try:
-            z = datetime.datetime.strptime(text, f)
-        except ValueError as v:
+            z = datetime.datetime.strptime(text, f)  # noqa: DTZ007
+        except ValueError as v:  # noqa: PERF203
             _ = v
         else:
             return z.astimezone().replace(tzinfo=None)

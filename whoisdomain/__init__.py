@@ -1,6 +1,6 @@
 # pylint: disable=duplicate-code
 """
-Module providing all public accessible functions and data for the whoisdomain package
+Module providing all public accessible functions and data for the whoisdomain package.
 
 ## optional modules supported:
 
@@ -53,6 +53,7 @@ from .strings.quotaStrings import QuotaStrings, QuotaStringsAdd
 from .tldDb.tld_regexpr import ZZ
 from .tldInfo import TldInfo
 from .version import VERSION
+from .whois_rdap import WhoisRdap
 from .whoisCliInterface import WhoisCliInterface
 from .whoisParser import WhoisParser
 
@@ -110,6 +111,7 @@ __all__ = [
     "WhoisCommandTimeout",
     "WhoisPrivateRegistry",
     "WhoisQuotaExceeded",
+    "WhoisRdap",
     "cleanupWhoisResponse",
     "filterTldToSupportedPattern",
     "getTestHint",

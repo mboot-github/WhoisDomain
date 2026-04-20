@@ -55,7 +55,6 @@ def _initDefaultCache(
     return CACHE_STUB
 
 
-# TODO: future: can we use decorator for caching?
 def doWhoisAndReturnString(
     pc: ParameterContext,
     dc: DataContext,

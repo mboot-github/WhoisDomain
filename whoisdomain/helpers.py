@@ -40,7 +40,7 @@ def validTlds() -> list[str]:
     return tldInfo.validTlds()
 
 
-def get_TLD_RE() -> dict[str, Any]:
+def get_TLD_RE() -> dict[str, dict[str, Any]]:
     global tldInfo
     return tldInfo.TLD_RE()
 
@@ -82,9 +82,8 @@ def cleanupWhoisResponse(
         if pc.with_cleanup_results is True and line.startswith("%"):  # only remove if requested
             continue
 
-        if pc.withRedacted is False:
-            if "REDACTED FOR PRIVACY" in line:  # these lines contibute nothing so ignore
-                continue
+        if pc.withRedacted is False and "REDACTED FOR PRIVACY" in line:  # these lines contibute nothing so ignore
+            continue
 
         if "Please query the RDDS service of the Registrar of Record" in line:  # these lines contibute nothing so ignore
             continue

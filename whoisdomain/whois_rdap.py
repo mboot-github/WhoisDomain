@@ -6,7 +6,7 @@ from typing import Any
 import tld
 import whodap
 
-from data_response import DataResponse
+from .data_response import DataResponse
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,8 @@ class WhoisRdap:
     def __init__(self) -> None:
         self.dnsc = whodap.DNSClient.new_client()  # make sure we cache the primary looup for the tld rdap servers
 
-    def fld(self, domain: str) -> str | None:
+    @classmethod
+    def fld(cls, domain: str) -> str | None:
         return tld.get_fld(domain, fix_protocol=True, fail_silently=True)
 
     def do_one_domain(self, domain: str) -> DataResponse:
@@ -28,10 +29,10 @@ class WhoisRdap:
             return DataResponse(status=True, data=resp.to_whois_dict())
         except NotImplementedError as e:
             msg = f"Exception: {e}"
-            return DataResponse(status=False, message=str(e))
+            return DataResponse(status=False, message=msg)
         except Exception as e:
             msg = f"Exception: {e}"
-            return DataResponse(status=False, message=str(e))
+            return DataResponse(status=False, message=msg)
 
     @classmethod
     def get_registrant(cls, data: dict[str, Any]) -> tuple[str, str]:
