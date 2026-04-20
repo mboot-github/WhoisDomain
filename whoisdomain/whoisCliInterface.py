@@ -43,7 +43,7 @@ class WhoisCliInterface:
         msg = f"downloading dependencies: {copy_command}"
         log.debug(msg)
 
-        subprocess.call(
+        subprocess.call(  # noqa: S602 # `subprocess` call with `shell=True` identified, security issue
             copy_command,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -100,7 +100,7 @@ class WhoisCliInterface:
         msg = f"{self.rawWhoisResultString}"
         log.debug(msg)
 
-        if self.pc.ignore_returncode is False and self.processHandle.returncode not in [0, 1]:
+        if self.pc.ignore_returncode is False and self.processHandle.returncode not in {0, 1}:
             if "fgets: Connection reset by peer" in self.rawWhoisResultString:
                 return self.rawWhoisResultString.replace("fgets: Connection reset by peer", "")
 

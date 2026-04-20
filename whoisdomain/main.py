@@ -598,12 +598,12 @@ def main() -> None:  # noqa: C901,PLR0915
     fileData: dict[str, Any] = {}
 
     for opt, arg in opts:
-        if opt in ("-S", "SupportedTld"):
+        if opt in {"-S", "SupportedTld"}:
             for tld in sorted(whois.validTlds()):
                 print(tld)
             sys.exit(0)
 
-        if opt in ("-V", "Version"):
+        if opt in {"-V", "Version"}:
             print(whois.getVersion())
             sys.exit(0)
 
@@ -611,28 +611,28 @@ def main() -> None:  # noqa: C901,PLR0915
             usage()
             sys.exit(0)
 
-        if opt in ("-a", "--all"):
+        if opt in {"-a", "--all"}:
             TestAllTld = True
 
-        if opt in ("-H", "--having"):
+        if opt in {"-H", "--having"}:
             TestAllTld = True
             allHaving = str(arg)
 
-        if opt in ("-r", "--reg"):
+        if opt in {"-r", "--reg"}:
             TestAllTld = True
             allRegex = str(arg)
 
-        if opt in ("-v", "--verbose"):
+        if opt in {"-v", "--verbose"}:
             Verbose = True
             logging.basicConfig(level="DEBUG")
 
-        if opt in ("-p", "--print"):
+        if opt in {"-p", "--print"}:
             PrintGetRawWhoisResult = True
 
-        if opt in ("-j", "--json"):
+        if opt in {"-j", "--json"}:
             PrintJson = True
 
-        if opt in ("-T", "--Testing"):
+        if opt in {"-T", "--Testing"}:
             # print out all names of tld where we have _test
             TestAllTld = True
             rr = makeTestAllCurrentTld(None)
@@ -640,23 +640,23 @@ def main() -> None:  # noqa: C901,PLR0915
                 print(item)
             sys.exit(0)
 
-        if opt in ("-t", "--test"):
+        if opt in {"-t", "--test"}:
             # collect all _test entries defined and only run those,
             # o not run the default meta.tld
             TestAllTld = True
             TestRunOnly = True
 
-        if opt in ("-R", "--Ruleset"):
+        if opt in {"-R", "--Ruleset"}:
             Ruleset = True
 
-        if opt in ("-D", "--Directory"):
+        if opt in {"-D", "--Directory"}:
             directory = arg
             isDir = pathlib.Path(directory).is_dir()
             if isDir is False:
                 print(f"{directory} cannot be found or is not a directory", file=sys.stderr)
                 sys.exit(101)
 
-        if opt in ("-C", "--Cleanup"):
+        if opt in {"-C", "--Cleanup"}:
             inFile = arg
             isFile = pathlib.Path(arg).is_file()
             if isFile is False:
@@ -668,7 +668,7 @@ def main() -> None:  # noqa: C901,PLR0915
             rc.printMe()
             sys.exit(0)
 
-        if opt in ("-f", "--file"):
+        if opt in {"-f", "--file"}:  # a set
             filename = arg
             isFile = pathlib.Path(filename).is_file()
             if isFile is False:
@@ -679,7 +679,7 @@ def main() -> None:  # noqa: C901,PLR0915
                 files.append(filename)
                 TestAllTld = False
 
-        if opt in ("-d", "--domain"):
+        if opt in {"-d", "--domain"}:  # set
             domain = arg
             if domain not in domains:
                 domains.append(domain)

@@ -160,11 +160,18 @@
         "ARG002","ARG001",
         "D107","D102","D101","D103","D100","D105","D104","D205","D203",
         "N812","N818","N806","N802","N815","N816","N803","N999",
-        "PLR6201","PLR2004","PLR0917","PLR0913","PLR0911","PLR0912","PLR0914",
+        "PLR2004",
+
+        "PLR0911", # Too many return statements
+        "PLR0912", # Too many branches
+        "PLR0914", # Too many local variables
+        "PLR0913", # Too many arguments in function definition
         "PLW0603", # Using the global statement to update `xxx` is discouraged
         "PLW0602", # Using global for `xxx` but no assignment is done
+
         "RUF001","RUF067", "RUF012",
-        "S101","S602",
+        "S101", # Use of `assert` detected
+        # "S602",
 
         #
         "COM812", # The following rule may cause conflicts when used with the formatter: `COM812`

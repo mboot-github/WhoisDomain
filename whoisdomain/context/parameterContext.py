@@ -213,12 +213,12 @@ class ParameterContext:
         self._validateAllMandatoryNowKnown(mandatory)
 
     def __getattr__(self, name: str) -> Any:
-        if name in ["params", "value"]:
+        if name in {"params", "value"}:
             return self.name
         return self.get(name)
 
     def __setattr__(self, name: str, value: Any) -> None:
-        if name in ["params", "value"]:
+        if name in {"params", "value"}:
             object.__setattr__(self, name, value)
         else:
             self.set(name, value)
