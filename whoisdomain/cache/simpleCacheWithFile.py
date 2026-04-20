@@ -16,6 +16,7 @@ class SimpleCacheWithFile(SimpleCacheBase):
 
     def __init__(
         self,
+        *,
         verbose: bool = False,
         cacheFilePath: str | None = None,
         cacheMaxAge: int = (60 * 60 * 48),

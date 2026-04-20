@@ -10,6 +10,7 @@ class DBMCache:
     def __init__(
         self,
         dbmFile: str,
+        *,
         verbose: bool = False,
     ) -> None:
         self.verbose = verbose

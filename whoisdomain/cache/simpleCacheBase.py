@@ -9,6 +9,7 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 class SimpleCacheBase:
     def __init__(
         self,
+        *,
         verbose: bool = False,
         cacheMaxAge: int = (60 * 60 * 48),
     ) -> None:

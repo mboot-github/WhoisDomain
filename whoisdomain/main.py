@@ -115,13 +115,14 @@ class ResponseCleaner:
 
     def cleanupWhoisResponse(  # noqa: C901
         self,
+        *,
         verbose: bool = False,
         with_cleanup_results: bool = False,
     ) -> tuple[str, dict[Any, Any]]:
         result = whois.cleanupWhoisResponse(
             self.data,
-            verbose,
-            with_cleanup_results,
+            verbose=verbose,
+            with_cleanup_results=with_cleanup_results,
         )
 
         self.rDict: dict[str, Any] = {
@@ -139,37 +140,43 @@ class ResponseCleaner:
         postambleSeen = False
         percentSeen = False
         for line in z:
+            lline = line
             if preambleSeen is False:
-                if line.startswith("["):
-                    self.rDict["Preamble"].append(line)
-                    line = "PRE;" + line
+                if lline.startswith("["):
+                    self.rDict["Preamble"].append(lline)
+                    lline = "PRE;" + lline
                     continue
                 preambleSeen = True
 
             if preambleSeen is True and percentSeen is False:
-                if line.startswith("%"):
-                    self.rDict["Percent"].append(line)
-                    line = "PERCENT;" + line
+                if lline.startswith("%"):
+                    self.rDict["Percent"].append(lline)
+                    lline = "PERCENT;" + lline
                     continue
                 percentSeen = True
 
-            if postambleSeen is False:  # noqa: SIM102
-                if line.startswith("-- ") or line.startswith(">>> ") or line.startswith("Copyright notice"):
+            if postambleSeen is False:
+                valid = [
+                    "-- ",
+                    ">>> ",
+                    "Copyright notice",
+                ]
+                if lline.startswith(tuple(valid)):
                     postambleSeen = True
 
             if postambleSeen is True:
-                self.rDict["Postamble"].append(line)
-                line = "POST;" + line
+                self.rDict["Postamble"].append(lline)
+                lline = "POST;" + lline
                 continue
 
-            body.append(line)
+            body.append(lline)
 
-            ll = line
-            if "\t" in line:
-                ll = "TAB;" + line  # mark lines having tabs
+            ll = lline
+            if "\t" in lline:
+                ll = "TAB;" + lline  # mark lines having tabs
 
             if ll.endswith("\r"):
-                ll = "CR;" + line  # mark lines having CR (\r)
+                ll = "CR;" + lline  # mark lines having CR (\r)
 
             rr.append(ll)
 
@@ -216,6 +223,7 @@ def testItem(d: str, pc: whois.ParameterContext) -> Any:
 
 def testItem1(
     d: str,
+    *,
     printgetRawWhoisResult: bool = False,
 ) -> None:
     global \

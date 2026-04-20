@@ -17,6 +17,7 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 def filterTldToSupportedPattern(
     domain: str,
     dList: list[str],
+    *,
     verbose: bool = False,
 ) -> str | None:
     global tldInfo
@@ -59,6 +60,7 @@ def getTestHint(tldString: str) -> str | None:
 
 def cleanupWhoisResponse(
     whoisStr: str,
+    *,
     verbose: bool = False,
     with_cleanup_results: bool = False,
     withRedacted: bool = False,
@@ -99,5 +101,5 @@ def cleanupWhoisResponse(
 VERBOSE: bool = False
 
 # Here we focre load on import the processing of the ZZ database
-tldInfo = TldInfo(ZZ, VERBOSE)
+tldInfo = TldInfo(ZZ, verbose=VERBOSE)
 tldInfo.init()  # must run on import

@@ -13,6 +13,7 @@ class TldInfo:
     def __init__(
         self,
         zzDict: dict[str, Any],
+        *,
         verbose: bool = False,
     ) -> None:
         self.verbose = verbose
@@ -31,6 +32,7 @@ class TldInfo:
     def _initOne(
         self,
         tld: str,
+        *,
         override: bool = False,
     ) -> None:
         # meta domains start with _: examples _centralnic and _donuts
@@ -56,7 +58,10 @@ class TldInfo:
             self.tldRegexDb[tld2] = what
 
     @classmethod
-    def _cleanupResultDict(cls, resultDict: dict[str, Any]) -> dict[str, Any]:
+    def _cleanupResultDict(
+        cls,
+        resultDict: dict[str, Any],
+    ) -> dict[str, Any]:
         # we dont want to propagate the extend data
         resultDict.pop("extend", None)
         resultDict.pop("_extend", None)
@@ -73,6 +78,7 @@ class TldInfo:
     def flattenMasterTldEntry(
         self,
         tldString: str,
+        *,
         override: bool = False,
     ) -> dict[str, Any]:
         tldDict = self.zzDictRef[tldString]
@@ -87,7 +93,9 @@ class TldInfo:
 
         return self._cleanupResultDict(tldDict)
 
-    def init(self) -> None:
+    def init(
+        self,
+    ) -> None:
         # build the database of all tld
         for tld in self.zzDictRef:
             self._initOne(tld, override=False)
@@ -96,6 +104,7 @@ class TldInfo:
         self,
         domain: str,
         dList: list[str],
+        *,
         verbose: bool = False,
     ) -> str | None:
         # we have max 2 levels so first check if the last 2 are in our list
@@ -127,11 +136,15 @@ class TldInfo:
         # reprocess the regexes we newly defined or overrode
         override = True
         for tld in aDict:
-            self._initOne(tld, override)
+            self._initOne(tld, override=override)
 
-    def validTlds(self) -> list[str]:
+    def validTlds(
+        self,
+    ) -> list[str]:
         return sorted(self.tldRegexDb.keys())
 
-    def TLD_RE(self) -> dict[str, dict[str, Any]]:
+    def TLD_RE(
+        self,
+    ) -> dict[str, dict[str, Any]]:
         # this returns the currenly prepared list of all tlds and the compiled regexes
         return self.tldRegexDb

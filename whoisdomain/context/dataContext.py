@@ -12,6 +12,7 @@ class DataContext:
     def __init__(
         self,
         domain: str,
+        *,
         hasLibTld: bool = False,
     ) -> None:
         self.originalDomain: str = domain  # the requested domain before cleanup

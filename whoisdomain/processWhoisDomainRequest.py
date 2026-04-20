@@ -87,7 +87,7 @@ class ProcessWhoisDomainRequest:
         self.dc.tldString = filterTldToSupportedPattern(
             self.dc.domain,
             self.dc.dList,
-            self.pc.verbose,
+            verbose=self.pc.verbose,
         )
 
         if self.dc.tldString is None:

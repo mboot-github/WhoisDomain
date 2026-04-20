@@ -16,7 +16,10 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 PATTERN_CACHE: dict[tuple[str, int], Any] = {}
 
 
-def make_pat(reStr: str, flags: int) -> Any:
+def make_pat(
+    reStr: str,
+    flags: int,
+) -> Any:
     if (reStr, flags) in PATTERN_CACHE:
         pattern = PATTERN_CACHE[reStr, flags]
     else:
@@ -26,10 +29,12 @@ def make_pat(reStr: str, flags: int) -> Any:
 
 
 def newLineSplit(
+    *,
     ignoreCase: bool = True,
 ) -> Callable[[str], list[str]]:
     def xNewlineSplit(
         whoisStr: str,
+        *,
         verbose: bool = False,
     ) -> Any:
         # split the incoming text on newlines \n\n
@@ -45,13 +50,13 @@ def newLineSplit(
 
 def R(
     reStr: str,
+    *,
     ignoreCase: bool = True,
-) -> Callable[[str, list[str], bool], list[str]]:
+) -> Callable[[str, list[str]], list[str]]:
     # regular simple regex strings are converter with currying to functins to be called later
     def reFindAll(
         textStr: str,
         sData: list[str],
-        verbose: bool = False,
     ) -> Any:
         flags = re.IGNORECASE if ignoreCase else 0  # NOFLAG is 3.11
         pattern = make_pat(reStr, flags)
@@ -71,9 +76,9 @@ def findFromToAndLookFor(
     fromStr: str,
     toStr: str,
     lookForStr: str,
+    *,
     ignoreCase: bool = True,
-    verbose: bool = False,
-) -> Callable[[str, list[str], bool], list[str]]:
+) -> Callable[[str, list[str]], list[str]]:
     # look for a particular string like R()
     # but limit the context we look in
     # to a specific sub section of the whois cli response
@@ -81,7 +86,6 @@ def findFromToAndLookFor(
     def xFindFromToAndLookFor(
         textStr: str,
         sData: list[str],
-        verbose: bool = False,
     ) -> Any:
         flags = re.IGNORECASE if ignoreCase else 0  # NOFLAG is 3.11
         p1 = make_pat(fromStr, flags)
@@ -157,9 +161,9 @@ def findFromToAndLookForWithFindFirst(
     fromStr: str,  # we will replace {} in fromStr with the result from findFirst
     toStr: str,
     lookForStr: str,
+    *,
     ignoreCase: bool = True,
-    verbose: bool = False,
-) -> Callable[[str, list[str], bool], list[str]]:
+) -> Callable[[str, list[str]], list[str]]:
     # look for a particular string like R() with find first
     #   then build a from ,to context using the result from findFirst (google.fr is a example)
     #     but limit the context we look in
@@ -168,7 +172,6 @@ def findFromToAndLookForWithFindFirst(
     def xFindFromToAndLookForWithFindFirst(
         textStr: str,
         sData: list[str],
-        verbose: bool = False,
     ) -> list[str]:
         flags = re.IGNORECASE if ignoreCase else 0  # NOFLAG is 3.11
 
@@ -221,14 +224,13 @@ def findInSplitedLookForHavingFindFirst(
     findFirst: str,
     lookForStr: str,
     extract: str,
+    *,
     ignoreCase: bool = True,
-    verbose: bool = False,
-) -> Callable[[str, list[str], bool], list[str]]:
+) -> Callable[[str, list[str]], list[str]]:
     # requires splitted data
     def xfindInSplitedLookForHavingFindFirst(
         textStr: str,
         sData: list[str],
-        verbose: bool = False,
     ) -> list[str]:
         flags = re.IGNORECASE if ignoreCase else 0  # NOFLAG is 3.11
 

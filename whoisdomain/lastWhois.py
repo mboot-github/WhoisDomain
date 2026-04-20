@@ -33,7 +33,7 @@ def updateLastWhois(
             "Domain": ".".join(dList),
             "rawData": whoisStr,
             "server": pc.server,
-        }
+        },
     )
 
 

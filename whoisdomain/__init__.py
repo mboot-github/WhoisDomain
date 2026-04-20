@@ -126,7 +126,9 @@ __all__ = [
 ]
 
 
-def _result2dict(func: Any) -> Any:
+def _result2dict(
+    func: Any,
+) -> Any:
     @wraps(func)
     def _inner(*args: str, **kw: Any) -> dict[str, Any]:
         r = func(*args, **kw)
@@ -138,6 +140,7 @@ def _result2dict(func: Any) -> Any:
 def remoteQ2(
     conn: Any,
     max_requests: int,
+    *,
     verbose: bool = False,
 ) -> None:
     n: int = 0
@@ -249,6 +252,7 @@ def q2(
 
 def query(
     domain: str,
+    *,
     force: bool = False,
     cache_file: str | None = None,
     cache_age: int = 60 * 60 * 48,

@@ -4,7 +4,7 @@ include Makefile.inc
 
 MYPY_INSTALL := \
 	types-requests \
-	types-python-dateutil
+	types-python-dateutil redis
 
 prep: clean format check mypy
 

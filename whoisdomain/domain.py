@@ -72,15 +72,15 @@ class Domain:
 
         self.name_servers: list[str] = []
         for x in tmp:
-            x = x.strip(" .")  # remove any leading or trailing spaces and/or dots
-            if x:
-                if " " in x:
-                    x, _ = x.split(" ", 1)
-                    x = x.strip(" .")
+            xx = x.strip(" .")  # remove any leading or trailing spaces and/or dots
+            if xx:
+                if " " in xx:
+                    xx, _ = xx.split(" ", 1)
+                    xx = xx.strip(" .")
 
-                x = x.lower()
-                if x not in self.name_servers:
-                    self.name_servers.append(x)
+                xx = xx.lower()
+                if xx not in self.name_servers:
+                    self.name_servers.append(xx)
 
         self.name_servers = sorted(self.name_servers)
 
@@ -123,8 +123,8 @@ class Domain:
         if pc.stripHttpStatus:
             z = []
             for item in self.statuses:
-                item = self.cleanStatus(item)
-                z.append(item)
+                xitem = self.cleanStatus(item)
+                z.append(xitem)
             self.statuses = z
 
     def _doOptionalFields(
@@ -172,9 +172,9 @@ class Domain:
         self.registrant_country = dc.data["registrant_country"][0].strip()
 
         # date time items
-        self.creation_date = str_to_date(dc.data["creation_date"][0], self.tld)
-        self.expiration_date = str_to_date(dc.data["expiration_date"][0], self.tld)
-        self.last_updated = str_to_date(dc.data["updated_date"][0], self.tld)
+        self.creation_date = str_to_date(dc.data["creation_date"][0], tld=self.tld)
+        self.expiration_date = str_to_date(dc.data["expiration_date"][0], tld=self.tld)
+        self.last_updated = str_to_date(dc.data["updated_date"][0], tld=self.tld)
 
         self.dnssec = dc.data["DNSSEC"]
         self._doStatus(pc, dc)

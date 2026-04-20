@@ -81,6 +81,7 @@ _CUSTOM_DATE_FORMATS = {
 
 def str_to_date(
     text: str,
+    *,
     tld: str | None = None,
     verbose: bool = False,
 ) -> datetime.datetime | None:
@@ -111,7 +112,7 @@ def str_to_date(
     if re.search(r, text):
         text = re.sub(r, "(utc\\g<1>0\\g<2>00)", text)
 
-    # hack for 1st 2nd 3rd 4th etc
+    # a h a c k for 1st 2nd 3rd 4th etc
     # better here https://stackoverflow.com/questions/1258199/python-datetime-strptime-wildcard
     text = re.sub(r"(\d+)(st|nd|rd|th) ", r"\1 ", text)
 

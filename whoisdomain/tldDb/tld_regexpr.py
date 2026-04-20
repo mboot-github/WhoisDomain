@@ -27,7 +27,12 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 # seems the most up to date and maintained
 
 
-def xStr(what: str, times: int = 1, firstMandatory: bool = True) -> str:
+def xStr(
+    what: str,
+    times: int = 1,
+    *,
+    firstMandatory: bool = True,
+) -> str:
     # =================================================================
     # Often we want to repeat regex patterns,
     #   ( typically with nameservers or status fields )
@@ -909,7 +914,6 @@ ZZ["sk"] = {
         fromStr=r"\nRegistrar:",
         toStr=r"\n\n",
         lookForStr=r"Organization:\s*([^\n]*)\n",
-        verbose=True,
     ),
 }
 

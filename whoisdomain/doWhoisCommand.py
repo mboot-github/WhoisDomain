@@ -76,7 +76,7 @@ def doWhoisAndReturnString(
         cache.put(
             keyString,
             wci.executeWhoisQueryOrReturnFileData(),
-        )
+        ),
     )
 
 

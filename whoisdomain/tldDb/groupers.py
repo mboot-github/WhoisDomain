@@ -18,9 +18,12 @@ COM_LIST: list[str] = [
 ]
 
 
-def groupFromList(aList: list[str]) -> Callable[[str], dict[str, str]]:
+def groupFromList(
+    aList: list[str],
+) -> Callable[[str], dict[str, str]]:
     def xgroupFromList(
         whoisStr: str,
+        *,
         verbose: bool = False,
     ) -> dict[str, str]:
         result: dict[str, str] = {}
