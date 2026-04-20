@@ -1,10 +1,14 @@
-import sys
+import logging
+
+# import sys
 from typing import Any
 
 import tld
 import whodap
 
 from data_response import DataResponse
+
+logger = logging.getLogger(__name__)
 
 
 class WhoisRdap:
@@ -22,8 +26,11 @@ class WhoisRdap:
             xtld = a[-1]
             resp = self.dnsc.lookup(dom, xtld)
             return DataResponse(status=True, data=resp.to_whois_dict())
+        except NotImplementedError as e:
+            msg = f"Exception: {e}"
+            return DataResponse(status=False, message=str(e))
         except Exception as e:
-            print(f"Exception: {e}", file=sys.stderr)
+            msg = f"Exception: {e}"
             return DataResponse(status=False, message=str(e))
 
     @classmethod

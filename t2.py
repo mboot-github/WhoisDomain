@@ -1,9 +1,17 @@
+import logging
+
 import whoisdomain
 from whois_rdap import WhoisRdap
 
+logger = logging.getLogger(__name__)
 
 def xmain() -> None:
     rr = {}
+
+    logging.basicConfig(
+        filename="myapp.log",
+        level=logging.WARNING,
+    )
 
     wr = WhoisRdap()
     for k, v in whoisdomain.ZZ.items():
