@@ -30,7 +30,8 @@ On January 19, 2023, ICANN opened voting on a global amendment to all its regist
      * the second item will be YYYYMMDD,
      * the third item will start from 1 and be only used if more than one update will have to be done in one day.
 
-Versions `1.x.x` will keep the output compatible with Danny Cork until 2024-02-03 (February 2024)
+Versions `1.x.x` will keep the output compatible with Danny Cork.
+Versions `2.x.x` will add a dependency on whodap and use rdab based whois data before consulting historical whois.
 
 ## Releases
 

@@ -1,20 +1,6 @@
-# Makefile
-
-SHELL := /bin/bash -l
-export SHELL
-
-VENV := ./vtmp/
-export VENV
-
-# tested on 3.10-3.14
-MIN_PYTHON_VERSION := $(shell basename $$( ls /usr/bin/python3.[0-9][0-9] | awk '{print $0; exit}' ) )
-export MIN_PYTHON_VERSION
-
-# ==========================================
-# Code formatting and checks
-PY_FILES := *.py bin/*.py whoisdomain/
-
-LINE_LENGTH := 160
+# ==========================================================
+include Makefile.inc
+# ==========================================================
 
 TEST_OPTIONS_ALL = \
 	--withPublicSuffix \
