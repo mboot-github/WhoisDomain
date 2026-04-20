@@ -58,7 +58,8 @@ class Domain:
 
     def _doNameservers(
         self,
-        pc: ParameterContext,
+        # pc: ParameterContext,
+        *,
         dc: DataContext,
     ) -> None:
         tmp: list[str] = []
@@ -178,7 +179,7 @@ class Domain:
 
         self.dnssec = dc.data["DNSSEC"]
         self._doStatus(pc, dc)
-        self._doNameservers(pc, dc)
+        self._doNameservers(dc=dc)
 
         # optional fields
         self._doOptionalFields(dc.data)

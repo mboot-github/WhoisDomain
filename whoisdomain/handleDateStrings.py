@@ -83,7 +83,6 @@ def str_to_date(
     text: str,
     *,
     tld: str | None = None,
-    verbose: bool = False,
 ) -> datetime.datetime | None:
     text = text.strip().lower()
 

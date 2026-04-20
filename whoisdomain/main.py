@@ -223,8 +223,6 @@ def testItem(d: str, pc: whois.ParameterContext) -> Any:
 
 def testItem1(
     d: str,
-    *,
-    printgetRawWhoisResult: bool = False,
 ) -> None:
     global \
         IgnoreReturncode, \
@@ -378,7 +376,7 @@ def getAllCurrentTld() -> list[str]:
 
 def appendHintOrMeta(
     rr: list[str],
-    allRegex: str | None,
+    # allRegex: str | None,
     tld: str,
 ) -> None:
     global TestAllTld, TestRunOnly
@@ -393,7 +391,7 @@ def appendHintOrMeta(
 
 def appendHint(
     rr: list[str],
-    allRegex: str | None,
+    # allRegex: str | None,
     tld: str,
 ) -> None:
     global TestAllTld, TestRunOnly
@@ -405,17 +403,17 @@ def appendHint(
 
 
 def makeMetaAllCurrentTld(
-    allHaving: str | None = None,
+    # allHaving: str | None = None,
     allRegex: str | None = None,
 ) -> list[str]:
     rr: list[str] = []
     for tld in getAllCurrentTld():
         if allRegex is None:
-            appendHintOrMeta(rr, allRegex, tld)
+            appendHintOrMeta(rr, tld)
             continue
 
         if re.search(allRegex, tld):
-            appendHintOrMeta(rr, allRegex, tld)
+            appendHintOrMeta(rr, tld)
 
     return rr
 
@@ -426,10 +424,10 @@ def makeTestAllCurrentTld(
     rr: list[str] = []
     for tld in getAllCurrentTld():
         if allRegex is None:
-            appendHint(rr, allRegex, tld)
+            appendHint(rr, tld)
             continue
         if re.search(allRegex, tld):
-            appendHint(rr, allRegex, tld)
+            appendHint(rr, tld)
 
     return rr
 
@@ -583,7 +581,7 @@ def main() -> None:  # noqa: C901,PLR0915
 
     # TestAllTld: bool = False
 
-    allHaving: str | None = None  # from all supported tld only process the ones having this :: TODO ::
+    # allHaving: str | None = None  # from all supported tld only process the ones having this :: TODO ::
     allRegex: str | None = None  # from all supported tld process only the ones matching this regex
 
     directory: str | None = None
@@ -614,9 +612,9 @@ def main() -> None:  # noqa: C901,PLR0915
         if opt in {"-a", "--all"}:
             TestAllTld = True
 
-        if opt in {"-H", "--having"}:
-            TestAllTld = True
-            allHaving = str(arg)
+        #        if opt in {"-H", "--having"}:
+        #            TestAllTld = True
+        #            allHaving = str(arg)
 
         if opt in {"-r", "--reg"}:
             TestAllTld = True
@@ -709,7 +707,7 @@ def main() -> None:  # noqa: C901,PLR0915
 
     if TestAllTld:
         if TestRunOnly is False:
-            testDomains(makeMetaAllCurrentTld(allHaving, allRegex))
+            testDomains(makeMetaAllCurrentTld(allRegex))
         else:
             testDomains(makeTestAllCurrentTld(allRegex))
 

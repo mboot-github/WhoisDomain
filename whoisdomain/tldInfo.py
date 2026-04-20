@@ -42,7 +42,7 @@ class TldInfo:
         if not override and tld in self.tldRegexDb:
             return
 
-        what = self.flattenMasterTldEntry(tld, override=override)
+        what = self.flattenMasterTldEntry(tld)
         if self.withStore:
             self.tldRegexDb[tld] = what
 
@@ -78,8 +78,6 @@ class TldInfo:
     def flattenMasterTldEntry(
         self,
         tldString: str,
-        *,
-        override: bool = False,
     ) -> dict[str, Any]:
         tldDict = self.zzDictRef[tldString]
         hasExtend: str | None = tldDict.get("extend") or tldDict.get("_extend")
@@ -102,10 +100,7 @@ class TldInfo:
 
     def filterTldToSupportedPattern(
         self,
-        domain: str,
         dList: list[str],
-        *,
-        verbose: bool = False,
     ) -> str | None:
         # we have max 2 levels so first check if the last 2 are in our list
         tld = f"{dList[-2]}.{dList[-1]}"

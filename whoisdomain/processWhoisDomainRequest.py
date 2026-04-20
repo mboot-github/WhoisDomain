@@ -85,9 +85,7 @@ class ProcessWhoisDomainRequest:
 
         # Is it a supported domain =======
         self.dc.tldString = filterTldToSupportedPattern(
-            self.dc.domain,
             self.dc.dList,
-            verbose=self.pc.verbose,
         )
 
         if self.dc.tldString is None:

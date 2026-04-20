@@ -15,13 +15,13 @@ class DummyCache:
 
     def get(  # noqa: PLR6301
         self,
-        keyString: str,
+        keyString: str,  # noqa: ARG002
     ) -> str | None:
         return None
 
     def put(  # noqa: PLR6301
         self,
-        keyString: str,
+        keyString: str,  # noqa: ARG002
         data: str,
     ) -> str:
         return data

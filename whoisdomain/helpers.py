@@ -15,13 +15,10 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 def filterTldToSupportedPattern(
-    domain: str,
     dList: list[str],
-    *,
-    verbose: bool = False,
 ) -> str | None:
     global tldInfo
-    return tldInfo.filterTldToSupportedPattern(domain, dList, verbose=verbose)
+    return tldInfo.filterTldToSupportedPattern(dList)
 
 
 def mergeExternalDictWithRegex(

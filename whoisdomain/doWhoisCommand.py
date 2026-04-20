@@ -30,7 +30,7 @@ def setMyCache(myCache: Any) -> None:
 
 def _initDefaultCache(
     pc: ParameterContext,
-    dc: DataContext,
+    #    dc: DataContext,
 ) -> Any:
     global CACHE_STUB
 
@@ -62,7 +62,7 @@ def doWhoisAndReturnString(
 ) -> str:
     cache = _initDefaultCache(
         pc=pc,
-        dc=dc,
+        # dc=dc,
     )
     keyString = ".".join(dc.dList)
 

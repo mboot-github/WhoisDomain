@@ -157,9 +157,26 @@
 
     ignore = [
         # ignore for now:
-        "ARG002","ARG001",
-        "D107","D102","D101","D103","D100","D105","D104","D205","D203",
-        "N812","N818","N806","N802","N815","N816","N803","N999",
+        #"ARG001",
+        #"ARG002",
+
+        "D100",
+        "D101",
+        "D102",
+        "D104",
+        "D105",
+        "D107",
+        "D103", # Missing docstring in public function
+
+        "N802",
+        "N803",
+        "N806",
+        "N812",
+        "N815",
+        "N816",
+        "N818",
+        "N999",
+
         "PLR2004",
 
         "PLR0911", # Too many return statements
@@ -171,7 +188,6 @@
 
         "RUF001","RUF067", "RUF012",
         "S101", # Use of `assert` detected
-        # "S602",
 
         #
         "COM812", # The following rule may cause conflicts when used with the formatter: `COM812`
