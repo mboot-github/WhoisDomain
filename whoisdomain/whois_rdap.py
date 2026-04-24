@@ -1,5 +1,6 @@
 import logging
 from typing import Any
+
 import tld
 import whodap
 
@@ -90,7 +91,7 @@ class WhoisRdap:
         return r
 
     @classmethod
-    def map_data_to_whoisdomain(
+    def map_data_to_whoisdomain(  # noqa: C901 # is too complex
         cls,
         data: dict[str, Any],
         *,
@@ -105,6 +106,7 @@ class WhoisRdap:
 
         if data["abuse_email"]:
             rr["abuse_contact"] = data["abuse_email"]
+
         if data["admin_email"]:
             rr["admin"] = data["admin_email"]
 
@@ -113,8 +115,10 @@ class WhoisRdap:
 
         if data["created_date"]:
             rr["creation_date"] = data["created_date"]
+
         if data["updated_date"]:
             rr["updated_date"] = data["updated_date"]
+
         if data["expires_date"]:
             rr["expiration_date"] = data["expires_date"]
 

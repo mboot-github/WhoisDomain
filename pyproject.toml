@@ -177,7 +177,7 @@
         "PLW0603", # Using the global statement to update `xxx` is discouraged
         "PLW0602", # Using global for `xxx` but no assignment is done
 
-        "RUF001", # String contains ambiguous  urf8 char
+        "RUF001", # String contains ambiguous utf8 char
         "RUF067", # `__init__` module should only contain docstrings and re-exports
 
         "S101", # Use of `assert` detected

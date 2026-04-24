@@ -155,6 +155,10 @@ class OneTld:
         return False
 
     def _skipKnowTld(self):
+        z = self.allKnownTldDict.get(self.tld, {}).get("_privateRegistry")
+        if z is not None:
+            return False
+
         if self.tld2 == self.tld and self.tld in self.allKnownTldDict:
             return True
 
@@ -162,7 +166,7 @@ class OneTld:
 
     def _doNoManagerTld(self):
         if self.manager == "NULL":
-            print(f"no manager fir tld: {self.tld}")
+            print(f"no manager for tld: {self.tld}")
             if self.tld not in self.allKnownTldDict:
                 print(f'# ZZ["{self.tld}"] = ' + '{"_privateRegistry": True} # no manager')
 
@@ -253,6 +257,12 @@ class OneTld:
         for n in sequence:
             if n():
                 return
+
+        if "whois.identitydigital.services" in self.resolved_whois_servers:
+            return
+
+        if "tucowsregistry.net" in self.resolved_whois_servers:
+            return
 
         print(
             "# MISSING",

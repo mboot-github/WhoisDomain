@@ -35,16 +35,21 @@ COMMON_VENV := rm -rf $(VENV); \
 
 all: clean prep test
 
+# ---------------------------
 clean: cleanupVenv
 	rm -f *.1 *.2 *.log *.tmp  1 2
 	rm -rf .mypy_cache
 	# rm -f IanaDb.sqlite # dont remove during testing
 	rm -rf .iana_cache/ .psl_cache/
 
+realclean: clean
+	rm -f *.sqlite
+
 # cleanup the virtual env
 cleanupVenv:
 	rm -rf $(VENV)
 
+# ---------------------------
 prep: format check
 
 format:
@@ -53,10 +58,12 @@ format:
 check:
 	ruff check --fix $(PY_FILES)
 
+# ---------------------------
 test: IanaDb.sqlite
 	$(COMMON_VENV) \
 	$(PIP_INSTALL) -r requirements.txt ;\
 		./investigateTld.py 2>2 | tee 1
+		cat 2
 
 IanaDb.sqlite:
 	$(COMMON_VENV) \

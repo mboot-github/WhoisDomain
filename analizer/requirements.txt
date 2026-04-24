@@ -1,3 +1,5 @@
 dnspython
 beautifulsoup4
 requests-cache
+tld
+whodap
