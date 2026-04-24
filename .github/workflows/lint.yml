@@ -51,6 +51,7 @@ jobs:
       - name: Install package
         run: |
           python -m pip install --upgrade pip
+          pip install tld whodap
           pip install .
 
       - name: Smoke test
