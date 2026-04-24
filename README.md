@@ -84,7 +84,6 @@ and `make suggest`.
 
 ## Support
  * Python 3.x is supported for x >= 10
- * Python 2.x IS NOT supported.
 
 ## Author's
   * See: [Authors](docs/Authors.md)
@@ -93,64 +92,9 @@ and `make suggest`.
 
 ## Updates
   * see [Updates](docs/Updates.md) for a full history of changes.
-  * Only the latest update is mentioned here
-
-### 1.20230906.1
-  * introduce parsing based on functions
-  * allow contextual search in splitted data and plain data
-  * allow contextual search based on earlier result
-  * fix a few tld to return the proper registrant string (not nic handle)
-
-### 1.20230913.1
-  * if you have installed `tld` (pip install tld) you can enable withPublicSuffix=True to process untill you reach the pseudo tld.
-  * the public_suffix info is added if available (and if requested)
-  * example case is: ./test2.py -d www.dublin.airport.aero --withPublicSuffix
-
-### 1.20230913.3
-  * fix re.NOFLAGS, it is not compatible with 3.9, it appears in 3.11
-
-## 1.20230917.1
-  * prepare work on pylint
-  * switch to logging: all verbose is currently log.debug(); to show set LOGLEVEL=DEBUG before calling, see Makefile: make test
-  * experimental: add extractServers: bool default False; when true we will try to extract the "redirect info chain" on rcf1036/whois and jwhois for linux/darwin
-  * add missing option to query(), test in production environment done
-
-## 1.20231102.1
-  * fix from kazet for .pl tld.
-
-## 1.20231115.1
- New tld's and removal of a few tlds no longer supported at iana
-
- * abb, bw, bn, crown, crs, fj (does not work), gp (does not work), weir, realtor, post, mw, pf (a strange one), iq (gives timout), mm, int, hm (does not work)
-
-
-## 1.20240129.1
-
-add various second level .uk for which i can create tests; comments in the tld_regexpr.py; a few have no example or whois server to test with `2024-01-23`
-add switch not to ignore leading www in the domain request
-
----
-
-## 1.20250220.2
-
-- fix tld: global, it moved to a new organisation
-- fix some obsolete domains
-- fix all derived from amsterdam to use their own _server:
-
-## 1.20250929.1
-- fix coop
-- remove a few unasighed domains (iana)
-
-## 1.20260106.1
-- fix co.il and add il tld
-- cleanup some obsolete tld's
-
-## 1.20260326.1
-- fix 'be' and 'pl' ; thanks Misiu Tomasz.
-- add additional domains from iana.
-- remove domains no longer in iana.
-- Makefile: switch to ruff instead of black and pylama.
 
 ## in progress
+
 - switch to minimal version 3.10
 - update gitgub-action lint (mypy) to use `setup-python@v6` and `checkout@v6`
+- start working on v2 with rdap first
