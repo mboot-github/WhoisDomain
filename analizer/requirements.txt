@@ -1,5 +1,5 @@
 dnspython
 beautifulsoup4
 requests-cache
-tld
-whodap
+whodap==0.1.16
+tld==0.13.2
