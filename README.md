@@ -3,8 +3,8 @@
 - A Python package for retrieving WHOIS information of DOMAIN'S ONLY.
 - Python >=3.10
 - requirements
-    - whodap>=0.1.16
-    - tld>=0.13.2
+    - whodap>=0.1.16 [![Spectra Assure Community Badge](https://secure.software/pypi/badge/whodap)](https://secure.software/pypi/packages/whodap)
+    - tld>=0.13.2 [![Spectra Assure Community Badge](https://secure.software/pypi/badge/tld)](https://secure.software/pypi/packages/tld/0.13.2/tld-0.13.2-py2.py3-none-any.whl)
 - v1 uses only whois and will be moved to maintenance only
 - v2 will use whodap to first retrieve info with rdap and if no data is available try the classic whois approach
 
