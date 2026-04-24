@@ -1,5 +1,4 @@
 import logging
-import os
 from typing import (
     Any,
 )
@@ -11,7 +10,6 @@ from .tldInfo import TldInfo
 from .version import VERSION
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 def filterTldToSupportedPattern(

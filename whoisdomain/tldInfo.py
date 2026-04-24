@@ -1,12 +1,10 @@
 # import re
 import logging
-import os
 from typing import (
     Any,
 )
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 class TldInfo:

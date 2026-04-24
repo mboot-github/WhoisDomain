@@ -1,50 +1,46 @@
 import logging
-import os
 import re
-from typing import (
-    Any,
-)
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    import datetime
 
 from .context.dataContext import DataContext
 from .context.parameterContext import ParameterContext
 from .handleDateStrings import str_to_date
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 class Domain:
-    # The docstrings for classes should summarize its behavior
-    # and list the public methods and instance variables.
-    """
-    A class to represent a standarized result of a whois lookup.
+    def __init__(
+        self,
+        pc: ParameterContext,
+        dc: DataContext,
+    ) -> None:
+        _ = pc
+        _ = dc
 
-    # Attributes
-    * Attributes are created dynamically,
-    not all domains have currently the same amount.
+        self.name: str = ""
+        self.tld: str = ""
+        self.registrar: str = ""
+        self.registrant: str = ""
+        self.registrant_country: str = ""
+        self.status: str = ""
 
-    - name: str, the domain name
-    - tld: str, the detected top level domain
-    - name_servers: List, a list of detected name servers
-    - DNSSEC: boolean
+        self.abuse_contact: str = ""
+        self.admin: str = ""
 
-    - status: List
-    - registrar: str
-    - registrant: str
-    - registrant_country:
-    - emails: List
+        self.statuses: list[str] = []
+        self.emails: list[str] = []
+        self.name_servers: list[str] = []
 
-    - updated_date: datetime
-    - expiration_date: datetime
-    - creation_date: datetime
+        self.dnssec: bool = False
 
-    Methods
-    -------
-    def init(pc: ParameterContext,dc: DataContext) -> None:
-        initialize the object with the current data from dc.data: Dict[str, Any]
-        the init is separated from creating an instance as we want to use dependency injection as much as possible.
-
-    """
+        self.updated_date: datetime.datetime | None = None
+        self.expiration_date: datetime.datetime | None = None
+        self.creation_date: datetime.datetime | None = None
+        self._rdap_: dict[str, Any] = {}
 
     @classmethod
     def _cleanupArray(
@@ -55,35 +51,6 @@ class Domain:
             index = data.index("")
             data.pop(index)
         return data
-
-    def _doNameservers(
-        self,
-        # pc: ParameterContext,
-        *,
-        dc: DataContext,
-    ) -> None:
-        tmp: list[str] = []
-        for x in dc.data["name_servers"]:
-            if isinstance(x, str):
-                tmp.append(x.strip().lower())
-                continue
-
-            # not a string but an array
-            tmp.extend(y.strip().lower() for y in x)
-
-        self.name_servers: list[str] = []
-        for x in tmp:
-            xx = x.strip(" .")  # remove any leading or trailing spaces and/or dots
-            if xx:
-                if " " in xx:
-                    xx, _ = xx.split(" ", 1)
-                    xx = xx.strip(" .")
-
-                xx = xx.lower()
-                if xx not in self.name_servers:
-                    self.name_servers.append(xx)
-
-        self.name_servers = sorted(self.name_servers)
 
     @classmethod
     def cleanStatus(
@@ -101,6 +68,33 @@ class Domain:
                 return res[0].strip()
 
         return item
+
+    def _doNameservers(
+        self,
+        *,
+        dc: DataContext,
+    ) -> None:
+        tmp: list[str] = []
+        for x in dc.data["name_servers"]:
+            if isinstance(x, str):
+                tmp.append(x.strip().lower())
+                continue
+
+            # not a string but an array
+            tmp.extend(y.strip().lower() for y in x)
+
+        for x in tmp:
+            xx = x.strip(" .")  # remove any leading or trailing spaces and/or dots
+            if xx:
+                if " " in xx:
+                    xx, _ = xx.split(" ", 1)
+                    xx = xx.strip(" .")
+
+                xx = xx.lower()
+                if xx not in self.name_servers:
+                    self.name_servers.append(xx)
+
+        self.name_servers = sorted(self.name_servers)
 
     def _doStatus(
         self,
@@ -177,19 +171,19 @@ class Domain:
         self.expiration_date = str_to_date(dc.data["expiration_date"][0], tld=self.tld)
         self.last_updated = str_to_date(dc.data["updated_date"][0], tld=self.tld)
 
-        self.dnssec = dc.data["DNSSEC"]
+        self.dnssec = bool(dc.data["DNSSEC"])
         self._doStatus(pc, dc)
         self._doNameservers(dc=dc)
 
         # optional fields
         self._doOptionalFields(dc.data)
 
-    def __init__(
+    def from_whodap_dict(
         self,
-        pc: ParameterContext,
-        dc: DataContext,
+        d: dict[str, Any],
     ) -> None:
-        pass
+        for name, value in d.items():
+            super().__setattr__(name, value)
 
     def init(
         self,

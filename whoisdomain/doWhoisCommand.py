@@ -1,5 +1,4 @@
 import logging
-import os
 from typing import (
     Any,
 )
@@ -10,7 +9,7 @@ from .context.parameterContext import ParameterContext
 from .whoisCliInterface import WhoisCliInterface
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
 
 # actually also whois uses cache, so if you really dont want to use cache
 # you should also pass the --force-lookup flag (on linux)

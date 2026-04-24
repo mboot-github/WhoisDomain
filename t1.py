@@ -41,6 +41,7 @@ def main() -> None:
         "Mu",
         "Nirvana",
         "Purgatory",
+        "JustHereOnMyDyingPlanet",
     ]
 
     restart_after_count: int = 50

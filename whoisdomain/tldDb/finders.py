@@ -1,5 +1,4 @@
 import logging
-import os
 import re
 from collections.abc import Callable
 
@@ -11,7 +10,7 @@ from typing import (
 )
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
 
 PATTERN_CACHE: dict[tuple[str, int], Any] = {}
 
@@ -50,11 +49,11 @@ def R(
     reStr: str,
     *,
     ignoreCase: bool = True,
-) -> Callable[[str], list[str]]:
+) -> Callable[[str, list[str]], list[str]]:
     # regular simple regex strings are converter with currying to functins to be called later
     def reFindAll(
         textStr: str,
-        # sData: list[str],
+        _: list[str],
     ) -> Any:
         flags = re.IGNORECASE if ignoreCase else 0  # NOFLAG is 3.11
         pattern = make_pat(reStr, flags)
@@ -76,14 +75,14 @@ def findFromToAndLookFor(
     lookForStr: str,
     *,
     ignoreCase: bool = True,
-) -> Callable[[str], list[str]]:
+) -> Callable[[str, list[str]], list[str]]:
     # look for a particular string like R()
     # but limit the context we look in
     # to a specific sub section of the whois cli response
     # use currying to create a func that will be called later
     def xFindFromToAndLookFor(
         textStr: str,
-        # sData: list[str],
+        _: list[str],
     ) -> Any:
         flags = re.IGNORECASE if ignoreCase else 0  # NOFLAG is 3.11
         p1 = make_pat(fromStr, flags)
@@ -161,7 +160,7 @@ def findFromToAndLookForWithFindFirst(
     lookForStr: str,
     *,
     ignoreCase: bool = True,
-) -> Callable[[str], list[str]]:
+) -> Callable[[str, list[str]], list[str]]:
     # look for a particular string like R() with find first
     #   then build a from ,to context using the result from findFirst (google.fr is a example)
     #     but limit the context we look in
@@ -169,7 +168,7 @@ def findFromToAndLookForWithFindFirst(
     # use currying to create a func that will be called later
     def xFindFromToAndLookForWithFindFirst(
         textStr: str,
-        # sData: list[str],
+        _: list[str],
     ) -> list[str]:
         flags = re.IGNORECASE if ignoreCase else 0  # NOFLAG is 3.11
 

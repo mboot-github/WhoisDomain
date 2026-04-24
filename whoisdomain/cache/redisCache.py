@@ -1,8 +1,7 @@
 import logging
-import os
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
 
 HAS_REDIS = False
 try:

@@ -1,8 +1,5 @@
 import logging
-
-# import sys
 from typing import Any
-
 import tld
 import whodap
 
@@ -101,11 +98,16 @@ class WhoisRdap:
     ) -> dict[str, Any]:
         rr: dict[str, Any] = {}
         rr["name"] = data["domain_name"]
-        rr["dnssec"] = data["dnssec"] == "signed"
+
+        rr["dnssec"] = False
+        if data.get("dnssec"):
+            rr["dnssec"] = data["dnssec"] == "signed"
+
         if data["abuse_email"]:
             rr["abuse_contact"] = data["abuse_email"]
         if data["admin_email"]:
             rr["admin"] = data["admin_email"]
+
         if data["nameservers"]:
             rr["name_servers"] = data["nameservers"]
 

@@ -6,13 +6,12 @@ str_to_date() is the only entry point
 
 import datetime
 import logging
-import os
 import re
 
 from .exceptions import UnknownDateFormatError
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
 
 # http://docs.python.org/library/datetime.html#strftime-strptime-behavior
 _DATE_FORMATS = [

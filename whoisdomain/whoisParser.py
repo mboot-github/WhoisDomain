@@ -1,5 +1,4 @@
 import logging
-import os
 import re
 from typing import (
     Any,
@@ -22,7 +21,7 @@ from .strings.noneStrings import NoneStrings
 from .strings.quotaStrings import QuotaStrings
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
 
 NN2 = 2
 
@@ -67,7 +66,7 @@ class WhoisParser:
         sData: list[str] = []
         splitter = self.dc.thisTld.get("_split")
         if splitter:
-            sData = splitter(self.dc.whoisStr, self.pc.verbose)
+            sData = splitter(self.dc.whoisStr)
             if sData != []:
                 for item in sData:
                     msg = f"split data: {item}"
@@ -84,7 +83,7 @@ class WhoisParser:
 
             if callable(val):
                 # vcall the curry function we created in tld_regexpr.py
-                self.resultDict[key] = val(self.dc.whoisStr, sData, self.pc.verbose) or empty
+                self.resultDict[key] = val(self.dc.whoisStr, sData) or empty
                 msg = f"_doExtractPattensFromWhoisString: call indirect {val} {key}, {self.resultDict[key]}"
                 log.debug(msg)
                 continue

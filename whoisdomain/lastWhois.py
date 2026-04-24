@@ -9,7 +9,6 @@ public access is only needed fow: get_last_raw_whois_data()
 """
 
 import logging
-import os
 from typing import (
     Any,
 )
@@ -17,7 +16,7 @@ from typing import (
 from .context.parameterContext import ParameterContext
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
 
 LastWhois: dict[str, Any] = {}
 

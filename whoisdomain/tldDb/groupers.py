@@ -1,10 +1,8 @@
 # import re
 # import sys
 import logging
-import os
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 COM_LIST: list[str] = [

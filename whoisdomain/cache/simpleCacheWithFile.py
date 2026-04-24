@@ -1,6 +1,5 @@
 import json
 import logging
-import os
 import pathlib
 
 from .simpleCacheBase import (
@@ -8,7 +7,6 @@ from .simpleCacheBase import (
 )
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 class SimpleCacheWithFile(SimpleCacheBase):

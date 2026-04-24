@@ -1,12 +1,8 @@
 import json
 import logging
-import os
-from typing import (
-    Any,
-)
+from typing import Any
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 ParamsStringJson: str = """
 {
@@ -147,11 +143,28 @@ ParamsStringJson: str = """
 
 
 class ParameterContext:
-    params: dict[str, Any]
+    kt: dict[str, Any]
     value: dict[str, Any]
-    KT: dict[str, Any]
+    params: dict[str, Any]
 
-    def _loadDefaults(self) -> list[str]:
+    def __init__(
+        self,
+        **kwargs: Any,
+    ) -> None:
+        self.kt: dict[str, Any] = {
+            "int": int,
+            "float": float,
+            "str": str,
+            "bool": bool,
+        }
+        self.value: dict[str, Any] = {}
+        self.params: dict[str, Any] = json.loads(ParamsStringJson)
+
+        mandatory: list[str] = self._load_defaults()
+        self._add_args(mandatory, **kwargs)
+        self._validate_all_mandatoty_known(mandatory)
+
+    def _load_defaults(self) -> list[str]:
         mandatory: list[str] = []
         for i, k in self.params.items():
             if "default" in k:
@@ -161,7 +174,7 @@ class ParameterContext:
                 self.value[i] = None
         return mandatory
 
-    def _addArgs(
+    def _add_args(
         self,
         mandatory: list[str],
         **kwargs: dict[str, Any],
@@ -178,7 +191,7 @@ class ParameterContext:
 
             # we have a type and we still exist
             if value is not None:
-                if not isinstance(value, self.KT[t]):
+                if not isinstance(value, self.kt[t]):
                     msg = f"unknown type: {t} for {name}, {value}"
                     raise TypeError(msg)
 
@@ -187,7 +200,7 @@ class ParameterContext:
                     del mandatory[mandatory.index(name)]
 
     @classmethod
-    def _validateAllMandatoryNowKnown(
+    def _validate_all_mandatoty_known(
         cls,
         mandatory: list[str],
     ) -> None:
@@ -195,40 +208,32 @@ class ParameterContext:
             msg = f"missing mandatory parametrs: {sorted(mandatory)}"
             raise ValueError(msg)
 
-    def __init__(
+    def __getattr__(
         self,
-        **kwargs: Any,
-    ) -> None:
-        self.KT = {
-            "int": int,
-            "float": float,
-            "str": str,
-            "bool": bool,
-        }
+        name: str,
+    ) -> Any:
+        if name in {"params", "value", "kt"}:
+            getattr(self, name)
 
-        self.params = json.loads(ParamsStringJson)
-        self.value = {}
-
-        mandatory: list[str] = self._loadDefaults()
-        self._addArgs(mandatory, **kwargs)
-        self._validateAllMandatoryNowKnown(mandatory)
-
-    def __getattr__(self, name: str) -> Any:
-        if name in {"params", "value"}:
-            return self.name
         return self.get(name)
 
-    def __setattr__(self, name: str, value: Any) -> None:
-        if name in {"params", "value"}:
-            object.__setattr__(self, name, value)
-        else:
-            self.set(name, value)
+    def __setattr__(
+        self,
+        name: str,
+        value: Any,
+    ) -> None:
+        if name in {"params", "value", "kt"}:
+            super().__setattr__(name, value)
+            return
 
-    def get(self, name: str) -> Any:
-        if name in self.value:
-            return self.value[name]
-        msg = f"'{self.__class__.__name__}' object has no attribute '{name}'"
-        raise AttributeError(msg)
+        self.set(name, value)
+
+    # -------------------------------------
+    def get(
+        self,
+        name: str,
+    ) -> Any:
+        return self.value.get(name)
 
     def set(self, name: str, value: Any) -> None:
         if name not in self.params:
@@ -242,25 +247,29 @@ class ParameterContext:
                 raise TypeError(msg)
 
             if value is not None:
-                if not isinstance(value, self.KT[t]):
+                if not isinstance(value, self.kt[t]):
                     msg = f"unknown type: {t} for {name}, {value}"
                     raise TypeError(msg)
                 self.value[name] = value
             # leave the default
 
-    def toJson(self) -> str:
+    def toJson(
+        self,
+    ) -> str:
         rr: dict[str, Any] = {}
         for k in self.params:
             rr[k] = self.get(k)
         return json.dumps(rr)
 
-    def fromJson(self, jString: str) -> None:
+    def fromJson(
+        self,
+        jString: str,
+    ) -> None:
         zz = json.loads(jString)
         for k, v in zz.items():
             self.set(k, v)
 
 
 if __name__ == "__main__":
-    domain: str = "haha.ha"
     pc = ParameterContext()
     print(pc.value)

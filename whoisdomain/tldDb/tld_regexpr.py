@@ -2,7 +2,6 @@
 # line length = 160
 
 import logging
-import os
 from typing import Any
 
 from .finders import (
@@ -14,7 +13,6 @@ from .finders import (
 )
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 # 2023-09-03 mboot, all _items are inherited, confirmed

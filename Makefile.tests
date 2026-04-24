@@ -12,32 +12,49 @@ TEST_OPTIONS_ALL = \
 # --------------------------------------------------
 # Tests
 # --------------------------------------------------
-test: test1 testwith test2 test3 test4
+test: prep test1 test2 test3 test4
+
+prep:
+	mkdir -p tmp
 
 test1:
-	./test1.py | tee tmp/$@.1
+	$(COMMON_VENV) \
+	$(PIP_INSTALL) -r requirements.txt; \
+	./test1.py 2>tmp/$@.2| tee tmp/$@.1
 
 # test2 has the data type in the output
 test2:
+	$(COMMON_VENV) \
+	$(PIP_INSTALL) -r requirements.txt; \
 	./test2.py -f testdata/DOMAINS.txt 2>tmp/$@.2 | tee tmp/$@.1
 
 # test3 simulates the whoisdomain command and has no data type in the output
 test3:
+	$(COMMON_VENV) \
+	$(PIP_INSTALL) -r requirements.txt; \
 	./test3.py -f testdata/DOMAINS.txt 2>tmp/$@.2 | tee tmp/$@.1
 
 test4:
+	$(COMMON_VENV) \
+	$(PIP_INSTALL) -r requirements.txt; \
 	LOGLEVEL=DEBUG ./test2.py $(TEST_OPTIONS_ALL) -t 2>tmp/$@.2 | tee tmp/$@.1
 
 testwith: withPublicSuffix withExtractServers stripHttpStatus
 
 withPublicSuffix:
+	$(COMMON_VENV) \
+	$(PIP_INSTALL) -r requirements.txt; \
 	./test2.py -d  www.dublin.airport.aero --withPublicSuffix
 
 withExtractServers:
+	$(COMMON_VENV) \
+	$(PIP_INSTALL) -r requirements.txt; \
 	./test2.py -d google.com --extractServers
 
 stripHttpStatus:
-	./test2.py -d nic.aarp --stripHttpStatus
-	./test2.py -d nic.abudhabi --stripHttpStatus
-	./test2.py -d META.AU --stripHttpStatus
-	./test2.py -d google.AU --stripHttpStatus
+	$(COMMON_VENV) \
+	$(PIP_INSTALL) -r requirements.txt; \
+	./test2.py -d nic.aarp --stripHttpStatus;\
+	./test2.py -d nic.abudhabi --stripHttpStatus; \
+	./test2.py -d META.AU --stripHttpStatus; \
+	./test2.py -d google.AU --stripHttpStatus; \

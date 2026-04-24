@@ -1,6 +1,5 @@
 # import sys
 import logging
-import os
 
 from .context.dataContext import DataContext
 from .context.parameterContext import ParameterContext
@@ -13,7 +12,7 @@ from .whoisCliInterface import WhoisCliInterface
 from .whoisParser import WhoisParser
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
 
 TLD_LIB_PRESENT: bool = False
 try:

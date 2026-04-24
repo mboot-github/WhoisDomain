@@ -4,7 +4,6 @@ import gc
 import getopt
 import json
 import logging
-import os
 import pathlib
 import re
 import sys
@@ -15,7 +14,7 @@ from typing import (
 import whoisdomain as whois  # to be compatible with dannycork
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
 
 # if we are not running as test2.py run in a simplistic way
 SIMPLISTIC: bool = False
