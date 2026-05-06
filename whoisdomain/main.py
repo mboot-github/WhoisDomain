@@ -35,6 +35,9 @@ WithExtractServers: bool = False
 WithStripHttpStatus: bool = False
 WithNoIgnoreWww: bool = False
 
+RdapOnly: bool = False
+WhoisOnly: bool = False
+
 
 class ResponseCleaner:
     data: str
@@ -235,7 +238,9 @@ def testItem1(
         WithPublicSuffix, \
         WithExtractServers, \
         WithStripHttpStatus, \
-        WithNoIgnoreWww
+        WithNoIgnoreWww, \
+        RdapOnly, \
+        WhoisOnly
 
     pc = whois.ParameterContext(
         ignore_returncode=IgnoreReturncode,
@@ -248,6 +253,8 @@ def testItem1(
         extractServers=WithExtractServers,
         stripHttpStatus=WithStripHttpStatus,
         noIgnoreWww=WithNoIgnoreWww,
+        whoisOnly=WhoisOnly,
+        rdapOnly=RdapOnly,
     )
 
     # use the new query (can also simply use q2()
@@ -540,7 +547,7 @@ def showFailures() -> None:
 
 
 def main() -> None:  # noqa: C901,PLR0915
-    global PrintJson, Verbose, IgnoreReturncode, PrintGetRawWhoisResult, Ruleset, SIMPLISTIC, WithRedacted, TestAllTld, TestRunOnly, WithPublicSuffix, WithExtractServers, WithStripHttpStatus, WithNoIgnoreWww  # noqa: E501  # pylint: disable=line-too-long
+    global PrintJson, Verbose, IgnoreReturncode, PrintGetRawWhoisResult, Ruleset, SIMPLISTIC, WithRedacted, TestAllTld, TestRunOnly, WithPublicSuffix, WithExtractServers, WithStripHttpStatus, WithNoIgnoreWww, RdapOnly, WhoisOnly  # noqa: E501  # pylint: disable=line-too-long
 
     name: str = pathlib.Path(sys.argv[0]).name
     SIMPLISTIC = True
@@ -573,6 +580,8 @@ def main() -> None:  # noqa: C901,PLR0915
                 "extractServers",
                 "stripHttpStatus",
                 "withNoIgnoreWww",
+                "rdapOnly",
+                "whoisOnly",
             ],
         )
     except getopt.GetoptError:
@@ -696,6 +705,12 @@ def main() -> None:  # noqa: C901,PLR0915
 
         if opt in ("--withNoIgnoreWww"):
             WithNoIgnoreWww = True
+
+        if opt in ("--rdapOnly"):
+            RdapOnly = True
+
+        if opt in ("--whoisOnly"):
+            WhoisOnly = True
 
     msg = f"{name} SIMPLISTIC: {SIMPLISTIC}"
     log.debug(msg)

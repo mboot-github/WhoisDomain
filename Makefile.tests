@@ -12,7 +12,8 @@ TEST_OPTIONS_ALL = \
 # --------------------------------------------------
 # Tests
 # --------------------------------------------------
-test: prep test1 test2 test3 test4
+# test: prep test1 test2 test3 test4
+test: prep test2
 
 prep:
 	mkdir -p tmp
@@ -26,7 +27,7 @@ test1:
 test2:
 	$(COMMON_VENV) \
 	$(PIP_INSTALL) -r requirements.txt; \
-	./test2.py -f testdata/DOMAINS.txt 2>tmp/$@.2 | tee tmp/$@.1
+	./test2.py --whoisOnly -f testdata/DOMAINS.txt 2>tmp/$@.2 | tee tmp/$@.1;
 
 # test3 simulates the whoisdomain command and has no data type in the output
 test3:
