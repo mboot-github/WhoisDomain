@@ -138,6 +138,18 @@ ParamsStringJson: str = """
     "optional": true,
     "help": "if set to true we skip the strip www action"
   }
+  "rdapOnly": {
+    "type": "bool",
+    "default": false,
+    "optional": true,
+    "help": "if set to true we only consult rdap"
+  }
+  "whoisOnly": {
+    "type": "bool",
+    "default": false,
+    "optional": true,
+    "help": "if set to true we only consult whois"
+  }
 }
 """
 

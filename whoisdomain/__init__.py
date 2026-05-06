@@ -207,17 +207,22 @@ def q2(
         hasLibTld=TLD_LIB_PRESENT,
     )
 
-    wr = WhoisRdap()
-    dd = wr.do_one_domain(domain)
-    if dd.status:
-        with_rdap_whois = True
-        d: dict[str, Any] = wr.map_data_to_whoisdomain(dd.data, with_rdap_whois=with_rdap_whois)
-        rr = Domain(pc=pc, dc=dc)
-        rr.from_whodap_dict(d)
-        msg = f"lookup: {domain} using whodap"
-        log.info(msg)
-        return rr  # also show the raw data from whodap
-    log.warning(dd)  # no proper answer from rdap try whois
+    if pc.whoisOnly is False:
+        wr = WhoisRdap()
+        dd = wr.do_one_domain(domain)
+        if dd.status:
+            with_rdap_whois = True
+            d: dict[str, Any] = wr.map_data_to_whoisdomain(dd.data, with_rdap_whois=with_rdap_whois)
+
+            rr = Domain(pc=pc, dc=dc)
+            rr.from_whodap_dict(d)
+            msg = f"lookup: {domain} using whodap"
+            log.info(msg)
+            return rr  # also show the raw data from whodap
+
+        log.warning(dd)  # no proper answer from rdap try whois
+        if pc.rdapOnly is True:
+            return None
 
     initLastWhois()
 
@@ -245,6 +250,7 @@ def q2(
     )
 
     result = pwdr.processRequest()
+
     del pwdr
     del dom
     del wci
@@ -259,42 +265,20 @@ def q2(
     return result
 
 
-#    force: bool = False,
-#    cache_file: str | None = None,
-#    cache_age: int = 60 * 60 * 48,
-#    slow_down: int = 0,
-#    ignore_returncode: bool = False,
-#    server: str | None = None,
-#    verbose: bool = False,
-#    with_cleanup_results: bool = False,
-#    internationalized: bool = False,
-#    include_raw_whois_text: bool = False,
-#    return_raw_text_for_unsupported_tld: bool = False,
-#    timeout: float | None = None,
-#    parse_partial_response: bool = False,
-#    cmd: str = "whois",
-#    simplistic: bool = False,
-#    withRedacted: bool = False,
-#    tryInstallMissingWhoisOnWindows: bool = False,
-#    shortResponseLen: int = 5,
-#    withPublicSuffix: bool = False,
-#    extractServers: bool = False,
-#    stripHttpStatus: bool = False,
-#    noIgnoreWww: bool = False,
-
-
 def query(
     domain: str,
     *,
     pc: ParameterContext | None = None,
     verbose: bool = False,
     **kwargs: Any,
+    # see documentation about parameters in context/parameterContext.py
     #    force: bool = False,
     #    cache_file: str | None = None,
     #    cache_age: int = 60 * 60 * 48,
     #    slow_down: int = 0,
     #    ignore_returncode: bool = False,
     #    server: str | None = None,
+    #    verbose: bool = False,
     #    with_cleanup_results: bool = False,
     #    internationalized: bool = False,
     #    include_raw_whois_text: bool = False,
@@ -310,9 +294,9 @@ def query(
     #    extractServers: bool = False,
     #    stripHttpStatus: bool = False,
     #    noIgnoreWww: bool = False,
+    #    rdapOnly: bool = false,
+    #    whoisOnly: bool = false,
 ) -> Domain | None:
-    # see documentation about paramaters in parameterContext.py
-
     assert isinstance(domain, str), Exception("`domain` - must be <str>")
 
     if verbose is True:
@@ -320,29 +304,6 @@ def query(
 
     if pc is None:
         pc = ParameterContext(**kwargs)
-    #            force=force,
-    #            cache_file=cache_file,
-    #            cache_age=cache_age,
-    #            slow_down=slow_down,
-    #            ignore_returncode=ignore_returncode,
-    #            server=server,
-    #            verbose=verbose,
-    #            with_cleanup_results=with_cleanup_results,
-    #            internationalized=internationalized,
-    #            include_raw_whois_text=include_raw_whois_text,
-    #            return_raw_text_for_unsupported_tld=return_raw_text_for_unsupported_tld,
-    #            timeout=timeout,
-    #            parse_partial_response=parse_partial_response,
-    #            cmd=cmd,
-    #            simplistic=simplistic,
-    #            withRedacted=withRedacted,
-    #            withPublicSuffix=withPublicSuffix,
-    #            shortResponseLen=shortResponseLen,
-    #            tryInstallMissingWhoisOnWindows=tryInstallMissingWhoisOnWindows,
-    #            extractServers=extractServers,
-    #            stripHttpStatus=stripHttpStatus,
-    #            noIgnoreWww=noIgnoreWww,
-    #        )
 
     msg = f"{pc}"
     log.debug(msg)
