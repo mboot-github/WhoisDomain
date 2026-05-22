@@ -208,6 +208,7 @@ def q2(
         if dd.status:
             with_rdap_whois = True
             d: dict[str, Any] = wr.map_data_to_whoisdomain(dd.data, with_rdap_whois=with_rdap_whois)
+            d['__lookup__'] = 'rdap'
 
             rr = Domain(pc=pc, dc=dc)
             rr.from_whodap_dict(d)
@@ -293,20 +294,5 @@ def query(
 # Add get function to support return result in dictionary form
 get = _result2dict(query)
 
-# CLAUDE: logging changes
-# Calling logging.basicConfig(level="DEBUG") inside library code mutates the application's root logger
-# and is widely considered bad library citizenship.
-# If the caller's app uses logging, you've just overridden their config.
-# Use a per-package logger and let the caller configure the level:
-#  logging.getLogger("whoisdomain").setLevel("DEBUG"),
-#  or document a setup_logging(verbose=) helper that callers can opt into.
-
-#  CLAUDE: memoryleak:
-# Three calls — gc.collect(0); gc.collect(1); gc.collect(2) — once on entry and once on exit.
-# gc.collect(2) already does generations 0 and 1, so the other two are redundant.
-# More importantly, manual GC in library code imposes work on callers who don't need it
-# (Python's GC is generational and usually correct without help).
-# The del spam right above isn't doing anything either
-# — locals are about to go out of scope.
+# CLAUDE: memoryleak:
 # If you're chasing a real leak, profile it with tracemalloc;
-# otherwise this is cargo-culted overhead.

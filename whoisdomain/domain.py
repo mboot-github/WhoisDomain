@@ -11,7 +11,6 @@ from .handleDateStrings import str_to_date
 
 log = logging.getLogger(__name__)
 
-
 class Domain:
     def __init__(
         self,
@@ -37,12 +36,13 @@ class Domain:
 
         self.dnssec: bool = False
 
-        self.last_updated: datetime.datetime | None = None
+        # self.last_updated: datetime.datetime | None = None
         self.updated_date: datetime.datetime | None = None
         self.expiration_date: datetime.datetime | None = None
         self.creation_date: datetime.datetime | None = None
 
         self._rdap_: dict[str, Any] = {}
+        self.__lookup__ = "whois"
 
     @classmethod
     def _cleanupArray(
@@ -170,7 +170,7 @@ class Domain:
         self.creation_date = str_to_date(dc.data["creation_date"][0], tld=self.tld)
         self.expiration_date = str_to_date(dc.data["expiration_date"][0], tld=self.tld)
         self.updated_date = str_to_date(dc.data["updated_date"][0], tld=self.tld)
-        self.last_updated = self.updated_date  # keep old name for one release
+        # self.last_updated = self.updated_date  # keep old name for one release
 
         self.dnssec = bool(dc.data["DNSSEC"])
         self._doStatus(pc, dc)
