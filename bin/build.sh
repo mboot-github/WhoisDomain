@@ -7,6 +7,7 @@ VERSION_FILE="work/version"
 setupVersionNumberToday()
 {
     VERSION="1" # we start with version 1, only breaking changes will increment the first digit
+    VERSION="2" # we start with version 1, only breaking changes will increment the first digit
 
     # while preparing the test.pypi we increment the day sequence if needed,
     # only a last version actually later will get published to the actual pypi (non test)

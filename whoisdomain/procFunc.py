@@ -1,13 +1,15 @@
 # python3
 
 import errno
+import logging
 import multiprocessing as mp
-import sys
 from typing import (
     Any,
 )
 
 from .context.parameterContext import ParameterContext
+
+log = logging.getLogger(__name__)
 
 # from .domain import Domain
 
@@ -39,7 +41,7 @@ class ProcFunc:
         domain: str,
         pc: ParameterContext,
     ) -> Any:
-        jStr = pc.toJson()
+        jStr = pc.to_json()
 
         request: dict[str, Any] = {
             "domain": domain,
@@ -47,19 +49,17 @@ class ProcFunc:
         }
 
         # request -> reply: remote
-        if pc.verbose:
-            print("OneItem:SEND:", request, file=sys.stderr)
+        log.info("OneItem:SEND: %s", request)
         self.parent_conn.send(request)
 
         reply = self.parent_conn.recv()
-        if pc.verbose:
-            print("OneItem:RECEIVE:", reply, file=sys.stderr)
+        log.info("OneItem:RECEIVE: %s", reply)
 
         if reply["status"] is True:
             # possibly re convert this into a Domain object.
             return reply["result"]
 
-        raise Exception(reply["exception"])
+        raise Exception(reply["exception"])  # noqa: TRY002
 
     def makeHandler(
         self,
@@ -77,7 +77,7 @@ class ProcFunc:
                 return self.oneItem(domain, pc)
             except OSError as e:
                 if e.errno != errno.ECONNRESET:
-                    print(f"restart process {e}", file=sys.stderr)
+                    log.info("restart process %s", e)
                     raise
 
                 self.startProc(f, max_requests)

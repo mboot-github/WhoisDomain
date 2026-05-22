@@ -1,20 +1,19 @@
 import logging
-import os
 import time
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 class SimpleCacheBase:
     def __init__(
         self,
+        *,
         verbose: bool = False,
-        cacheMaxAge: int = (60 * 60 * 48),
+        cache_max_age: int = (60 * 60 * 48),
     ) -> None:
         self.verbose = verbose
         self.memCache: dict[str, tuple[float, str]] = {}
-        self.cacheMaxAge: int = cacheMaxAge
+        self.cache_max_age: int = cache_max_age
 
     def put(
         self,
@@ -37,7 +36,7 @@ class SimpleCacheBase:
             return None
 
         t = time.time()
-        hasExpired = cData[0] < (t - self.cacheMaxAge)
+        hasExpired = cData[0] < (t - self.cache_max_age)
         if hasExpired is True:
             return None
 

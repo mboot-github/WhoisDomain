@@ -1,5 +1,5 @@
 """
-This module keeps track of the original whois string for the last query request
+Keep track of the original whois string for the last query request.
 
 it should be rewritten to use a static class or singleton
 it is re-initialized on each new request
@@ -9,7 +9,6 @@ public access is only needed fow: get_last_raw_whois_data()
 """
 
 import logging
-import os
 from typing import (
     Any,
 )
@@ -17,7 +16,7 @@ from typing import (
 from .context.parameterContext import ParameterContext
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
 
 LastWhois: dict[str, Any] = {}
 
@@ -33,7 +32,7 @@ def updateLastWhois(
             "Domain": ".".join(dList),
             "rawData": whoisStr,
             "server": pc.server,
-        }
+        },
     )
 
 

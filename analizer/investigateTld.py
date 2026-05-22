@@ -21,13 +21,14 @@ def extract_server_hints(aDict: dict[str, Any]) -> dict[str, Any]:
     # key will be the whois server, data will be the list of tld's using this server
     servers: dict[str, Any] = {}
     k = "_server"
+
     for key, value in aDict.items():
         if k in value:
             server = value[k]
             if server not in servers:
                 servers[server] = []
             servers[server].append(key)
-    # print(servers)
+
     return servers
 
 
@@ -53,8 +54,6 @@ def xMain() -> None:
     dbFileName = "IanaDb.sqlite"
     allTld: list[str] = []
 
-    # print(tld_regexpr.ZZ)
-    # sys.exit(0)
     server_hints = extract_server_hints(tld_regexpr.ZZ)
 
     iad = IanaDatabase(verbose=verbose)
@@ -68,9 +67,10 @@ def xMain() -> None:
         tld = ot.tld
         forest[tld] = ot
 
-    for tld, data in forest.items():
-        if data.rdap_info != "NULL":
-            print(tld, data.rdap_info)
+    if 0:
+        for tld, data in forest.items():
+            if data.rdap_info != "NULL":
+                print("RDAP", tld, data.rdap_info)
 
     allTld = sorted(allTld)
     for tld in tld_regexpr.ZZ:

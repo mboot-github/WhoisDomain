@@ -1,26 +1,25 @@
 import logging
-import os
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 class DummyCache:
     def __init__(
         self,
+        *,
         verbose: bool = False,
     ) -> None:
         self.verbose = verbose
 
-    def get(
+    def get(  # noqa: PLR6301
         self,
-        keyString: str,
+        keyString: str,  # noqa: ARG002
     ) -> str | None:
         return None
 
-    def put(
+    def put(  # noqa: PLR6301
         self,
-        keyString: str,
+        keyString: str,  # noqa: ARG002
         data: str,
     ) -> str:
         return data

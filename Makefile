@@ -1,36 +1,11 @@
 # ==========================================================
-SHELL := /bin/bash -l
-export SHELL
-
-VENV := ./vtmp/
-export VENV
-
-# tested on 3.10-3.14
-MIN_PYTHON_VERSION := $(shell basename $$( ls /usr/bin/python3.[0-9][0-9] | awk '{print $0; exit}' ) )
-export MIN_PYTHON_VERSION
-
-PIP_INSTALL := pip3 -q \
-	--require-virtualenv \
-	--disable-pip-version-check \
-	--no-color install --no-cache-dir
-
-# ==========================================
-# Code formatting and checks
-PY_FILES := *.py whoisdomain/
-
-# LINE_LENGTH := 160
+include Makefile.inc
+# ==========================================================
 
 MYPY_INSTALL := \
 	types-requests \
-	types-python-dateutil redis tld
+	types-python-dateutil redis
 
-COMMON_VENV := rm -rf $(VENV); \
-	$(MIN_PYTHON_VERSION) -m venv $(VENV); \
-	source ./$(VENV)/bin/activate;
-
-# --------------------------------------------------
-# reformat, lint and verify basics
-# --------------------------------------------------
 prep: clean format check mypy
 
 clean:
@@ -47,7 +22,7 @@ check:
 
 mypy:
 	$(COMMON_VENV) \
-	$(PIP_INSTALL) mypy $(MYPY_INSTALL); \
+	$(PIP_INSTALL) -r requirements.txt mypy $(MYPY_INSTALL); \
 	mypy \
 		--strict \
 		--no-incremental \
@@ -61,3 +36,8 @@ build:
 
 test:
 	make -f Makefile.tests
+
+t2:
+	$(COMMON_VENV) \
+	$(PIP_INSTALL) -r requirements.txt; \
+	$(MIN_PYTHON_VERSION) t2.py 2>$@.2 | tee $@.1

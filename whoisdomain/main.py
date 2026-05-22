@@ -4,7 +4,6 @@ import gc
 import getopt
 import json
 import logging
-import os
 import pathlib
 import re
 import sys
@@ -15,7 +14,7 @@ from typing import (
 import whoisdomain as whois  # to be compatible with dannycork
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
 
 # if we are not running as test2.py run in a simplistic way
 SIMPLISTIC: bool = False
@@ -36,19 +35,24 @@ WithExtractServers: bool = False
 WithStripHttpStatus: bool = False
 WithNoIgnoreWww: bool = False
 
+RdapOnly: bool = False
+WhoisOnly: bool = False
+
 
 class ResponseCleaner:
     data: str
-    rDict: dict[str, Any] = {}
+    my_response_dict: dict[str, Any]
 
     def __init__(
         self,
         pathToTestFile: str,
     ):
         self.data = self.readInputFile(pathToTestFile)
+        self.my_response_dict = {}
 
+    @classmethod
     def readInputFile(
-        self,
+        cls,
         pathToTestFile: str,
     ) -> str:
         if not pathlib.Path(pathToTestFile).exists():
@@ -57,8 +61,9 @@ class ResponseCleaner:
         # switch to binary mode as that is what Popen uses; make sure the data is treated exactly the same
         return pathlib.Path(pathToTestFile).read_bytes().decode(errors="ignore")
 
+    @classmethod
     def cleanSection(
-        self,
+        cls,
         section: list[str],
     ) -> list[str]:
         # cleanup any beginning and ending empty lines from the section
@@ -111,18 +116,19 @@ class ResponseCleaner:
 
         return sections2
 
-    def cleanupWhoisResponse(
+    def cleanupWhoisResponse(  # noqa: C901
         self,
+        *,
         verbose: bool = False,
         with_cleanup_results: bool = False,
     ) -> tuple[str, dict[Any, Any]]:
         result = whois.cleanupWhoisResponse(
             self.data,
-            verbose,
-            with_cleanup_results,
+            verbose=verbose,
+            with_cleanup_results=with_cleanup_results,
         )
 
-        self.rDict: dict[str, Any] = {
+        self.my_response_dict: dict[str, Any] = {
             "BodyHasSections": False,  # if this is true the body is not a list of lines but a list of sections with lines
             "Preamble": [],  # the lines telling what whois servers wwere contacted
             "Percent": [],  # lines staring with %% , often not present but may contain hints
@@ -137,56 +143,62 @@ class ResponseCleaner:
         postambleSeen = False
         percentSeen = False
         for line in z:
+            lline = line
             if preambleSeen is False:
-                if line.startswith("["):
-                    self.rDict["Preamble"].append(line)
-                    line = "PRE;" + line
+                if lline.startswith("["):
+                    self.my_response_dict["Preamble"].append(lline)
+                    lline = "PRE;" + lline
                     continue
                 preambleSeen = True
 
             if preambleSeen is True and percentSeen is False:
-                if line.startswith("%"):
-                    self.rDict["Percent"].append(line)
-                    line = "PERCENT;" + line
+                if lline.startswith("%"):
+                    self.my_response_dict["Percent"].append(lline)
+                    lline = "PERCENT;" + lline
                     continue
                 percentSeen = True
 
             if postambleSeen is False:
-                if line.startswith("-- ") or line.startswith(">>> ") or line.startswith("Copyright notice"):
+                valid = [
+                    "-- ",
+                    ">>> ",
+                    "Copyright notice",
+                ]
+                if lline.startswith(tuple(valid)):
                     postambleSeen = True
 
             if postambleSeen is True:
-                self.rDict["Postamble"].append(line)
-                line = "POST;" + line
+                self.my_response_dict["Postamble"].append(lline)
+                lline = "POST;" + lline
                 continue
 
-            body.append(line)
+            body.append(lline)
 
-            ll = line
-            if "\t" in line:
-                ll = "TAB;" + line  # mark lines having tabs
+            ll = lline
+            if "\t" in lline:
+                ll = "TAB;" + lline  # mark lines having tabs
 
             if ll.endswith("\r"):
-                ll = "CR;" + line  # mark lines having CR (\r)
+                ll = "CR;" + lline  # mark lines having CR (\r)
 
             rr.append(ll)
 
         body = self.cleanSection(body)
-        self.rDict["Body"] = self.splitBodyInSections(body)
-        return "\n".join(rr), self.rDict
+        self.my_response_dict["Body"] = self.splitBodyInSections(body)
+        return "\n".join(rr), self.my_response_dict
 
     def printMe(self) -> None:
         zz = ["Preamble", "Percent", "Postamble"]
         for k in zz:
             n = 0
-            for lines in self.rDict[k]:
+            for lines in self.my_response_dict[k]:
                 tab = " [TAB] " if "\t" in lines else ""  # tabs are present in this section
                 cr = " [CR] " if "\r" in lines else ""  # \r is present in this section
                 print(k, cr, tab, lines)
 
         k = "Body"
-        if self.rDict[k]:
-            for n, lines in enumerate(self.rDict[k]):
+        if self.my_response_dict[k]:
+            for n, lines in enumerate(self.my_response_dict[k]):
                 ws = " [WHITESPACE AT END] " if re.search(r"[ \t]+\r?\n", lines) else ""
                 tab = " [TAB] " if "\t" in lines else ""  # tabs are present in this section
                 cr = " [CR] " if "\r" in lines else ""  # \r is present in this section
@@ -214,7 +226,6 @@ def testItem(d: str, pc: whois.ParameterContext) -> Any:
 
 def testItem1(
     d: str,
-    printgetRawWhoisResult: bool = False,
 ) -> None:
     global \
         IgnoreReturncode, \
@@ -227,7 +238,9 @@ def testItem1(
         WithPublicSuffix, \
         WithExtractServers, \
         WithStripHttpStatus, \
-        WithNoIgnoreWww
+        WithNoIgnoreWww, \
+        RdapOnly, \
+        WhoisOnly
 
     pc = whois.ParameterContext(
         ignore_returncode=IgnoreReturncode,
@@ -240,6 +253,8 @@ def testItem1(
         extractServers=WithExtractServers,
         stripHttpStatus=WithStripHttpStatus,
         noIgnoreWww=WithNoIgnoreWww,
+        whoisOnly=WhoisOnly,
+        rdapOnly=RdapOnly,
     )
 
     # use the new query (can also simply use q2()
@@ -295,7 +310,7 @@ def errorItem(d: str, e: Any, what: str = "Generic") -> None:
     print(message)
 
 
-def testDomains(aList: list[str]) -> None:
+def testDomains(aList: list[str]) -> None:  # noqa: C901
     for d in aList:
         # skip empty lines
         if not d:
@@ -314,19 +329,19 @@ def testDomains(aList: list[str]) -> None:
         prepItem(dd)
         try:
             testItem1(dd)
-        except whois.UnknownTld as e:
+        except whois.UnknownTldError as e:
             errorItem(dd, e, what="UnknownTld")
-        except whois.FailedParsingWhoisOutput as e:
+        except whois.FailedParsingWhoisOutputError as e:
             errorItem(dd, e, what="FailedParsingWhoisOutput")
-        except whois.UnknownDateFormat as e:
+        except whois.UnknownDateFormatError as e:
             errorItem(dd, e, what="UnknownDateFormat")
-        except whois.WhoisCommandFailed as e:
+        except whois.WhoisCommandFailedError as e:
             errorItem(dd, e, what="WhoisCommandFailed")
-        except whois.WhoisQuotaExceeded as e:
+        except whois.WhoisQuotaExceededError as e:
             errorItem(dd, e, what="WhoisQuotaExceeded")
-        except whois.WhoisPrivateRegistry as e:
+        except whois.WhoisPrivateRegistryError as e:
             errorItem(dd, e, what="WhoisPrivateRegistry")
-        except whois.WhoisCommandTimeout as e:
+        except whois.WhoisCommandTimeoutError as e:
             errorItem(dd, e, what="WhoisCommandTimeout")
 
 
@@ -368,7 +383,7 @@ def getAllCurrentTld() -> list[str]:
 
 def appendHintOrMeta(
     rr: list[str],
-    allRegex: str | None,
+    # allRegex: str | None,
     tld: str,
 ) -> None:
     global TestAllTld, TestRunOnly
@@ -383,7 +398,7 @@ def appendHintOrMeta(
 
 def appendHint(
     rr: list[str],
-    allRegex: str | None,
+    # allRegex: str | None,
     tld: str,
 ) -> None:
     global TestAllTld, TestRunOnly
@@ -395,17 +410,17 @@ def appendHint(
 
 
 def makeMetaAllCurrentTld(
-    allHaving: str | None = None,
+    # allHaving: str | None = None,
     allRegex: str | None = None,
 ) -> list[str]:
     rr: list[str] = []
     for tld in getAllCurrentTld():
         if allRegex is None:
-            appendHintOrMeta(rr, allRegex, tld)
+            appendHintOrMeta(rr, tld)
             continue
 
         if re.search(allRegex, tld):
-            appendHintOrMeta(rr, allRegex, tld)
+            appendHintOrMeta(rr, tld)
 
     return rr
 
@@ -416,10 +431,10 @@ def makeTestAllCurrentTld(
     rr: list[str] = []
     for tld in getAllCurrentTld():
         if allRegex is None:
-            appendHint(rr, allRegex, tld)
+            appendHint(rr, tld)
             continue
         if re.search(allRegex, tld):
-            appendHint(rr, allRegex, tld)
+            appendHint(rr, tld)
 
     return rr
 
@@ -531,8 +546,8 @@ def showFailures() -> None:
                 print(i, j, Failures[i][j])
 
 
-def main() -> None:
-    global PrintJson, Verbose, IgnoreReturncode, PrintGetRawWhoisResult, Ruleset, SIMPLISTIC, WithRedacted, TestAllTld, TestRunOnly, WithPublicSuffix, WithExtractServers, WithStripHttpStatus, WithNoIgnoreWww  # noqa: E501  # pylint: disable=line-too-long
+def main() -> None:  # noqa: C901,PLR0915
+    global PrintJson, Verbose, IgnoreReturncode, PrintGetRawWhoisResult, Ruleset, SIMPLISTIC, WithRedacted, TestAllTld, TestRunOnly, WithPublicSuffix, WithExtractServers, WithStripHttpStatus, WithNoIgnoreWww, RdapOnly, WhoisOnly  # noqa: E501  # pylint: disable=line-too-long
 
     name: str = pathlib.Path(sys.argv[0]).name
     SIMPLISTIC = True
@@ -565,6 +580,8 @@ def main() -> None:
                 "extractServers",
                 "stripHttpStatus",
                 "withNoIgnoreWww",
+                "rdapOnly",
+                "whoisOnly",
             ],
         )
     except getopt.GetoptError:
@@ -573,7 +590,7 @@ def main() -> None:
 
     # TestAllTld: bool = False
 
-    allHaving: str | None = None  # from all supported tld only process the ones having this :: TODO ::
+    # allHaving: str | None = None  # from all supported tld only process the ones having this :: TODO ::
     allRegex: str | None = None  # from all supported tld process only the ones matching this regex
 
     directory: str | None = None
@@ -587,13 +604,14 @@ def main() -> None:
 
     fileData: dict[str, Any] = {}
 
+    # CLAUDE: Better still, migrate the CLI from getopt to argparse.
     for opt, arg in opts:
-        if opt in ("-S", "SupportedTld"):
+        if opt in {"-S", "SupportedTld"}:
             for tld in sorted(whois.validTlds()):
                 print(tld)
             sys.exit(0)
 
-        if opt in ("-V", "Version"):
+        if opt in {"-V", "Version"}:
             print(whois.getVersion())
             sys.exit(0)
 
@@ -601,28 +619,28 @@ def main() -> None:
             usage()
             sys.exit(0)
 
-        if opt in ("-a", "--all"):
+        if opt in {"-a", "--all"}:
             TestAllTld = True
 
-        if opt in ("-H", "--having"):
-            TestAllTld = True
-            allHaving = str(arg)
+        #        if opt in {"-H", "--having"}:
+        #            TestAllTld = True
+        #            allHaving = str(arg)
 
-        if opt in ("-r", "--reg"):
+        if opt in {"-r", "--reg"}:
             TestAllTld = True
             allRegex = str(arg)
 
-        if opt in ("-v", "--verbose"):
+        if opt in {"-v", "--verbose"}:
             Verbose = True
             logging.basicConfig(level="DEBUG")
 
-        if opt in ("-p", "--print"):
+        if opt in {"-p", "--print"}:
             PrintGetRawWhoisResult = True
 
-        if opt in ("-j", "--json"):
+        if opt in {"-j", "--json"}:
             PrintJson = True
 
-        if opt in ("-T", "--Testing"):
+        if opt in {"-T", "--Testing"}:
             # print out all names of tld where we have _test
             TestAllTld = True
             rr = makeTestAllCurrentTld(None)
@@ -630,23 +648,23 @@ def main() -> None:
                 print(item)
             sys.exit(0)
 
-        if opt in ("-t", "--test"):
+        if opt in {"-t", "--test"}:
             # collect all _test entries defined and only run those,
             # o not run the default meta.tld
             TestAllTld = True
             TestRunOnly = True
 
-        if opt in ("-R", "--Ruleset"):
+        if opt in {"-R", "--Ruleset"}:
             Ruleset = True
 
-        if opt in ("-D", "--Directory"):
+        if opt in {"-D", "--Directory"}:
             directory = arg
             isDir = pathlib.Path(directory).is_dir()
             if isDir is False:
                 print(f"{directory} cannot be found or is not a directory", file=sys.stderr)
                 sys.exit(101)
 
-        if opt in ("-C", "--Cleanup"):
+        if opt in {"-C", "--Cleanup"}:
             inFile = arg
             isFile = pathlib.Path(arg).is_file()
             if isFile is False:
@@ -658,7 +676,7 @@ def main() -> None:
             rc.printMe()
             sys.exit(0)
 
-        if opt in ("-f", "--file"):
+        if opt in {"-f", "--file"}:  # a set
             filename = arg
             isFile = pathlib.Path(filename).is_file()
             if isFile is False:
@@ -669,25 +687,31 @@ def main() -> None:
                 files.append(filename)
                 TestAllTld = False
 
-        if opt in ("-d", "--domain"):
+        if opt in {"-d", "--domain"}:  # set
             domain = arg
             if domain not in domains:
                 domains.append(domain)
 
-        if opt in ("--extractServers"):
+        if opt == "--extractServers":
             WithExtractServers = True
 
-        if opt in ("--stripHttpStatus"):
+        if opt == "--stripHttpStatus":
             WithStripHttpStatus = True
 
-        if opt in ("--withRedacted"):
+        if opt == "--withRedacted":
             WithRedacted = True
 
-        if opt in ("--withPublicSuffix"):
+        if opt == "--withPublicSuffix":
             WithPublicSuffix = True
 
-        if opt in ("--withNoIgnoreWww"):
+        if opt == "--withNoIgnoreWww":
             WithNoIgnoreWww = True
+
+        if opt == "--rdapOnly":
+            RdapOnly = True
+
+        if opt == "--whoisOnly":
+            WhoisOnly = True
 
     msg = f"{name} SIMPLISTIC: {SIMPLISTIC}"
     log.debug(msg)
@@ -699,7 +723,7 @@ def main() -> None:
 
     if TestAllTld:
         if TestRunOnly is False:
-            testDomains(makeMetaAllCurrentTld(allHaving, allRegex))
+            testDomains(makeMetaAllCurrentTld(allRegex))
         else:
             testDomains(makeTestAllCurrentTld(allRegex))
 

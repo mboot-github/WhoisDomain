@@ -1,23 +1,22 @@
 # import sys
 import logging
-import os
 
 from .context.dataContext import DataContext
 from .context.parameterContext import ParameterContext
 from .domain import Domain
 from .doWhoisCommand import doWhoisAndReturnString
-from .exceptions import UnknownTld
+from .exceptions import UnknownTldError
 from .helpers import filterTldToSupportedPattern, get_TLD_RE
 from .lastWhois import updateLastWhois
 from .whoisCliInterface import WhoisCliInterface
 from .whoisParser import WhoisParser
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
 
 TLD_LIB_PRESENT: bool = False
 try:
-    import tld as libTld
+    import tld as lib_tld
 
     TLD_LIB_PRESENT = True
 except ImportError as ee:
@@ -38,8 +37,6 @@ class ProcessWhoisDomainRequest:
         self.dom: Domain | None = dom
         self.wci = wci
         self.parser = parser
-        if self.pc.verbose:
-            logging.basicConfig(level="DEBUG")
 
     def _analyzeDomainStringAndValidate(
         self,
@@ -53,7 +50,7 @@ class ProcessWhoisDomainRequest:
 
         # test with: www.dublin.airport.aero see make withPublicSuffix
         if self.dc.hasLibTld and self.pc.withPublicSuffix:
-            res = libTld.get_tld(
+            res = lib_tld.get_tld(
                 self.dc.domain,
                 fail_silently=True,
                 fix_protocol=True,
@@ -69,9 +66,8 @@ class ProcessWhoisDomainRequest:
             self.dc.dList = []
             return
 
-        if self.dc.dList[0] == "www":
-            if self.pc.noIgnoreWww is False:
-                self.dc.dList = self.dc.dList[1:]
+        if self.dc.dList[0] == "www" and self.pc.noIgnoreWww is False:
+            self.dc.dList = self.dc.dList[1:]
 
         if len(self.dc.dList) == 0:
             self.dc.tldString = None
@@ -86,9 +82,7 @@ class ProcessWhoisDomainRequest:
 
         # Is it a supported domain =======
         self.dc.tldString = filterTldToSupportedPattern(
-            self.dc.domain,
             self.dc.dList,
-            self.pc.verbose,
         )
 
         if self.dc.tldString is None:
@@ -97,7 +91,7 @@ class ProcessWhoisDomainRequest:
             a = f"The TLD {tld} is currently not supported by this package."
             b = "Use validTlds() to see what toplevel domains are supported."
             msg = f"{a} {b}"
-            raise UnknownTld(msg)
+            raise UnknownTldError(msg)
 
         # Internationalized domains: Idna translate
         if self.pc.internationalized:
@@ -158,7 +152,7 @@ class ProcessWhoisDomainRequest:
             if self.pc.simplistic is False:
                 raise
 
-            self.dc.exeptionStr = f"{e}"
+            self.dc.exceptionStr = f"{e}"
             assert self.dom is not None
             self.dom.init(
                 pc=self.pc,
@@ -196,11 +190,11 @@ class ProcessWhoisDomainRequest:
     def _prepRequest(self) -> bool:
         try:
             self._analyzeDomainStringAndValidate()  # may raise UnknownTld
-        except UnknownTld:
+        except UnknownTldError:
             if self.pc.simplistic is False:
                 raise
 
-            self.dc.exeptionStr = "UnknownTld"
+            self.dc.exceptionStr = "UnknownTld"
 
             assert self.dom is not None
             self.dom.init(
@@ -220,10 +214,7 @@ class ProcessWhoisDomainRequest:
             return True
 
         # =================================================
-        myKeys: list[str] = []
-        for item in get_TLD_RE():
-            myKeys.append(item)
-
+        myKeys: list[str] = list(get_TLD_RE())
         if self.dc.tldString not in myKeys:
             msg = self._makeMessageForUnsupportedTld()
             if msg is None:
@@ -237,9 +228,9 @@ class ProcessWhoisDomainRequest:
                 return True
 
             if self.pc.simplistic is False:
-                raise UnknownTld(msg)
+                raise UnknownTldError(msg)
 
-            self.dc.exeptionStr = msg  # was: self.dc.exeptionStr = "UnknownTld"
+            self.dc.exceptionStr = msg  # was: self.dc.exceptionStr = "UnknownTld"
             assert self.dom is not None
             self.dom.init(
                 pc=self.pc,
@@ -253,7 +244,7 @@ class ProcessWhoisDomainRequest:
 
         if self.parser.verifyPrivateRegistry():  # may raise WhoisPrivateRegistry
             msg = "This tld has either no whois server or responds only with minimal information"
-            self.dc.exeptionStr = msg
+            self.dc.exceptionStr = msg
             assert self.dom is not None
             self.dom.init(
                 pc=self.pc,

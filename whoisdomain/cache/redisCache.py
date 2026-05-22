@@ -1,8 +1,7 @@
 import logging
-import os
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
 
 HAS_REDIS = False
 try:
@@ -15,7 +14,14 @@ except ImportError as e:
 if HAS_REDIS:
 
     class RedisCache:
-        def __init__(self, verbose: bool = False, host: str = "localhost", port: int = 6379, db: int = 0) -> None:
+        def __init__(
+            self,
+            *,
+            verbose: bool = False,
+            host: str = "localhost",
+            port: int = 6379,
+            db: int = 0,
+        ) -> None:
             self.verbose = verbose
 
             self.pool = redis.ConnectionPool(host=host, port=port, db=db, decode_responses=True)

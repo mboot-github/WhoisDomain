@@ -1,5 +1,4 @@
 import logging
-import os
 from typing import (
     Any,
 )
@@ -10,7 +9,7 @@ from .context.parameterContext import ParameterContext
 from .whoisCliInterface import WhoisCliInterface
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
 
 # actually also whois uses cache, so if you really dont want to use cache
 # you should also pass the --force-lookup flag (on linux)
@@ -30,7 +29,7 @@ def setMyCache(myCache: Any) -> None:
 
 def _initDefaultCache(
     pc: ParameterContext,
-    dc: DataContext,
+    #    dc: DataContext,
 ) -> Any:
     global CACHE_STUB
 
@@ -46,8 +45,8 @@ def _initDefaultCache(
     # if no cache defined init the default cache (optional with file storage based on pc)
     CACHE_STUB = SimpleCacheWithFile(
         verbose=pc.verbose,
-        cacheFilePath=pc.cache_file,
-        cacheMaxAge=pc.cache_age,
+        cache_file_path=pc.cache_file,
+        cache_max_age=pc.cache_age,
     )
 
     msg = "initializing default cache"
@@ -55,7 +54,6 @@ def _initDefaultCache(
     return CACHE_STUB
 
 
-# TODO: future: can we use decorator for caching?
 def doWhoisAndReturnString(
     pc: ParameterContext,
     dc: DataContext,
@@ -63,7 +61,7 @@ def doWhoisAndReturnString(
 ) -> str:
     cache = _initDefaultCache(
         pc=pc,
-        dc=dc,
+        # dc=dc,
     )
     keyString = ".".join(dc.dList)
 
@@ -77,7 +75,7 @@ def doWhoisAndReturnString(
         cache.put(
             keyString,
             wci.executeWhoisQueryOrReturnFileData(),
-        )
+        ),
     )
 
 

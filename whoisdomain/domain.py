@@ -1,89 +1,62 @@
 import logging
-import os
 import re
-from typing import (
-    Any,
-)
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    import datetime
 
 from .context.dataContext import DataContext
 from .context.parameterContext import ParameterContext
 from .handleDateStrings import str_to_date
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
-
 
 class Domain:
-    # The docstrings for classes should summarize its behavior
-    # and list the public methods and instance variables.
-    """
-    A class to represent a standarized result of a whois lookup
-
-    # Attributes
-    * Attributes are created dynamically,
-    not all domains have currently the same amount.
-
-    - name: str, the domain name
-    - tld: str, the detected top level domain
-    - name_servers: List, a list of detected name servers
-    - DNSSEC: boolean
-
-    - status: List
-    - registrar: str
-    - registrant: str
-    - registrant_country:
-    - emails: List
-
-    - updated_date: datetime
-    - expiration_date: datetime
-    - creation_date: datetime
-
-    Methods
-    -------
-    def init(pc: ParameterContext,dc: DataContext) -> None:
-        initialize the object with the current data from dc.data: Dict[str, Any]
-        the init is separated from creating an instance as we want to use dependency injection as much as possible.
-
-    """
-
-    def _cleanupArray(
-        self,
-        data: list[str],
-    ) -> list[str]:
-        if "" in data:
-            index = data.index("")
-            data.pop(index)
-        return data
-
-    def _doNameservers(
+    def __init__(
         self,
         pc: ParameterContext,
         dc: DataContext,
     ) -> None:
-        tmp: list[str] = []
-        for x in dc.data["name_servers"]:
-            if isinstance(x, str):
-                tmp.append(x.strip().lower())
-                continue
+        _ = pc
+        _ = dc
 
-            # not a string but an array
-            tmp.extend(y.strip().lower() for y in x)
+        self.name: str = ""
+        self.tld: str = ""
+        self.registrar: str = ""
+        self.registrant: str = ""
+        self.registrant_country: str = ""
+        self.status: str = ""
 
+        self.abuse_contact: str = ""
+        self.admin: str = ""
+
+        self.statuses: list[str] = []
+        self.emails: list[str] = []
         self.name_servers: list[str] = []
-        for x in tmp:
-            x = x.strip(" .")  # remove any leading or trailing spaces and/or dots
-            if x:
-                if " " in x:
-                    x, _ = x.split(" ", 1)
-                    x = x.strip(" .")
 
-                x = x.lower()
-                if x not in self.name_servers:
-                    self.name_servers.append(x)
+        self.dnssec: bool = False
 
-        self.name_servers = sorted(self.name_servers)
+        # self.last_updated: datetime.datetime | None = None
+        self.updated_date: datetime.datetime | None = None
+        self.expiration_date: datetime.datetime | None = None
+        self.creation_date: datetime.datetime | None = None
 
-    def cleanStatus(self, item: str) -> str:
+        self._rdap_: dict[str, Any] = {}
+        self.__lookup__ = "whois"
+
+    @classmethod
+    def _cleanupArray(
+        cls,
+        data: list[str],
+    ) -> list[str]:
+        # remove empty elements from the list (thanks to CLAUDE)
+        return [x for x in data if x]
+
+    @classmethod
+    def cleanStatus(
+        cls,
+        item: str,
+    ) -> str:
         if "icann.org/epp#" in item:
             res = re.split(r"\s*\(?https?://(www\.)?icann\.org/epp#\s*", item)
             if res and res[0]:
@@ -95,6 +68,33 @@ class Domain:
                 return res[0].strip()
 
         return item
+
+    def _doNameservers(
+        self,
+        *,
+        dc: DataContext,
+    ) -> None:
+        tmp: list[str] = []
+        for x in dc.data["name_servers"]:
+            if isinstance(x, str):
+                tmp.append(x.strip().lower())
+                continue
+
+            # not a string but an array
+            tmp.extend(y.strip().lower() for y in x)
+
+        for x in tmp:
+            xx = x.strip(" .")  # remove any leading or trailing spaces and/or dots
+            if xx:
+                if " " in xx:
+                    xx, _ = xx.split(" ", 1)
+                    xx = xx.strip(" .")
+
+                xx = xx.lower()
+                if xx not in self.name_servers:
+                    self.name_servers.append(xx)
+
+        self.name_servers = sorted(self.name_servers)
 
     def _doStatus(
         self,
@@ -118,8 +118,8 @@ class Domain:
         if pc.stripHttpStatus:
             z = []
             for item in self.statuses:
-                item = self.cleanStatus(item)
-                z.append(item)
+                xitem = self.cleanStatus(item)
+                z.append(xitem)
             self.statuses = z
 
     def _doOptionalFields(
@@ -167,23 +167,24 @@ class Domain:
         self.registrant_country = dc.data["registrant_country"][0].strip()
 
         # date time items
-        self.creation_date = str_to_date(dc.data["creation_date"][0], self.tld)
-        self.expiration_date = str_to_date(dc.data["expiration_date"][0], self.tld)
-        self.last_updated = str_to_date(dc.data["updated_date"][0], self.tld)
+        self.creation_date = str_to_date(dc.data["creation_date"][0], tld=self.tld)
+        self.expiration_date = str_to_date(dc.data["expiration_date"][0], tld=self.tld)
+        self.updated_date = str_to_date(dc.data["updated_date"][0], tld=self.tld)
+        # self.last_updated = self.updated_date  # keep old name for one release
 
-        self.dnssec = dc.data["DNSSEC"]
+        self.dnssec = bool(dc.data["DNSSEC"])
         self._doStatus(pc, dc)
-        self._doNameservers(pc, dc)
+        self._doNameservers(dc=dc)
 
         # optional fields
         self._doOptionalFields(dc.data)
 
-    def __init__(
+    def from_whodap_dict(
         self,
-        pc: ParameterContext,
-        dc: DataContext,
+        d: dict[str, Any],
     ) -> None:
-        pass
+        for name, value in d.items():
+            super().__setattr__(name, value)
 
     def init(
         self,
@@ -193,8 +194,8 @@ class Domain:
         if pc.include_raw_whois_text and dc.whoisStr is not None:
             self.text = dc.whoisStr
 
-        if dc.exeptionStr is not None:
-            self._exception = dc.exeptionStr
+        if dc.exceptionStr is not None:
+            self._exception = dc.exceptionStr
             return
 
         if dc.data == {}:

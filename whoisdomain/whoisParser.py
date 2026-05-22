@@ -1,5 +1,4 @@
 import logging
-import os
 import re
 from typing import (
     Any,
@@ -12,9 +11,9 @@ from .domain import Domain
 
 # import sys
 from .exceptions import (
-    FailedParsingWhoisOutput,
-    WhoisPrivateRegistry,
-    WhoisQuotaExceeded,
+    FailedParsingWhoisOutputError,
+    WhoisPrivateRegistryError,
+    WhoisQuotaExceededError,
 )
 from .helpers import get_TLD_RE
 from .strings.ignoreStrings import IgnoreStrings
@@ -22,7 +21,9 @@ from .strings.noneStrings import NoneStrings
 from .strings.quotaStrings import QuotaStrings
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
+
+
+NN2 = 2
 
 
 class WhoisParser:
@@ -35,8 +36,6 @@ class WhoisParser:
         self.dc = dc
         self.dom: Domain | None = None
         self.resultDict: dict[str, Any] = {}
-        if self.pc.verbose:
-            logging.basicConfig(level="DEBUG")
 
     def _doExtractPattensIanaFromWhoisString(
         self,
@@ -57,23 +56,6 @@ class WhoisParser:
             msg = f"parsing iana data only for tld: {self.dc.tldString}, {result}"
             log.debug(msg)
 
-    #    def _doExtractPattensFromWhoisString_old(
-    #        self,
-    #    ) -> None:
-    #        empty = [""]  # Historical: we use 'empty string' as default, not None
-    #
-    #        for key, compiledRe in self.dc.thisTld.items():
-    #            if key.startswith("_"):
-    #                # skip meta element like: _server or _privateRegistry
-    #                continue
-    #
-    #            self.resultDict[key] = empty  # set a default
-    #            if compiledRe:
-    #                # here we apply the regex patterns
-    #                self.resultDict[key] = compiledRe.findall(self.dc.whoisStr) or empty
-    #                msg = f"{key}, {self.resultDict[key]}"
-    #                log.debug(msg)
-
     def _doExtractPattensFromWhoisString(
         self,
     ) -> None:
@@ -82,7 +64,7 @@ class WhoisParser:
         sData: list[str] = []
         splitter = self.dc.thisTld.get("_split")
         if splitter:
-            sData = splitter(self.dc.whoisStr, self.pc.verbose)
+            sData = splitter(self.dc.whoisStr)
             if sData != []:
                 for item in sData:
                     msg = f"split data: {item}"
@@ -99,17 +81,10 @@ class WhoisParser:
 
             if callable(val):
                 # vcall the curry function we created in tld_regexpr.py
-                self.resultDict[key] = val(self.dc.whoisStr, sData, self.pc.verbose) or empty
+                self.resultDict[key] = val(self.dc.whoisStr, sData) or empty
                 msg = f"_doExtractPattensFromWhoisString: call indirect {val} {key}, {self.resultDict[key]}"
                 log.debug(msg)
                 continue
-
-            #            if isinstance(val, str):
-            #                # we still support plain strings also
-            #                self.resultDict[key] = re.findall(val, self.dc.whoisStr, flags=re.IGNORECASE) or empty
-            #                msg = f"_doExtractPattensFromWhoisStringstr: {key}, {self.resultDict[key]}"
-            #                log.debug(msg)
-            #                continue
 
             msg = f"UNKNOWN: _doExtractPattensFromWhoisString {key}, {val}"
             log.debug(msg)
@@ -127,12 +102,12 @@ class WhoisParser:
 
         whois_splitted: list[str] = self.dc.whoisStr.split(k)
         z: int = len(whois_splitted)
-        if z > 2:
+        if z > NN2:
             self.dc.whoisStr = k.join(whois_splitted[1:])
             self.dom = None
             return self.dom
 
-        if z == 2 and whois_splitted[1].strip():
+        if z == NN2 and whois_splitted[1].strip():
             # if we see source: IANA and the part after is not only whitespace
             msg = f"after: {k} we see not only whitespace: {whois_splitted[1]}"
             log.debug(msg)
@@ -177,7 +152,7 @@ class WhoisParser:
             return False
 
         whoisDnsSecList: list[str] = self.dc.whoisStr.split("DNSSEC:")
-        if len(whoisDnsSecList) >= 2:
+        if len(whoisDnsSecList) >= NN2:
             msg = "DEGUG: i have seen dnssec: {whoisDnsSecStr}"
             log.debug(msg)
 
@@ -196,16 +171,6 @@ class WhoisParser:
 
         msg = f"shortResponse:: {self.dc.tldString} {self.dc.whoisStr}"
         log.debug(msg)
-
-        # TODO: some short responses are actually valid:
-        # lookfor Domain: and Status but all other fields are missing so the regexec could fail
-        # this domain is taken already or reserved
-
-        # whois syswow.64-b.it
-        # [Querying whois.nic.it]
-        # [whois.nic.it]
-        # Domain:             syswow.64-b.it
-        # Status:             UNASSIGNABLE
 
         # ---------------------------------
         # NOTE: from here s is lowercase only
@@ -230,7 +195,7 @@ class WhoisParser:
             if i in s:
                 if self.pc.simplistic:
                     msg = "WhoisQuotaExceeded"
-                    self.dc.exeptionStr = msg
+                    self.dc.exceptionStr = msg
 
                     assert self.dom is not None
                     self.dom.init(
@@ -239,11 +204,11 @@ class WhoisParser:
                     )
                     return self.dom
 
-                raise WhoisQuotaExceeded(self.dc.whoisStr)
+                raise WhoisQuotaExceededError(self.dc.whoisStr)
 
         if self.pc.simplistic:
             msg = "FailedParsingWhoisOutput"
-            self.dc.exeptionStr = msg
+            self.dc.exceptionStr = msg
 
             assert self.dom is not None
             self.dom.init(
@@ -252,7 +217,7 @@ class WhoisParser:
             )
             return self.dom
 
-        raise FailedParsingWhoisOutput(self.dc.whoisStr)
+        raise FailedParsingWhoisOutputError(self.dc.whoisStr)
 
     def _extractWhoisServer(self) -> list[str]:
         # jp starts comments with [\s
@@ -266,7 +231,7 @@ class WhoisParser:
 
         return []
 
-    def _cleanupWhoisResponse(
+    def _cleanupWhoisResponse(  # noqa: C901
         self,
     ) -> str:
         tmp2: list[str] = []
@@ -276,7 +241,7 @@ class WhoisParser:
         for line in tmp:
             # some servers respond with: % Quota exceeded in the comment section (lines starting with %)
             if "quota exceeded" in line.lower():
-                raise WhoisQuotaExceeded(self.dc.whoisStr)
+                raise WhoisQuotaExceededError(self.dc.whoisStr)
 
             if ":101: no entries found" in line.lower():  # google.co.cz has a response longer than 5 but no data
                 break
@@ -285,9 +250,14 @@ class WhoisParser:
                 continue
 
             if self.pc.withRedacted is False:
+                skip = False
                 for item in IgnoreStrings():
                     if item in line:  # note we do not use ignorecase currently here
-                        continue
+                        skip = True
+                        break
+
+                if skip:
+                    continue
 
                 if "REDACTED FOR PRIVACY" in line:  # these lines contibute nothing so ignore
                     continue
@@ -316,7 +286,7 @@ class WhoisParser:
 
         if self.pc.simplistic is False:
             msg = "WhoisPrivateRegistry"
-            raise WhoisPrivateRegistry(msg)
+            raise WhoisPrivateRegistryError(msg)
 
         return True
 
@@ -334,9 +304,8 @@ class WhoisParser:
         self.pc.slow_down = self.pc.slow_down or 0
 
         slowDown = self.dc.thisTld.get("_slowdown")
-        if slowDown:
-            if self.pc.slow_down == 0 and int(slowDown) > 0:
-                self.pc.slow_down = int(slowDown)
+        if slowDown and self.pc.slow_down == 0 and int(slowDown) > 0:
+            self.pc.slow_down = int(slowDown)
 
         if int(self.pc.slow_down):
             msg = f"using _slowdown hint {self.pc.slow_down} for tld: {self.dc.tldString}"

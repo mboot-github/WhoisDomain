@@ -1,15 +1,14 @@
 import dbm
 import logging
-import os
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 
 class DBMCache:
     def __init__(
         self,
         dbmFile: str,
+        *,
         verbose: bool = False,
     ) -> None:
         self.verbose = verbose

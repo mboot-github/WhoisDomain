@@ -1,3 +1,3 @@
-"""This module only makes the version available for dynamic versioning"""
+"""module only makes the version available for dynamic versioning."""
 
-VERSION = "1.20260326.1"
+VERSION = "2.20260522.1"

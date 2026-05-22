@@ -1,6 +1,6 @@
 # pylint: disable=duplicate-code
 """
-Module providing all public accessible functions and data for the whoisdomain package
+Module providing all public accessible functions and data for the whoisdomain package.
 
 ## optional modules supported:
 
@@ -9,7 +9,6 @@ Module providing all public accessible functions and data for the whoisdomain pa
 All public data is vizible via the __all__ List
 """
 
-import gc
 import logging
 import os
 import sys
@@ -25,13 +24,13 @@ from .context.parameterContext import ParameterContext
 from .domain import Domain
 from .doWhoisCommand import setMyCache
 from .exceptions import (
-    FailedParsingWhoisOutput,
-    UnknownDateFormat,
-    UnknownTld,
-    WhoisCommandFailed,
-    WhoisCommandTimeout,
-    WhoisPrivateRegistry,
-    WhoisQuotaExceeded,
+    FailedParsingWhoisOutputError,
+    UnknownDateFormatError,
+    UnknownTldError,
+    WhoisCommandFailedError,
+    WhoisCommandTimeoutError,
+    WhoisPrivateRegistryError,
+    WhoisQuotaExceededError,
 )
 from .helpers import (
     cleanupWhoisResponse,
@@ -53,11 +52,11 @@ from .strings.quotaStrings import QuotaStrings, QuotaStringsAdd
 from .tldDb.tld_regexpr import ZZ
 from .tldInfo import TldInfo
 from .version import VERSION
+from .whois_rdap import WhoisRdap
 from .whoisCliInterface import WhoisCliInterface
 from .whoisParser import WhoisParser
 
 log = logging.getLogger(__name__)
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 HAS_REDIS = False
 try:
@@ -66,9 +65,6 @@ try:
     HAS_REDIS = True
 except ImportError as e:
     _ = e
-
-if HAS_REDIS:
-    from .cache.redisCache import RedisCache
 
 WHOISDOMAIN: str = ""
 if os.getenv("WHOISDOMAIN"):
@@ -82,18 +78,19 @@ if "SIMPLISTIC" in WD:
 
 TLD_LIB_PRESENT: bool = False
 try:
-    import tld as libTld  # noqa: F401
+    import tld as lib_tld  # noqa: F401
 
     TLD_LIB_PRESENT = True
 except ImportError as e:
     _ = e  # ignore any error
+
 
 __all__ = [
     "VERSION",
     "ZZ",
     "DBMCache",
     "DummyCache",
-    "FailedParsingWhoisOutput",
+    "FailedParsingWhoisOutputError",
     "NoneStrings",
     "NoneStringsAdd",
     "ParameterContext",
@@ -104,12 +101,13 @@ __all__ = [
     "SimpleCacheBase",
     "SimpleCacheWithFile",
     "TldInfo",
-    "UnknownDateFormat",
-    "UnknownTld",
-    "WhoisCommandFailed",
-    "WhoisCommandTimeout",
-    "WhoisPrivateRegistry",
-    "WhoisQuotaExceeded",
+    "UnknownDateFormatError",
+    "UnknownTldError",
+    "WhoisCommandFailedError",
+    "WhoisCommandTimeoutError",
+    "WhoisPrivateRegistryError",
+    "WhoisQuotaExceededError",
+    "WhoisRdap",
     "cleanupWhoisResponse",
     "filterTldToSupportedPattern",
     "getTestHint",
@@ -123,8 +121,15 @@ __all__ = [
     "validTlds",
 ]
 
+if HAS_REDIS:
+    from .cache.redisCache import RedisCache
 
-def _result2dict(func: Any) -> Any:
+    __all__ += ["RedisCache"]
+
+
+def _result2dict(
+    func: Any,
+) -> Any:
     @wraps(func)
     def _inner(*args: str, **kw: Any) -> dict[str, Any]:
         r = func(*args, **kw)
@@ -136,6 +141,7 @@ def _result2dict(func: Any) -> Any:
 def remoteQ2(
     conn: Any,
     max_requests: int,
+    *,
     verbose: bool = False,
 ) -> None:
     n: int = 0
@@ -150,7 +156,7 @@ def remoteQ2(
                 print("remoteQ2:Receive:", request, file=sys.stderr)
 
             pc: ParameterContext = ParameterContext()
-            pc.fromJson(request["pc"])
+            pc.from_json(request["pc"])
 
             # call the func
             allOk = True
@@ -191,21 +197,30 @@ def q2(
     domain: str,
     pc: ParameterContext,
 ) -> Domain | None:
-    if pc.verbose is True:
-        os.putenv("LOGLEVEL", "DEBUG")
-        os.environ["LOGLEVEL"] = "DEBUG"
-        logging.basicConfig(level="DEBUG")
-
-    gc.collect(0)
-    gc.collect(1)
-    gc.collect(2)
-
-    initLastWhois()
-
     dc = DataContext(
         domain=domain,
         hasLibTld=TLD_LIB_PRESENT,
     )
+
+    if pc.whoisOnly is False:
+        wr = WhoisRdap()
+        dd = wr.do_one_domain(domain)
+        if dd.status:
+            with_rdap_whois = True
+            d: dict[str, Any] = wr.map_data_to_whoisdomain(dd.data, with_rdap_whois=with_rdap_whois)
+            d['__lookup__'] = 'rdap'
+
+            rr = Domain(pc=pc, dc=dc)
+            rr.from_whodap_dict(d)
+            msg = f"lookup: {domain} using whodap"
+            log.info(msg)
+            return rr  # also show the raw data from whodap
+
+        log.warning(dd)  # no proper answer from rdap try whois
+        if pc.rdapOnly is True:
+            return None
+
+    initLastWhois()
 
     dom = Domain(
         pc=pc,
@@ -230,82 +245,45 @@ def q2(
         parser=parser,
     )
 
-    result = pwdr.processRequest()
-    del pwdr
-    del dom
-    del wci
-    del parser
-    del dc
-    del pc
-
-    gc.collect(0)
-    gc.collect(1)
-    gc.collect(2)
-
-    return result
+    return pwdr.processRequest()
 
 
 def query(
     domain: str,
-    force: bool = False,
-    cache_file: str | None = None,
-    cache_age: int = 60 * 60 * 48,
-    slow_down: int = 0,
-    ignore_returncode: bool = False,
-    server: str | None = None,
-    verbose: bool = False,
-    with_cleanup_results: bool = False,
-    internationalized: bool = False,
-    include_raw_whois_text: bool = False,
-    return_raw_text_for_unsupported_tld: bool = False,
-    timeout: float | None = None,
-    parse_partial_response: bool = False,
-    cmd: str = "whois",
-    simplistic: bool = False,
-    withRedacted: bool = False,
+    *,
     pc: ParameterContext | None = None,
-    tryInstallMissingWhoisOnWindows: bool = False,
-    shortResponseLen: int = 5,
-    withPublicSuffix: bool = False,
-    extractServers: bool = False,
-    stripHttpStatus: bool = False,
-    noIgnoreWww: bool = False,
-    # if you use pc as argument all above params (except domain are ignored)
+    verbose: bool = False,
+    **kwargs: Any,
+    # see documentation about parameters in context/parameterContext.py
+    #    force: bool = False,
+    #    cache_file: str | None = None,
+    #    cache_age: int = 60 * 60 * 48,
+    #    slow_down: int = 0,
+    #    ignore_returncode: bool = False,
+    #    server: str | None = None,
+    #    verbose: bool = False,
+    #    with_cleanup_results: bool = False,
+    #    internationalized: bool = False,
+    #    include_raw_whois_text: bool = False,
+    #    return_raw_text_for_unsupported_tld: bool = False,
+    #    timeout: float | None = None,
+    #    parse_partial_response: bool = False,
+    #    cmd: str = "whois",
+    #    simplistic: bool = False,
+    #    withRedacted: bool = False,
+    #    tryInstallMissingWhoisOnWindows: bool = False,
+    #    shortResponseLen: int = 5,
+    #    withPublicSuffix: bool = False,
+    #    extractServers: bool = False,
+    #    stripHttpStatus: bool = False,
+    #    noIgnoreWww: bool = False,
+    #    rdapOnly: bool = false,
+    #    whoisOnly: bool = false,
 ) -> Domain | None:
-    # see documentation about paramaters in parameterContext.py
-
     assert isinstance(domain, str), Exception("`domain` - must be <str>")
-
-    if verbose is True:
-        os.putenv("LOGLEVEL", "DEBUG")
-        os.environ["LOGLEVEL"] = "DEBUG"
-        logging.basicConfig(level="DEBUG")
-
+    _ = verbose  # ha_ck
     if pc is None:
-        pc = ParameterContext(
-            force=force,
-            cache_file=cache_file,
-            cache_age=cache_age,
-            slow_down=slow_down,
-            ignore_returncode=ignore_returncode,
-            server=server,
-            verbose=verbose,
-            with_cleanup_results=with_cleanup_results,
-            internationalized=internationalized,
-            include_raw_whois_text=include_raw_whois_text,
-            return_raw_text_for_unsupported_tld=return_raw_text_for_unsupported_tld,
-            timeout=timeout,
-            parse_partial_response=parse_partial_response,
-            cmd=cmd,
-            simplistic=simplistic,
-            withRedacted=withRedacted,
-            withPublicSuffix=withPublicSuffix,
-            shortResponseLen=shortResponseLen,
-            tryInstallMissingWhoisOnWindows=tryInstallMissingWhoisOnWindows,
-            extractServers=extractServers,
-            stripHttpStatus=stripHttpStatus,
-            noIgnoreWww=noIgnoreWww,
-        )
+        pc = ParameterContext(**kwargs)
 
     msg = f"{pc}"
     log.debug(msg)
@@ -315,3 +293,6 @@ def query(
 
 # Add get function to support return result in dictionary form
 get = _result2dict(query)
+
+# CLAUDE: memoryleak:
+# If you're chasing a real leak, profile it with tracemalloc;
