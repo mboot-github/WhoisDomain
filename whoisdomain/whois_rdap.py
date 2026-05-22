@@ -1,9 +1,11 @@
 import logging
 from typing import Any
 
-import tld
+# import tld
 import whodap
 
+# as rdap has no concept of second level domains we will drop the import tld
+# and just take the last item of the domain: domain.split('.')[-1]
 from .data_response import DataResponse
 
 logger = logging.getLogger(__name__)
@@ -15,7 +17,8 @@ class WhoisRdap:
 
     @classmethod
     def fld(cls, domain: str) -> str | None:
-        return tld.get_fld(domain, fix_protocol=True, fail_silently=True)
+        return str(domain).split(".")[-1]
+        # return tld.get_fld(domain, fix_protocol=True, fail_silently=True)
 
     def do_one_domain(self, domain: str) -> DataResponse:
         try:

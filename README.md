@@ -3,19 +3,21 @@
 - A Python package for retrieving WHOIS information of DOMAIN'S ONLY.
 - Python >=3.10
 - requirements:
-    - whodap>=0.1.16 [![Spectra Assure Community Badge](https://secure.software/pypi/badge/whodap)](https://secure.software/pypi/packages/whodap)
-    - tld>=0.13.2 [![Spectra Assure Community Badge](https://secure.software/pypi/badge/tld)](https://secure.software/pypi/packages/tld/0.13.2/tld-0.13.2-py2.py3-none-any.whl)
-    - redis (optional) [![Spectra Assure Community Badge](https://secure.software/pypi/badge/redis)](https://secure.software/pypi/packages/redis)
-
+    - whodap>=0.1.16 [![Spectra Assure Community Badge](https://secure.software/pypi/badge/whodap)](https://secure.software/pypi/packages/whodap).
+    - tld>=0.13.2 [![Spectra Assure Community Badge](https://secure.software/pypi/badge/tld)](https://secure.software/pypi/packages/tld/0.13.2/tld-0.13.2-py2.py3-none-any.whl).
+    - redis (optional) [![Spectra Assure Community Badge](https://secure.software/pypi/badge/redis)](https://secure.software/pypi/packages/redis).
 - v1 uses only whois and has been be moved to maintenance only
-- v2 will use whodap to first retrieve info with rdap and if no data is available try the classic whois approach
-
+- v2 will use whodap to first retrieve info with rdap, if no data is available try the classic whois approach.
   * This package will not support querying ip CIDR ranges or AS information.
   * This was a copy of the original DanyCork 'whois'.
       * Significantly refactored in 2023 (v1).
       * RDAP adding in 2026 (v2).
       * The v1 output is still compatible with DanyCork 'whois'.
       * the v2 will move away from strict compatibility.
+
+Notes:
+
+ - Rdap servers only know about the real IANA domain, the concept of first level domains is not supported when using rdap requests.
 
 ---
 
@@ -42,7 +44,7 @@ you should be aware that each query will increase its memory use.
 
 Versions `1.x.x` will keep the output compatible with Danny Cork.
 
-Versions `2.x.x` will add a dependency on whodap and use rdab based whois data before consulting historical whois.
+Versions `2.x.x` will add a dependency on whodap and use rdap based whois data before consulting historical whois.
 
 ### Releases
 
@@ -100,3 +102,5 @@ and `make suggest`.
 - switch to minimal version 3.10
 - update gitgub-action lint (mypy) to use `setup-python@v6` and `checkout@v6`
 - start working on v2 with rdap first
+
+## 2.20260522.1
