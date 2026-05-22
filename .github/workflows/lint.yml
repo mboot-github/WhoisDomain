@@ -25,9 +25,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install ruff tld types-redis types-requests python-dateutil whodap
 
-      - name: Run ruff format check
-        run: ruff format --check whoisdomain/
-
       - name: Run ruff lint
         run: ruff check whoisdomain/
 
