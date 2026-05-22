@@ -52,7 +52,6 @@ _DATE_FORMATS = [
     "%Y-%m-%dt%H:%M:%S.%f%z",  # 2011-09-08T14:44:51.622265+03:00
     "%Y%m%d",  # 20110908
     "%Y. %m. %d.",  # 2020. 01. 12.
-    "before %b-%Y",  # before aug-1996
     "%a %d %b %Y",  # Tue 21 Jun 2011
     "%A %d %b %Y",  # Tuesday 21 Jun 2011
     "%a %d %B %Y",  # Tue 21 June 2011
@@ -72,6 +71,13 @@ _DATE_FORMATS = [
     "%a %b %d %H:%M:%S %Y",  # Thu Oct 21 05:54:20 2032 (kg Kyrgyzstan)
     "%m-%d-%Y",  # 03-28-2013 # is ambivalent for all days <=12
 ]
+
+# CLAUDE_TODO:
+# More importantly: "%m/%d/%Y" (line 65) and "%d/%m/%Y" (line 27) are both present
+#  — any input like 03/04/2025 matches whichever wins the loop,
+#  which depends on order rather than the source TLD.
+# Either gate ambiguous formats per-TLD via _CUSTOM_DATE_FORMATS
+#  or strip the US format when the TLD's convention is known.
 
 _CUSTOM_DATE_FORMATS = {
     "ml": "%m/%d/%Y",
@@ -131,11 +137,14 @@ def str_to_date(
 
     for f in _DATE_FORMATS:
         try:
-            z = datetime.datetime.strptime(text, f)  # noqa: DTZ007
+            z = datetime.datetime.strptime(text, f).astimezone().replace(tzinfo=None)
+            if z.tzinfo is None:
+                z = z.replace(tzinfo=datetime.timezone.utc)
         except ValueError as v:  # noqa: PERF203
             _ = v
         else:
-            return z.astimezone().replace(tzinfo=None)
+            # CLAUDE FIX
+            return z.astimezone(datetime.timezone.utc).replace(tzinfo=None)
 
     msg = f"Unknown date format: '{text}'"
     raise UnknownDateFormatError(msg)

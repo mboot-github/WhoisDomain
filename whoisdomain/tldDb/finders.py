@@ -38,9 +38,7 @@ def newLineSplit(
         reStr = r"\n\n"
         flags = re.IGNORECASE if ignoreCase else 0
         pattern = make_pat(reStr, flags)
-        z = pattern.split(whoisStr)
-        del pattern
-        return z
+        return pattern.split(whoisStr)
 
     return xNewlineSplit
 
@@ -57,9 +55,7 @@ def R(
     ) -> Any:
         flags = re.IGNORECASE if ignoreCase else 0  # NOFLAG is 3.11
         pattern = make_pat(reStr, flags)
-        z = pattern.findall(textStr)
-        del pattern
-        return z
+        return pattern.findall(textStr)
 
     return reFindAll
 
@@ -87,7 +83,6 @@ def findFromToAndLookFor(
         flags = re.IGNORECASE if ignoreCase else 0  # NOFLAG is 3.11
         p1 = make_pat(fromStr, flags)
         s1 = p1.search(textStr)
-        del p1
 
         msg = f"s1 {s1}, {fromStr}"
         log.debug(msg)
@@ -104,20 +99,15 @@ def findFromToAndLookFor(
         p3 = make_pat(lookForStr, flags)
 
         s2 = p2.search(t2)
-        del p2
         if s2 is None:
-            z = p3.findall(t2)
-            del p3
-            return z
+            return p3.findall(t2)
 
         end = s2.end()
         t3 = t2[:end]
         msg = f"toStr {t3}"
         log.debug(msg)
 
-        z = p3.findall(t3)
-        del p3
-        return z
+        return p3.findall(t3)
 
     return xFindFromToAndLookFor
 

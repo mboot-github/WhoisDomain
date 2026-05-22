@@ -1,5 +1,7 @@
+# ruff: noqa: N815
 import json
 import logging
+from dataclasses import asdict, dataclass
 from typing import Any
 
 log = logging.getLogger(__name__)
@@ -154,6 +156,83 @@ ParamsStringJson: str = """
 """
 
 
+@dataclass(slots=True)
+class ParameterContext2:
+    # if the whois command fails with code 1 still process the data returned as normal.
+    ignore_returncode: bool = False
+    # Don't use cache.
+    force: bool = False
+    verbose: bool = False
+    # cleanup lines starting with % and REDACTED FOR PRIVACY
+    with_cleanup_results: bool = False
+    # if true convert with internationalizedDomainNameToPunyCode()
+    internationalized: bool = False
+    # if reqested the full response is also returned.
+    include_raw_whois_text: bool = False
+    return_raw_text_for_unsupported_tld: bool = False
+    # try to parse partial response when cmd timed out
+    #  (stdbuf should be in PATH for best results)
+    parse_partial_response: bool = False
+
+    # when simplistic is true,
+    #  we return null for most exceptions and dont pass info why we have no data.
+    simplistic: bool = False
+
+    # show redacted output default no redacted data is shown
+    withRedacted: bool = False
+
+    # specify the path to the cli whois you want to use.
+    cmd: str = "whois"
+
+    # specify the path to the cli whois you want to use.
+    cache_file: str | None = None
+
+    # use this whois server for making this query:
+    #   Linux/Mac: 'whois -h <server> <domain>'
+    #   Windows: 'whois.exe <domain> <server>'"
+    server: str | None = None
+
+    # Cache expiration time for given domain in seconds 60*60*48 (48 hours).
+    cache_age: int = 172800
+
+    # Time [s] it will wait after you query WHOIS database.
+    slow_down: int = 0
+
+    # timeout in seconds for the whois command to return a result.
+    timeout: float = 30.0
+
+    # allow auto install of sysinternals whois on windows if no whois found
+    tryInstallMissingWhoisOnWindows: bool = False
+
+    # The number of lines we consider a short response.
+    shortResponseLen: int = 5
+
+    # if lib 'tld' is installed add tld info based on get_tld(); fake the tld if needed
+    withPublicSuffix: bool = False
+
+    # try to extract the whois servers from the whois output (uses --verbose)
+    extractServers: bool = False
+
+    # strip https://icann.org/epp# from status response
+    stripHttpStatus: bool = False
+
+    # if set to true we skip the strip www action
+    noIgnoreWww: bool = False
+
+    # if set to true we only consult rdap
+    rdapOnly: bool = False
+
+    # if set to true we only consult whois
+    whoisOnly: bool = False
+
+    def to_json(self) -> str:
+        return json.dumps(asdict(self))
+
+    @classmethod
+    def from_json(cls, s: str) -> "ParameterContext2":
+        return cls(**json.loads(s))
+
+
 class ParameterContext:
     kt: dict[str, Any]
     value: dict[str, Any]
@@ -174,7 +253,7 @@ class ParameterContext:
 
         mandatory: list[str] = self._load_defaults()
         self._add_args(mandatory, **kwargs)
-        self._validate_all_mandatoty_known(mandatory)
+        self._validate_all_mandatory_known(mandatory)
 
     def _load_defaults(self) -> list[str]:
         mandatory: list[str] = []
@@ -189,7 +268,7 @@ class ParameterContext:
     def _add_args(
         self,
         mandatory: list[str],
-        **kwargs: dict[str, Any],
+        **kwargs: Any,
     ) -> None:
         for name, value in kwargs.items():
             if name not in self.params:
@@ -212,7 +291,7 @@ class ParameterContext:
                     del mandatory[mandatory.index(name)]
 
     @classmethod
-    def _validate_all_mandatoty_known(
+    def _validate_all_mandatory_known(
         cls,
         mandatory: list[str],
     ) -> None:
@@ -225,9 +304,10 @@ class ParameterContext:
         name: str,
     ) -> Any:
         if name in {"params", "value", "kt"}:
-            getattr(self, name)
+            raise AttributeError(name)  # should never happen as they are resolved before __getattr__
+            # getattr(self, name)
 
-        return self.get(name)
+        return self.value.get(name)
 
     def __setattr__(
         self,

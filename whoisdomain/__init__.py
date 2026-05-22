@@ -9,7 +9,6 @@ Module providing all public accessible functions and data for the whoisdomain pa
 All public data is vizible via the __all__ List
 """
 
-import gc
 import logging
 import os
 import sys
@@ -67,9 +66,6 @@ try:
 except ImportError as e:
     _ = e
 
-if HAS_REDIS:
-    from .cache.redisCache import RedisCache
-
 WHOISDOMAIN: str = ""
 if os.getenv("WHOISDOMAIN"):
     WHOISDOMAIN = str(os.getenv("WHOISDOMAIN"))
@@ -87,6 +83,7 @@ try:
     TLD_LIB_PRESENT = True
 except ImportError as e:
     _ = e  # ignore any error
+
 
 __all__ = [
     "VERSION",
@@ -123,6 +120,11 @@ __all__ = [
     "setMyCache",
     "validTlds",
 ]
+
+if HAS_REDIS:
+    from .cache.redisCache import RedisCache
+
+    __all__ += ["RedisCache"]
 
 
 def _result2dict(
@@ -195,13 +197,6 @@ def q2(
     domain: str,
     pc: ParameterContext,
 ) -> Domain | None:
-    if pc.verbose is True:
-        logging.basicConfig(level="DEBUG")
-
-    gc.collect(0)
-    gc.collect(1)
-    gc.collect(2)
-
     dc = DataContext(
         domain=domain,
         hasLibTld=TLD_LIB_PRESENT,
@@ -249,20 +244,7 @@ def q2(
         parser=parser,
     )
 
-    result = pwdr.processRequest()
-
-    del pwdr
-    del dom
-    del wci
-    del parser
-    del dc
-    del pc
-
-    gc.collect(0)
-    gc.collect(1)
-    gc.collect(2)
-
-    return result
+    return pwdr.processRequest()
 
 
 def query(
@@ -298,10 +280,7 @@ def query(
     #    whoisOnly: bool = false,
 ) -> Domain | None:
     assert isinstance(domain, str), Exception("`domain` - must be <str>")
-
-    if verbose is True:
-        logging.basicConfig(level="DEBUG")
-
+    _ = verbose  # ha_ck
     if pc is None:
         pc = ParameterContext(**kwargs)
 
@@ -313,3 +292,21 @@ def query(
 
 # Add get function to support return result in dictionary form
 get = _result2dict(query)
+
+# CLAUDE: logging changes
+# Calling logging.basicConfig(level="DEBUG") inside library code mutates the application's root logger
+# and is widely considered bad library citizenship.
+# If the caller's app uses logging, you've just overridden their config.
+# Use a per-package logger and let the caller configure the level:
+#  logging.getLogger("whoisdomain").setLevel("DEBUG"),
+#  or document a setup_logging(verbose=) helper that callers can opt into.
+
+#  CLAUDE: memoryleak:
+# Three calls — gc.collect(0); gc.collect(1); gc.collect(2) — once on entry and once on exit.
+# gc.collect(2) already does generations 0 and 1, so the other two are redundant.
+# More importantly, manual GC in library code imposes work on callers who don't need it
+# (Python's GC is generational and usually correct without help).
+# The del spam right above isn't doing anything either
+# — locals are about to go out of scope.
+# If you're chasing a real leak, profile it with tracemalloc;
+# otherwise this is cargo-culted overhead.

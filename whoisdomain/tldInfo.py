@@ -15,8 +15,6 @@ class TldInfo:
         verbose: bool = False,
     ) -> None:
         self.verbose = verbose
-        if verbose:
-            logging.basicConfig(level="DEBUG")
 
         # a reference to the external ZZ database of all TLD info
         self.zzDictRef = zzDict

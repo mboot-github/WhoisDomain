@@ -37,8 +37,6 @@ class ProcessWhoisDomainRequest:
         self.dom: Domain | None = dom
         self.wci = wci
         self.parser = parser
-        if self.pc.verbose:
-            logging.basicConfig(level="DEBUG")
 
     def _analyzeDomainStringAndValidate(
         self,
@@ -154,7 +152,7 @@ class ProcessWhoisDomainRequest:
             if self.pc.simplistic is False:
                 raise
 
-            self.dc.exeptionStr = f"{e}"
+            self.dc.exceptionStr = f"{e}"
             assert self.dom is not None
             self.dom.init(
                 pc=self.pc,
@@ -196,7 +194,7 @@ class ProcessWhoisDomainRequest:
             if self.pc.simplistic is False:
                 raise
 
-            self.dc.exeptionStr = "UnknownTld"
+            self.dc.exceptionStr = "UnknownTld"
 
             assert self.dom is not None
             self.dom.init(
@@ -232,7 +230,7 @@ class ProcessWhoisDomainRequest:
             if self.pc.simplistic is False:
                 raise UnknownTldError(msg)
 
-            self.dc.exeptionStr = msg  # was: self.dc.exeptionStr = "UnknownTld"
+            self.dc.exceptionStr = msg  # was: self.dc.exceptionStr = "UnknownTld"
             assert self.dom is not None
             self.dom.init(
                 pc=self.pc,
@@ -246,7 +244,7 @@ class ProcessWhoisDomainRequest:
 
         if self.parser.verifyPrivateRegistry():  # may raise WhoisPrivateRegistry
             msg = "This tld has either no whois server or responds only with minimal information"
-            self.dc.exeptionStr = msg
+            self.dc.exceptionStr = msg
             assert self.dom is not None
             self.dom.init(
                 pc=self.pc,

@@ -18,12 +18,10 @@ class WhoisRdap:
     @classmethod
     def fld(cls, domain: str) -> str | None:
         return str(domain).split(".")[-1]
-        # return tld.get_fld(domain, fix_protocol=True, fail_silently=True)
 
     def do_one_domain(self, domain: str) -> DataResponse:
         try:
-            xfld = str(self.fld(domain))
-            a = xfld.split(".")
+            a = str(domain).split(".")
             dom = ".".join(a[:-1])
             xtld = a[-1]
             resp = self.dnsc.lookup(dom, xtld)

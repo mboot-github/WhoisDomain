@@ -604,6 +604,7 @@ def main() -> None:  # noqa: C901,PLR0915
 
     fileData: dict[str, Any] = {}
 
+    # CLAUDE: Better still, migrate the CLI from getopt to argparse.
     for opt, arg in opts:
         if opt in {"-S", "SupportedTld"}:
             for tld in sorted(whois.validTlds()):
@@ -691,25 +692,25 @@ def main() -> None:  # noqa: C901,PLR0915
             if domain not in domains:
                 domains.append(domain)
 
-        if opt in ("--extractServers"):
+        if opt == "--extractServers":
             WithExtractServers = True
 
-        if opt in ("--stripHttpStatus"):
+        if opt == "--stripHttpStatus":
             WithStripHttpStatus = True
 
-        if opt in ("--withRedacted"):
+        if opt == "--withRedacted":
             WithRedacted = True
 
-        if opt in ("--withPublicSuffix"):
+        if opt == "--withPublicSuffix":
             WithPublicSuffix = True
 
-        if opt in ("--withNoIgnoreWww"):
+        if opt == "--withNoIgnoreWww":
             WithNoIgnoreWww = True
 
-        if opt in ("--rdapOnly"):
+        if opt == "--rdapOnly":
             RdapOnly = True
 
-        if opt in ("--whoisOnly"):
+        if opt == "--whoisOnly":
             WhoisOnly = True
 
     msg = f"{name} SIMPLISTIC: {SIMPLISTIC}"

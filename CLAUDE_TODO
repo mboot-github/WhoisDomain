@@ -1,0 +1,39 @@
+---
+
+# TLD regex database compiled eagerly at import
+whoisdomain/helpers.py · lines 99–100
+
+Importing whoisdomain forces processing all 3,000+ lines of ZZ immediately. Consumers who only need one TLD pay the cost of all of them. Make MY_TLD_INFO lazy — initialize on first call to get_TLD_RE() or filterTldToSupportedPattern(). Bonus: significantly faster python -c "import whoisdomain", which matters for CLI tools and lambdas.
+
+---
+
+# ParameterContext is a JSON-parsed config rather than a dataclass
+whoisdomain/context/parameterContext.py
+
+A 150-line JSON literal is parsed at import to define ~25 parameters, then __getattr__ returns Any for every read. mypy can't help you, IDE autocomplete can't help your users, and the validation code (~80 lines) duplicates what @dataclass(slots=True) + __post_init__ would give you for free. Sketch:
+
+@dataclass(slots=True)
+class ParameterContext:
+    cmd: str = "whois"
+    timeout: float = 30.0
+    cache_age: int = 60 * 60 * 48
+    verbose: bool = False
+    rdap_only: bool = False
+    # ... etc
+    def to_json(self) -> str: return json.dumps(asdict(self))
+    @classmethod
+    def from_json(cls, s: str) -> "ParameterContext":
+        return cls(**json.loads(s))
+
+---
+
+# Module-level mutable globals everywhere
+helpers.py:99, doWhoisCommand.py:20, lastWhois.py:21, main.py:550
+
+MY_TLD_INFO, CACHE_STUB, LastWhois, and a 14-name global declaration in main(). This makes the package effectively a singleton — concurrent users (e.g. an async webapp) will fight over state, and tests can't run in parallel. Move shared state onto a Whois client class that callers instantiate, and keep the module-level helpers as thin wrappers around a default instance for backwards compatibility.
+
+---
+
+# Quick nits
+is True / is False comparisons throughout — just use if x: / if not x:
+~40 sites

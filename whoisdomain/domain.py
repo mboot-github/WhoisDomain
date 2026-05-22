@@ -37,9 +37,11 @@ class Domain:
 
         self.dnssec: bool = False
 
+        self.last_updated: datetime.datetime | None = None
         self.updated_date: datetime.datetime | None = None
         self.expiration_date: datetime.datetime | None = None
         self.creation_date: datetime.datetime | None = None
+
         self._rdap_: dict[str, Any] = {}
 
     @classmethod
@@ -47,10 +49,8 @@ class Domain:
         cls,
         data: list[str],
     ) -> list[str]:
-        if "" in data:
-            index = data.index("")
-            data.pop(index)
-        return data
+        # remove empty elements from the list (thanks to CLAUDE)
+        return [x for x in data if x]
 
     @classmethod
     def cleanStatus(
@@ -169,7 +169,8 @@ class Domain:
         # date time items
         self.creation_date = str_to_date(dc.data["creation_date"][0], tld=self.tld)
         self.expiration_date = str_to_date(dc.data["expiration_date"][0], tld=self.tld)
-        self.last_updated = str_to_date(dc.data["updated_date"][0], tld=self.tld)
+        self.updated_date = str_to_date(dc.data["updated_date"][0], tld=self.tld)
+        self.last_updated = self.updated_date  # keep old name for one release
 
         self.dnssec = bool(dc.data["DNSSEC"])
         self._doStatus(pc, dc)
@@ -193,8 +194,8 @@ class Domain:
         if pc.include_raw_whois_text and dc.whoisStr is not None:
             self.text = dc.whoisStr
 
-        if dc.exeptionStr is not None:
-            self._exception = dc.exeptionStr
+        if dc.exceptionStr is not None:
+            self._exception = dc.exceptionStr
             return
 
         if dc.data == {}:

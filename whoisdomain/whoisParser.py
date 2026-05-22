@@ -36,8 +36,6 @@ class WhoisParser:
         self.dc = dc
         self.dom: Domain | None = None
         self.resultDict: dict[str, Any] = {}
-        if self.pc.verbose:
-            logging.basicConfig(level="DEBUG")
 
     def _doExtractPattensIanaFromWhoisString(
         self,
@@ -197,7 +195,7 @@ class WhoisParser:
             if i in s:
                 if self.pc.simplistic:
                     msg = "WhoisQuotaExceeded"
-                    self.dc.exeptionStr = msg
+                    self.dc.exceptionStr = msg
 
                     assert self.dom is not None
                     self.dom.init(
@@ -210,7 +208,7 @@ class WhoisParser:
 
         if self.pc.simplistic:
             msg = "FailedParsingWhoisOutput"
-            self.dc.exeptionStr = msg
+            self.dc.exceptionStr = msg
 
             assert self.dom is not None
             self.dom.init(
@@ -252,9 +250,14 @@ class WhoisParser:
                 continue
 
             if self.pc.withRedacted is False:
+                skip = False
                 for item in IgnoreStrings():
                     if item in line:  # note we do not use ignorecase currently here
-                        continue
+                        skip = True
+                        break
+
+                if skip:
+                    continue
 
                 if "REDACTED FOR PRIVACY" in line:  # these lines contibute nothing so ignore
                     continue

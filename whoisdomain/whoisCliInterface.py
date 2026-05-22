@@ -2,6 +2,7 @@ import logging
 import os
 import pathlib
 import platform
+import shlex  # CLUADE: split(' ') will split '  ' into 2 elements not one ; fixed.
 import shutil
 import subprocess  # noqa: S404
 import time
@@ -79,8 +80,7 @@ class WhoisCliInterface:
 
     def _makeWhoisCommandToRun(self) -> list[str]:
         whoisCommandList: list[str] = [self.pc.cmd]
-        if " " in self.pc.cmd:
-            whoisCommandList = self.pc.cmd.split(" ")
+        whoisCommandList = shlex.split(self.pc.cmd) if " " in self.pc.cmd else [self.pc.cmd]
 
         if self.IS_WINDOWS:
             return self._makeWhoisCommandToRunWindows(
@@ -117,11 +117,17 @@ class WhoisCliInterface:
         # LANG=en is added to make the ".jp" output consisent across all environments
         # STDBUF_OFF_CMD needed to not lose data on kill
 
+        env = None
+        if self.domain.endswith(".jp"):
+            env = {**os.environ, "LANG": "en"}
+
+        # CLAUDE: env={"LANG": "en"} replaces the child's environment wholesale rather than augmenting it.
+        # fixed: mboot
         with subprocess.Popen(  # noqa: S603
             self.STDBUF_OFF_CMD + self._makeWhoisCommandToRun(),
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            env={"LANG": "en"} if self.domain.endswith(".jp") else None,
+            env=env,
         ) as self.processHandle:
             msg = f"timout: {self.pc.timeout}"
             log.debug(msg)

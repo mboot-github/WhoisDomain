@@ -12,8 +12,8 @@ TEST_OPTIONS_ALL = \
 # --------------------------------------------------
 # Tests
 # --------------------------------------------------
-# test: prep test1 test2 test3 test4
-test: prep test2
+test: prep test1 test2 test3 test4
+# test: prep test2
 
 prep:
 	mkdir -p tmp
