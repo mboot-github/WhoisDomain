@@ -156,7 +156,7 @@ def remoteQ2(
                 print("remoteQ2:Receive:", request, file=sys.stderr)
 
             pc: ParameterContext = ParameterContext()
-            pc.fromJson(request["pc"])
+            pc.from_json(request["pc"])
 
             # call the func
             allOk = True

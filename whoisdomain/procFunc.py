@@ -41,7 +41,7 @@ class ProcFunc:
         domain: str,
         pc: ParameterContext,
     ) -> Any:
-        jStr = pc.toJson()
+        jStr = pc.to_json()
 
         request: dict[str, Any] = {
             "domain": domain,
