@@ -11,6 +11,7 @@ from .handleDateStrings import str_to_date
 
 log = logging.getLogger(__name__)
 
+
 class Domain:
     def __init__(
         self,

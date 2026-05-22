@@ -208,7 +208,7 @@ def q2(
         if dd.status:
             with_rdap_whois = True
             d: dict[str, Any] = wr.map_data_to_whoisdomain(dd.data, with_rdap_whois=with_rdap_whois)
-            d['__lookup__'] = 'rdap'
+            d["__lookup__"] = "rdap"
 
             rr = Domain(pc=pc, dc=dc)
             rr.from_whodap_dict(d)
