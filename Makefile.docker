@@ -59,4 +59,4 @@ dockerPush:
 	export VERSION=$(shell cat work/version) && \
 	docker image push \
 		--all-tags $(DOCKER_WHO)/$(WHAT)
-	docker run mbootgithub/whoisdomain -d google.com -j | jq -r .
+	docker run mbootgithub/whoisdomain -d google.com
