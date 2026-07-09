@@ -1,0 +1,98 @@
+# Source - https://stackoverflow.com/a/47240886
+# Posted by Basj, modified by community. See post 'Timeline' for change history
+# Retrieved 2026-05-25, License - CC BY-SA 4.0
+import collections
+import sqlite3
+
+
+class KeyValueStore(collections.UserDict):
+    def __init__(self, filename=None) -> None:
+        self.conn = sqlite3.connect(filename)
+        self.conn.execute("CREATE TABLE IF NOT EXISTS kv (key text unique, value text)")
+
+    def close(self) -> None:
+        self.conn.commit()
+        self.conn.close()
+
+    def __len__(self) -> int:
+        rows = self.conn.execute("SELECT COUNT(*) FROM kv").fetchone()[0]
+        return rows if rows is not None else 0
+
+    def iterkeys(self) -> str:
+        c = self.conn.cursor()
+        for row in c.execute("SELECT key FROM kv"):
+            yield row[0]
+
+    def itervalues(self) -> str:
+        c = self.conn.cursor()
+        for row in c.execute("SELECT value FROM kv"):
+            yield row[0]
+
+    def iteritems(self) -> tuple[str, str]:
+        c = self.conn.cursor()
+        for row in c.execute("SELECT key, value FROM kv"):
+            yield row[0], row[1]
+
+    def keys(self) -> list[str]:
+        return list(self.iterkeys())
+
+    def values(self) -> list[str]:
+        return list(self.itervalues())
+
+    def items(self) -> list[str]:
+        return list(self.iteritems())
+
+    def __contains__(self, key) -> bool:
+        return self.conn.execute("SELECT 1 FROM kv WHERE key = ?", (key,)).fetchone() is not None
+
+    def __getitem__(self, key) -> str:
+        item = self.conn.execute("SELECT value FROM kv WHERE key = ?", (key,)).fetchone()
+        if item is None:
+            raise KeyError(key)
+        return item[0]
+
+    def __setitem__(self, key, value) -> None:
+        self.conn.execute("REPLACE INTO kv (key, value) VALUES (?,?)", (key, value))
+
+    def __delitem__(self, key) -> None:
+        if key not in self:
+            raise KeyError(key)
+        self.conn.execute("DELETE FROM kv WHERE key = ?", (key,))
+
+    def __iter__(self) -> str:
+        return self.iterkeys()
+
+
+if __name__ == "__main__":
+    # Source - https://stackoverflow.com/a/47240886
+    # Posted by Basj, modified by community. See post 'Timeline' for change history
+    # Retrieved 2026-05-25, License - CC BY-SA 4.0
+
+    # from sqlitekeyvaluestore import KeyValueStore
+
+    kv = KeyValueStore("test.db")  # uses SQLite
+
+    print(len(kv))  # 0 item
+    kv["hello1"] = "you1"
+    kv["hello2"] = "you2"
+    kv["hello3"] = "you3"
+    print(kv["hello1"])  # you1
+    print(len(kv))  # 3 items
+
+    del kv["hello1"]
+    print(len(kv))  # 2 items remaining
+
+    print("hello1" in kv)  # False, it has just been deleted!
+    print("hello3" in kv)  # True
+
+    kv["hello3"] = "newvalue"  # redefine an already present key/value
+    print(kv["hello3"])  # newvalue
+
+    print(kv.keys())  # ['hello2', 'hello3']
+    print(kv.values())  # ['you2', 'newvalue']
+    print(kv.items())  # [('hello2', 'you2'), ('hello3', 'newvalue')]
+
+    for k in kv:
+        print(k, kv[k])
+
+    kv.close()  # important to commit

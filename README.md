@@ -97,11 +97,10 @@ and `make suggest`.
 ## Updates
   * see [Updates](docs/Updates.md) for a full history of changes.
 
-## in progress
-
-
-## 2.20260522.1
+## 2.20260709.1
 
 - switch to minimal version 3.10
 - update gitgub-action lint (mypy) to use `setup-python@v6` and `checkout@v6`
 - start working on v2 with rdap first
+
+## in progress
