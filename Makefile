@@ -18,7 +18,7 @@ format:
 	ruff format $(PY_FILES)
 
 check:
-	ruff check --fix $(PY_FILES)
+	ruff check $(PY_FILES)
 
 mypy:
 	$(COMMON_VENV) \

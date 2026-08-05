@@ -187,10 +187,13 @@
         "RUF067", # `__init__` module should only contain docstrings and re-exports
 
         "S101", # Use of `assert` detected
+        "S404", # Use of
+        "S602", # Use of
         #
         "COM812", # The following rule may cause conflicts when used with the formatter: `COM812`
         "T201",   # print statements are ok, used in verbose mode
         "D212",   # `multi-line-summary-first-line` (D212) and `multi-line-summary-second-line` (D213) are incompatible.
+        "D415",   #
         "PT028",  # experimental rule, incomplete
     ]
 

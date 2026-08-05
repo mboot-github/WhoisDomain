@@ -4,7 +4,7 @@ import pathlib
 import platform
 import shlex  # CLUADE: split(' ') will split '  ' into 2 elements not one ; fixed.
 import shutil
-import subprocess  # noqa: S404
+import subprocess
 import time
 
 from .context.dataContext import DataContext
@@ -43,7 +43,7 @@ class WhoisCliInterface:
         msg = f"downloading dependencies: {copy_command}"
         log.debug(msg)
 
-        subprocess.call(  # noqa: S602 # `subprocess` call with `shell=True` identified, security issue
+        subprocess.call(  # `subprocess` call with `shell=True` identified, security issue
             copy_command,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
