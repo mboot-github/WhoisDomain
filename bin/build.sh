@@ -38,7 +38,8 @@ setupVersionNumberToday()
     # keep track of the latest version string
     echo "${V}" >"./${VERSION_FILE}"
     cat <<! >whoisdomain/version.py
-'''This module only makes the version available for dynamic versioning'''
+# This module only makes the version available for dynamic versioning
+# noqa: D415
 VERSION = '${V}'
 !
 

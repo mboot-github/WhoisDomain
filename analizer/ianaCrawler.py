@@ -175,7 +175,7 @@ class IanaCrawler:
     def _processOneTableData(self, trs: list[str]) -> list[str]:
         record: list[str] = []
         for each in trs:
-            try:
+            try:  # noqa: PLW0717
                 link = each.find("a")["href"]
                 aa = link.split("/")
                 s = aa[-1].replace(".html", "")

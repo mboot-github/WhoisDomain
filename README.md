@@ -99,12 +99,11 @@ and `make suggest`.
 
 ## 2.20260709.1
 
+- first version 2 release
 - switch to minimal version 3.10
 - update gitgub-action lint (mypy) to use `setup-python@v6` and `checkout@v6`
 - start working on v2 with rdap first
 
 ## 2.20260805.1
 
-add dependencies to the pyproject.toml file
-
-## in progress
+- add dependencies to the pyproject.toml file

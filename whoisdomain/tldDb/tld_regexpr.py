@@ -3004,4 +3004,57 @@ ZZ["xn--wgbh1c"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["xn--xkc2al3hye2a"] = {"_privateRegistry": True}  # no whois server found in iana
 ZZ["zw"] = {"_privateRegistry": True}  # no whois server found in iana
 
+# ZZ["web"] = {"_privateRegistry": True} # no whois server found in iana
+ZZ["कम"] = {"_server": "whois.nic.xn--11b4c3d", "extend": "xn--11b4c3d"}  # whois.nic.xn--11b4c3d ['xn--11b4c3d']
+ZZ["ಭರತ"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  # whois.nixiregistry.in
+ZZ["ଭରତ"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  # whois.nixiregistry.in
+ZZ["ভৰত"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  # whois.nixiregistry.in
+ZZ["ভরত"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  # whois.nixiregistry.in
+ZZ["नट"] = {"_server": "whois.nic.xn--c2br7g", "extend": "xn--c2br7g"}  # whois.nic.xn--c2br7g ['xn--c2br7g']
+ZZ["சஙகபபர"] = {"_server": "whois.ta.sgnic.sg", "extend": "xn--clchc0ea0b2g2a9gcd"}  # whois.ta.sgnic.sg ['xn--clchc0ea0b2g2a9gcd']
+ZZ["భరత"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  # whois.nixiregistry.in
+ZZ["ભરત"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  # whois.nixiregistry.in
+ZZ["भरतम"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  # whois.nixiregistry.in
+ZZ["भरत"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  # whois.nixiregistry.in
+ZZ["भरत"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  # whois.nixiregistry.in
+ZZ["सगठन"] = {"_server": "whois.nic.xn--i1b6b1a6a2e", "extend": "xn--i1b6b1a6a2e"}  # whois.nic.xn--i1b6b1a6a2e ['xn--i1b6b1a6a2e']
+ZZ["ഭരത"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  # whois.nixiregistry.in
+ZZ["ਭਰਤ"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  # whois.nixiregistry.in
+ZZ["இநதய"] = {
+    "_server": "whois.nixiregistry.in",
+    "extend": "xn--2scrj9c",
+}  # whois.nixiregistry.in
 # currently defined in ZZ but missing in iana: onion, onion
