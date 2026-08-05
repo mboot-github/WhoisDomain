@@ -26,7 +26,7 @@ jobs:
           pip install ruff tld types-redis types-requests python-dateutil whodap
 
       - name: Run ruff lint
-        run: ruff check whoisdomain/
+        run: ruff check --fix whoisdomain/
 
   test:
     name: Test on Python ${{ matrix.python-version }}
