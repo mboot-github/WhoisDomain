@@ -21,11 +21,12 @@ makeVenv()
 
 installFromTestPyPi()
 {
-    sleep $time
     while true
     do
+        pip install -r requirements.txt
         pip install -i https://test.pypi.org/simple/ ${WHAT}==${VERSION} && break
         echo "sleeping ${time} seconds to allow the freshly uploaded image to become available on test.pypi" >&2
+        sleep $time
     done
 }
 

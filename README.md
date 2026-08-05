@@ -27,15 +27,6 @@ Notes:
 
 On January 19, 2023, ICANN opened voting on a global amendment to all its registry and registrar agreements. In it they defined an RDAP Ramp-Up Period of 180 days starting with the effectiveness of this amendment. 360 days after this period is defined as the WHOIS Services Sunset Date, after which it is not a requirement for registries and registrars to offer a WHOIS service and instead only an RDAP service is required. All voting thresholds were met within the 60 day voting period and the amendment was approved by the ICANN Board. The date for WHOIS Sunset for gTLDs was set as 28 January 2025.[47]
 
-### B) **memory leak**
-
-**2024-02-05: The current whoisdomain has a memory leak.**
-
-The memory leak is not relevant for short running use
-but when using whoisdomain in long running programs
-you should be aware that each query will increase its memory use.
-
-
 ### Versioning
 
   * I will start versioning at 1.x.x
@@ -66,6 +57,9 @@ Pypi releases can be installed with:
   * it has been observed that the default cli whois on Mac is showing each forward step in its output, this makes parsing the result very unreliable.
   * using a brew install whois will give in general better results.
 
+### Issues
+  * see [Issues](docs/Issues.md)
+
 ## Docker release
   * See [Docker](docs/Docker.md)
 
@@ -77,8 +71,8 @@ Pypi releases can be installed with:
 
 ## ccTLD & TLD support
 
-Most `tld's` are now autodetected via IANA root db, see the Analizer directory
-and `make suggest`.
+Most `tld's` are now autodetected via IANA root db,
+see the Analizer directory and `make suggest`.
 
   * see the file: [tld_regexpr](./whoisdomain/tldDb/tld_regexpr.py)
   * for python use:  `whoisdomain.validTlds()`
@@ -107,3 +101,6 @@ and `make suggest`.
 ## 2.20260805.1
 
 - add dependencies to the pyproject.toml file
+
+## 2.20260805.2
+-  create a separate Issues text and rephrase the memory issue after better testing from [Misiu](https://github.com/Misiu)
