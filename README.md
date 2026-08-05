@@ -103,4 +103,8 @@ and `make suggest`.
 - update gitgub-action lint (mypy) to use `setup-python@v6` and `checkout@v6`
 - start working on v2 with rdap first
 
+## 2.20260805.1
+
+add dependencies to the pyproject.toml file
+
 ## in progress

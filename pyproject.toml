@@ -18,6 +18,11 @@
     readme = "README.md"
     requires-python = ">=3.10"
 
+    dependencies = [
+        "whodap>=0.1.16",
+        "tld>=0.13.2",
+    ]
+
     license = "MIT"
 
     classifiers = [
