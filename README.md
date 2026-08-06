@@ -107,3 +107,6 @@ see the Analizer directory and `make suggest`.
 
 ## 2.20260806.1
 - test auto publish on tag push
+
+## 2.20260806.2
+- test again
