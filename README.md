@@ -110,3 +110,6 @@ see the Analizer directory and `make suggest`.
 
 ## 2.20260806.2
 - test again
+
+## 2.20260806.3
+- in 2 the pipy publish worded but the release already exists so one more time
