@@ -104,3 +104,6 @@ see the Analizer directory and `make suggest`.
 
 ## 2.20260805.2
 -  create a separate Issues text and rephrase the memory issue after better testing from [Misiu](https://github.com/Misiu)
+
+## 2.20260806.1
+- test auto publish on tag push
